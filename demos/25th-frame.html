@@ -1,0 +1,1246 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>第二十五帧</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;700;900&family=ZCOOL+XiaoWei&family=Ma+Shan+Zheng&family=Limelight&family=Poiret+One&display=swap">
+<style>
+:root{
+  color-scheme: dark;
+  --bg:#0d0a07; --bg2:#17110b; --wood:#3b2717; --wood2:#2a1b10; --brass:#c19a5b; --brass2:#8a6a3a;
+  --paper:#ece2cb; --paper2:#d9caa6; --ink:#2b2117; --ink2:#5a4632; --silver:#d8d6cf; --dim:#9a8a72;
+  --red:#a8432f; --glow:rgba(255,196,120,.18);
+  --serif:"Noto Serif SC","Songti SC","STSong","SimSun",serif;
+  --deco:"ZCOOL XiaoWei","Noto Serif SC","Songti SC",serif;
+  --hand:"Ma Shan Zheng","Long Cang","Kaiti SC","STKaiti","KaiTi",cursive;
+  --latin:"Limelight","Poiret One","Didot",serif;
+  --cw: clamp(66px, 19vw, 112px);
+}
+*{box-sizing:border-box}
+html,body{height:100%;margin:0}
+body{background:var(--bg);color:var(--paper);font-family:var(--serif);overflow-x:hidden;
+  -webkit-tap-highlight-color:transparent;
+  background-image:radial-gradient(ellipse 80% 50% at 50% -10%, rgba(255,190,110,.16), transparent 70%),
+    radial-gradient(ellipse 60% 40% at 50% 110%, rgba(120,70,30,.25), transparent 70%);
+  background-attachment:fixed}
+button{font-family:var(--serif);color:inherit;cursor:pointer}
+.hidden{display:none !important}
+#app{min-height:100%;display:flex;flex-direction:column;max-width:1240px;margin:0 auto;
+  padding:env(safe-area-inset-top) max(10px,env(safe-area-inset-right)) env(safe-area-inset-bottom) max(10px,env(safe-area-inset-left))}
+/* header */
+.bar{display:flex;align-items:center;gap:8px;padding:8px 2px;border-bottom:1px solid rgba(193,154,91,.25)}
+.brand{font-family:var(--deco);font-size:18px;letter-spacing:.12em;color:var(--brass);white-space:nowrap}
+.brand small{font-family:var(--latin);font-size:10px;letter-spacing:.2em;margin-left:6px;opacity:.7}
+.night{flex:1;text-align:center;font-family:var(--deco);color:var(--paper2);font-size:15px;letter-spacing:.2em;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.tbtn{background:linear-gradient(#2a1d12,#1a120b);border:1px solid var(--brass2);border-radius:3px;padding:6px 10px;font-size:13px;color:var(--paper2);min-height:34px}
+.tbtn:hover,.tbtn:focus-visible{border-color:var(--brass);color:var(--paper);outline:none}
+/* layout */
+.stage{flex:1;display:grid;grid-template-columns:1fr;gap:10px;padding:10px 0}
+@media (min-width:960px){.stage{grid-template-columns:minmax(0,1.25fr) minmax(0,1fr);align-items:start}}
+.theatre{display:flex;flex-direction:column;gap:8px;min-width:0}
+.brief{position:relative;background:linear-gradient(175deg,var(--paper),var(--paper2));color:var(--ink);
+  padding:10px 14px 10px 44px;border-radius:2px;box-shadow:0 6px 18px rgba(0,0,0,.5), inset 0 0 30px rgba(120,80,30,.25);
+  transform:rotate(-.6deg)}
+.brief::before{content:"";position:absolute;left:14px;top:-6px;width:18px;height:34px;border:3px solid #8f8f8f;border-bottom:none;border-radius:9px 9px 0 0;opacity:.8}
+.brief .goal{font-family:var(--hand);font-size:clamp(20px,5.4vw,26px);line-height:1.25}
+.brief .sub{font-family:var(--hand);font-size:clamp(14px,3.8vw,17px);color:var(--ink2);margin-top:2px}
+.screenWrap{position:relative;width:100%;aspect-ratio:4/3.45;max-height:62vh;border-radius:4px;overflow:hidden;
+  background:#050403;box-shadow:0 0 0 1px rgba(193,154,91,.35),0 0 0 5px #120d08,0 0 0 6px rgba(193,154,91,.25),0 18px 40px rgba(0,0,0,.6)}
+#screen{position:absolute;inset:0;width:100%;height:100%;display:block}
+/* desk */
+.desk{position:relative;border-radius:6px;padding:12px 10px 12px;min-width:0;
+  background:
+    repeating-linear-gradient(92deg, rgba(0,0,0,.0) 0 7px, rgba(0,0,0,.08) 7px 9px, rgba(255,220,170,.03) 9px 15px),
+    radial-gradient(ellipse 70% 60% at 50% 0%, rgba(255,190,120,.22), transparent 70%),
+    linear-gradient(180deg,var(--wood),var(--wood2));
+  box-shadow:inset 0 1px 0 rgba(255,220,170,.15),inset 0 0 0 2px rgba(0,0,0,.4),0 10px 30px rgba(0,0,0,.55);
+  border:1px solid #1a1009}
+.desk::before,.desk::after{content:"";position:absolute;top:8px;width:10px;height:10px;border-radius:50%;
+  background:radial-gradient(circle at 35% 35%,#f3d79c,#8a6a3a 60%,#3d2c16)}
+.desk::before{left:8px}.desk::after{right:8px}
+.deskLabel{font-family:var(--deco);text-align:center;color:var(--brass);letter-spacing:.3em;font-size:13px;margin:0 0 8px}
+.deskLabel span{font-family:var(--latin);letter-spacing:.2em;font-size:10px;opacity:.7;margin-left:6px}
+.secLabel{font-size:12px;color:var(--dim);letter-spacing:.15em;margin:8px 2px 6px}
+/* film strip timeline */
+.strip{position:relative;background:#0b0907;border-radius:3px;padding:16px 8px;box-shadow:inset 0 0 12px #000, 0 3px 8px rgba(0,0,0,.5);
+  display:flex;align-items:center;justify-content:center;gap:0;overflow:hidden}
+.strip::before,.strip::after{content:"";position:absolute;left:0;right:0;height:7px;
+  background:repeating-linear-gradient(90deg,transparent 0 7px,rgba(236,226,203,.75) 7px 15px,transparent 15px 21px)}
+.strip::before{top:4px}.strip::after{bottom:4px}
+.slot{position:relative;width:var(--cw);flex:0 1 var(--cw);min-width:54px;aspect-ratio:4/3.9;border:1px dashed rgba(236,226,203,.28);border-radius:2px;
+  display:flex;align-items:center;justify-content:center;background:rgba(255,255,255,.03);transition:background .15s,border-color .15s}
+.slot .num{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-family:var(--latin);font-size:22px;color:rgba(236,226,203,.18);pointer-events:none}
+.slot.over{background:rgba(255,200,120,.15);border-color:var(--brass);border-style:solid}
+.gap{position:relative;flex:0 0 14px;align-self:stretch;display:flex;align-items:center;justify-content:center}
+.gap.on{flex-basis:22px}
+.gap.on::before{content:"";position:absolute;top:6%;bottom:6%;left:50%;border-left:1px dashed rgba(255,120,90,.55)}
+.gap.on::after{content:"";position:absolute;inset:-10px -10px;}
+.gap.over::before{border-left:2px solid #ff9070}
+.gap .card{position:absolute;z-index:2;width:22px;min-width:0;padding:2px}
+.gap .card .lbl,.gap .card .badge{display:none}
+.gap .card canvas{aspect-ratio:1/2.4;object-fit:cover}
+/* cards */
+.card{position:relative;width:var(--cw);background:linear-gradient(#efe6d2,#d8cbac);border-radius:2px;padding:4px 4px 3px;color:var(--ink);
+  box-shadow:0 3px 8px rgba(0,0,0,.45);touch-action:none;user-select:none;-webkit-user-select:none;cursor:grab;
+  transition:transform .12s, box-shadow .12s}
+.card:hover{transform:translateY(-2px);box-shadow:0 6px 12px rgba(0,0,0,.5)}
+.card canvas{display:block;width:100%;aspect-ratio:4/3;background:#111;border-radius:1px;pointer-events:none}
+.card .lbl{font-size:clamp(11px,2.9vw,13px);text-align:center;padding-top:3px;line-height:1.2;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;pointer-events:none}
+.card .badge{position:absolute;top:-6px;right:-6px;background:var(--red);color:#fff3e4;font-size:10px;padding:1px 5px;border-radius:8px;pointer-events:none;letter-spacing:.05em}
+.slot .card{width:100%;box-shadow:none;background:#e4d9bf}
+.card.used{opacity:.25;pointer-events:none}
+.card.ghost{position:fixed;z-index:999;pointer-events:none;transform:rotate(-3deg) scale(1.06);box-shadow:0 16px 30px rgba(0,0,0,.6);transition:none;opacity:.95}
+.card.lift{opacity:.35}
+.pool{display:grid;grid-template-columns:repeat(auto-fill,minmax(var(--cw),1fr));gap:10px;justify-items:center;padding:4px 2px;min-height:60px;border-radius:3px}
+.pool.over{background:rgba(255,200,120,.08);outline:1px dashed var(--brass2)}
+.flashpool{display:flex;flex-wrap:wrap;gap:10px;justify-content:center}
+.flashpool .card{background:linear-gradient(#f0d6cc,#d6b3a4)}
+.controls{display:flex;gap:10px;justify-content:center;margin-top:12px}
+.btn{font-family:var(--deco);font-size:17px;letter-spacing:.3em;padding:10px 22px;min-height:46px;border-radius:3px;
+  background:linear-gradient(#2c1e12,#1a110a);border:1px solid var(--brass2);color:var(--paper)}
+.btn.primary{background:linear-gradient(#d1ab68,#8f6b36);color:#1d140b;border-color:#f1d49a;box-shadow:0 0 18px rgba(255,190,110,.25)}
+.btn:disabled{opacity:.45;cursor:default}
+.btn:focus-visible{outline:2px solid var(--brass);outline-offset:2px}
+.tip{min-height:1.4em;text-align:center;color:var(--dim);font-size:13px;margin:8px 4px 0;line-height:1.5}
+.tip b{color:var(--brass);font-weight:400}
+/* overlays */
+.overlay{position:fixed;inset:0;z-index:50;display:flex;align-items:center;justify-content:center;padding:16px;background:rgba(5,4,3,.82);backdrop-filter:blur(2px)}
+#title{background:#030202;z-index:80;flex-direction:column;padding:0}
+#titleCanvas{position:absolute;inset:0;width:100%;height:100%}
+#title .enter{position:absolute;left:50%;bottom:max(9vh,40px);transform:translateX(-50%);z-index:2}
+#title .credit{position:absolute;bottom:12px;left:0;right:0;text-align:center;font-size:11px;color:#6d6153;letter-spacing:.2em;z-index:2}
+.letter{position:relative;width:min(520px,100%);max-height:88vh;overflow:auto;color:var(--ink);padding:28px 26px 22px;border-radius:2px;
+  background:
+    repeating-linear-gradient(180deg,transparent 0 33px,rgba(90,70,50,.18) 33px 34px),
+    radial-gradient(ellipse at 30% 20%,rgba(255,255,255,.35),transparent 60%),
+    radial-gradient(ellipse at 80% 90%,rgba(140,95,40,.28),transparent 60%),
+    linear-gradient(170deg,#efe5cd,#dccba4);
+  box-shadow:0 30px 60px rgba(0,0,0,.7), inset 0 0 50px rgba(120,80,30,.3);transform:rotate(-.8deg);animation:drop .5s ease-out}
+.letter::after{content:"";position:absolute;right:18px;top:16px;width:58px;height:58px;border:2px solid rgba(168,67,47,.6);border-radius:50%;
+  background:radial-gradient(circle,transparent 55%,rgba(168,67,47,.08) 56%);transform:rotate(14deg)}
+.letter .head{font-family:var(--deco);color:var(--ink2);letter-spacing:.3em;font-size:13px;margin-bottom:10px}
+.letter .body{font-family:var(--hand);font-size:clamp(19px,4.8vw,23px);line-height:34px;white-space:pre-wrap}
+.letter .actions{display:flex;justify-content:flex-end;gap:10px;margin-top:18px}
+.letter .btn{color:var(--paper)}
+@keyframes drop{from{opacity:0;transform:translateY(-20px) rotate(-3deg)}to{opacity:1;transform:rotate(-.8deg)}}
+.drawer{width:min(560px,100%);max-height:86vh;overflow:auto;background:linear-gradient(#2d1e12,#1b120b);border:1px solid var(--brass2);border-radius:4px;padding:18px;
+  box-shadow:0 30px 60px rgba(0,0,0,.7)}
+.drawer h2{font-family:var(--deco);font-weight:400;color:var(--brass);letter-spacing:.3em;text-align:center;margin:0 0 4px;font-size:20px}
+.drawer .en{font-family:var(--latin);text-align:center;font-size:10px;letter-spacing:.3em;color:var(--dim);margin-bottom:14px}
+.drawer ul{list-style:none;padding:0;margin:0;display:grid;gap:8px}
+.drawer li{display:flex;gap:8px;align-items:center}
+.drawer .slip{flex:1;text-align:left;background:linear-gradient(170deg,#e9dfc6,#cfbf98);color:var(--ink);border:none;border-radius:2px;padding:10px 12px;font-family:var(--hand);font-size:18px;min-height:44px}
+.drawer .slip[disabled]{background:#2a2016;color:#6d5d48;font-family:var(--serif);font-size:13px}
+.drawer .go{min-height:44px}
+.drawer .foot{display:flex;gap:8px;justify-content:center;margin-top:14px;flex-wrap:wrap}
+/* credits */
+#credits{background:#000;z-index:90;padding:0;overflow:hidden;display:block}
+#credits .roll{position:absolute;left:0;right:0;top:100%;text-align:center;padding:0 20px;animation:roll 70s linear forwards}
+#credits .roll.static{position:relative;top:auto;animation:none;padding:40px 20px;height:100%;overflow:auto}
+@keyframes roll{to{transform:translateY(calc(-100% - 100vh))}}
+#credits h1{font-family:var(--deco);font-weight:400;font-size:clamp(34px,9vw,56px);letter-spacing:.3em;color:#eee;margin:0}
+#credits .en{font-family:var(--latin);letter-spacing:.4em;color:#999;font-size:12px;margin:6px 0 40px}
+#credits h3{font-family:var(--latin);font-weight:400;letter-spacing:.35em;color:#8a8a8a;font-size:11px;margin:46px 0 4px}
+#credits .role{font-family:var(--serif);color:#9a9a9a;font-size:13px;letter-spacing:.3em}
+#credits .name{font-family:var(--deco);color:#f0f0f0;font-size:22px;letter-spacing:.2em;margin:4px 0 18px}
+#credits .shot{font-family:var(--serif);color:#d0d0d0;font-size:15px;line-height:1.9;letter-spacing:.08em}
+#credits .shot em{font-style:normal;color:#8c8c8c;font-size:12px;letter-spacing:.2em;display:block;margin-top:14px}
+#credits .note{font-family:var(--hand);color:#e8e0cc;font-size:20px;line-height:1.8;max-width:520px;margin:30px auto}
+#credits .deco{width:200px;height:20px;margin:30px auto;border-top:1px solid #777;border-bottom:1px solid #777;position:relative}
+#credits .deco::after{content:"";position:absolute;left:50%;top:50%;width:10px;height:10px;border:1px solid #aaa;transform:translate(-50%,-50%) rotate(45deg);background:#000}
+#credits .end{font-family:var(--deco);font-size:40px;letter-spacing:.5em;color:#fff;margin:80px 0 20px}
+#credits .ctl{position:absolute;right:12px;top:calc(env(safe-area-inset-top) + 10px);z-index:3;display:flex;gap:8px}
+@media (max-width:600px){
+  .bar{flex-wrap:wrap;row-gap:2px}
+  .brand{flex:1}
+  .brand small{display:none}
+  .night{order:3;flex:0 0 100%;font-size:13px;letter-spacing:.12em;text-align:left;padding-left:2px}
+}
+@media (prefers-reduced-motion: reduce){
+  *{animation-duration:.01ms !important;transition:none !important}
+}
+</style>
+</head>
+<body>
+<div id="app">
+  <header class="bar">
+    <div class="brand">第二十五帧<small>THE 25TH FRAME</small></div>
+    <div class="night" id="nightLabel">第一夜</div>
+    <button class="tbtn" id="btnDrawer" aria-label="打开抽屉，回看字条">抽屉</button>
+    <button class="tbtn" id="btnMute" aria-pressed="false">声音 开</button>
+  </header>
+  <main class="stage">
+    <section class="theatre">
+      <div class="brief" id="brief"><div class="goal" id="goal"></div><div class="sub" id="goalSub"></div></div>
+      <div class="screenWrap"><canvas id="screen" aria-label="放映窗"></canvas></div>
+    </section>
+    <section class="desk" aria-label="剪辑台">
+      <div class="deskLabel" id="deskLabel">剪 辑 台<span>CUTTING ROOM</span></div>
+      <div class="secLabel">时间线 · 把镜头拖进胶片带（可交换、可拖回）</div>
+      <div class="strip" id="timeline"></div>
+      <div id="flashWrap" class="hidden">
+        <div class="secLabel">单帧 · 只闪一下的第二十五帧（拖到两格之间的红线上）</div>
+        <div class="flashpool" id="flashPool"></div>
+      </div>
+      <div class="secLabel">镜头素材 · 沈先生留下的胶片</div>
+      <div class="pool" id="pool"></div>
+      <div class="controls">
+        <button class="btn" id="btnClear">清空</button>
+        <button class="btn primary" id="btnPlay">放 映</button>
+      </div>
+      <p class="tip" id="tip"></p>
+    </section>
+  </main>
+</div>
+
+<div class="overlay" id="title">
+  <canvas id="titleCanvas"></canvas>
+  <button class="btn primary enter" id="btnEnter">走进剪辑室</button>
+  <div class="credit">上海 · 一九三九 · 天光影片公司 剪辑间</div>
+</div>
+<div class="overlay hidden" id="noteModal" role="dialog" aria-modal="true">
+  <div class="letter"><div class="head" id="noteHead"></div><div class="body" id="noteBody"></div>
+    <div class="actions" id="noteActions"></div></div>
+</div>
+<div class="overlay hidden" id="drawer" role="dialog" aria-modal="true">
+  <div class="drawer"><h2>抽 屉</h2><div class="en">LETTERS FROM MR. SHEN</div>
+    <ul id="drawerList"></ul>
+    <div class="foot"><button class="btn" id="btnCloseDrawer">合上</button><button class="btn" id="btnReset">清空进度</button></div></div>
+</div>
+<div class="overlay hidden" id="credits"><div class="ctl"><button class="tbtn" id="btnCreditsBack">回到剪辑台</button></div><div class="roll" id="roll"></div></div>
+<script>
+"use strict";
+/* ============ 基础工具 ============ */
+const TAU = Math.PI * 2;
+const G = (v, a = 1) => `rgba(${v|0},${v|0},${v|0},${a})`;
+const clamp = (x, a, b) => Math.max(a, Math.min(b, x));
+const lerp = (a, b, k) => a + (b - a) * k;
+function rng(seed) { let s = seed >>> 0; return () => { s += 0x6D2B79F5; let r = Math.imul(s ^ s >>> 15, 1 | s); r ^= r + Math.imul(r ^ r >>> 7, 61 | r); return ((r ^ r >>> 14) >>> 0) / 4294967296; }; }
+let REDUCED = false;
+try { REDUCED = matchMedia('(prefers-reduced-motion: reduce)').matches; } catch (e) {}
+const store = {
+  get(k, d) { try { const v = localStorage.getItem(k); return v ? JSON.parse(v) : d; } catch (e) { return d; } },
+  set(k, v) { try { localStorage.setItem(k, JSON.stringify(v)); } catch (e) {} },
+  del(k) { try { localStorage.removeItem(k); } catch (e) {} }
+};
+/* 画布小工具：所有镜头在 320×240（学院比例 4:3）逻辑坐标中绘制 */
+function E(c, x, y, rx, ry, rot = 0) { c.beginPath(); c.ellipse(x, y, Math.abs(rx), Math.abs(ry), rot, 0, TAU); c.fill(); }
+function L(c, x1, y1, x2, y2) { c.beginPath(); c.moveTo(x1, y1); c.lineTo(x2, y2); c.stroke(); }
+function poly(c, pts) { c.beginPath(); c.moveTo(pts[0], pts[1]); for (let i = 2; i < pts.length; i += 2) c.lineTo(pts[i], pts[i + 1]); c.closePath(); c.fill(); }
+function vgrad(c, y0, y1, stops) { const g = c.createLinearGradient(0, y0, 0, y1); stops.forEach((s, i) => g.addColorStop(s[0], s[1])); return g; }
+function hgrad(c, x0, x1, stops) { const g = c.createLinearGradient(x0, 0, x1, 0); stops.forEach(s => g.addColorStop(s[0], s[1])); return g; }
+function glow(c, x, y, r, a = .2, v = 255) { const g = c.createRadialGradient(x, y, 0, x, y, r); g.addColorStop(0, G(v, a)); g.addColorStop(1, G(v, 0)); c.fillStyle = g; c.fillRect(x - r, y - r, r * 2, r * 2); }
+/* 光束 + 光里的灰尘 */
+function beam(c, pts, a, t, seed = 1, n = 26) {
+  c.save();
+  c.beginPath(); c.moveTo(pts[0], pts[1]); for (let i = 2; i < pts.length; i += 2) c.lineTo(pts[i], pts[i + 1]); c.closePath();
+  const g = c.createLinearGradient(pts[0], pts[1], (pts[4] + pts[6]) / 2, (pts[5] + pts[7]) / 2);
+  g.addColorStop(0, G(255, a)); g.addColorStop(1, G(255, a * .15));
+  c.fillStyle = g; c.fill(); c.clip();
+  const R = rng(seed); const xs = Math.min(pts[0], pts[2], pts[4], pts[6]), xe = Math.max(pts[0], pts[2], pts[4], pts[6]);
+  const ys = Math.min(pts[1], pts[3], pts[5], pts[7]), ye = Math.max(pts[1], pts[3], pts[5], pts[7]);
+  for (let i = 0; i < n; i++) {
+    const bx = R(), by = R(), sp = .3 + R(), ph = R() * TAU;
+    const x = xs + ((bx * (xe - xs) + Math.sin(t * .4 * sp + ph) * 8 + t * 3 * sp) % (xe - xs + 1));
+    const y = ys + ((by * (ye - ys) + t * 4 * sp) % (ye - ys + 1));
+    c.fillStyle = G(255, .25 + .5 * Math.abs(Math.sin(t * sp + ph)));
+    c.fillRect(x, y, 1.2, 1.2);
+  }
+  c.restore();
+}
+function grainWall(c, seed, v, a, n = 400) { const R = rng(seed); for (let i = 0; i < n; i++) { c.fillStyle = G(R() > .5 ? v + 30 : v - 30, a * R()); c.fillRect(R() * 320, R() * 240, 1 + R() * 2, 1 + R() * 2); } }
+
+/* ============ 镜头绘制 ============ */
+function eye(c, x, y, blink, light) {
+  c.fillStyle = G(205 * light + 20); E(c, x, y, 8.5, 4.2);
+  c.fillStyle = G(22); E(c, x + 1, y, 4.2, 4.2);
+  c.fillStyle = G(255, .9 * light + .1); E(c, x - 1, y - 1.5, 1.2, 1.2);
+  if (blink) { c.fillStyle = G(150 * light + 30); E(c, x, y, 9.5, 5); c.strokeStyle = G(30); c.lineWidth = 1.6; L(c, x - 8, y + 1, x + 8, y + 1); }
+  else { c.strokeStyle = G(20, .9); c.lineWidth = 1.6; c.beginPath(); c.ellipse(x, y, 8.5, 4.4, 0, Math.PI * 1.05, Math.PI * 1.95); c.stroke(); }
+}
+function shFace(c, t) {
+  c.fillStyle = hgrad(c, 0, 320, [[0, G(78)], [.5, G(36)], [1, G(12)]]); c.fillRect(0, 0, 320, 240);
+  glow(c, 60, 50, 150, .1);
+  const br = Math.sin(t * 1.4) * .8;
+  c.fillStyle = G(16); c.beginPath(); c.moveTo(30, 240); c.bezierCurveTo(55, 196, 105, 182, 140, 178); c.lineTo(182, 178); c.bezierCurveTo(218, 182, 262, 196, 290, 240); c.fill();
+  c.fillStyle = G(60); c.beginPath(); c.moveTo(52, 240); c.bezierCurveTo(70, 206, 108, 190, 138, 184); c.lineTo(150, 240); c.fill();
+  c.fillStyle = G(28); c.beginPath(); c.moveTo(118, 240); c.lineTo(140, 186); c.lineTo(156, 240); c.fill();
+  c.fillStyle = G(218); poly(c, [140, 180, 160, 224, 182, 180, 173, 170, 147, 170]);
+  c.fillStyle = G(150); poly(c, [168, 178, 160, 224, 182, 180]);
+  c.fillStyle = G(26); poly(c, [155, 190, 165, 190, 170, 232, 160, 240, 150, 232]);
+  c.fillStyle = hgrad(c, 140, 182, [[0, G(175)], [1, G(48)]]); c.fillRect(142, 146, 38, 36);
+  c.fillStyle = G(0, .4); E(c, 162, 156, 22, 9);
+  c.save(); c.translate(160, 106 + br * .4);
+  c.fillStyle = G(160); E(c, -50, 4, 8, 15); c.fillStyle = G(40); E(c, 50, 4, 8, 15);
+  c.fillStyle = hgrad(c, -55, 55, [[0, G(236)], [.42, G(182)], [.72, G(84)], [1, G(28)]]);
+  c.beginPath(); c.moveTo(0, -62); c.bezierCurveTo(36, -62, 50, -35, 50, 0); c.bezierCurveTo(50, 35, 30, 58, 0, 62); c.bezierCurveTo(-30, 58, -50, 35, -50, 0); c.bezierCurveTo(-50, -35, -36, -62, 0, -62); c.fill();
+  c.fillStyle = G(0, .28); c.beginPath(); c.moveTo(18, -24); c.bezierCurveTo(50, 0, 42, 42, 0, 62); c.bezierCurveTo(30, 44, 36, 18, 18, -24); c.fill();
+  c.fillStyle = G(0, .18); E(c, 28, 20, 14, 18);
+  c.fillStyle = G(14); c.beginPath(); c.moveTo(-52, -6); c.bezierCurveTo(-60, -52, -30, -76, 4, -73); c.bezierCurveTo(42, -73, 60, -48, 52, -6); c.bezierCurveTo(47, -30, 30, -44, 6, -45); c.bezierCurveTo(-12, -40, -38, -40, -52, -6); c.fill();
+  c.strokeStyle = G(130, .55); c.lineWidth = 2; c.beginPath(); c.moveTo(-42, -36); c.bezierCurveTo(-30, -58, -8, -66, 12, -64); c.stroke();
+  c.strokeStyle = G(28); c.lineWidth = 3.4; c.lineCap = 'round'; L(c, -31, -15, -10, -16); L(c, 10, -16, 31, -14);
+  c.fillStyle = G(0, .22); E(c, -20, -3, 15, 9); c.fillStyle = G(0, .42); E(c, 20, -3, 15, 9);
+  const blink = (t % 4.3) < .13 || (t % 4.3 > 2.1 && t % 4.3 < 2.18 && t > 6);
+  eye(c, -20, -3, blink, 1); eye(c, 20, -3, blink, .5);
+  c.strokeStyle = G(0, .45); c.lineWidth = 2; c.beginPath(); c.moveTo(4, -4); c.bezierCurveTo(8, 10, 11, 20, 6, 26); c.stroke();
+  c.fillStyle = G(0, .4); c.beginPath(); c.moveTo(7, 25); c.bezierCurveTo(16, 22, 17, 33, 6, 33); c.bezierCurveTo(-1, 34, -9, 33, -11, 30); c.fill();
+  c.fillStyle = G(255, .28); E(c, -3, 16, 3.5, 9);
+  c.strokeStyle = G(40); c.lineWidth = 2.4; L(c, -15, 41, 15, 41);
+  c.fillStyle = G(0, .2); E(c, 0, 47, 10, 3);
+  c.strokeStyle = G(255, .3); c.lineWidth = 1.5; c.beginPath(); c.moveTo(-49, -10); c.bezierCurveTo(-50, 25, -32, 52, -8, 61); c.stroke();
+  c.restore();
+}
+function shSoup(c, t) {
+  c.fillStyle = vgrad(c, 0, 240, [[0, G(44)], [.65, G(20)], [1, G(10)]]); c.fillRect(0, 0, 320, 240);
+  c.fillStyle = G(120, .35); c.fillRect(24, 18, 62, 74); c.fillStyle = G(30); c.fillRect(53, 18, 4, 74); c.fillRect(24, 53, 62, 4);
+  beam(c, [24, 18, 86, 18, 250, 175, 120, 175], .14, t, 3);
+  c.fillStyle = vgrad(c, 165, 240, [[0, G(52)], [1, G(16)]]); c.fillRect(0, 165, 320, 75);
+  c.strokeStyle = G(110, .6); c.lineWidth = 1.5; L(c, 0, 165, 320, 165);
+  c.strokeStyle = G(0, .25); for (let i = 0; i < 6; i++) L(c, 0, 180 + i * 11, 320, 176 + i * 12);
+  c.fillStyle = G(0, .55); E(c, 178, 206, 92, 14);
+  c.fillStyle = hgrad(c, 90, 230, [[0, G(235)], [.5, G(170)], [1, G(55)]]);
+  c.beginPath(); c.moveTo(90, 158); c.bezierCurveTo(92, 205, 130, 214, 160, 214); c.bezierCurveTo(190, 214, 228, 205, 230, 158); c.fill();
+  c.fillStyle = G(30); c.fillRect(140, 210, 40, 6);
+  c.strokeStyle = G(70, .7); c.lineWidth = 1.2; c.beginPath(); c.moveTo(96, 176); c.bezierCurveTo(130, 188, 190, 188, 224, 176); c.stroke();
+  c.fillStyle = G(242); E(c, 160, 158, 71, 17);
+  c.fillStyle = hgrad(c, 96, 224, [[0, G(170)], [1, G(70)]]); E(c, 160, 159, 64, 13);
+  c.fillStyle = G(255, .5); E(c, 132, 157, 14, 3);
+  c.fillStyle = G(255, .7); for (let i = 0; i < 5; i++) E(c, 140 + i * 9, 160 + Math.sin(i * 2) * 3, 2, 1);
+  c.strokeStyle = G(205); c.lineWidth = 5; c.lineCap = 'round'; L(c, 196, 156, 264, 118);
+  c.fillStyle = G(220); E(c, 192, 160, 13, 6, -.4);
+  c.save(); c.globalCompositeOperation = 'lighter';
+  for (let i = 0; i < 7; i++) {
+    const ph = i * 1.7, x0 = 118 + i * 14;
+    const k = ((t * .35 + i * .13) % 1);
+    c.strokeStyle = G(255, .09 * (1 - k) + .03); c.lineWidth = 7 + i % 3 * 3;
+    c.beginPath(); c.moveTo(x0, 152);
+    for (let y = 0; y <= 110; y += 10) c.lineTo(x0 + Math.sin(y * .045 + t * 1.6 + ph) * (6 + y * .14) + y * .12, 152 - y - k * 12);
+    c.stroke();
+  }
+  c.restore();
+}
+function mum(c, x, y, r, rot) {
+  c.save(); c.translate(x, y); c.rotate(rot);
+  for (let k = 0; k < 3; k++) { const rr = r * (1 - k * .28); c.fillStyle = G(250 - k * 25);
+    for (let i = 0; i < 18; i++) { const a = i / 18 * TAU + k * .3; c.save(); c.rotate(a); E(c, rr * .55, 0, rr * .48, rr * .1); c.restore(); } }
+  c.fillStyle = G(170); E(c, 0, 0, r * .18, r * .18); c.restore();
+}
+function shCoffin(c, t) {
+  for (let x = 0; x < 320; x += 16) { c.fillStyle = hgrad(c, x, x + 16, [[0, G(14)], [.5, G(34)], [1, G(14)]]); c.fillRect(x, 0, 16, 240); }
+  beam(c, [142, 0, 182, 0, 262, 240, 62, 240], .16, t, 7);
+  c.fillStyle = G(6); c.fillRect(136, 32, 48, 58); c.fillStyle = G(95); c.fillRect(142, 38, 36, 46);
+  c.fillStyle = G(60); E(c, 160, 56, 7, 9); c.fillRect(150, 66, 20, 18);
+  c.strokeStyle = G(5); c.lineWidth = 4; L(c, 136, 32, 152, 48); L(c, 184, 32, 168, 48);
+  c.fillStyle = G(10); c.fillRect(100, 182, 8, 50); c.fillRect(212, 182, 8, 50);
+  c.fillStyle = G(0, .5); E(c, 160, 234, 100, 7);
+  c.fillStyle = hgrad(c, 82, 238, [[0, G(205)], [.6, G(130)], [1, G(50)]]); poly(c, [92, 138, 228, 138, 240, 150, 80, 150]);
+  c.fillStyle = vgrad(c, 150, 184, [[0, G(150)], [1, G(40)]]); poly(c, [80, 150, 240, 150, 232, 184, 88, 184]);
+  c.strokeStyle = G(240, .5); c.lineWidth = 1; L(c, 80, 150, 240, 150);
+  c.strokeStyle = G(0, .4); c.strokeRect(100, 158, 120, 18);
+  c.fillStyle = G(25); for (let i = 0; i < 4; i++) E(c, 118 + i * 30, 138, 10, 3, .3);
+  mum(c, 132, 132, 13, .2); mum(c, 160, 128, 15, 1.1); mum(c, 188, 133, 12, .6);
+  const fl = 1 + Math.sin(t * 13) * .12 + Math.sin(t * 7.3) * .08;
+  c.fillStyle = G(225); c.fillRect(44, 150, 9, 44); c.fillStyle = G(40); c.fillRect(40, 194, 17, 6);
+  glow(c, 48, 140, 46 * fl, .22);
+  c.fillStyle = G(255); E(c, 48.5, 142, 3 * fl, 7 * fl);
+  c.strokeStyle = G(200, .25); c.lineWidth = 1.2; c.beginPath(); c.moveTo(48, 132);
+  for (let y = 0; y < 90; y += 6) c.lineTo(48 + Math.sin(y * .08 + t * 1.5) * (y * .12), 132 - y); c.stroke();
+}
+function shWoman(c, t) {
+  c.fillStyle = G(14); c.fillRect(0, 0, 320, 240);
+  c.fillStyle = vgrad(c, 28, 212, [[0, G(245)], [1, G(196)]]); c.fillRect(150, 28, 140, 184);
+  glow(c, 220, 110, 130, .14);
+  c.fillStyle = G(150, .6); for (let i = 0; i < 4; i++) c.fillRect(150, 150 + i * 14, 140, 1);
+  c.fillStyle = G(12); c.fillRect(216, 28, 6, 184); c.fillRect(150, 92, 140, 6); c.fillRect(144, 22, 152, 7); c.fillRect(144, 210, 152, 9);
+  c.fillStyle = G(255, .08); poly(c, [150, 219, 290, 219, 200, 240, 0, 240]);
+  const sw = Math.sin(t * 1.1) * 10 + Math.sin(t * 2.3) * 4;
+  c.fillStyle = G(255, .3); c.beginPath(); c.moveTo(140, 22); c.bezierCurveTo(160 + sw, 80, 150 - sw * .5, 150, 168 + sw, 214); c.lineTo(132, 214); c.lineTo(132, 22); c.fill();
+  c.strokeStyle = G(255, .2); for (let i = 0; i < 4; i++) { c.beginPath(); c.moveTo(136 + i * 5, 22); c.bezierCurveTo(150 + sw + i * 3, 90, 146 - sw * .4, 150, 150 + sw + i * 4, 214); c.stroke(); }
+  c.fillStyle = G(8);
+  c.beginPath(); c.moveTo(208, 96); c.lineTo(221, 96); c.bezierCurveTo(232, 100, 238, 104, 238, 114); c.lineTo(231, 150);
+  c.bezierCurveTo(238, 170, 240, 190, 236, 228); c.lineTo(196, 228); c.bezierCurveTo(194, 190, 198, 170, 205, 150); c.lineTo(197, 114); c.bezierCurveTo(198, 104, 202, 100, 208, 96); c.fill();
+  E(c, 214, 80, 13, 15); E(c, 228, 72, 8, 8); c.fillRect(209, 88, 10, 10);
+  c.beginPath(); c.moveTo(199, 110); c.lineTo(186, 96); c.lineTo(180, 102); c.lineTo(196, 124); c.fill();
+  c.strokeStyle = G(255, .35); c.lineWidth = 1; c.beginPath(); c.moveTo(203, 70); c.bezierCurveTo(200, 78, 201, 88, 206, 92); c.stroke();
+  c.beginPath(); c.moveTo(238, 116); c.lineTo(231, 150); c.bezierCurveTo(238, 170, 240, 190, 236, 228); c.stroke();
+}
+function steamPuffs(c, t, x0, y0, dir, n, spread) {
+  for (let i = 0; i < n; i++) {
+    const age = (t * .5 + i / n) % 1;
+    const x = x0 + dir * age * spread + Math.sin(i * 3 + t) * 6, y = y0 - age * 60 - i % 3 * 4, r = 8 + age * 34;
+    c.fillStyle = G(232, (1 - age) * .45); E(c, x, y, r, r * .8);
+  }
+}
+function shPlatform(c, t) {
+  c.fillStyle = vgrad(c, 0, 240, [[0, G(28)], [.45, G(70)], [1, G(18)]]); c.fillRect(0, 0, 320, 240);
+  c.fillStyle = G(190, .7); poly(c, [0, 18, 320, 6, 320, 16, 0, 26]);
+  c.strokeStyle = G(10); c.lineWidth = 3; for (let i = 0; i < 8; i++) L(c, i * 46, 0, i * 46 - 10, 30);
+  c.fillStyle = G(14); c.fillRect(38, 26, 7, 200); c.fillRect(268, 20, 7, 200);
+  c.fillStyle = vgrad(c, 176, 240, [[0, G(80)], [1, G(22)]]); poly(c, [0, 176, 150, 176, 60, 240, 0, 240]);
+  c.strokeStyle = G(220, .8); c.lineWidth = 2; L(c, 150, 176, 60, 240);
+  c.fillStyle = G(16); c.fillRect(150, 92, 170, 92); c.fillStyle = G(30); c.fillRect(150, 110, 170, 40);
+  c.fillStyle = hgrad(c, 0, 0, [[0, G(40)], [1, G(40)]]); c.fillStyle = vgrad(c, 100, 150, [[0, G(70)], [.3, G(30)], [1, G(10)]]); c.fillRect(196, 100, 124, 52);
+  c.fillStyle = G(12); c.fillRect(214, 64, 22, 38); c.fillRect(208, 60, 34, 8);
+  c.fillStyle = G(170); c.fillRect(160, 102, 22, 18); c.fillStyle = G(12); c.fillRect(170, 102, 2, 18);
+  for (let i = 0; i < 4; i++) { const x = 186 + i * 36; c.fillStyle = G(8); E(c, x, 188, 17, 17); c.strokeStyle = G(90); c.lineWidth = 2; c.beginPath(); c.arc(x, 188, 15, 0, TAU); c.stroke();
+    for (let s = 0; s < 6; s++) { const a = s / 6 * TAU + .3; L(c, x, 188, x + Math.cos(a) * 14, 188 + Math.sin(a) * 14); } }
+  c.strokeStyle = G(120); c.lineWidth = 3; L(c, 186, 188, 258, 188);
+  steamPuffs(c, t, 225, 60, -1, 12, 150); steamPuffs(c, t + .5, 190, 186, -1, 8, 120);
+  c.fillStyle = G(12); c.fillRect(70, 40, 3, 50); c.fillStyle = G(220); E(c, 71.5, 96, 6, 8); glow(c, 71, 96, 40, .25);
+  c.fillStyle = G(6); E(c, 104, 150, 6, 7); poly(c, [96, 158, 112, 158, 116, 205, 92, 205]);
+}
+function tracks(c, vx, vy, sky1, sky2, ground) {
+  c.fillStyle = vgrad(c, 0, vy, [[0, G(sky1)], [1, G(sky2)]]); c.fillRect(0, 0, 320, vy);
+  c.fillStyle = vgrad(c, vy, 240, [[0, G(ground + 15)], [1, G(ground)]]); c.fillRect(0, vy, 320, 240 - vy);
+  c.fillStyle = G(ground - 10); poly(c, [vx - 4, vy, vx + 4, vy, 260, 240, 60, 240]);
+  c.strokeStyle = G(0, .6); for (let i = 1; i < 14; i++) { const k = 1 / (i * .35); const y = vy + (240 - vy) * Math.min(1, k * .3); const hw = (y - vy) * 1.1; c.lineWidth = Math.max(1, (y - vy) / 22); L(c, vx - hw, y, vx + hw, y); }
+  c.strokeStyle = G(200, .85); c.lineWidth = 1.5; L(c, vx - 1, vy, 110, 240); L(c, vx + 1, vy, 210, 240);
+  c.fillStyle = G(10); for (let i = 0; i < 5; i++) { const k = 1 / (1 + i * .9); const x = vx - 40 - 110 * k, y = vy + 2; c.fillRect(x, y - 90 * k - 10, Math.max(1, 3 * k), 90 * k + 10); c.fillRect(x - 10 * k, y - 85 * k - 10, 22 * k, 1.5); }
+}
+function shTrainOut(c, t) {
+  const vx = 160, vy = 128; tracks(c, vx, vy, 120, 215, 30);
+  c.fillStyle = G(250, .9); E(c, 160, vy - 6, 24, 8); glow(c, 160, vy - 4, 90, .25);
+  c.fillStyle = G(40); for (let i = 0; i < 6; i++) c.fillRect(i * 58 - 10, vy - 18 - (i % 3) * 7, 46, 18 + (i % 3) * 7);
+  const d = 1 + t * 1.15, w = 120 / d, h = 100 / d, by = vy + 112 / d;
+  steamPuffs(c, t, vx + 6, by - h - 8, .6, 10, 40 / d + 30);
+  c.fillStyle = G(14); c.fillRect(vx - w / 2, by - h, w, h); c.fillStyle = G(55); c.fillRect(vx - w / 2, by - h, w, h * .12);
+  c.fillStyle = G(150); c.fillRect(vx - w * .15, by - h * .8, w * .3, h * .3);
+  c.fillStyle = G(230); E(c, vx - w * .36, by - h * .15, w * .05, w * .05); E(c, vx + w * .36, by - h * .15, w * .05, w * .05);
+  glow(c, vx - w * .36, by - h * .15, w * .3, .3); glow(c, vx + w * .36, by - h * .15, w * .3, .3);
+}
+function shTrainIn(c, t) {
+  const vx = 160, vy = 120; tracks(c, vx, vy, 30, 90, 18);
+  const d = Math.max(.95, 4.2 - t * 1.45), s = 1 / d, by = vy + 120 * s;
+  steamPuffs(c, t, vx - 10, by - 140 * s, -.5, 10, 60);
+  c.fillStyle = G(10); c.fillRect(vx - 60 * s, by - 120 * s, 120 * s, 120 * s);
+  c.fillStyle = vgrad(c, by - 110 * s, by - 30 * s, [[0, G(60)], [1, G(15)]]); E(c, vx, by - 70 * s, 46 * s, 46 * s);
+  c.fillStyle = G(14); c.fillRect(vx - 8 * s, by - 150 * s, 16 * s, 40 * s);
+  c.fillStyle = G(6); poly(c, [vx - 60 * s, by - 12 * s, vx + 60 * s, by - 12 * s, vx + 30 * s, by, vx - 30 * s, by]);
+  const k = clamp(1.2 - d * .25, .2, 1);
+  glow(c, vx, by - 72 * s, 160 * s + 30, .5 * k); c.fillStyle = G(255); E(c, vx, by - 72 * s, 11 * s, 11 * s);
+  c.save(); c.globalCompositeOperation = 'lighter'; c.fillStyle = G(255, .07 * k); poly(c, [vx - 6 * s, by - 72 * s, vx + 6 * s, by - 72 * s, 320, 240, 0, 240]); c.restore();
+}
+function scribble(c, x, y, w, rows, seed, lh = 9) {
+  const R = rng(seed); c.beginPath();
+  for (let r = 0; r < rows; r++) { let xx = x; const yy = y + r * lh; const ww = r === rows - 1 ? w * .5 : w * (.85 + R() * .15); c.moveTo(xx, yy);
+    while (xx < x + ww) { const s = 3 + R() * 4; c.quadraticCurveTo(xx + s / 2, yy - 2 - R() * 3, xx + s, yy + R() * 1.5); xx += s + (R() < .15 ? 4 : 0); c.moveTo(xx, yy); } }
+  c.stroke();
+}
+function shLetter(c, t) {
+  c.fillStyle = vgrad(c, 0, 240, [[0, G(36)], [1, G(16)]]); c.fillRect(0, 0, 320, 240);
+  c.strokeStyle = G(0, .25); c.lineWidth = 1; for (let i = 0; i < 14; i++) { c.beginPath(); c.moveTo(0, i * 18); c.bezierCurveTo(100, i * 18 + 6, 220, i * 18 - 6, 320, i * 18 + 3); c.stroke(); }
+  glow(c, 150, 120, 160, .22);
+  c.save(); c.translate(98, 132); c.rotate(-.16); c.fillStyle = G(0, .45); c.fillRect(-56, -32, 116, 72);
+  c.fillStyle = G(190); c.fillRect(-60, -36, 116, 72); c.strokeStyle = G(120); c.lineWidth = 1; L(c, -60, -36, -2, 4); L(c, 56, -36, -2, 4);
+  c.fillStyle = G(120); c.fillRect(30, -30, 18, 22); c.strokeStyle = G(70, .7); c.beginPath(); c.arc(28, -18, 11, 0, TAU); c.stroke(); c.restore();
+  const lift = Math.sin(t * 1.2) * 1.5;
+  c.save(); c.translate(184, 118); c.rotate(.1); c.fillStyle = G(0, .5); c.fillRect(-62, -78, 132, 168);
+  c.fillStyle = hgrad(c, -66, 66, [[0, G(245)], [1, G(205)]]); c.beginPath(); c.moveTo(-66, -82); c.lineTo(66, -82); c.lineTo(66, 82 - lift); c.lineTo(52 + lift, 86); c.lineTo(-66, 86); c.closePath(); c.fill();
+  c.strokeStyle = G(40, .8); c.lineWidth = 1; scribble(c, -54, -64, 104, 15, 11);
+  c.fillStyle = G(60, .8); E(c, 40, 72, 9, 4); c.restore();
+  c.save(); c.translate(70, 205); c.rotate(-.55); c.fillStyle = G(12); c.fillRect(-60, -4, 110, 8); c.fillStyle = G(200); c.fillRect(-60, -4, 8, 8); c.fillRect(38, -4, 2, 8);
+  c.fillStyle = G(150); poly(c, [50, -4, 66, 0, 50, 4]); c.restore();
+}
+function shChair(c, t) {
+  c.fillStyle = vgrad(c, 0, 150, [[0, G(26)], [1, G(44)]]); c.fillRect(0, 0, 320, 150);
+  c.fillStyle = vgrad(c, 150, 240, [[0, G(34)], [1, G(12)]]); c.fillRect(0, 150, 320, 90);
+  c.strokeStyle = G(0, .4); c.lineWidth = 1; for (let i = -8; i < 9; i++) L(c, 160 + i * 6, 150, 160 + i * 60, 240);
+  c.fillStyle = G(220, .55); poly(c, [30, 30, 92, 26, 92, 108, 30, 112]);
+  c.fillStyle = G(20); c.fillRect(59, 26, 3, 86); c.fillRect(30, 68, 62, 3);
+  c.fillStyle = G(230, .32); poly(c, [130, 168, 220, 162, 300, 232, 170, 240]);
+  c.fillStyle = G(30, .9); c.fillRect(208, 170, 4, 60); poly(c, [146, 198, 286, 196, 288, 200, 146, 202]);
+  beam(c, [30, 30, 92, 26, 300, 232, 130, 168], .1, t, 5, 34);
+  c.fillStyle = G(0, .55); poly(c, [150, 196, 186, 196, 276, 214, 236, 220]);
+  c.strokeStyle = G(18); c.lineCap = 'round';
+  c.lineWidth = 4; c.beginPath(); c.ellipse(166, 118, 22, 34, 0, Math.PI * 1.02, Math.PI * 1.98); c.stroke();
+  L(c, 144, 120, 146, 160); L(c, 188, 120, 186, 160);
+  c.lineWidth = 3; c.beginPath(); c.ellipse(166, 116, 13, 22, 0, Math.PI, TAU); c.stroke();
+  c.fillStyle = vgrad(c, 156, 170, [[0, G(110)], [1, G(25)]]); E(c, 166, 161, 30, 9);
+  c.lineWidth = 3.5; L(c, 140, 164, 134, 204); L(c, 192, 164, 198, 204); L(c, 152, 168, 150, 198); L(c, 180, 168, 183, 198);
+  c.lineWidth = 1.5; c.beginPath(); c.ellipse(166, 186, 26, 6, 0, 0, TAU); c.stroke();
+  c.strokeStyle = G(255, .35); c.lineWidth = 1; c.beginPath(); c.ellipse(166, 118, 22, 34, 0, Math.PI * 1.1, Math.PI * 1.45); c.stroke();
+}
+function shClock(c, t) {
+  c.fillStyle = hgrad(c, 0, 320, [[0, G(14)], [.6, G(40)], [1, G(60)]]); c.fillRect(0, 0, 320, 240);
+  c.strokeStyle = G(255, .05); c.lineWidth = 1; for (let i = -12; i < 24; i++) { L(c, i * 20, 0, i * 20 + 120, 240); L(c, i * 20 + 120, 0, i * 20, 240); }
+  c.fillStyle = G(0, .5); c.fillRect(116, 18, 104, 222);
+  c.fillStyle = hgrad(c, 108, 212, [[0, G(20)], [.75, G(70)], [1, G(110)]]); c.fillRect(108, 10, 104, 230);
+  c.fillStyle = G(14); c.fillRect(102, 6, 116, 10);
+  c.fillStyle = G(215); c.beginPath(); c.arc(160, 70, 42, 0, TAU); c.fill();
+  c.strokeStyle = G(60); c.lineWidth = 3; c.beginPath(); c.arc(160, 70, 42, 0, TAU); c.stroke();
+  c.strokeStyle = G(30); for (let i = 0; i < 60; i++) { const a = i / 60 * TAU, r1 = i % 5 ? 36 : 31; c.lineWidth = i % 5 ? 1 : 3; L(c, 160 + Math.cos(a) * r1, 70 + Math.sin(a) * r1, 160 + Math.cos(a) * 39, 70 + Math.sin(a) * 39); }
+  const sec = t * 1, mn = 59 + sec / 60, hr = 11 + mn / 60;
+  const hand = (a, r, w) => { c.lineWidth = w; L(c, 160, 70, 160 + Math.cos(a - Math.PI / 2) * r, 70 + Math.sin(a - Math.PI / 2) * r); };
+  c.strokeStyle = G(15); c.lineCap = 'round'; hand(hr / 12 * TAU, 20, 4); hand(mn / 60 * TAU, 30, 2.5);
+  c.strokeStyle = G(90); hand(Math.floor(sec) / 60 * TAU, 33, 1);
+  c.fillStyle = G(15); E(c, 160, 70, 4, 4);
+  c.fillStyle = G(6); c.fillRect(128, 124, 64, 100); c.strokeStyle = G(120, .6); c.lineWidth = 1; c.strokeRect(128, 124, 64, 100);
+  const sw = REDUCED ? 0 : Math.sin(t * Math.PI) * .28;
+  c.save(); c.translate(160, 126); c.rotate(sw); c.strokeStyle = G(150); c.lineWidth = 2; L(c, 0, 0, 0, 76);
+  c.fillStyle = vgrad(c, 68, 92, [[0, G(240)], [1, G(110)]]); E(c, 0, 80, 12, 12); c.restore();
+  c.fillStyle = G(255, .06); poly(c, [212, 0, 320, 0, 320, 240, 212, 240]);
+}
+function shDoor(c, t) {
+  c.fillStyle = vgrad(c, 0, 240, [[0, G(22)], [1, G(8)]]); c.fillRect(0, 0, 320, 240);
+  const x0 = 118, y0 = 34, w = 84, h = 186;
+  c.fillStyle = vgrad(c, y0, y0 + h, [[0, G(240)], [1, G(180)]]); c.fillRect(x0, y0, w, h);
+  const close = clamp(t / 1.25, 0, 1), ease = 1 - Math.pow(1 - close, 3);
+  const open = 1 - ease;
+  if (open > .05) { c.fillStyle = G(30, .9); poly(c, [x0 + w * .55, y0 + h, x0 + w * .75, y0 + h, x0 + w * .75 + 70 * open, 240, x0 + w * .3 + 70 * open, 240]); }
+  c.fillStyle = G(255, .1 * open + .02); poly(c, [x0, y0 + h, x0 + w, y0 + h, 300, 240, 30, 240]);
+  const pw = w * (.12 + .88 * ease), ex = x0 + pw, sk = 16 * open;
+  c.fillStyle = hgrad(c, x0, ex, [[0, G(34)], [1, G(52)]]); poly(c, [x0, y0, ex, y0 - sk, ex, y0 + h + sk, x0, y0 + h]);
+  c.strokeStyle = G(0, .5); c.lineWidth = 1.5;
+  if (pw > 20) { c.strokeRect(x0 + pw * .15, y0 + 18, pw * .7, h * .35); c.strokeRect(x0 + pw * .15, y0 + h * .5, pw * .7, h * .42);
+    c.fillStyle = G(200); E(c, ex - pw * .12, y0 + h * .5, 3, 3); }
+  c.fillStyle = G(8); c.fillRect(x0 - 8, y0 - 8, 8, h + 8); c.fillRect(x0 + w, y0 - 8, 8, h + 8); c.fillRect(x0 - 8, y0 - 8, w + 16, 8);
+  if (ease > .97) { c.fillStyle = G(255, .9); c.fillRect(x0, y0 + h - 2, w, 2); glow(c, 160, y0 + h + 2, 80, .2 + Math.sin(t * 9) * .03); }
+}
+function shRain(c, t) {
+  c.fillStyle = vgrad(c, 0, 240, [[0, G(30)], [1, G(60)]]); c.fillRect(0, 0, 320, 240);
+  const R = rng(9);
+  for (let i = 0; i < 14; i++) { const x = R() * 320, y = 90 + R() * 120; glow(c, x, y, 12 + R() * 22, .18 + R() * .15); }
+  c.strokeStyle = G(255, .22); c.lineWidth = 1;
+  for (let i = 0; i < 90; i++) { const x = R() * 340, sp = 220 + R() * 160; const y = (R() * 300 + t * sp) % 300 - 40; L(c, x, y, x - 4, y + 16); }
+  for (let i = 0; i < 26; i++) { const x = R() * 320, sp = 6 + R() * 22, ph = R() * 240; const y = (ph + t * sp) % 260 - 10;
+    c.strokeStyle = G(255, .12); c.lineWidth = 1.5; L(c, x, y - 18, x + Math.sin(y * .1) * 1.5, y);
+    c.fillStyle = G(255, .45); E(c, x, y, 2, 2.6); c.fillStyle = G(0, .4); E(c, x + .6, y + .8, 1, 1.2); }
+  c.fillStyle = G(6); c.fillRect(0, 0, 320, 12); c.fillRect(0, 222, 320, 18); c.fillRect(0, 0, 14, 240); c.fillRect(306, 0, 14, 240);
+  c.fillRect(154, 0, 12, 240); c.fillRect(0, 108, 320, 10);
+  c.fillStyle = G(120, .4); c.fillRect(0, 222, 320, 2);
+}
+function shSunrise(c, t) {
+  c.fillStyle = vgrad(c, 0, 180, [[0, G(90)], [.7, G(215)], [1, G(250)]]); c.fillRect(0, 0, 320, 180);
+  const sy = 176 - t * 9;
+  glow(c, 168, sy, 170, .5);
+  c.save(); c.translate(168, sy); c.rotate(t * .03); c.fillStyle = G(255, .07); for (let i = 0; i < 12; i++) { c.rotate(TAU / 12); poly(c, [0, 0, 400, -16, 400, 16]); } c.restore();
+  c.fillStyle = G(255); E(c, 168, sy, 20, 20);
+  c.fillStyle = G(255, .45); for (let i = 0; i < 5; i++) E(c, (i * 83 + t * 6) % 380 - 30, 40 + i * 18, 70, 4);
+  c.fillStyle = G(14);
+  const sk = [0, 168, 18, 168, 18, 150, 40, 150, 40, 162, 62, 162, 62, 140, 74, 132, 86, 140, 86, 162, 104, 162, 104, 120, 112, 120, 112, 100, 116, 84, 120, 100, 120, 120, 128, 120, 128, 160,
+    150, 160, 150, 146, 176, 146, 176, 160, 198, 160, 198, 128, 206, 118, 214, 128, 214, 160, 236, 160, 236, 150, 252, 140, 268, 150, 268, 160, 286, 160, 286, 144, 320, 144, 320, 180, 0, 180];
+  poly(c, sk);
+  c.fillStyle = vgrad(c, 180, 240, [[0, G(170)], [1, G(40)]]); c.fillRect(0, 180, 320, 60);
+  c.fillStyle = G(255, .6); for (let i = 0; i < 14; i++) { const y = 184 + i * 4, w = 50 - i * 2.5 + Math.sin(t * 3 + i) * 6; c.fillRect(168 - w / 2 + Math.sin(t * 2 + i * 1.3) * 4, y, w, 1.2); }
+  c.fillStyle = G(10); poly(c, [60, 196, 110, 196, 100, 204, 70, 204]); c.fillRect(84, 176, 2, 20);
+  c.strokeStyle = G(20); c.lineWidth = 1.3;
+  for (let i = 0; i < 4; i++) { const bx = (40 + i * 22 + t * 14) % 340, by = 70 + i * 7 + Math.sin(t * 2 + i) * 3, f = Math.sin(t * 8 + i) * 3;
+    c.beginPath(); c.moveTo(bx - 6, by - f); c.quadraticCurveTo(bx - 3, by - 3, bx, by); c.quadraticCurveTo(bx + 3, by - 3, bx + 6, by - f); c.stroke(); }
+}
+function shStreetlamp(c, t) {
+  c.fillStyle = G(8); c.fillRect(0, 0, 320, 240);
+  c.fillStyle = G(18); c.fillRect(0, 30, 90, 150); c.fillRect(250, 20, 70, 160);
+  c.fillStyle = G(70, .6); c.fillRect(20, 60, 14, 18); c.fillRect(276, 50, 14, 18);
+  const fl = .9 + Math.sin(t * 17) * .04 + (Math.sin(t * 3.1) > .97 ? -.3 : 0);
+  c.save(); c.globalCompositeOperation = 'lighter'; const g = c.createLinearGradient(0, 64, 0, 230); g.addColorStop(0, G(255, .34 * fl)); g.addColorStop(1, G(255, .04));
+  c.fillStyle = g; poly(c, [160, 64, 172, 64, 236, 228, 96, 228]); c.restore();
+  glow(c, 166, 60, 60, .35 * fl);
+  c.fillStyle = vgrad(c, 200, 240, [[0, G(40)], [1, G(14)]]); c.fillRect(0, 210, 320, 30);
+  c.fillStyle = G(170, .5 * fl); E(c, 166, 226, 76, 12);
+  const R = rng(4); c.fillStyle = G(255, .25); for (let i = 0; i < 40; i++) { const x = 100 + R() * 132, y = 216 + R() * 20; E(c, x, y, 3 + R() * 3, 1); }
+  c.fillStyle = G(14); c.fillRect(140, 64, 5, 166); c.fillRect(134, 224, 17, 6);
+  c.strokeStyle = G(14); c.lineWidth = 3; c.beginPath(); c.moveTo(142, 66); c.quadraticCurveTo(150, 50, 166, 54); c.stroke();
+  c.fillStyle = G(20); poly(c, [156, 54, 176, 54, 172, 66, 160, 66]); c.fillStyle = G(255); c.fillRect(161, 62, 10, 4);
+  c.fillStyle = G(6);
+  c.beginPath(); c.moveTo(196, 126); c.lineTo(212, 126); c.bezierCurveTo(220, 130, 222, 150, 222, 170); c.lineTo(218, 222); c.lineTo(190, 222); c.lineTo(186, 170); c.bezierCurveTo(186, 150, 188, 130, 196, 126); c.fill();
+  E(c, 204, 114, 9, 11); c.fillRect(190, 104, 28, 3); poly(c, [195, 104, 213, 104, 211, 96, 197, 96]);
+  c.fillStyle = G(0, .6); poly(c, [190, 222, 218, 222, 120, 240, 80, 240]);
+  const cg = .4 + .6 * Math.max(0, Math.sin(t * 1.3)); glow(c, 198, 120, 6, cg * .8); c.fillStyle = G(255, cg); E(c, 198, 120, 1.2, 1.2);
+  c.strokeStyle = G(255, .14); c.lineWidth = 1; c.beginPath(); c.moveTo(212, 112); c.bezierCurveTo(214, 100, 207, 92, 213, 80); c.stroke();
+}
+function rose(c, x, y, r, v) {
+  c.fillStyle = G(v * .45); E(c, x, y, r, r * .9);
+  for (let i = 0; i < 5; i++) { const rr = r * (1 - i * .18); c.fillStyle = G(v * (.55 + i * .1)); c.beginPath(); c.arc(x + i * .6, y - i * .5, rr, Math.PI * (.9 + i * .3), Math.PI * (1.9 + i * .3)); c.fill(); }
+  c.strokeStyle = G(0, .4); c.lineWidth = .8; c.beginPath(); c.arc(x + 1, y - 1, r * .35, 0, Math.PI * 1.5); c.stroke();
+}
+function shFlowers(c, t) {
+  c.fillStyle = hgrad(c, 0, 320, [[0, G(60)], [.5, G(26)], [1, G(8)]]); c.fillRect(0, 0, 320, 240);
+  c.fillStyle = G(26); c.fillRect(0, 198, 320, 42); c.strokeStyle = G(130, .4); L(c, 0, 198, 320, 198);
+  c.fillStyle = G(0, .5); E(c, 186, 202, 50, 6);
+  c.fillStyle = hgrad(c, 136, 186, [[0, G(230)], [.35, G(140)], [1, G(30)]]);
+  c.beginPath(); c.moveTo(146, 128); c.bezierCurveTo(130, 150, 132, 196, 148, 200); c.lineTo(176, 200); c.bezierCurveTo(192, 196, 192, 150, 176, 128); c.fill();
+  c.fillStyle = G(255, .5); c.fillRect(146, 140, 3, 50);
+  c.strokeStyle = G(30); c.lineWidth = 2; [[-40, 60], [-14, 40], [14, 46], [40, 66], [0, 30]].forEach(([dx, dy]) => { c.beginPath(); c.moveTo(161, 132); c.quadraticCurveTo(161 + dx * .3, 132 - dy * .5, 161 + dx, 132 - dy); c.stroke(); });
+  c.fillStyle = G(40); [[120, 90, -.6], [204, 84, .6], [140, 110, -.3], [186, 112, .4]].forEach(([x, y, a]) => E(c, x, y, 16, 5, a));
+  const sw = Math.sin(t * .8) * 1.2;
+  rose(c, 121 + sw, 72, 15, 240); rose(c, 147, 92, 14, 200); rose(c, 175 + sw, 86, 16, 225); rose(c, 201, 66, 14, 150); rose(c, 161 + sw, 102, 12, 170);
+  const p = (t * .22) % 1, px = 200 + Math.sin(p * 9) * 10 + p * 20, py = 80 + p * 118;
+  c.fillStyle = G(220, p > .95 ? (1 - p) * 20 : 1); E(c, px, py, 4, 2.2, p * 6);
+}
+function shShadow(c, t) {
+  c.fillStyle = G(6); c.fillRect(0, 0, 320, 240);
+  c.fillStyle = vgrad(c, 20, 210, [[0, G(150)], [1, G(105)]]); c.fillRect(60, 20, 200, 190);
+  glow(c, 200, 70, 120, .12);
+  const x = 30 + t * 42, bob = Math.sin(t * 5) * 1.5;
+  c.save(); c.beginPath(); c.rect(60, 20, 200, 190); c.clip(); c.fillStyle = G(30, .78);
+  E(c, x, 74 + bob, 15, 17); poly(c, [x - 26, 60 + bob, x + 26, 60 + bob, x + 22, 54 + bob, x - 22, 54 + bob]); poly(c, [x - 14, 54 + bob, x + 14, 54 + bob, x + 11, 38 + bob, x - 11, 38 + bob]);
+  c.beginPath(); c.moveTo(x - 14, 90 + bob); c.bezierCurveTo(x - 36, 96, x - 40, 140, x - 38, 210); c.lineTo(x + 38, 210); c.bezierCurveTo(x + 40, 140, x + 36, 96, x + 14, 90 + bob); c.fill();
+  c.restore();
+  c.strokeStyle = G(0, .25); c.lineWidth = 6; for (let i = 0; i < 9; i++) { const xx = 70 + i * 23 + Math.sin(t * .7 + i) * 2; L(c, xx, 20, xx + 3, 210); }
+  c.fillStyle = G(255, .06); for (let i = 0; i < 9; i++) c.fillRect(80 + i * 23, 20, 6, 190);
+  c.fillStyle = G(4); c.fillRect(52, 12, 216, 9); c.fillRect(52, 208, 216, 12); c.fillRect(156, 20, 8, 190);
+  c.fillStyle = G(255, .05); poly(c, [60, 220, 260, 220, 320, 240, 0, 240]);
+}
+function shHat(c, t) {
+  c.fillStyle = vgrad(c, 0, 180, [[0, G(200)], [1, G(235)]]); c.fillRect(0, 0, 320, 180);
+  c.fillStyle = G(70); c.fillRect(0, 30, 70, 150); c.fillRect(230, 50, 90, 130); c.fillStyle = G(100); c.fillRect(70, 80, 60, 100);
+  c.fillStyle = G(30); for (let i = 0; i < 3; i++) for (let j = 0; j < 4; j++) { c.fillRect(10 + i * 20, 44 + j * 32, 10, 16); c.fillRect(244 + i * 24, 64 + j * 28, 12, 14); }
+  c.fillStyle = vgrad(c, 180, 240, [[0, G(150)], [1, G(90)]]); c.fillRect(0, 180, 320, 60);
+  c.strokeStyle = G(60, .5); c.lineWidth = 1; for (let i = 0; i < 8; i++) L(c, i * 50 - 20, 240, i * 46 + 10, 180);
+  const T = t % 3, hx = 40 + T * 95, hy = 168 - Math.abs(Math.sin(T * 3.4)) * 70 * (1 - T / 4), rot = T * 5.5;
+  c.fillStyle = G(0, .3); E(c, hx, 206, 18 * (1 - (168 - hy) / 140), 3);
+  c.save(); c.translate(hx, hy); c.rotate(rot); c.fillStyle = G(14); E(c, 0, 6, 20, 5); c.beginPath(); c.moveTo(-12, 6); c.bezierCurveTo(-13, -14, 13, -14, 12, 6); c.fill();
+  c.fillStyle = G(60); c.fillRect(-12, 1, 24, 3); c.restore();
+  c.strokeStyle = G(40, .5); c.lineWidth = 1; for (let i = 0; i < 3; i++) L(c, hx - 30 - i * 8, hy + i * 6 - 6, hx - 52 - i * 8, hy + i * 6 - 6);
+  const R = rng(2); c.fillStyle = G(50); for (let i = 0; i < 6; i++) { const lx = (R() * 320 + t * (80 + R() * 60)) % 340 - 10, ly = 60 + R() * 120 + Math.sin(t * 3 + i) * 10; E(c, lx, ly, 4, 1.5, t * 4 + i); }
+  const lx = 20 + T * 60, ph = Math.sin(t * 14);
+  c.strokeStyle = G(16); c.lineWidth = 7; c.lineCap = 'round';
+  L(c, lx, 150, lx + 14 * ph, 178); L(c, lx + 14 * ph, 178, lx + 6 * ph + 8, 204);
+  L(c, lx, 150, lx - 14 * ph, 178); L(c, lx - 14 * ph, 178, lx - 6 * ph - 2, 204);
+  c.fillStyle = G(16); c.fillRect(lx - 10, 112, 22, 40);
+}
+
+const SHOTS = {
+  face: { name: '男子特写', draw: shFace },
+  soup: { name: '一碗热汤', draw: shSoup },
+  coffin: { name: '小棺木', draw: shCoffin },
+  woman: { name: '倚窗的女人', draw: shWoman },
+  platform: { name: '站台上的火车', draw: shPlatform },
+  trainOut: { name: '离站的火车', draw: shTrainOut },
+  trainIn: { name: '进站的火车', draw: shTrainIn },
+  letter: { name: '一封信', draw: shLetter },
+  chair: { name: '空椅子', draw: shChair },
+  clock: { name: '挂钟', draw: shClock },
+  door: { name: '关上的门', draw: shDoor },
+  rain: { name: '雨中的窗', draw: shRain },
+  sunrise: { name: '日出', draw: shSunrise },
+  streetlamp: { name: '街灯下的人', draw: shStreetlamp },
+  flowers: { name: '一束花', draw: shFlowers },
+  shadow: { name: '窗外的影子', draw: shShadow },
+  hat: { name: '被风吹走的礼帽', draw: shHat }
+};
+const THUMB_T = { door: .5, trainOut: .3, trainIn: 1.8, hat: 1.1, shadow: 2.2, sunrise: 1 };
+
+/* ============ 胶片质感 ============ */
+let NOISE = null;
+function makeNoise() {
+  const cv = document.createElement('canvas'); cv.width = cv.height = 192; const x = cv.getContext('2d');
+  const im = x.createImageData(192, 192);
+  for (let i = 0; i < im.data.length; i += 4) { const v = Math.random() * 255; im.data[i] = im.data[i + 1] = im.data[i + 2] = v; im.data[i + 3] = 255; }
+  x.putImageData(im, 0, 0); NOISE = cv;
+}
+/* 在已经按 320×240 变换好的上下文里叠加：颗粒、闪烁、划痕、暗角、尘点 */
+function filmFX(c, t, k = 1) {
+  if (!NOISE) makeNoise();
+  c.save();
+  const motion = REDUCED ? .3 : 1;
+  c.globalAlpha = .12 * k; c.globalCompositeOperation = 'overlay';
+  const ox = (Math.random() * 192) | 0, oy = (Math.random() * 192) | 0;
+  c.drawImage(NOISE, -ox, -oy, 384, 384); c.drawImage(NOISE, 192 - ox, -oy, 384, 384);
+  c.globalCompositeOperation = 'source-over'; c.globalAlpha = 1;
+  const fl = (Math.random() - .5) * .07 * motion * k; c.fillStyle = fl > 0 ? G(255, fl) : G(0, -fl); c.fillRect(0, 0, 320, 240);
+  if (Math.random() < .5 * motion * k) { c.strokeStyle = G(Math.random() < .5 ? 230 : 10, .35); c.lineWidth = .6; const x = Math.random() * 320; L(c, x, 0, x + (Math.random() - .5) * 6, 240); }
+  if (Math.random() < .12 * motion * k) { c.fillStyle = G(10, .7); E(c, Math.random() * 320, Math.random() * 240, 1 + Math.random() * 2.5, 1 + Math.random() * 2); }
+  if (Math.random() < .05 * motion * k) { c.strokeStyle = G(15, .5); c.lineWidth = .8; const x = Math.random() * 320, y = Math.random() * 240; c.beginPath(); c.moveTo(x, y); c.quadraticCurveTo(x + 8, y + 4, x + 3, y + 14); c.stroke(); }
+  const g = c.createRadialGradient(160, 120, 70, 160, 120, 215); g.addColorStop(0, G(0, 0)); g.addColorStop(1, G(0, .78));
+  c.fillStyle = g; c.fillRect(0, 0, 320, 240);
+  c.restore();
+}
+function wrapText(c, text, maxW) {
+  const out = []; text.split('\n').forEach(par => { let line = '';
+    for (const ch of par) { if (c.measureText(line + ch).width > maxW && line) { if ('，。、：；！？”）'.includes(ch)) { line += ch; out.push(line); line = ''; continue; } out.push(line); line = ch; } else line += ch; }
+    out.push(line); }); return out;
+}
+/* 默片字幕卡：黑底 + Art Deco 装饰边框 */
+function titleCard(c, lines, opt = {}) {
+  c.fillStyle = G(6); c.fillRect(0, 0, 320, 240);
+  c.strokeStyle = G(220, .85); c.lineWidth = 1.2; c.strokeRect(18, 16, 284, 208); c.lineWidth = .6; c.strokeRect(23, 21, 274, 198);
+  const corner = (x, y, sx, sy) => { c.save(); c.translate(x, y); c.scale(sx, sy); c.beginPath(); for (let i = 1; i <= 3; i++) { c.moveTo(0, i * 7); c.arc(0, 0, i * 7, Math.PI / 2, 0, true); } c.stroke();
+    c.fillStyle = G(220, .85); poly(c, [0, 0, 4, 0, 0, 4]); c.restore(); };
+  c.lineWidth = .7; corner(23, 21, 1, 1); corner(297, 21, -1, 1); corner(23, 219, 1, -1); corner(297, 219, -1, -1);
+  c.lineWidth = .7; L(c, 120, 34, 200, 34); L(c, 120, 206, 200, 206);
+  c.fillStyle = G(220, .9); poly(c, [160, 30, 164, 34, 160, 38, 156, 34]); poly(c, [160, 202, 164, 206, 160, 210, 156, 206]);
+  c.textAlign = 'center'; c.textBaseline = 'middle';
+  const size = opt.size || 17, fam = opt.font || '"Noto Serif SC","Songti SC",serif';
+  c.font = `${opt.weight || 700} ${size}px ${fam}`;
+  const smallFam = opt.smallFont || '"Limelight","Poiret One",serif';
+  let all = []; lines.forEach(l => { if (typeof l === 'object' && l.small === true) { all.push({ text: l.text, small: true }); return; } c.font = `${opt.weight || 700} ${size}px ${fam}`; wrapText(c, l.text || l, 236).forEach(x => all.push({ text: x })); });
+  const lh = size * 1.55; let y = 120 - (all.length - 1) * lh / 2;
+  all.forEach(l => { if (l.small) { let fs = clamp(size * .62, 7, 16); c.font = `400 ${fs}px ${smallFam}`; const mw = c.measureText(l.text).width; if (mw > 230) { fs = Math.max(5, fs * 230 / mw); c.font = `400 ${fs}px ${smallFam}`; } c.fillStyle = G(180); } else { c.font = `${opt.weight || 700} ${size}px ${fam}`; c.fillStyle = G(238); }
+    c.fillText(l.text, 160, y); y += lh; });
+}
+/*LEVELS-START*/
+/* ============ 关卡与判定（纯逻辑，可在 node 中单独测试） ============ */
+const has = (s, ...ids) => ids.every(i => s.includes(i));
+const any = (s, ...ids) => ids.some(i => s.includes(i));
+const bef = (s, a, b) => s.indexOf(a) > -1 && s.indexOf(b) > -1 && s.indexOf(a) < s.indexOf(b);
+const last = s => s[s.length - 1];
+const pair = (s, a, b) => s.length === 2 && has(s, a, b);
+
+const LEVELS = [
+  { id: 1, title: '第一夜', slots: 2, pool: ['face', 'soup', 'coffin'],
+    goal: '让观众相信：他饿了。', sub: '两格胶片。先让观众看见什么，他们就会以为他在想什么。',
+    hint: '把“一碗热汤”和“男子特写”接在一起。',
+    solutions: [
+      { test: ({ s }) => s[0] === 'soup' && s[1] === 'face', text: '观众觉得：他饿了。前排有个孩子咽了一下口水。', react: 'lean' },
+      { test: ({ s }) => s[0] === 'face' && s[1] === 'soup', text: '观众觉得：他饿了——他一直盯着那碗汤。有人摸了摸自己的肚子。', react: 'lean' }],
+    misreads: [
+      { test: ({ s }) => pair(s, 'face', 'coffin'), text: '观众觉得：他很悲伤。有人掏出了手帕。——可字条上写的是“饿”。', react: 'cry' },
+      { test: ({ s }) => s[0] === 'coffin' && s[1] === 'soup', text: '观众觉得：这是一场丧事后的豆腐饭。没人看见那张脸——饿的到底是谁？', react: 'murmur' },
+      { test: ({ s }) => s[0] === 'soup' && s[1] === 'coffin', text: '观众以为这碗汤是供给死者的。前排老先生双手合十。', react: 'murmur' }],
+    letter: '小林：\n汤是道具间借来的，脸是我自己的。拍那一格时我什么都没想，可你看，观众替我饿了。\n这就是剪辑——说话的不是镜头，是镜头和镜头之间那道缝。\n明晚，换一个盒子。\n——沈' },
+
+  { id: 2, title: '第二夜', slots: 2, pool: ['face', 'soup', 'coffin', 'flowers'],
+    goal: '让观众相信：他很悲伤。', sub: '还是同一张脸。他从头到尾没有动过一根眉毛。',
+    hint: '脸不会变，变的是它前后接的东西。',
+    solutions: [
+      { test: ({ s }) => pair(s, 'coffin', 'face'), text: '观众觉得：他失去了一个孩子。放映厅里很静，有人在抹眼泪。', react: 'cry' }],
+    misreads: [
+      { test: ({ s }) => pair(s, 'soup', 'face'), text: '观众觉得：他又饿了。有人小声说：“这人怎么老吃不饱。”', react: 'laugh' },
+      { test: ({ s }) => pair(s, 'flowers', 'face'), text: '观众觉得：他要去赴一场约会。后排的小姐们笑了起来。', react: 'laugh' },
+      { test: ({ s }) => pair(s, 'coffin', 'flowers'), text: '观众看见了一场葬礼。可没有那张脸，谁也不知道该替谁难过。', react: 'murmur' },
+      { test: ({ s }) => pair(s, 'soup', 'flowers'), text: '观众以为这是一则西菜馆的广告。有人开始打哈欠。', react: 'yawn' },
+      { test: ({ s }) => pair(s, 'soup', 'coffin'), text: '观众以为汤是祭品。前排老先生又双手合十了。', react: 'murmur' }],
+    letter: '那口小棺材，是《站台》里用过的道具。拍完那一场，阿婉三天没跟我说话。\n她说：“你连别人的孩子都能借来哭。”\n她说得对。我借来的东西，一直没还。\n——沈' },
+
+  { id: 3, title: '第三夜', slots: 3, pool: ['face', 'letter', 'chair', 'soup', 'clock'],
+    goal: '让观众相信：他在思念一个人。', sub: '三格。人不在了，东西还在。别让脸抢在最前面。',
+    hint: '一封信、一把空椅子，把他的脸夹在它们后面或中间。',
+    solutions: [
+      { test: ({ s }) => has(s, 'face', 'letter', 'chair') && s[0] !== 'face', text: '观众觉得：他在思念一个人——一个曾经坐在那把椅子上、给他写过信的人。', react: 'sigh' }],
+    misreads: [
+      { test: ({ s }) => has(s, 'face', 'letter', 'chair') && s[0] === 'face', text: '脸放在了最前面。观众觉得：他在发呆，然后有人寄来一封信、搬走一把椅子。像是要搬家。', react: 'confused' },
+      { test: ({ s }) => has(s, 'soup', 'letter', 'face'), text: '观众以为他在思念一碗汤。有人笑出了声。', react: 'laugh' },
+      { test: ({ s }) => has(s, 'soup', 'chair', 'face'), text: '观众觉得：他在等人一起吃饭，饭菜快凉了。后排有人喊：“快坐呀！”', react: 'laugh' },
+      { test: ({ s }) => has(s, 'soup', 'clock', 'face'), text: '观众觉得：他在等开饭。挂钟走得很慢，全场都饿了。', react: 'lean' },
+      { test: ({ s }) => has(s, 'clock', 'letter', 'face'), text: '观众觉得：他在等一封迟到的回信。很近了——可那个“人”在哪里？', react: 'murmur' },
+      { test: ({ s }) => has(s, 'clock', 'chair', 'face'), text: '观众觉得：他在等一个迟到的人。差一点——等待还不是思念。', react: 'murmur' },
+      { test: ({ s }) => !s.includes('face'), text: '观众看见了几样旧东西，以为是寄卖行的广告。有人问：“那把椅子卖多少？”', react: 'yawn' }],
+    letter: '椅子是她的。她走后，我没让任何人坐过。\n厂里的人说我在等一封回信。其实信早就来了，我只是一直没拆。\n——沈' },
+
+  { id: 4, title: '第四夜', slots: 3, pool: ['woman', 'face', 'platform', 'flowers'],
+    goal: '剪一场离别。', sub: '火车总是最后走的那个。',
+    hint: '先让观众看见两个人，最后才是火车。',
+    solutions: [
+      { test: ({ s }) => s[2] === 'platform' && has(s, 'woman', 'face'), text: '观众觉得：她走了，他留在站台上。有人轻轻叹了一口气。', react: 'sigh' }],
+    misreads: [
+      { test: ({ s }) => s[0] === 'platform' && has(s, 'woman', 'face'), text: '观众觉得：她回来了！有人鼓掌。——可字条上写的是离别。顺序反了。', react: 'applaud' },
+      { test: ({ s }) => s[1] === 'platform' && has(s, 'woman', 'face'), text: '火车夹在两个人中间。观众吵了起来：这是离别，还是两个陌生人隔着铁轨？', react: 'murmur' },
+      { test: ({ s }) => has(s, 'flowers', 'face', 'platform') && !s.includes('woman'), text: '观众觉得：他捧着花来接人，可车已经开了。这是错过，不是离别。', react: 'sigh' },
+      { test: ({ s }) => has(s, 'flowers', 'woman', 'platform') && !s.includes('face'), text: '观众觉得：一个女人买了束花，上了火车。没有人送她。', react: 'murmur' },
+      { test: ({ s }) => !s.includes('platform'), text: '观众觉得：这是一场求婚。前排有人吹了声口哨。', react: 'laugh' }],
+    letter: '一九三七年秋，北站。她上了往南的车，说过了年就回来。\n这一段我拍下来了。是我这辈子最好的镜头——因为我忘了喊“开始”。\n——沈' },
+
+  { id: 5, title: '第五夜', slots: 3, pool: ['woman', 'face', 'platform', 'flowers'], same: 4,
+    goal: '用昨晚同一盒胶片，剪一场重逢。', sub: '一格都不许换。顺序，就是命运。',
+    hint: '把火车挪到她前面。车先到，人才能下来。',
+    solutions: [
+      { test: ({ s }) => bef(s, 'platform', 'woman') && s.includes('face') && last(s) !== 'platform', text: '观众觉得：她回来了。蒸汽还没散，他们就认出了彼此。有人站起来鼓掌。', react: 'applaud' }],
+    misreads: [
+      { test: ({ s }) => last(s) === 'platform' && has(s, 'woman', 'face'), text: '观众觉得：她走了。——这是昨晚的结局。今晚要的是回来。', react: 'sigh' },
+      { test: ({ s }) => bef(s, 'woman', 'platform') && s.includes('face'), text: '观众觉得：她上了车，留下他一个人。还是离别。', react: 'sigh' },
+      { test: ({ s }) => has(s, 'platform', 'flowers', 'face') && !s.includes('woman'), text: '观众觉得：他下了火车，买了一束花。去接谁？没人知道。', react: 'confused' },
+      { test: ({ s }) => has(s, 'platform', 'woman', 'flowers') && !s.includes('face'), text: '观众觉得：她回来了，还收到一束花——可送花的人呢？', react: 'murmur' },
+      { test: ({ s }) => !s.includes('platform'), text: '观众觉得：一对恋人在家里。没有火车，就没有“回来”。', react: 'confused' }],
+    letter: '你看，同样三格胶片，倒过来，就是另一个人生。\n审查处说《站台》的结局“过于消沉，有碍时局”，片子封进了库房。\n他们没说错。只是我那时不知道，片子里的事，会先在片子外头发生。\n——沈' },
+
+  { id: 6, title: '第六夜', slots: 4, pool: ['clock', 'door', 'face', 'shadow', 'sunrise', 'rain', 'streetlamp'],
+    goal: '让观众坐立不安。', sub: '先让他们听见时间，再让他们看见不该看见的。最后，别给他们天亮。',
+    hint: '要有挂钟；影子（或街灯下的人）放在脸之前；别用日出。',
+    solutions: [
+      { test: ({ s }) => has(s, 'face', 'clock') && (bef(s, 'shadow', 'face') || bef(s, 'streetlamp', 'face')) && !s.includes('sunrise') && last(s) === 'door', text: '观众觉得：有人在外面，而他知道。门关上的那一下，后排有人叫出了声。', react: 'tense' },
+      { test: ({ s }) => has(s, 'face', 'clock') && (bef(s, 'shadow', 'face') || bef(s, 'streetlamp', 'face')) && !s.includes('sunrise'), text: '观众觉得：有人在外面，而他知道。前排的太太攥住了丈夫的袖子。', react: 'tense' }],
+    misreads: [
+      { test: ({ s }) => last(s) === 'sunrise', text: '天亮了。观众松了一口气，有人开始打哈欠——不安被你治好了。', react: 'yawn' },
+      { test: ({ s }) => s.includes('sunrise'), text: '日出插在中间，观众以为这是两天的事。紧张漏了气。', react: 'yawn' },
+      { test: ({ s }) => !s.includes('face'), text: '观众看见影子、门和钟，以为是凶宅出租的广告。有人笑了。', react: 'laugh' },
+      { test: ({ s }) => !any(s, 'shadow', 'streetlamp') && has(s, 'clock', 'rain'), text: '观众觉得：他只是讨厌下雨天，在等雨停。全场都有点困。', react: 'yawn' },
+      { test: ({ s }) => !any(s, 'shadow', 'streetlamp') && s.includes('clock'), text: '观众觉得：他在等下班。挂钟走得很慢。', react: 'yawn' },
+      { test: ({ s }) => !any(s, 'shadow', 'streetlamp'), text: '观众觉得：一个寻常的雨夜。没什么可怕的——外面没有人。', react: 'yawn' },
+      { test: ({ s }) => (bef(s, 'face', 'shadow') || bef(s, 'face', 'streetlamp')) && !bef(s, 'shadow', 'face') && !bef(s, 'streetlamp', 'face'), text: '他先看了一眼窗外，影子才出现——观众以为是邻居路过。先让观众看见威胁，再看他的脸。', react: 'murmur' },
+      { test: ({ s }) => !s.includes('clock'), text: '观众有点紧张，但还不够——少了点什么，在一下一下地催他们。', react: 'murmur' }],
+    letter: '我得跟你说实话：我不是失踪，是躲起来了。\n有人在找《站台》的底片。有人想烧了它，也有人想把它卖到外国去。\n我把它拆成了你这些天剪的盒子。你剪得越好，它就越完整。\n——沈' },
+
+  { id: 7, title: '第七夜', slots: 3, pool: ['hat', 'face', 'soup', 'flowers'], flash: ['chair', 'letter', 'coffin', 'sunrise'],
+    goal: '让观众笑着看完，散场时却说不出为什么想哭。', sub: '表面是一出滑稽戏。在两格之间，藏一格只闪一下的胶片。',
+    hint: '先“礼帽”再“男子特写”，然后把“空椅子”拖到两格之间的红线上。',
+    solutions: [
+      { test: ({ s, f }) => bef(s, 'hat', 'face') && f === 'chair', text: '观众笑着看完了。散场时，一位老太太在门口站了很久，说不出为什么想哭。', react: 'laughcry' },
+      { test: ({ s, f }) => bef(s, 'hat', 'face') && f === 'letter', text: '观众笑着看完了。散场时，有人忽然想给一个很久没联系的人写信。', react: 'laughcry' }],
+    misreads: [
+      { test: ({ s }) => !s.includes('hat'), text: '没有礼帽，就没有笑料。观众面面相觑。', react: 'confused' },
+      { test: ({ s }) => !s.includes('face'), text: '礼帽满街乱飞，可没有人去追它。观众笑不起来——滑稽戏里总得有个倒霉蛋。', react: 'confused' },
+      { test: ({ s }) => bef(s, 'face', 'hat'), text: '观众觉得：他把帽子扔了，像是在发脾气。没人笑得出来。', react: 'murmur' },
+      { test: ({ f }) => !f, text: '观众哈哈大笑，笑着散了场，什么也没带走。——在两格之间，藏一帧试试。', react: 'laugh' },
+      { test: ({ f }) => f === 'coffin', text: '那一帧太重了。笑声里有人看见了棺材，脸一下白了。第二十五帧要轻，轻到看不见。', react: 'tense' },
+      { test: ({ f }) => f === 'sunrise', text: '观众笑着散场，心情好极了。——可沈先生要的不是这个。', react: 'laugh' }],
+    letter: '每秒二十四格，是给眼睛看的。\n我在我每一部片子里，都多藏了一格——第二十五格。观众看不见它，可是会记得。\n那一格从来不是拍来的，是我想出来的：她坐在那把椅子上，好像从没离开过。\n明晚是最后一盒。结局，你来剪。\n——沈' },
+
+  { id: 8, title: '第八夜', slots: 4, pool: ['face', 'woman', 'trainIn', 'trainOut', 'letter', 'chair', 'flowers', 'streetlamp', 'rain', 'sunrise'],
+    goal: '剪完《站台》的结局。', sub: '重逢，或者如实的离别。两种都对。由你决定。',
+    hint: '重逢：进站的火车 → 她 → 他。离别：她 → 他 → 离站的火车。',
+    solutions: [
+      { test: ({ s }) => has(s, 'trainIn', 'woman', 'face') && bef(s, 'trainIn', 'woman') && !any(s, 'trainOut', 'chair') && !['rain', 'streetlamp'].includes(last(s)),
+        text: '火车进站，她下了车。观众站起来鼓掌——没有人知道，这一幕从来没有发生过。', react: 'applaud', ending: 'reunion' },
+      { test: ({ s }) => has(s, 'trainOut', 'face') && !s.includes('trainIn') && (!s.includes('woman') || bef(s, 'woman', 'trainOut')) && !['sunrise', 'flowers'].includes(last(s)),
+        text: '火车走了。灯亮的时候，没有人起身。过了很久，有人轻轻地鼓了掌。', react: 'cry', ending: 'parting' }],
+    misreads: [
+      { test: ({ s }) => has(s, 'trainIn', 'trainOut'), text: '火车来了又走。观众糊涂了：像是一个人在站台上，过完了一辈子。——选一班车吧。', react: 'confused' },
+      { test: ({ s }) => !s.includes('face'), text: '观众看见了她，看见了车，却没有看见他。——那是沈先生的脸，别把他剪掉。', react: 'murmur' },
+      { test: ({ s }) => !any(s, 'trainIn', 'trainOut'), text: '没有火车，观众分不清这是离别还是一个寻常的下午。《站台》的结局，总得有一班车。', react: 'confused' },
+      { test: ({ s }) => s.includes('trainIn') && !s.includes('woman'), text: '火车进站了，下来的人里没有她。观众以为这是一场更深的离别。', react: 'sigh' },
+      { test: ({ s }) => bef(s, 'woman', 'trainIn'), text: '她先出现，火车才进站——观众以为她是来接别人的。', react: 'murmur' },
+      { test: ({ s }) => s.includes('trainIn') && s.includes('chair'), text: '她回来了，可那把椅子还空着。观众不知道该哭还是该笑。', react: 'confused' },
+      { test: ({ s }) => s.includes('trainIn') && ['rain', 'streetlamp'].includes(last(s)), text: '她回来了，可最后一格还在下雨。观众以为这只是他做的一场梦。', react: 'sigh' },
+      { test: ({ s }) => s.includes('trainIn') && s.includes('trainOut') === false && s.includes('woman'), text: '她回来了——可故事收在一个奇怪的地方，观众没反应过来。', react: 'confused' },
+      { test: ({ s }) => bef(s, 'trainOut', 'woman'), text: '火车开走了，她却还在窗边。观众以为走的是他。', react: 'murmur' },
+      { test: ({ s }) => s.includes('trainOut') && ['sunrise', 'flowers'].includes(last(s)), text: '车走了，天却亮了，还开了花。观众以为她走了反倒是件好事。有人皱起眉头。', react: 'confused' }],
+    letter: '' }
+];
+const ENDINGS = {
+  reunion: { title: '终章 · 重逢', letter: '小林：\n火车进站了。她下了车。\n我知道这是假的。这一格不是拍来的，是你替我想出来的。\n可电影每秒二十四格都在说真话，总该留一格，替人把没过上的日子过完。\n底片交给你了。别找我。我去北站等车。\n——沈' },
+  parting: { title: '终章 · 离别', letter: '小林：\n你让她走了。你剪的是真的。\n我等了这些年，等的原来不是她回来，是有人肯把这场离别好好地放完。\n现在它放完了，灯可以亮了。\n底片交给你了。别找我。\n——沈' }
+};
+const GENERIC = {
+  empty: { text: '银幕白了两秒。前排有人说：“先锋派。”后排有人去退票了。', react: 'confused' },
+  partial: n => ({ text: `胶片没接满，银幕上黑了一截。观众以为放映员睡着了。（这一夜要接满 ${n} 格）`, react: 'murmur' }),
+  fallback: { text: '观众看完了，面面相觑。有人说看懂了，但说不出懂了什么。', react: 'confused' }
+};
+function judge(lv, seq, flash) {
+  const s = seq.filter(Boolean);
+  const ctx = { s, f: flash ? flash.id : null, full: s.length === lv.slots };
+  if (!s.length) return Object.assign({ ok: false }, GENERIC.empty);
+  if (!ctx.full) return Object.assign({ ok: false }, GENERIC.partial(lv.slots));
+  for (const so of lv.solutions) if (so.test(ctx)) return { ok: true, text: so.text, react: so.react, ending: so.ending || null };
+  for (const m of lv.misreads) if (m.test(ctx)) return { ok: false, text: m.text, react: m.react };
+  return Object.assign({ ok: false }, GENERIC.fallback);
+}
+/*LEVELS-END*/
+
+/* ============ 声音（WebAudio 合成） ============ */
+const Snd = {
+  ctx: null, master: null, noise: null, muted: !!store.get('tf25_mute', false), timer: null, hum: null,
+  init() {
+    if (this.ctx) { if (this.ctx.state === 'suspended') this.ctx.resume().catch(() => {}); return; }
+    try {
+      const AC = window.AudioContext || window.webkitAudioContext; if (!AC) return;
+      this.ctx = new AC(); this.master = this.ctx.createGain(); this.master.gain.value = this.muted ? 0 : .8; this.master.connect(this.ctx.destination);
+      const n = this.ctx.sampleRate * 2, b = this.ctx.createBuffer(1, n, this.ctx.sampleRate), d = b.getChannelData(0);
+      for (let i = 0; i < n; i++) d[i] = Math.random() * 2 - 1; this.noise = b;
+    } catch (e) { this.ctx = null; }
+  },
+  setMute(m) { this.muted = m; store.set('tf25_mute', m); if (this.master) this.master.gain.setTargetAtTime(m ? 0 : .8, this.ctx.currentTime, .05); },
+  ok() { return this.ctx && this.master; },
+  burst(t, dur, freq, q, gain, type = 'bandpass') {
+    if (!this.ok()) return; const x = this.ctx, s = x.createBufferSource(); s.buffer = this.noise;
+    const f = x.createBiquadFilter(); f.type = type; f.frequency.value = freq; f.Q.value = q;
+    const g = x.createGain(); g.gain.setValueAtTime(.0001, t); g.gain.linearRampToValueAtTime(gain, t + Math.min(.005, dur / 4)); g.gain.exponentialRampToValueAtTime(.0001, t + dur);
+    s.connect(f); f.connect(g); g.connect(this.master); s.start(t, Math.random() * 1.5); s.stop(t + dur + .05);
+  },
+  tone(t, freq, dur, gain, type = 'triangle', attack = .01) {
+    if (!this.ok()) return; const x = this.ctx, o = x.createOscillator(), g = x.createGain(); o.type = type; o.frequency.value = freq;
+    g.gain.setValueAtTime(.0001, t); g.gain.linearRampToValueAtTime(gain, t + attack); g.gain.exponentialRampToValueAtTime(.0001, t + dur);
+    o.connect(g); g.connect(this.master); o.start(t); o.stop(t + dur + .05);
+  },
+  projStart() {
+    if (!this.ok() || this.timer) return; const x = this.ctx;
+    const o = x.createOscillator(), f = x.createBiquadFilter(), g = x.createGain(); o.type = 'sawtooth'; o.frequency.value = 46; f.type = 'lowpass'; f.frequency.value = 160;
+    g.gain.value = .0001; g.gain.setTargetAtTime(.06, x.currentTime, .2); o.connect(f); f.connect(g); g.connect(this.master); o.start(); this.hum = { o, g };
+    let next = x.currentTime + .05, k = 0;
+    this.timer = setInterval(() => { while (next < x.currentTime + .12) { this.burst(next, .02, 2600, 3, .13); if (k % 3 === 0) this.burst(next + .01, .04, 420, 1, .07, 'lowpass'); next += 1 / 16; k++; } }, 30);
+  },
+  projStop() {
+    if (this.timer) { clearInterval(this.timer); this.timer = null; }
+    if (this.hum && this.ok()) { const t = this.ctx.currentTime; this.hum.g.gain.setTargetAtTime(.0001, t, .15); this.hum.o.stop(t + .8); this.burst(t, .12, 300, 1, .2, 'lowpass'); }
+    this.hum = null;
+  },
+  beep() { if (this.ok()) this.tone(this.ctx.currentTime, 880, .12, .08, 'sine'); },
+  blip() { if (this.ok()) this.tone(this.ctx.currentTime, 2400, .05, .04, 'sine'); },
+  chime() { if (!this.ok()) return; const t = this.ctx.currentTime; [392, 494, 587, 784].forEach((f, i) => { this.tone(t + i * .14, f, 1.6, .09); this.tone(t + i * .14, f * 2, .8, .02, 'sine'); }); },
+  fail() { if (!this.ok()) return; const t = this.ctx.currentTime; this.tone(t, 233, .5, .07); this.tone(t + .22, 196, .9, .07); },
+  react(kind) {
+    if (!this.ok()) return; const t = this.ctx.currentTime;
+    if (kind === 'laugh' || kind === 'laughcry') for (let p = 0; p < 4; p++) for (let i = 0; i < 6; i++) { const tt = t + p * .17 + i * .13 + Math.random() * .04; this.tone(tt, 230 + p * 60 + Math.random() * 40, .09, .03, 'sawtooth'); this.burst(tt, .08, 900 + p * 200, 2, .04); }
+    else if (kind === 'applaud') for (let i = 0; i < 90; i++) this.burst(t + Math.random() * 2.4, .03, 1800 + Math.random() * 1500, 1.5, .06 * Math.random() + .02);
+    else if (kind === 'murmur' || kind === 'confused') for (let i = 0; i < 10; i++) this.burst(t + Math.random() * 1.6, .35, 350 + Math.random() * 400, 4, .05);
+    else if (kind === 'cry' || kind === 'sigh') { for (let i = 0; i < 3; i++) this.burst(t + i * .5, 1.1, 700, .8, .05, 'lowpass'); this.tone(t, 330, 2.2, .025, 'sine', .4); this.tone(t, 262, 2.6, .025, 'sine', .5); }
+    else if (kind === 'tense') { this.tone(t, 110, 1.6, .06, 'sine', .3); this.burst(t + .1, .5, 1200, 6, .05); }
+    else if (kind === 'lean') { this.burst(t, .6, 500, 3, .04); this.tone(t + .1, 140, .25, .03, 'sine'); }
+    else if (kind === 'yawn') { this.tone(t, 300, 1.2, .025, 'sine', .3); this.burst(t + .4, 1, 600, 2, .04, 'lowpass'); }
+  }
+};
+
+/* ============ 放映厅画布 ============ */
+const TH = { cv: null, c: null, w: 0, h: 0, dpr: 1, sx: 0, sy: 0, sw: 0, sh: 0, mode: 'idle', card: null, t0: 0, items: [], preview: null, previewUntil: 0,
+  people: [], react: null, reactT: 0, onDone: null, light: .4, ps: 1 };
+function thResize() {
+  const cv = TH.cv, r = cv.getBoundingClientRect(); TH.dpr = Math.min(2, window.devicePixelRatio || 1);
+  TH.w = Math.max(10, r.width); TH.h = Math.max(10, r.height);
+  cv.width = Math.round(TH.w * TH.dpr); cv.height = Math.round(TH.h * TH.dpr);
+  TH.sy = 16; TH.sh = Math.min(TH.w * .84 * .75, (TH.h - TH.sy - 4) / 1.2); TH.sw = TH.sh * 4 / 3; TH.sx = (TH.w - TH.sw) / 2;
+  TH.ps = Math.max(.2, TH.sh * .18 / 94); TH.base = TH.sy + TH.sh * .97 + 88 * TH.ps;
+  const n = clamp(Math.round(TH.w / (58 * TH.ps)), 6, 24), R = rng(42); TH.people = [];
+  for (let i = 0; i < n; i++) TH.people.push({ x: (i + .5) / n * TH.w + (R() - .5) * 12, type: (R() * 4) | 0, s: .85 + R() * .3, d: R() * .5, side: i % 2 ? 1 : -1, ph: R() * TAU });
+}
+function drawHall(c, t) {
+  const { w, h, sx, sy, sw, sh } = TH;
+  c.fillStyle = '#070504'; c.fillRect(0, 0, w, h);
+  const LT = TH.light;
+  const g = c.createRadialGradient(w / 2, sy + sh / 2, sw * .3, w / 2, sy + sh / 2, sw * 1.1); g.addColorStop(0, `rgba(200,190,170,${.12 * LT})`); g.addColorStop(1, 'rgba(0,0,0,0)'); c.fillStyle = g; c.fillRect(0, 0, w, h);
+  const cw = sx - 4; if (cw > 6) for (const side of [0, 1]) { const x0 = side ? sx + sw + 4 : 0; for (let i = 0; i < 6; i++) { const fx = x0 + i * cw / 6;
+      const gg = c.createLinearGradient(fx, 0, fx + cw / 6, 0); gg.addColorStop(0, 'rgba(60,18,14,.9)'); gg.addColorStop(.5, `rgba(${110 + 40 * LT},${34 + 10 * LT},${26},.95)`); gg.addColorStop(1, 'rgba(40,12,10,.9)'); c.fillStyle = gg; c.fillRect(fx, 0, cw / 6 + .5, h); } }
+  c.strokeStyle = 'rgba(193,154,91,.55)'; c.lineWidth = 1; c.strokeRect(sx - 5.5, sy - 5.5, sw + 11, sh + 11);
+  c.save(); c.translate(w / 2, sy - 6); c.strokeStyle = 'rgba(193,154,91,.5)'; for (let i = 0; i < 9; i++) { const a = Math.PI + (i + 1) / 10 * Math.PI; c.beginPath(); c.moveTo(Math.cos(a) * 4, Math.sin(a) * 4); c.lineTo(Math.cos(a) * 12, Math.sin(a) * 12); c.stroke(); } c.restore();
+  if (TH.mode === 'play' || TH.mode === 'leader') {
+    c.save(); c.globalCompositeOperation = 'lighter'; const bx = w / 2, by = h + 60;
+    const bg = c.createLinearGradient(0, by, 0, sy); bg.addColorStop(0, 'rgba(255,240,210,.0)'); bg.addColorStop(1, 'rgba(255,240,210,.06)');
+    c.fillStyle = bg; c.beginPath(); c.moveTo(bx - 10, by); c.lineTo(sx, sy); c.lineTo(sx + sw, sy); c.lineTo(bx + 10, by); c.fill();
+    const R = rng(77); for (let i = 0; i < 40; i++) { const k = R(), y = sy + (by - sy) * ((R() + t * .02 * (R() + .3)) % 1), sp = (y - sy) / (by - sy), x = lerp(sx + k * sw, bx, sp) + Math.sin(t + i) * 4;
+      c.fillStyle = `rgba(255,240,210,${.25 * (1 - sp) * Math.abs(Math.sin(t * .7 + i))})`; c.fillRect(x, y, 1.5, 1.5); }
+    c.restore();
+  }
+}
+function drawPerson(c, p, t, L) {
+  const { h } = TH; const base = TH.base || h; let s = TH.ps * (.9 + (p.s - .85) * .4) * (p.type === 3 ? .82 : 1), dx = 0, dy = 0, rot = 0, arm = 0, clap = 0;
+  const rt = TH.react ? (t - TH.reactT - p.d) : -1; const k = clamp(rt / .5, 0, 1); const fade = rt < 0 ? 0 : (rt < 4.5 ? 1 : clamp(1 - (rt - 4.5) / 1, 0, 1)); const e = k * fade;
+  dy += Math.sin(t * .7 + p.ph) * .6;
+  switch (TH.react) {
+    case 'lean': dy -= 7 * e; s *= 1 + .04 * e; break;
+    case 'cry': dy += 3 * e; rot = .08 * p.side * e; arm = (p.type % 2 === 0 || p.d > .3) ? e : 0; break;
+    case 'sigh': dy += (4 + Math.sin(rt * 1.4) * 2) * e; break;
+    case 'laugh': dy -= Math.abs(Math.sin(rt * 13 + p.ph)) * 5 * e; rot = -.1 * e; break;
+    case 'laughcry': if (rt < 2.2) { dy -= Math.abs(Math.sin(rt * 13 + p.ph)) * 5 * e; rot = -.1 * e; } else { const q = clamp((rt - 2.2) / .6, 0, 1) * fade; dy += 3 * q; arm = p.d > .22 ? q : 0; rot = .06 * p.side * q; } break;
+    case 'applaud': clap = e; dy -= 2 * e; break;
+    case 'murmur': rot = .16 * p.side * e; dx = 3 * p.side * e; break;
+    case 'confused': rot = Math.sin(p.ph * 3) > 0 ? .22 * e : -.22 * e; break;
+    case 'tense': dy += 6 * e; s *= 1 - .05 * e; dy += Math.sin(t * 30 + p.ph) * .6 * e; break;
+    case 'yawn': arm = p.d > .35 ? e * 1.2 : 0; dy += 2 * e; break;
+  }
+  dx *= s; dy *= s; const x = p.x + dx, hy = base - 64 * s + dy;
+  c.save(); c.translate(x, hy); c.fillStyle = '#030202';
+  c.beginPath(); c.moveTo(-34 * s, 70 * s); c.bezierCurveTo(-32 * s, 28 * s, -20 * s, 22 * s, 0, 22 * s); c.bezierCurveTo(20 * s, 22 * s, 32 * s, 28 * s, 34 * s, 70 * s); c.fill();
+  if (arm) { c.save(); c.translate(p.side * 18 * s, 34 * s); c.rotate(-p.side * (TH.react === 'yawn' ? 2.6 : 2.2) * arm); c.fillRect(-4 * s, 0, 8 * s, 30 * s); c.restore(); }
+  if (clap) { const o = Math.abs(Math.sin(t * 22 + p.ph)) * 5 * s; c.fillRect(-10 * s - o, 26 * s, 8 * s, 10 * s); c.fillRect(2 * s + o, 26 * s, 8 * s, 10 * s); }
+  c.rotate(rot); c.fillRect(-6 * s, 8 * s, 12 * s, 16 * s);
+  E(c, 0, 0, 14 * s, 16 * s);
+  if (p.type === 0) { E(c, 0, -10 * s, 22 * s, 4 * s); c.fillRect(-12 * s, -24 * s, 24 * s, 14 * s); }
+  else if (p.type === 1) { E(c, 9 * s * p.side, -6 * s, 8 * s, 8 * s); }
+  c.strokeStyle = `rgba(230,220,200,${.22 * L})`; c.lineWidth = 1.2; c.beginPath();
+  if (p.type === 0) { c.moveTo(-22 * s, -10 * s); c.lineTo(22 * s, -10 * s); } else c.ellipse(0, 0, 14 * s, 16 * s, 0, Math.PI * 1.15, Math.PI * 1.85);
+  c.stroke(); c.restore();
+}
+function leader(c, k) {
+  const n = 3 - Math.floor(k * 3), f = (k * 3) % 1;
+  c.fillStyle = G(150); c.fillRect(0, 0, 320, 240); c.fillStyle = G(110); c.beginPath(); c.moveTo(160, 120); c.arc(160, 120, 200, -Math.PI / 2, -Math.PI / 2 + f * TAU); c.fill();
+  c.strokeStyle = G(240); c.lineWidth = 2; c.beginPath(); c.arc(160, 120, 80, 0, TAU); c.stroke(); c.beginPath(); c.arc(160, 120, 94, 0, TAU); c.stroke();
+  L(c, 0, 120, 320, 120); L(c, 160, 0, 160, 240);
+  c.fillStyle = G(20); c.font = '700 96px "Limelight","Poiret One",serif'; c.textAlign = 'center'; c.textBaseline = 'middle'; c.fillText(String(Math.max(1, n)), 160, 126);
+}
+let lastBeep = -1;
+function thFrame(now) {
+  const t = now / 1000, c = TH.c, d = TH.dpr; c.setTransform(d, 0, 0, d, 0, 0);
+  drawHall(c, t);
+  const jit = (TH.mode === 'play' && !REDUCED) ? 1 : 0, jx = jit * (Math.random() - .5) * .8, jy = jit * (Math.random() - .5) * 1.2;
+  c.save(); c.setTransform(d * TH.sw / 320, 0, 0, d * TH.sh / 240, d * (TH.sx + jx), d * (TH.sy + jy));
+  c.beginPath(); c.rect(0, 0, 320, 240); c.clip();
+  let fx = .6;
+  if (TH.mode === 'leader') {
+    const k = (t - TH.t0) / 1.5; const n = Math.floor(k * 3); if (n !== lastBeep && n < 3) { lastBeep = n; Snd.beep(); }
+    if (k >= 1) { TH.mode = 'play'; TH.t0 = t; lastBeep = -1; } else leader(c, k); fx = 1; TH.light = .7;
+  }
+  if (TH.mode === 'play') {
+    const el = t - TH.t0; let acc = 0, cur = null, lt = 0;
+    for (const it of TH.items) { if (el < acc + it.dur) { cur = it; lt = el - acc; break; } acc += it.dur; }
+    if (!cur) { TH.mode = 'result'; TH.t0 = t; Snd.projStop(); const cb = TH.onDone; TH.onDone = null; if (cb) cb(); }
+    else {
+      if (cur.flash && !cur.blipped) { cur.blipped = true; Snd.blip(); }
+      if (lt < .035 && !cur.flash) { c.fillStyle = '#000'; c.fillRect(0, 0, 320, 240); }
+      else if (cur.id) SHOTS[cur.id].draw(c, cur.flash ? 1 : lt + .2); else { c.fillStyle = G(8); c.fillRect(0, 0, 320, 240); }
+      fx = 1; TH.light = cur.id ? .9 : .2;
+    }
+  }
+  if (TH.mode === 'idle' || TH.mode === 'result') {
+    if (TH.preview && now < TH.previewUntil) { SHOTS[TH.preview].draw(c, (now - TH.previewStart) / 1000 + .2); fx = .8; TH.light = .75; }
+    else { TH.preview = null; if (TH.card) titleCard(c, TH.card.lines, TH.card.opt || {}); TH.light = .45; }
+  }
+  filmFX(c, t, fx);
+  c.restore();
+  c.setTransform(d, 0, 0, d, 0, 0);
+  for (const p of TH.people) drawPerson(c, p, t, TH.light);
+  const fb = (TH.base || TH.h) + 4 * TH.ps; if (fb < TH.h) { c.fillStyle = '#030202'; c.fillRect(0, fb, TH.w, TH.h - fb); }
+  requestAnimationFrame(thFrame);
+}
+function thPlay(items, onDone) { TH.items = items.map(x => Object.assign({}, x)); TH.mode = 'leader'; TH.t0 = performance.now() / 1000; TH.react = null; TH.onDone = onDone; lastBeep = -1; TH.preview = null; Snd.projStart(); }
+function thCard(lines, opt) { TH.card = { lines, opt }; }
+function thReact(kind) { TH.react = kind; TH.reactT = performance.now() / 1000; Snd.react(kind); }
+function thPreview(id) { if (TH.mode === 'play' || TH.mode === 'leader') return; TH.preview = id; TH.previewStart = performance.now(); TH.previewUntil = performance.now() + 2600; }
+
+/* ============ 开场：放映机光束 ============ */
+const TT = { cv: null, c: null, w: 0, h: 0, d: 1, on: true };
+function ttResize() { const r = TT.cv.getBoundingClientRect(); TT.d = Math.min(2, window.devicePixelRatio || 1); TT.w = r.width; TT.h = r.height; TT.cv.width = Math.round(r.width * TT.d); TT.cv.height = Math.round(r.height * TT.d); }
+function ttFrame(now) {
+  if (!TT.on) return; const t = now / 1000, c = TT.c, { w, h, d } = TT; c.setTransform(d, 0, 0, d, 0, 0);
+  c.fillStyle = '#030202'; c.fillRect(0, 0, w, h);
+  const sw = Math.min(w * .86, h * .5 * 4 / 3), sh = sw * .75, sx = (w - sw) / 2, sy = Math.max(30, h * .12);
+  const px = w * .5, py = h * .87;
+  const sg = c.createRadialGradient(w / 2, sy + sh / 2, sw * .4, w / 2, sy + sh / 2, Math.max(w, h) * .8); sg.addColorStop(0, 'rgba(200,180,150,.10)'); sg.addColorStop(1, 'rgba(0,0,0,0)'); c.fillStyle = sg; c.fillRect(0, 0, w, h);
+  c.strokeStyle = 'rgba(193,154,91,.35)'; c.lineWidth = 1; c.strokeRect(sx - 8.5, sy - 8.5, sw + 17, sh + 17);
+  c.save(); c.globalCompositeOperation = 'lighter';
+  const bg = c.createLinearGradient(px, py, px, sy); bg.addColorStop(0, 'rgba(255,236,200,.30)'); bg.addColorStop(.5, 'rgba(255,236,200,.12)'); bg.addColorStop(1, 'rgba(255,236,200,.06)');
+  c.beginPath(); c.moveTo(px - 5, py); c.lineTo(sx, sy + sh); c.lineTo(sx, sy); c.lineTo(sx + sw, sy); c.lineTo(sx + sw, sy + sh); c.lineTo(px + 5, py); c.closePath();
+  c.fillStyle = bg; c.fill(); c.clip();
+  const R = rng(5); for (let i = 0; i < 220; i++) { const a = R(), b = R(), e2 = R(), sp = .2 + R(); const k = (b + t * .015 * sp) % 1; const y = lerp(py, sy + e2 * sh, k), x = lerp(px, sx + a * sw, k) + Math.sin(t * sp + i) * 6;
+    const tw = .3 + .7 * Math.abs(Math.sin(t * sp * 1.3 + i)); c.fillStyle = `rgba(255,240,215,${.5 * tw})`; const z = 1 + R() * 1.6; c.fillRect(x, y, z, z); }
+  c.restore();
+  c.save(); c.translate(sx + (REDUCED ? 0 : (Math.random() - .5) * .6), sy); c.scale(sw / 320, sh / 240); c.beginPath(); c.rect(0, 0, 320, 240); c.clip();
+  titleCard(c, ['第二十五帧', { text: 'THE 25TH FRAME', small: true }], { size: 34, font: '"ZCOOL XiaoWei","Noto Serif SC",serif', weight: 400 });
+  c.fillStyle = G(200); c.font = '400 9px "Noto Serif SC",serif'; c.textAlign = 'center'; c.fillText('每秒二十四格是现实，第二十五格是想象', 160, 186);
+  filmFX(c, t, 1); c.restore();
+  const sb = sy + sh, rows = [[lerp(sb, py, .3), Math.max(26, sw / 14), .5], [lerp(sb, py, .62), Math.max(34, sw / 10), .3]];
+  for (const [ry, sz, li] of rows) { const n = Math.ceil(w / sz) + 1, off = (ry * 7) % sz;
+    for (let i = 0; i < n; i++) { const x = i * sz - off, hw = sz * .42;
+      c.fillStyle = '#060404'; c.beginPath(); c.moveTo(x - hw, h); c.lineTo(x - hw, ry + sz * .25); c.quadraticCurveTo(x - hw, ry, x, ry); c.quadraticCurveTo(x + hw, ry, x + hw, ry + sz * .25); c.lineTo(x + hw, h); c.fill();
+      c.strokeStyle = `rgba(230,210,180,${li * .35})`; c.lineWidth = 1; c.beginPath(); c.moveTo(x - hw * .8, ry + sz * .12); c.quadraticCurveTo(x, ry - 1, x + hw * .8, ry + sz * .12); c.stroke(); } }
+  c.fillStyle = '#0b0806'; c.fillRect(px - 34, py - 6, 68, 40); c.fillStyle = '#16110c'; c.fillRect(px - 10, py - 12, 20, 10);
+  for (const [ox, r] of [[-20, 22], [22, 22]]) { c.save(); c.translate(px + ox, py - 32); c.rotate(t * (REDUCED ? 0 : 1.6) * (ox < 0 ? 1 : 1.3));
+    c.strokeStyle = 'rgba(150,120,80,.55)'; c.lineWidth = 2; c.beginPath(); c.arc(0, 0, r, 0, TAU); c.stroke(); for (let i = 0; i < 3; i++) { c.rotate(TAU / 3); c.beginPath(); c.moveTo(0, 0); c.lineTo(r, 0); c.stroke(); } c.restore(); }
+  c.fillStyle = 'rgba(255,240,210,.9)'; E(c, px, py - 1, 4, 3); glow(c, px, py, 24, .3);
+  requestAnimationFrame(ttFrame);
+}
+
+/* ============ 游戏流程与剪辑台 ============ */
+const $ = id => document.getElementById(id);
+const EN = ['THE FIRST NIGHT', 'THE SECOND NIGHT', 'THE THIRD NIGHT', 'THE FOURTH NIGHT', 'THE FIFTH NIGHT', 'THE SIXTH NIGHT', 'THE SEVENTH NIGHT', 'THE LAST NIGHT'];
+const PROLOGUE = '小林：\n厂里的人都说我失踪了。别信。\n剪辑台左手第二个抽屉里，有八盒胶片。每晚拆一盒，每盒一张字条。\n照字条上写的剪。剪对了，观众会告诉你；剪错了，他们也会。\n——沈';
+const SAVE = 'tf25_v1';
+let S = store.get(SAVE, null);
+if (!S || typeof S !== 'object') S = {};
+S = Object.assign({ cur: 0, unlocked: 0, solved: {}, endings: [], ending: null, read: [], misreads: [], prologue: false }, S);
+if (!Array.isArray(S.misreads)) S.misreads = []; if (!Array.isArray(S.read)) S.read = []; if (!Array.isArray(S.endings)) S.endings = [];
+S.cur = clamp(S.cur | 0, 0, LEVELS.length - 1); S.unlocked = clamp(S.unlocked | 0, 0, LEVELS.length - 1);
+const save = () => store.set(SAVE, S);
+
+let cur = 0, tl = [], flash = null, fails = 0, busy = false, pendingLetter = false;
+const lv = () => LEVELS[cur];
+
+/* 缩略图缓存 */
+const thumbCache = {};
+function thumb(id) {
+  if (!thumbCache[id]) { const cv = document.createElement('canvas'); cv.width = 256; cv.height = 192; const c = cv.getContext('2d'); c.scale(256 / 320, 192 / 240);
+    try { SHOTS[id].draw(c, THUMB_T[id] != null ? THUMB_T[id] : 1.2); const g = c.createRadialGradient(160, 120, 80, 160, 120, 220); g.addColorStop(0, G(0, 0)); g.addColorStop(1, G(0, .6)); c.fillStyle = g; c.fillRect(0, 0, 320, 240); } catch (e) {}
+    thumbCache[id] = cv; }
+  return thumbCache[id];
+}
+function makeCard(id, from, idx, isFlash) {
+  const d = document.createElement('div'); d.className = 'card'; d.dataset.id = id; d.dataset.from = from; d.dataset.idx = idx; if (isFlash) d.dataset.flash = '1';
+  d.tabIndex = 0; d.setAttribute('role', 'button'); d.setAttribute('aria-label', SHOTS[id].name + (isFlash ? '（单帧）' : ''));
+  const cv = document.createElement('canvas'); cv.width = 256; cv.height = 192; cv.getContext('2d').drawImage(thumb(id), 0, 0);
+  const lb = document.createElement('div'); lb.className = 'lbl'; lb.textContent = SHOTS[id].name;
+  d.append(cv, lb); if (isFlash) { const b = document.createElement('span'); b.className = 'badge'; b.textContent = '单帧'; d.append(b); }
+  return d;
+}
+function render() {
+  const L = lv();
+  $('nightLabel').textContent = L.title + ' · ' + EN[cur].toLowerCase().replace(/\b\w/g, m => m.toUpperCase());
+  $('goal').textContent = L.goal; $('goalSub').textContent = L.sub;
+  $('deskLabel').innerHTML = `剪 辑 台 · 第${'一二三四五六七八'[cur]}盒<span>REEL ${cur + 1}</span>`;
+  const T = $('timeline'); T.innerHTML = '';
+  for (let i = 0; i < L.slots; i++) {
+    const s = document.createElement('div'); s.className = 'slot'; s.dataset.slot = i; s.style.margin = L.flash ? '0' : '0 3px';
+    s.innerHTML = `<span class="num">${i + 1}</span>`; if (tl[i]) s.append(makeCard(tl[i], 'slot', i, false)); T.append(s);
+    if (L.flash && i < L.slots - 1) { const g = document.createElement('div'); g.className = 'gap on'; g.dataset.gap = i; g.title = '把单帧拖到这里';
+      if (flash && flash.gap === i) g.append(makeCard(flash.id, 'gap', i, true)); T.append(g); }
+  }
+  const P = $('pool'); P.innerHTML = '';
+  L.pool.forEach((id, i) => { const c = makeCard(id, 'pool', i, false); if (tl.includes(id)) c.classList.add('used'); P.append(c); });
+  $('flashWrap').classList.toggle('hidden', !L.flash);
+  const F = $('flashPool'); F.innerHTML = '';
+  if (L.flash) L.flash.forEach((id, i) => { const c = makeCard(id, 'flashpool', i, true); if (flash && flash.id === id) c.classList.add('used'); F.append(c); });
+  const pb = $('btnPlay'); pb.disabled = busy; pb.textContent = pendingLetter ? '读字条' : '放 映';
+  pb.classList.toggle('primary', true); $('btnClear').disabled = busy;
+}
+function setTip(html) { $('tip').innerHTML = html; }
+function levelCard() { thCard([lv().title, { text: EN[cur], small: true }, lv().goal], { size: 17 }); }
+function goLevel(i) {
+  cur = clamp(i, 0, LEVELS.length - 1); const L = lv();
+  tl = new Array(L.slots).fill(null); flash = null; fails = 0; busy = false; pendingLetter = false;
+  if (L.same && S.solved[L.same]) { const prev = S.solved[L.same].seq; if (prev && prev.length === L.slots) tl = prev.slice(); }
+  S.cur = cur; save(); levelCard(); render();
+  setTip(L.same && S.solved[L.same] ? '昨晚剪好的胶片还在时间线上。<b>不用换镜头，只换顺序。</b>' : cur === 0 ? '拖动或轻点镜头卡片放进时间线，然后按<b>放映</b>。轻按卡片可以在银幕上预览。' : L.flash ? '新机关：<b>单帧</b>。它只在银幕上闪一下，观众看不清，却会记得。' : '');
+}
+
+/* ---------- 拖拽（Pointer Events） ---------- */
+let drag = null;
+function targetAt(x, y) { const el = document.elementFromPoint(x, y); return el ? el.closest('.slot,.gap.on,.pool,.flashpool,#flashWrap') : null; }
+function clearOver() { document.querySelectorAll('.over').forEach(e => e.classList.remove('over')); }
+document.addEventListener('pointerdown', e => {
+  const card = e.target.closest && e.target.closest('.card'); if (!card || card.classList.contains('ghost') || busy || card.classList.contains('used')) return;
+  if (!card.closest('#timeline,#pool,#flashPool')) return;
+  e.preventDefault(); Snd.init();
+  const r = card.getBoundingClientRect();
+  drag = { card, id: card.dataset.id, from: card.dataset.from, idx: +card.dataset.idx, isFlash: card.dataset.flash === '1', x0: e.clientX, y0: e.clientY, ox: e.clientX - r.left, oy: e.clientY - r.top, w: r.width, started: false, ghost: null };
+  thPreview(drag.id);
+});
+window.addEventListener('pointermove', e => {
+  if (!drag) return;
+  if (!drag.started) { if (Math.hypot(e.clientX - drag.x0, e.clientY - drag.y0) < 7) return;
+    drag.started = true; const g = makeCard(drag.id, 'ghost', 0, drag.isFlash); g.classList.add('ghost'); g.style.width = Math.max(70, drag.w) + 'px'; document.body.append(g); drag.ghost = g; drag.card.classList.add('lift');
+    if (drag.isFlash) drag.ox = Math.min(drag.ox, 35); }
+  e.preventDefault();
+  drag.ghost.style.left = (e.clientX - drag.ox) + 'px'; drag.ghost.style.top = (e.clientY - drag.oy) + 'px';
+  clearOver(); const t = targetAt(e.clientX, e.clientY);
+  if (t) { if (drag.isFlash ? t.matches('.gap.on') : t.matches('.slot')) t.classList.add('over'); else if (t.matches('.pool,.flashpool') && drag.from !== 'pool' && drag.from !== 'flashpool') t.classList.add('over'); }
+}, { passive: false });
+function endDrag(e, cancel) {
+  if (!drag) return; const d = drag; drag = null; clearOver();
+  if (d.ghost) d.ghost.remove(); d.card.classList.remove('lift');
+  if (cancel) return;
+  if (!d.started) { tapCard(d); return; }
+  const t = targetAt(e.clientX, e.clientY); dropCard(d, t);
+}
+window.addEventListener('pointerup', e => endDrag(e, false));
+window.addEventListener('pointercancel', e => endDrag(e, true));
+function changed() { if (pendingLetter) return; if (TH.mode === 'result') { TH.mode = 'idle'; TH.react = null; levelCard(); } render(); }
+function dropCard(d, t) {
+  const L = lv();
+  if (d.isFlash) {
+    if (t && t.matches('.gap.on')) { flash = { gap: +t.dataset.gap, id: d.id }; setTip(`已在第 ${flash.gap + 1}、${flash.gap + 2} 格之间藏了一帧：<b>${SHOTS[d.id].name}</b>。`); }
+    else if (d.from === 'gap') flash = null;
+    else if (t && t.matches('.slot')) setTip('单帧要藏在<b>两格之间的红线</b>上，不能占一整格。');
+    changed(); return;
+  }
+  if (t && t.matches('.slot')) { const j = +t.dataset.slot;
+    if (d.from === 'slot') { const a = tl[d.idx]; tl[d.idx] = tl[j]; tl[j] = a; } else tl[j] = d.id; }
+  else if (t && t.matches('.gap.on')) return;
+  else if (d.from === 'slot') tl[d.idx] = null;
+  changed();
+}
+function tapCard(d) {
+  const L = lv();
+  if (d.isFlash) { if (d.from === 'gap') flash = null; else { const g = flash ? flash.gap : Math.floor((L.slots - 2) / 2); flash = { gap: g, id: d.id }; setTip(`单帧<b>${SHOTS[d.id].name}</b>已藏进第 ${g + 1}、${g + 2} 格之间。拖动它可以换位置。`); } changed(); return; }
+  if (d.from === 'slot') { tl[d.idx] = null; changed(); return; }
+  const k = tl.indexOf(null); if (k < 0) { setTip('时间线接满了。把卡片<b>拖到某一格上</b>可以替换，轻点时间线上的卡片可以撤下。'); return; }
+  tl[k] = d.id; changed();
+}
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape') { closeAll(); return; }
+  const card = e.target.closest && e.target.closest('.card'); if (card && (e.key === 'Enter' || e.key === ' ') && !busy && !card.classList.contains('used')) { e.preventDefault(); Snd.init(); thPreview(card.dataset.id); tapCard({ id: card.dataset.id, from: card.dataset.from, idx: +card.dataset.idx, isFlash: card.dataset.flash === '1' }); }
+});
+
+/* ---------- 放映与判定 ---------- */
+function play() {
+  if (busy) return; Snd.init();
+  if (pendingLetter) { openLetter(cur, false); return; }
+  const L = lv(); busy = true; render();
+  const dur = REDUCED ? 1.6 : 1.85, items = [];
+  for (let i = 0; i < L.slots; i++) { items.push({ id: tl[i] || null, dur }); if (flash && flash.gap === i) items.push({ id: flash.id, dur: .06, flash: true }); }
+  const res = judge(L, tl, flash);
+  setTip('放映中……嗒、嗒、嗒。');
+  thPlay(items, () => showResult(res));
+}
+function showResult(res) {
+  const L = lv();
+  thCard([res.text, { text: res.ok ? 'THE AUDIENCE UNDERSTOOD' : 'A MISREADING', small: true }], { size: 14 });
+  thReact(res.react);
+  setTimeout(() => {
+    busy = false;
+    if (res.ok) {
+      Snd.chime(); S.solved[L.id] = { seq: tl.slice(), flash: flash ? Object.assign({}, flash) : null, ending: res.ending || null };
+      if (res.ending) { S.ending = res.ending; if (!S.endings.includes(res.ending)) S.endings.push(res.ending); }
+      S.unlocked = Math.max(S.unlocked, Math.min(cur + 1, LEVELS.length - 1)); save();
+      pendingLetter = true; setTip(cur === 7 ? `你剪出了<b>${res.ending === 'reunion' ? '重逢' : '离别'}</b>。抽屉里还压着最后一张字条。` : '观众读懂了。剪辑台上多了一张字条。');
+    } else {
+      Snd.fail(); fails++;
+      if (!S.misreads.includes(res.text)) { S.misreads.push(res.text); save(); }
+      setTip(`误读。<span style="opacity:.7">（已收集误读 ${S.misreads.length} 种）</span>` + (fails >= 2 ? `<br>沈先生在字条背面写着：<b>${L.hint}</b>` : ' 换个顺序，再剪一次。'));
+    }
+    render();
+  }, 1100);
+}
+
+/* ---------- 字条、抽屉、片尾 ---------- */
+let overlayOpen = null;
+function show(id) { $(id).classList.remove('hidden'); overlayOpen = id; }
+function hide(id) { $(id).classList.add('hidden'); if (overlayOpen === id) overlayOpen = null; }
+function closeAll() { ['noteModal', 'drawer'].forEach(hide); }
+function letterText(i) { if (i < 0) return PROLOGUE; if (i === 7) return (ENDINGS[S.ending] || ENDINGS.reunion).letter; return LEVELS[i].letter; }
+function openLetter(i, fromDrawer, after) {
+  $('noteHead').textContent = i < 0 ? '序 · 压在剪辑台上的字条' : (i === 7 ? (ENDINGS[S.ending] || ENDINGS.reunion).title : LEVELS[i].title + ' · 沈先生的字条');
+  $('noteBody').textContent = letterText(i);
+  const A = $('noteActions'); A.innerHTML = '';
+  const btn = (txt, fn, primary) => { const b = document.createElement('button'); b.className = 'btn' + (primary ? ' primary' : ''); b.textContent = txt; b.onclick = fn; A.append(b); return b; };
+  if (i >= 0 && !S.read.includes(i)) { S.read.push(i); save(); }
+  if (fromDrawer) btn('收起', () => hide('noteModal'));
+  else if (i < 0) btn('开始剪辑', () => { hide('noteModal'); if (after) after(); }, true);
+  else if (i < 7) btn('下一夜', () => { hide('noteModal'); goLevel(i + 1); }, true);
+  else { btn('留在剪辑台', () => { hide('noteModal'); pendingLetter = false; render(); }); btn('片尾字幕', () => { hide('noteModal'); pendingLetter = false; render(); showCredits(); }, true); }
+  show('noteModal'); setTimeout(() => { const b = A.querySelector('.btn.primary') || A.querySelector('.btn'); if (b) b.focus(); }, 30);
+}
+function openDrawer() {
+  const U = $('drawerList'); U.innerHTML = '';
+  const li = (label, can, onRead, onGo) => { const l = document.createElement('li'); const a = document.createElement('button'); a.className = 'slip'; a.textContent = label; a.disabled = !can; a.onclick = onRead; l.append(a);
+    if (onGo) { const g = document.createElement('button'); g.className = 'tbtn go'; g.textContent = '重剪'; g.onclick = onGo; l.append(g); } U.append(l); };
+  li('序 · ' + PROLOGUE.split('\n')[1].slice(0, 14) + '…', true, () => openLetter(-1, true));
+  LEVELS.forEach((L, i) => { const got = !!S.solved[L.id]; const txt = got ? L.title + ' · ' + letterText(i).split('\n').filter(x => x && x !== '小林：')[0].slice(0, 14) + '…' : L.title + ' · （字条还没来）';
+    li(txt, got, () => openLetter(i, true), i <= S.unlocked ? () => { hide('drawer'); goLevel(i); } : null); });
+  const foot = document.querySelector('#drawer .foot'); let cr = $('btnCredits');
+  if (!cr) { cr = document.createElement('button'); cr.className = 'btn'; cr.id = 'btnCredits'; cr.textContent = '片尾字幕'; cr.onclick = () => { hide('drawer'); showCredits(); }; foot.insertBefore(cr, foot.firstChild); }
+  cr.classList.toggle('hidden', !S.ending);
+  let m = $('misreadCount'); if (!m) { m = document.createElement('p'); m.id = 'misreadCount'; m.style.cssText = 'text-align:center;color:var(--dim);font-size:12px;margin:12px 0 0'; U.after(m); }
+  m.textContent = `已收集观众误读 ${S.misreads.length} 种 · 已剪出结局 ${S.endings.map(e => e === 'reunion' ? '重逢' : '离别').join('、') || '无'}`;
+  $('btnReset').textContent = '清空进度'; $('btnReset').dataset.arm = '';
+  show('drawer');
+}
+function esc(s) { return String(s).replace(/[&<>"]/g, ch => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[ch])); }
+function showCredits() {
+  const rows = LEVELS.map((L, i) => { const sv = S.solved[L.id]; if (!sv) return '';
+    const seq = sv.seq.filter(Boolean).map((id, k) => esc(SHOTS[id].name) + (sv.flash && sv.flash.gap === k ? ` → <span style="color:#c98">［第二十五帧 · ${esc(SHOTS[sv.flash.id].name)}］</span>` : '')).join(' → ');
+    return `<div class="shot"><em>镜头 ${i + 1} · ${esc(L.title)} · ${esc(L.goal.replace(/^让观众相信：|。$/g, ''))}</em>${seq}</div>`; }).join('');
+  const end = S.ending === 'parting' ? '如实的离别' : '重逢';
+  $('roll').className = 'roll' + (REDUCED ? ' static' : '');
+  $('roll').innerHTML = `<div style="height:${REDUCED ? 10 : 30}vh"></div><h1>站 台</h1><div class="en">THE PLATFORM · RECUT ${S.ending === 'parting' ? '— AS IT WAS' : '— AS IT SHOULD HAVE BEEN'}</div>
+  <div class="deco"></div>
+  <div class="role">原 导 演</div><div class="name">沈先生</div>
+  <div class="role">剪 辑</div><div class="name">你</div>
+  <div class="role">主 演</div><div class="name">阿婉　·　沈先生（特写）</div>
+  <div class="role">结 局</div><div class="name">${end}</div>
+  <h3>SHOT LIST · 镜头表</h3>${rows}
+  <div class="deco"></div>
+  <div class="note">这部片子的镜头表，可以作为一部 AI 短片的分镜，交给叙事影像赛道。<br>每秒二十四格是拍下来的现实；第二十五格，是 AI 替人想象出来的那一帧。</div>
+  <h3>WITH THANKS TO</h3><div class="shot">天光影片公司 道具间 · 北站 · 第三放映厅的所有观众<br>以及误读了这部电影 ${S.misreads.length} 次的人们</div>
+  <h3>IN MEMORY</h3><div class="note" style="margin-top:6px">献给所有来不及过上的结局。</div>
+  <div class="end">剧 终</div><div class="en">FIN</div><div style="height:${REDUCED ? 6 : 40}vh"></div>`;
+  show('credits'); if (Snd.ok()) Snd.chime();
+}
+
+/* ---------- 启动 ---------- */
+function init() {
+  TH.cv = $('screen'); TH.c = TH.cv.getContext('2d'); TT.cv = $('titleCanvas'); TT.c = TT.cv.getContext('2d');
+  thResize(); ttResize();
+  if (window.ResizeObserver) new ResizeObserver(() => thResize()).observe(TH.cv);
+  window.addEventListener('resize', () => { thResize(); if (TT.on) ttResize(); });
+  requestAnimationFrame(thFrame); requestAnimationFrame(ttFrame);
+  goLevel(Math.min(S.cur, S.unlocked));
+  $('btnPlay').onclick = play;
+  $('btnClear').onclick = () => { if (busy) return; tl = tl.map(() => null); flash = null; changed(); };
+  $('btnMute').onclick = () => { Snd.init(); Snd.setMute(!Snd.muted); muteLabel(); };
+  $('btnDrawer').onclick = () => { Snd.init(); openDrawer(); };
+  $('btnCloseDrawer').onclick = () => hide('drawer');
+  $('btnReset').onclick = e => { const b = e.currentTarget; if (!b.dataset.arm) { b.dataset.arm = '1'; b.textContent = '再点一次，确认清空'; return; }
+    store.del(SAVE); S = { cur: 0, unlocked: 0, solved: {}, endings: [], ending: null, read: [], misreads: [], prologue: false }; hide('drawer'); goLevel(0); };
+  $('btnCreditsBack').onclick = () => hide('credits');
+  ['noteModal', 'drawer'].forEach(id => $(id).addEventListener('click', e => { if (e.target.id === id && (id === 'drawer' || !$('noteActions').querySelector('.primary'))) hide(id); }));
+  $('btnEnter').onclick = () => { Snd.init(); TT.on = false; hide('title'); $('app').removeAttribute('aria-hidden');
+    if (!S.prologue) { S.prologue = true; save(); openLetter(-1, false, () => {}); } };
+  muteLabel();
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(() => { for (const k in thumbCache) delete thumbCache[k]; render(); }).catch(() => {});
+  window.addEventListener('pointerdown', () => Snd.init(), { once: true });
+}
+function muteLabel() { const b = $('btnMute'); b.textContent = Snd.muted ? '声音 关' : '声音 开'; b.setAttribute('aria-pressed', String(Snd.muted)); }
+init();
+</script>
+</body>
+</html>

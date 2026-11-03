@@ -1,0 +1,1869 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>锔 · 碎瓷重圆</title>
+<meta name="description" content="把碎了的瓷器一片一片拼回去，裂痕处以金补之。">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Ma+Shan+Zheng&family=Noto+Serif+SC:wght@400;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#0e0a08; --ink:#ece3d4; --muted:#9d907e; --faint:#5e544a;
+  --gold:#d6ad62; --gold2:#f1d89c; --line:rgba(214,173,98,.28); --red:#9e2f26;
+  --sat:env(safe-area-inset-top,0px); --sab:env(safe-area-inset-bottom,0px);
+  --brush:"Ma Shan Zheng","STXingkai","Xingkai SC","STKaiti","KaiTi","Kaiti SC",serif;
+  --serif:"Noto Serif SC","Songti SC","STSong","SimSun","Source Han Serif SC",serif;
+  color-scheme:dark;
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{height:100%;margin:0;overflow:hidden}
+body{
+  background-color:var(--bg);color:var(--ink);font-family:var(--serif);
+  background-image:
+    radial-gradient(ellipse 70% 55% at 50% 38%,rgba(140,86,48,.20),rgba(0,0,0,0) 70%),
+    radial-gradient(ellipse at center,rgba(0,0,0,0) 45%,rgba(0,0,0,.72) 100%),
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.012 0.38' numOctaves='3' seed='4'/%3E%3CfeColorMatrix values='0 0 0 0 0.35 0 0 0 0 0.2 0 0 0 0 0.12 0 0 0 0.10 0'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23g)'/%3E%3C/svg%3E"),
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 1 0 0 0 0 0.9 0 0 0 0 0.8 0 0 0 0.05 0'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23n)'/%3E%3C/svg%3E"),
+    linear-gradient(180deg,#140e0b,#0b0807);
+  -webkit-font-smoothing:antialiased;user-select:none;-webkit-user-select:none;
+}
+button{font:inherit;color:inherit;cursor:pointer;border:0;background:none}
+button:focus-visible{outline:1px solid var(--gold);outline-offset:3px}
+.screen{position:fixed;inset:0;display:none;overflow:hidden}
+.screen.on{display:block}
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:.4em;min-width:9.5em;padding:.8em 1.6em;letter-spacing:.32em;text-indent:.32em;
+  border:1px solid rgba(236,227,212,.16);background:rgba(255,255,255,.025);color:var(--ink);border-radius:2px;font-size:15px;transition:background .3s,border-color .3s,color .3s}
+.btn:hover{background:rgba(255,255,255,.06);border-color:rgba(236,227,212,.3)}
+.btn.gold{border-color:var(--line);color:var(--gold2);background:linear-gradient(180deg,rgba(214,173,98,.14),rgba(214,173,98,.04));box-shadow:0 0 24px rgba(214,173,98,.08) inset}
+.btn.gold:hover{border-color:rgba(214,173,98,.6);background:linear-gradient(180deg,rgba(214,173,98,.22),rgba(214,173,98,.06))}
+.btn.sm{min-width:0;padding:.55em 1.1em;font-size:13px;letter-spacing:.2em;text-indent:.2em}
+.iconBtn{position:fixed;top:calc(10px + var(--sat));right:12px;z-index:50;width:40px;height:40px;border-radius:50%;display:grid;place-items:center;color:var(--muted);border:1px solid rgba(236,227,212,.1);background:rgba(10,7,6,.35)}
+.iconBtn:hover{color:var(--ink)}
+.iconBtn svg{width:20px;height:20px}
+.iconBtn .x{display:none}.iconBtn.muted .x{display:inline}.iconBtn.muted .w{display:none}
+
+/* 标题页 */
+#tcv{position:absolute;inset:0;width:100%;height:100%}
+.tWrap{position:absolute;inset:0;display:flex;flex-direction:column;justify-content:center;padding:0 8vw;pointer-events:none}
+.tWrap>*{pointer-events:auto}
+.tKicker{font-size:12px;letter-spacing:.6em;color:var(--muted);margin-bottom:1.2em}
+.tBig{font-family:var(--brush);font-weight:400;font-size:clamp(120px,20vw,230px);line-height:.95;margin:0;color:var(--ink);text-shadow:0 0 40px rgba(214,173,98,.12)}
+.tSub{font-family:var(--brush);font-size:clamp(28px,4vw,40px);letter-spacing:.35em;color:var(--gold2);margin:.15em 0 .6em .1em}
+.tTag{font-size:14px;line-height:2;color:var(--muted);letter-spacing:.12em;margin:0 0 2.2em}
+.tBtns{display:flex;flex-direction:column;align-items:flex-start;gap:12px}
+.tSeal{position:absolute;right:calc(6vw);bottom:calc(5vh + var(--sab));writing-mode:vertical-rl;font-size:12px;letter-spacing:.5em;color:var(--faint)}
+@media (max-aspect-ratio:9/10){
+  .tWrap{justify-content:flex-start;align-items:center;text-align:center;padding:calc(9vh + var(--sat)) 24px 0}
+  .tBig{font-size:clamp(92px,26vw,150px)}
+  .tSub{font-size:26px;margin-bottom:.4em}
+  .tTag{margin-bottom:0;font-size:13px}
+  .tBtns{position:absolute;left:0;right:0;bottom:calc(5vh + var(--sab));align-items:center;gap:10px}
+  .tBtns .btn{padding:.7em 1.4em}
+  .tSeal{display:none}
+}
+
+/* 顶栏 */
+.bar{position:absolute;left:0;right:0;top:0;padding:calc(10px + var(--sat)) 64px 0 12px;display:flex;align-items:center;gap:12px;z-index:5;pointer-events:none}
+.bar>*{pointer-events:auto}
+.back{height:40px;padding:0 14px 0 10px;color:#d8cbb4;letter-spacing:.2em;font-size:14px;display:inline-flex;align-items:center;gap:6px;border-radius:20px}
+.back:hover{color:var(--gold2)}
+.barTitle{flex:1;text-align:center;font-size:13px;letter-spacing:.3em;color:#d4c6ae;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;padding-left:0}
+.barTitle b{font-family:var(--brush);font-weight:400;font-size:20px;letter-spacing:.2em;color:var(--gold2);margin:0 .4em}
+.barTitle em{font-style:normal;color:var(--gold2)}
+
+/* 关卡选择 */
+.scroll{position:absolute;inset:0;overflow-y:auto;overflow-x:hidden;padding:calc(64px + var(--sat)) 16px calc(40px + var(--sab));-webkit-overflow-scrolling:touch}
+.wrapW{max-width:980px;margin:0 auto}
+.pageH{font-family:var(--brush);font-weight:400;font-size:40px;letter-spacing:.3em;margin:8px 0 6px;text-align:center}
+.pageSub{text-align:center;color:var(--muted);font-size:13px;letter-spacing:.3em;margin-bottom:28px}
+.chap{margin:0 0 34px;padding:20px 0 0;border-top:1px solid rgba(236,227,212,.07)}
+.chapH{display:flex;align-items:baseline;gap:14px;flex-wrap:wrap;margin-bottom:14px}
+.chapNo{font-size:12px;letter-spacing:.4em;color:var(--muted)}
+.chapName{font-family:var(--brush);font-size:30px;letter-spacing:.15em}
+.chapEra{font-size:13px;color:var(--muted);letter-spacing:.2em}
+.chapMech{margin-left:auto;font-size:12px;color:var(--faint);letter-spacing:.15em}
+.grid{display:grid;grid-template-columns:repeat(10,1fr);gap:10px}
+@media (max-width:640px){.grid{grid-template-columns:repeat(5,1fr)}.chapMech{margin-left:0;width:100%}}
+.lv{position:relative;aspect-ratio:1;border-radius:50%;display:grid;place-items:center;font-size:15px;color:rgba(20,14,10,.75);
+  box-shadow:0 6px 14px rgba(0,0,0,.45),inset 0 -6px 10px rgba(0,0,0,.25),inset 0 4px 8px rgba(255,255,255,.25);transition:transform .25s}
+.lv:hover{transform:translateY(-2px)}
+.lv.dark{color:rgba(240,225,200,.8)}
+.lv.done::after{content:"";position:absolute;inset:-4px;border-radius:50%;border:1.5px solid var(--gold);opacity:.8}
+.lv .dots{position:absolute;bottom:-14px;left:0;right:0;display:flex;justify-content:center;gap:3px}
+.lv .dots i{width:4px;height:4px;border-radius:50%;background:rgba(214,173,98,.25)}
+.lv .dots i.on{background:var(--gold)}
+.lv svg{position:absolute;inset:0;width:100%;height:100%;pointer-events:none}
+
+/* 博古架 */
+.shelfWrap{padding:18px;border-radius:6px;background:
+  repeating-linear-gradient(92deg,rgba(255,255,255,.018) 0 2px,rgba(0,0,0,0) 2px 9px),
+  linear-gradient(180deg,#3b2618,#2a1a10);box-shadow:0 20px 50px rgba(0,0,0,.5),inset 0 0 0 1px rgba(255,220,170,.06)}
+.shelfLabel{display:flex;justify-content:space-between;align-items:baseline;margin:14px 4px 8px;color:#c9b393;font-size:13px;letter-spacing:.25em}
+.shelfLabel b{font-family:var(--brush);font-weight:400;font-size:22px;color:#ecd9b8}
+.shelfLabel:first-child{margin-top:0}
+.shelf{display:grid;grid-template-columns:repeat(10,1fr);gap:6px}
+@media (max-width:640px){.shelf{grid-template-columns:repeat(5,1fr)}}
+.cell{position:relative;aspect-ratio:3/4;background:radial-gradient(ellipse at 50% 30%,#1e140d,#0f0906);box-shadow:inset 0 10px 18px rgba(0,0,0,.7),inset 0 0 0 1px rgba(0,0,0,.4);border-bottom:7px solid #5d3c23;border-radius:2px 2px 0 0;overflow:hidden}
+.cell canvas{position:absolute;inset:0;width:100%;height:100%}
+.cell.done{cursor:pointer}
+.cell .tag{position:absolute;left:0;right:0;bottom:4px;text-align:center;font-size:10px;letter-spacing:.2em;color:rgba(200,180,150,.25)}
+
+/* 游戏 */
+#cv{position:absolute;inset:0;width:100%;height:100%;touch-action:none}
+.foot{position:absolute;left:0;right:0;bottom:0;padding:0 16px calc(14px + var(--sab));display:flex;align-items:center;justify-content:center;gap:16px;pointer-events:none}
+.foot>*{pointer-events:auto}
+.prog{font-size:13px;letter-spacing:.3em;color:#d4c6ae;text-shadow:0 1px 6px rgba(0,0,0,.8)}
+.prog em{font-style:normal;color:var(--gold2);font-size:15px;letter-spacing:.1em}
+.toast{position:absolute;left:50%;top:calc(62px + var(--sat));transform:translate(-50%,-6px);max-width:min(88vw,520px);text-align:center;padding:.7em 1.3em;font-size:14px;line-height:1.8;letter-spacing:.12em;color:var(--gold2);
+  background:rgba(14,10,8,.72);border:1px solid var(--line);border-radius:2px;opacity:0;transition:opacity .6s,transform .6s;pointer-events:none;z-index:6}
+.toast.on{opacity:1;transform:translate(-50%,0)}
+
+/* 故事卡 */
+.overlay{position:fixed;inset:0;z-index:40;display:none;align-items:center;justify-content:center;padding:20px;background:rgba(6,4,3,.5)}
+.overlay.on{display:flex;animation:fadeIn .8s ease both}
+.card{position:relative;width:min(92vw,420px);padding:34px 30px 26px;background:linear-gradient(180deg,rgba(30,22,17,.97),rgba(18,13,10,.97));border:1px solid var(--line);border-radius:3px;box-shadow:0 30px 80px rgba(0,0,0,.6);text-align:center;animation:rise .9s cubic-bezier(.2,.8,.2,1) both}
+@keyframes rise{from{transform:translateY(18px);opacity:0}to{transform:none;opacity:1}}
+.card .seal{position:absolute;top:18px;right:18px;width:30px;height:30px;display:grid;place-items:center;background:var(--red);color:#f3e3d3;font-family:var(--brush);font-size:20px;border-radius:3px;transform:rotate(-4deg);opacity:.9}
+.card canvas{display:none;width:150px;height:190px;margin:-8px auto 6px}
+.card.view canvas{display:block}
+.cName{font-size:21px;font-weight:600;letter-spacing:.16em;margin:0 0 6px}
+.cEra{font-size:12px;letter-spacing:.4em;color:var(--muted)}
+.rule{width:44px;height:1px;background:var(--gold);opacity:.7;margin:18px auto}
+.cStory{font-size:15px;line-height:2.05;letter-spacing:.08em;color:#ddd2c1;text-align:justify;margin:0 0 18px}
+.cStars{display:flex;align-items:center;justify-content:center;gap:6px;font-size:12px;letter-spacing:.3em;color:var(--muted);margin-bottom:22px}
+.cStars i{width:6px;height:6px;border-radius:50%;background:rgba(214,173,98,.22)}
+.cStars i.on{background:var(--gold);box-shadow:0 0 8px rgba(214,173,98,.6)}
+.cBtns{display:flex;gap:10px;justify-content:center;flex-wrap:wrap}
+@media (max-aspect-ratio:9/10){.overlay{align-items:flex-end;padding-bottom:calc(20px + var(--sab))}}
+@media (prefers-reduced-motion:reduce){*{animation-duration:.01ms!important;transition-duration:.01ms!important}}
+</style>
+</head>
+<body>
+<button class="iconBtn" id="mute" aria-label="静音切换"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4 9.5h3.2L12 5.5v13l-4.8-4H4z"/><g class="w"><path d="M15.5 9.2a4 4 0 0 1 0 5.6"/><path d="M18 6.8a7.5 7.5 0 0 1 0 10.4"/></g><g class="x"><path d="M16 9.5l5 5M21 9.5l-5 5"/></g></svg></button>
+
+<section class="screen on" id="sTitle">
+  <canvas id="tcv"></canvas>
+  <div class="tWrap">
+    <div class="tKicker">金 缮 · 锔 瓷</div>
+    <h1 class="tBig">锔</h1>
+    <div class="tSub">碎瓷重圆</div>
+    <p class="tTag">把碎了的，一片一片拼回去。<br>裂痕之处，以金补之。</p>
+    <div class="tBtns">
+      <button class="btn gold" id="bStart">开始修复</button>
+      <button class="btn" id="bSelect">器物名录</button>
+      <button class="btn" id="bShelf">博古架</button>
+    </div>
+  </div>
+  <div class="tSeal">六窑 · 六十器 · 不计时 · 慢慢来</div>
+</section>
+
+<section class="screen" id="sSelect">
+  <div class="scroll"><div class="wrapW">
+    <div class="pageH">器物名录</div>
+    <div class="pageSub">六窑六十器 · 随意挑一件</div>
+    <div id="chapList"></div>
+  </div></div>
+  <div class="bar"><button class="back" data-go="title">‹ 返回</button></div>
+</section>
+
+<section class="screen" id="sShelf">
+  <div class="scroll"><div class="wrapW">
+    <div class="pageH">博古架</div>
+    <div class="pageSub" id="shelfSub"></div>
+    <div class="shelfWrap" id="shelfList"></div>
+  </div></div>
+  <div class="bar"><button class="back" data-go="title">‹ 返回</button></div>
+</section>
+
+<section class="screen" id="sGame">
+  <canvas id="cv"></canvas>
+  <div class="bar"><button class="back" id="gBack">‹ 名录</button><div class="barTitle" id="gTitle"></div></div>
+  <div class="toast" id="toast"></div>
+  <div class="foot"><span class="prog" id="gProg"></span><button class="btn sm gold" id="gHint">提示</button></div>
+</section>
+
+<div class="overlay" id="card"><div class="card" id="cardBox">
+  <div class="seal">锔</div>
+  <canvas id="cThumb" width="300" height="380"></canvas>
+  <h2 class="cName" id="cName"></h2>
+  <div class="cEra" id="cEra"></div>
+  <div class="rule"></div>
+  <p class="cStory" id="cStory"></p>
+  <div class="cStars" id="cStars"></div>
+  <div class="cBtns" id="cBtns"></div>
+</div></div>
+<script>
+/* ===================== 纯逻辑：随机数 / 几何 / 器型 / 碎裂 / 关卡 ===================== */
+var KG = (function () {
+  'use strict';
+  var TAU = Math.PI * 2;
+  function mulberry32(a) {
+    return function () {
+      a |= 0; a = (a + 0x6D2B79F5) | 0;
+      var t = Math.imul(a ^ (a >>> 15), 1 | a);
+      t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
+      return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+    };
+  }
+  function hashStr(s) {
+    var h = 2166136261;
+    for (var i = 0; i < s.length; i++) h = Math.imul(h ^ s.charCodeAt(i), 16777619);
+    return h >>> 0;
+  }
+  function makeRng(seed) {
+    var f = mulberry32(seed >>> 0);
+    return {
+      f: f,
+      range: function (a, b) { return a + (b - a) * f(); },
+      int: function (a, b) { return a + Math.floor(f() * (b - a + 1)); },
+      pick: function (arr) { return arr[Math.floor(f() * arr.length)]; },
+      chance: function (p) { return f() < p; }
+    };
+  }
+
+  /* ---------- 几何 ---------- */
+  function area(p) {
+    var a = 0;
+    for (var i = 0, n = p.length; i < n; i++) { var q = p[i], r = p[(i + 1) % n]; a += q[0] * r[1] - r[0] * q[1]; }
+    return a / 2;
+  }
+  function centroid(p) {
+    var a = 0, cx = 0, cy = 0, n = p.length;
+    for (var i = 0; i < n; i++) {
+      var x0 = p[i][0], y0 = p[i][1], x1 = p[(i + 1) % n][0], y1 = p[(i + 1) % n][1];
+      var cr = x0 * y1 - x1 * y0; a += cr; cx += (x0 + x1) * cr; cy += (y0 + y1) * cr;
+    }
+    if (Math.abs(a) < 1e-9) {
+      var sx = 0, sy = 0; for (i = 0; i < n; i++) { sx += p[i][0]; sy += p[i][1]; }
+      return [sx / n, sy / n];
+    }
+    return [cx / (3 * a), cy / (3 * a)];
+  }
+  function pip(x, y, poly) {
+    var ins = false;
+    for (var i = 0, n = poly.length, j = n - 1; i < n; j = i++) {
+      var xi = poly[i][0], yi = poly[i][1], xj = poly[j][0], yj = poly[j][1];
+      if (((yi > y) !== (yj > y)) && (x < (xj - xi) * (y - yi) / (yj - yi) + xi)) ins = !ins;
+    }
+    return ins;
+  }
+  /* Sutherland–Hodgman：保留 a*x+b*y <= c 的一侧 */
+  function clipHalf(poly, a, b, c) {
+    var out = [], n = poly.length;
+    for (var i = 0; i < n; i++) {
+      var P = poly[(i + n - 1) % n], Q = poly[i];
+      var dp = a * P[0] + b * P[1] - c, dq = a * Q[0] + b * Q[1] - c, t;
+      if (dq <= 0) {
+        if (dp > 0) { t = dp / (dp - dq); out.push([P[0] + (Q[0] - P[0]) * t, P[1] + (Q[1] - P[1]) * t]); }
+        out.push(Q);
+      } else if (dp <= 0) {
+        t = dp / (dp - dq); out.push([P[0] + (Q[0] - P[0]) * t, P[1] + (Q[1] - P[1]) * t]);
+      }
+    }
+    return out;
+  }
+  function bboxOf(polys) {
+    var b = { x0: 1e9, y0: 1e9, x1: -1e9, y1: -1e9 };
+    polys.forEach(function (p) { p.forEach(function (q) {
+      if (q[0] < b.x0) b.x0 = q[0]; if (q[0] > b.x1) b.x1 = q[0];
+      if (q[1] < b.y0) b.y0 = q[1]; if (q[1] > b.y1) b.y1 = q[1];
+    }); });
+    return b;
+  }
+  /* 单调三次插值（不过冲） */
+  function monotone(xs, ys) {
+    var n = xs.length, d = [], m = new Array(n), i;
+    for (i = 0; i < n - 1; i++) d[i] = (ys[i + 1] - ys[i]) / (xs[i + 1] - xs[i]);
+    m[0] = d[0]; m[n - 1] = d[n - 2];
+    for (i = 1; i < n - 1; i++) m[i] = d[i - 1] * d[i] <= 0 ? 0 : (d[i - 1] + d[i]) / 2;
+    for (i = 0; i < n - 1; i++) {
+      if (d[i] === 0) { m[i] = 0; m[i + 1] = 0; continue; }
+      var a = m[i] / d[i], b = m[i + 1] / d[i], s = a * a + b * b;
+      if (s > 9) { var t = 3 / Math.sqrt(s); m[i] = t * a * d[i]; m[i + 1] = t * b * d[i]; }
+    }
+    return function (x) {
+      if (x <= xs[0]) return ys[0];
+      if (x >= xs[n - 1]) return ys[n - 1];
+      var k = 0; while (k < n - 2 && x > xs[k + 1]) k++;
+      var h = xs[k + 1] - xs[k], t = (x - xs[k]) / h, t2 = t * t, t3 = t2 * t;
+      return (2 * t3 - 3 * t2 + 1) * ys[k] + (t3 - 2 * t2 + t) * h * m[k] + (-2 * t3 + 3 * t2) * ys[k + 1] + (t3 - t2) * h * m[k + 1];
+    };
+  }
+  function strokePoly(pts, wf) {
+    var L = [], R = [], n = pts.length;
+    for (var i = 0; i < n; i++) {
+      var a = pts[Math.max(0, i - 1)], b = pts[Math.min(n - 1, i + 1)];
+      var dx = b[0] - a[0], dy = b[1] - a[1], l = Math.hypot(dx, dy) || 1;
+      var nx = -dy / l, ny = dx / l, w = wf(i / (n - 1)) / 2;
+      L.push([pts[i][0] + nx * w, pts[i][1] + ny * w]);
+      R.push([pts[i][0] - nx * w, pts[i][1] - ny * w]);
+    }
+    return L.concat(R.reverse());
+  }
+  function quad(p0, c, p1, n) {
+    var out = [];
+    for (var i = 0; i <= n; i++) {
+      var t = i / n, u = 1 - t;
+      out.push([u * u * p0[0] + 2 * u * t * c[0] + t * t * p1[0], u * u * p0[1] + 2 * u * t * c[1] + t * t * p1[1]]);
+    }
+    return out;
+  }
+
+  /* ---------- 器型（左右对称 profile：t 自口沿向下 0..1，r 为相对半径） ---------- */
+  var PERSP = 0.2; // 俯视角：椭圆 ry/rx
+  var PROFILES = {
+    meiping:  { H: 430, R: 128, pts: [[0, .2], [.03, .19], [.05, .15], [.085, .15], [.12, .42], [.2, .86], [.31, 1], [.5, .88], [.78, .6], [.93, .5], [.965, .53], [1, .52]] },
+    yuhuchun: { H: 430, R: 124, pts: [[0, .42], [.03, .36], [.12, .21], [.3, .19], [.46, .46], [.66, .96], [.76, 1], [.87, .86], [.93, .6], [.955, .6], [1, .62]] },
+    bowl:     { H: 205, R: 172, pts: [[0, 1], [.06, .965], [.12, .985], [.45, .83], [.75, .53], [.86, .37], [.9, .34], [1, .35]] },
+    guan:     { H: 360, R: 150, pts: [[0, .42], [.05, .42], [.07, .38], [.13, .38], [.22, .78], [.42, 1], [.66, .92], [.88, .66], [.96, .6], [1, .62]] },
+    shangping:{ H: 440, R: 132, pts: [[0, .32], [.03, .3], [.08, .25], [.3, .23], [.46, .55], [.64, 1], [.8, .9], [.92, .6], [.96, .55], [1, .56]] },
+    ewer:     { H: 380, R: 122, pts: [[0, .42], [.04, .34], [.1, .27], [.24, .26], [.34, .66], [.52, 1], [.76, .86], [.92, .58], [1, .62]] },
+    wannian:  { H: 340, R: 152, pts: [[0, .5], [.04, .5], [.07, .44], [.12, .47], [.32, .92], [.48, 1], [.7, .88], [.9, .62], [.96, .58], [1, .6]] },
+    jingping: { H: 450, R: 114, pts: [[0, .15], [.02, .15], [.04, .12], [.29, .12], [.34, .13], [.41, .2], [.5, .62], [.66, 1], [.82, .86], [.93, .56], [.96, .53], [1, .55]] },
+    msbowl:   { H: 190, R: 174, pts: [[0, 1], [.35, .9], [.7, .62], [.86, .42], [.9, .38], [1, .4]] }
+  };
+  var MARGIN = 18;
+
+  function normalize(V) {
+    var b = bboxOf(V.parts), dx = MARGIN - b.x0, dy = MARGIN - b.y0;
+    V.parts = V.parts.map(function (p) { return p.map(function (q) { return [q[0] + dx, q[1] + dy]; }); });
+    V.cx += dx; V.y0 += dy;
+    if (V.extras) V.extras.forEach(function (e) { e.poly = e.poly.map(function (q) { return [q[0] + dx, q[1] + dy]; }); });
+    V.TW = Math.ceil(b.x1 - b.x0 + 2 * MARGIN); V.TH = Math.ceil(b.y1 - b.y0 + 2 * MARGIN);
+    V.area = V.parts.reduce(function (s, p) { return s + Math.abs(area(p)); }, 0);
+    return V;
+  }
+
+  function buildDisc(variant, rng) {
+    var R = 172 * rng.range(.96, 1.04);
+    var m = /lobes(\d+)/.exec(variant), lobes = m ? +m[1] : 0, depth = 0.05;
+    var rOf = function (th) { return lobes ? R * (1 - depth * Math.pow(1 - Math.abs(Math.sin(lobes * th / 2)), 5)) : R; };
+    var poly = [], N = 180;
+    for (var i = 0; i < N; i++) { var th = i / N * TAU - Math.PI / 2; var r = rOf(th + Math.PI / 2); poly.push([Math.cos(th) * r, Math.sin(th) * r]); }
+    var V = { kind: 'disc', cx: 0, y0: 0, R: R, lobes: lobes, rOf: rOf, parts: [poly], xi: /xi/.test(variant) };
+    normalize(V); V.cy = V.y0; return V;
+  }
+
+  function buildVessel(type, variant, rng) {
+    if (type === 'pan' || type === 'xi') return buildDisc(variant + (type === 'xi' ? ' xi' : ''), rng);
+    var P = PROFILES[type];
+    var H = P.H * rng.range(.95, 1.05), R = P.R * rng.range(.94, 1.06);
+    var src = P.pts;
+    if (type === 'bowl' && /chang|pie/.test(variant)) src = /pie/.test(variant) ? [[0, 1], [.12, .9], [.45, .76], [.75, .5], [.86, .37], [.9, .34], [1, .35]] : [[0, 1], [.4, .84], [.75, .53], [.86, .37], [.9, .34], [1, .35]];
+    var ts = [], rs = [];
+    src.forEach(function (q, i) {
+      var t = (i === 0 || i === src.length - 1) ? q[0] : q[0] + rng.range(-.01, .01);
+      if (i > 0 && t <= ts[i - 1] + .008) t = ts[i - 1] + .008;
+      ts.push(t); rs.push(q[1] * (i === 0 ? rng.range(.96, 1.04) : rng.range(.94, 1.06)));
+    });
+    var rn = monotone(ts, rs), rf = function (t) { return Math.max(.06, rn(t)); };
+    var K = 72, right = [], left = [], i;
+    for (i = 0; i <= K; i++) { var t = i / K; right.push([R * rf(t), H * t]); }
+    for (i = K; i >= 0; i--) left.push([-right[i][0], right[i][1]]);
+    var body = [];
+    var rTop = R * rf(0), rBot = R * rf(1);
+    // 口沿：上半椭圆（从右到左经过上方），俯视透视
+    var ryT = rTop * PERSP, ryB = rBot * PERSP;
+    for (i = 0; i <= K; i++) body.push(right[i]);
+    for (i = 1; i < 24; i++) { var a = i / 24 * Math.PI; body.push([Math.cos(a) * rBot, H + Math.sin(a) * ryB]); }
+    for (i = 0; i <= K; i++) body.push(left[i]);
+    for (i = 1; i < 32; i++) { var b = Math.PI + i / 32 * Math.PI; body.push([Math.cos(b) * rTop, Math.sin(b) * ryT]); }
+    var parts = [body], extras = [];
+    if (type === 'ewer') {
+      var hc = quad([-R * rf(.09) + 4, H * .09], [-R * 1.55, H * .02], [-R * rf(.44) + 6, H * .44], 22);
+      var handle = strokePoly(hc, function (u) { return 15 - 3 * Math.sin(u * Math.PI); });
+      var sc = quad([R * rf(.38) - 12, H * .38], [R * 1.08, H * .33], [R * 1.24, H * .15], 16);
+      var spout = strokePoly(sc, function (u) { return 30 - 17 * u; });
+      parts.push(handle, spout); extras.push({ k: 'handle', poly: handle }, { k: 'spout', poly: spout, tip: sc[sc.length - 1] });
+    }
+    if (type === 'jingping') {
+      var disk = [], dy = H * .31, drx = R * .32;
+      for (i = 0; i < 28; i++) { var th = i / 28 * TAU; disk.push([Math.cos(th) * drx, dy + Math.sin(th) * 6]); }
+      parts.push(disk); extras.push({ k: 'disk', poly: disk });
+    }
+    var V = { kind: 'profile', type: type, H: H, R: R, rf: rf, cx: 0, y0: 0, persp: PERSP, parts: parts, extras: extras };
+    return normalize(V);
+  }
+
+  /* ---------- 碎裂：Voronoi（半平面裁剪）∩ 器物轮廓 ---------- */
+  function bis(si, sj) { return [2 * (sj[0] - si[0]), 2 * (sj[1] - si[1]), sj[0] * sj[0] + sj[1] * sj[1] - si[0] * si[0] - si[1] * si[1]]; }
+  function computePieces(parts, seeds, bb) {
+    var n = seeds.length, res = [];
+    for (var i = 0; i < n; i++) {
+      var polys = [], A = 0, cx = 0, cy = 0;
+      for (var p = 0; p < parts.length; p++) {
+        var poly = parts[p];
+        for (var j = 0; j < n && poly.length; j++) if (j !== i) { var L = bis(seeds[i], seeds[j]); poly = clipHalf(poly, L[0], L[1], L[2]); }
+        if (poly.length >= 3) { var a = Math.abs(area(poly)); if (a > 0.5) { var c = centroid(poly); polys.push(poly); A += a; cx += c[0] * a; cy += c[1] * a; } }
+      }
+      var cell = [[bb.x0 - 60, bb.y0 - 60], [bb.x1 + 60, bb.y0 - 60], [bb.x1 + 60, bb.y1 + 60], [bb.x0 - 60, bb.y1 + 60]];
+      for (j = 0; j < n && cell.length; j++) if (j !== i) { L = bis(seeds[i], seeds[j]); cell = clipHalf(cell, L[0], L[1], L[2]); }
+      res.push({ polys: polys, area: A, c: A > 0 ? [cx / A, cy / A] : seeds[i].slice(), cell: cell });
+    }
+    return res;
+  }
+  function maxRad(polys, c) {
+    var r = 0; polys.forEach(function (p) { p.forEach(function (q) { r = Math.max(r, Math.hypot(q[0] - c[0], q[1] - c[1])); }); }); return r;
+  }
+  function onLine(L, q) { return Math.abs(L[0] * q[0] + L[1] * q[1] - L[2]) / Math.hypot(L[0], L[1]) < 1e-6; }
+
+  function shatter(V, n, rng) {
+    var parts = V.parts, bb = bboxOf(parts), tot = V.area, avg = tot / n;
+    var inside = function (x, y) { for (var k = 0; k < parts.length; k++) if (pip(x, y, parts[k])) return true; return false; };
+    var best = null, fallback = null;
+    for (var att = 0; att < 120 && !best; att++) {
+      var relax = att < 50 ? 1 : att < 90 ? .85 : .7, minD = Math.sqrt(tot / n) * 0.7 * relax;
+      var seeds = [], tries = 0;
+      while (seeds.length < n && tries < 6000) {
+        tries++;
+        var x = rng.range(bb.x0, bb.x1), y = rng.range(bb.y0, bb.y1);
+        if (!inside(x, y)) continue;
+        var ok = true;
+        for (var s = 0; s < seeds.length; s++) { var dx = seeds[s][0] - x, dy = seeds[s][1] - y; if (dx * dx + dy * dy < minD * minD) { ok = false; break; } }
+        if (ok) seeds.push([x, y]);
+      }
+      if (seeds.length < n) continue;
+      var res = computePieces(parts, seeds, bb);
+      seeds = seeds.map(function (sd, i) { var c = res[i].c; var nx = sd[0] * .5 + c[0] * .5, ny = sd[1] * .5 + c[1] * .5; return inside(nx, ny) ? [nx, ny] : sd; });
+      res = computePieces(parts, seeds, bb);
+      var minA = Math.min.apply(null, res.map(function (r) { return r.area; }));
+      var worstRatio = Math.max.apply(null, res.map(function (r) { return r.area > 0 ? maxRad(r.polys, r.c) / Math.sqrt(r.area) : 99; }));
+      if (minA >= avg * 0.4 && (worstRatio < 1.9 || (att > 70 && worstRatio < 2.6))) best = { seeds: seeds, res: res };
+      else if (minA >= avg * 0.3 && !fallback) fallback = { seeds: seeds, res: res };
+    }
+    best = best || fallback;
+    if (!best) throw new Error('shatter failed');
+    return jag(V, best.seeds, best.res, rng, inside);
+  }
+
+  /* 让切线变成“手工敲碎”的锯齿：同一条共享边对两侧碎片位移完全一致，拼合无缝 */
+  function jag(V, seeds, res, rng, inside) {
+    var n = seeds.length, edges = {}, i, j;
+    for (i = 0; i < n; i++) for (j = i + 1; j < n; j++) {
+      var L = bis(seeds[i], seeds[j]), cell = res[i].cell;
+      for (var k = 0; k < cell.length; k++) {
+        var v = cell[k], w = cell[(k + 1) % cell.length];
+        if (onLine(L, v) && onLine(L, w)) {
+          var len = Math.hypot(w[0] - v[0], w[1] - v[1]);
+          if (len > 1) edges[i + '-' + j] = {
+            i: i, j: j, L: L, A: v, B: w, len: len, amp: Math.min(5, len * .07),
+            fr: [1 + rng.f() * 1.2, 2.6 + rng.f() * 2, 6 + rng.f() * 4, 14 + rng.f() * 8],
+            am: [1, .5, .28, .14], ph: [rng.f() * TAU, rng.f() * TAU, rng.f() * TAU, rng.f() * TAU]
+          };
+          break;
+        }
+      }
+    }
+    function dispAt(e, u) {
+      var uu = Math.min(1, Math.max(0, u)), env = Math.pow(Math.sin(Math.PI * uu), .8), s = 0;
+      for (var k = 0; k < 4; k++) s += e.am[k] * Math.sin(e.fr[k] * uu * TAU + e.ph[k]);
+      var dx = e.B[0] - e.A[0], dy = e.B[1] - e.A[1], l = e.len, d = env * e.amp * s / 1.4;
+      return [e.A[0] + dx * uu - dy / l * d, e.A[1] + dy * uu + dx / l * d];
+    }
+    function uOf(e, q) { var dx = e.B[0] - e.A[0], dy = e.B[1] - e.A[1]; return ((q[0] - e.A[0]) * dx + (q[1] - e.A[1]) * dy) / (e.len * e.len); }
+    function edgeFor(pi, q) {
+      for (var jj = 0; jj < n; jj++) if (jj !== pi) {
+        var e = edges[Math.min(pi, jj) + '-' + Math.max(pi, jj)];
+        if (e && onLine(e.L, q)) return e;
+      }
+      return null;
+    }
+    var pieces = res.map(function (r, pi) {
+      var polys = r.polys.map(function (poly) {
+        var out = [], m = poly.length;
+        for (var k = 0; k < m; k++) {
+          var v = poly[k], w = poly[(k + 1) % m], ev = edgeFor(pi, v);
+          out.push(ev ? dispAt(ev, uOf(ev, v)) : v.slice());
+          if (ev && onLine(ev.L, w)) {
+            var dist = Math.hypot(w[0] - v[0], w[1] - v[1]), steps = Math.floor(dist / 3.5);
+            for (var s = 1; s < steps; s++) { var q = [v[0] + (w[0] - v[0]) * s / steps, v[1] + (w[1] - v[1]) * s / steps]; out.push(dispAt(ev, uOf(ev, q))); }
+          }
+        }
+        return out;
+      });
+      var A = 0, cx = 0, cy = 0;
+      polys.forEach(function (p) { var a = Math.abs(area(p)), c = centroid(p); A += a; cx += c[0] * a; cy += c[1] * a; });
+      var c = [cx / A, cy / A];
+      var local = polys.map(function (p) { return p.map(function (q) { return [q[0] - c[0], q[1] - c[1]]; }); });
+      return { id: pi, polys: polys, local: local, c: c, area: A, rad: maxRad(polys, c), bb: bboxOf(polys) };
+    });
+    var seams = [];
+    Object.keys(edges).forEach(function (key) {
+      var e = edges[key], m = Math.max(2, Math.ceil(e.len / 3)), pts = [], ins = [];
+      for (var s = 0; s <= m; s++) { var q = dispAt(e, s / m); pts.push(q); ins.push(inside(q[0], q[1])); }
+      var run = null;
+      for (s = 0; s <= m; s++) {
+        if (ins[s]) { if (!run) { run = []; if (s > 0) run.push(pts[s - 1]); } run.push(pts[s]); }
+        else if (run) { run.push(pts[s]); if (run.length > 2) seams.push(mkSeam(run, e)); run = null; }
+      }
+      if (run && run.length > 2) seams.push(mkSeam(run, e));
+    });
+    return { pieces: pieces, seams: seams, seeds: seeds };
+  }
+  function mkSeam(pts, e) {
+    var cum = [0];
+    for (var k = 1; k < pts.length; k++) cum.push(cum[k - 1] + Math.hypot(pts[k][0] - pts[k - 1][0], pts[k][1] - pts[k - 1][1]));
+    return { pts: pts, cum: cum, len: cum[cum.length - 1], a: e.i, b: e.j };
+  }
+
+  /* ---------- 关卡数据 ---------- */
+  var CHAPTERS = [
+    { name: '青花', era: '明', sub: '白地钴蓝 · 梅瓶与玉壶春', mech: '拖动碎片，放回原处', sw: ['#f3f0e7', '#2a4f9e'], body: '#efe9dc' },
+    { name: '汝窑天青', era: '北宋', sub: '雨过天青 · 盘与洗', mech: '轻点碎片，旋转九十度', sw: ['#c3d6cd', '#86a79f'], body: '#cdbfae' },
+    { name: '建盏', era: '宋', sub: '黑釉兔毫 · 茶盏', mech: '轻点旋转九十度', sw: ['#1d1510', '#a8703a'], body: '#4a3326' },
+    { name: '粉彩', era: '清', sub: '粉润柔丽 · 罐与瓶', mech: '轻点旋转四十五度', sw: ['#f7eee7', '#e3a0ab'], body: '#f1ebe2' },
+    { name: '唐三彩', era: '唐', sub: '流釉斑斓 · 执壶与罐', mech: '轻点旋转四十五度', sw: ['#c8862a', '#3f7a3a'], body: '#ead8c2' },
+    { name: '秘色瓷', era: '唐 · 五代', sub: '千峰翠色 · 净瓶与碗', mech: '旋转四十五度 · 双击翻面', sw: ['#a9bea4', '#6f8a74'], body: '#c9c3b2' }
+  ];
+  var CN = ['一', '二', '三', '四', '五', '六', '七', '八', '九', '十'];
+  // [器型, 变体, 器名, 年代, 故事]
+  var LEVELS = [
+    ['meiping', 'lotus', '青花缠枝莲纹梅瓶', '明 · 永乐', '一九三七年逃难的路上它碎在了渡口，三十年后，老人的孙女把它一片片捡回来。'],
+    ['yuhuchun', 'peony', '青花缠枝牡丹纹玉壶春瓶', '明 · 宣德', '它在景德镇的窑火里烧了一天一夜，出窑那天下着小雨，画工在瓶底偷偷点了一笔。'],
+    ['meiping', 'chrys', '青花缠枝菊纹梅瓶', '明 · 永乐', '母亲出嫁时，外婆用它插过一枝腊梅。后来梅枯了，瓶碎了，那年冬天的香气却一直还在。'],
+    ['yuhuchun', 'lotus', '青花莲池纹玉壶春瓶', '明 · 宣德', '船队带它出海，又在一场风浪里把它还给了大海。潜水员摸到它时，莲花还是蓝的。'],
+    ['meiping', 'peony', '青花折枝牡丹纹梅瓶', '明 · 成化', '书房里它站了四十年，替主人守着画轴。一只猫跳上案头，它便替猫挨了这一回摔。'],
+    ['yuhuchun', 'chrys', '青花菊花纹玉壶春瓶', '明 · 正统', '老画工说，菊要画得像在风里。他画完最后一瓣，手抖了一下，那一笔就留在了瓶肩上。'],
+    ['meiping', 'lotus', '青花海水缠莲纹梅瓶', '明 · 嘉靖', '涨水那年，它从祠堂的供桌上滚落，碎在青石板上。族人把碎片包进红布，传了三代。'],
+    ['yuhuchun', 'peony', '青花缠枝花卉纹玉壶春瓶', '明 · 万历', '收旧货的人用两斤米换下它，回家才发现，瓶里还藏着一封没有寄出的信。'],
+    ['meiping', 'chrys', '青花回纹菊瓣梅瓶', '明 · 弘治', '它的回纹一圈接着一圈，像日子。主人失手打碎它的那天，正是他退休后的第一个早晨。'],
+    ['yuhuchun', 'lotus', '青花蕉叶缠莲纹玉壶春瓶', '明 · 永乐', '拍卖槌落下的前一刻，它从展台滑落。满场寂静里，只有蕉叶纹还在静静地生长。'],
+
+    ['pan', 'tq', '汝窑天青釉圆盘', '北宋', '雨过天青云破处，烧瓷的人等了很多年，才等来这样一窑颜色。它碎的时候，也像一场雨。'],
+    ['xi', 'tq', '汝窑天青釉洗', '北宋', '文人用它洗笔，墨在天青色里化开，像远山。笔洗碎了，那些山还留在开片的纹路里。'],
+    ['pan', 'tq lobes6', '汝窑天青釉葵口盘', '北宋', '宫里的女官每天擦拭它六瓣的边沿，擦了十年。她出宫那天，什么也没有带走。'],
+    ['xi', 'tq', '汝窑天青釉弦纹洗', '北宋', '开片是釉在冷却时自己裂开的。匠人说，它生来就带着裂纹，所以并不怕再碎一次。'],
+    ['pan', 'tq lobes5', '汝窑天青釉五瓣花口盘', '北宋', '五片花瓣，一片给春天。少年把它当作生日礼物，失手碎在门槛上，哭了整整一晚。'],
+    ['xi', 'tq lobes8', '汝窑天青釉莲瓣式洗', '北宋 · 宣和', '汴京城破的那个冬天，它被埋进后院的土里。八百年后挖出来时，冰裂纹里长满了细根。'],
+    ['pan', 'fq', '汝窑粉青釉盘', '北宋', '有人说它是粉青，有人说是天青。争了半辈子的两位老先生都走了，它在库房里安静地碎着。'],
+    ['xi', 'tq lobes6', '汝窑天青釉葵花洗', '北宋', '她把它放在窗台上接雨水，看云影在盘心里走。搬家那天，纸箱底下传来一声轻响。'],
+    ['pan', 'fq', '汝窑天青釉折沿盘', '北宋', '折沿盘上曾盛过一枚青梅。吃梅的人远行未归，盘子等得太久，自己裂开了一道缝。'],
+    ['xi', 'tq lobes10', '汝窑天青釉莲花式洗', '北宋 · 政和', '它盛过清水，也盛过眼泪。最后一位主人把它留给博物馆，只附了一行字：请轻放。'],
+
+    ['bowl', 'gold shu', '建窑黑釉兔毫盏', '南宋', '斗茶的人说，汤花咬盏才算赢。这只盏赢过三十七场，输掉的那一场，它碎在了茶桌下。'],
+    ['bowl', 'silver shu', '建窑黑釉银兔毫盏', '北宋', '窑火偶然的一口气，把兔毫烧成了银色。烧窑人舍不得卖，把它藏进米缸，一藏就是一生。'],
+    ['bowl', 'gold shu', '建窑黑釉束口盏', '南宋', '僧人用它喝了二十年粗茶。圆寂前他把盏递给小沙弥，盏落地时，山门外正好落雪。'],
+    ['bowl', 'gold chang', '建窑黑釉敞口盏', '南宋', '它随商船去了海的另一边，被人供在漆盒里。百年后漆盒朽了，盏也碎成了几片星空。'],
+    ['bowl', 'brown shu', '建窑酱釉兔毫盏', '南宋', '酱色的釉像晒干的柿子。农家把它当饭碗用了许多年，孩子们说，用它吃饭特别香。'],
+    ['bowl', 'gold pie', '建窑黑釉金兔毫盏', '南宋', '金色的兔毫是从口沿流下来的光。主人每天清晨对着窗看它一会儿，才肯出门做工。'],
+    ['bowl', 'partridge chang', '建窑黑釉鹧鸪斑盏', '北宋', '鹧鸪斑像落在夜里的羽毛。诗人用它饮酒，醉后把它当作月亮，抛进了庭院的池塘。'],
+    ['bowl', 'oil shu', '建窑黑釉油滴盏', '南宋', '油滴在盏里闪，像一碗星星。小女孩把它举向灯光数星星，数到第九十九颗时手一松。'],
+    ['bowl', 'silver pie', '建窑黑釉撇口盏', '南宋', '撇口的盏适合远行人。他把它裹在行囊里走过三座山，在最后一道山梁上摔了一跤。'],
+    ['bowl', 'gold shu', '建窑“供御”款兔毫盏', '北宋 · 宣和', '盏底刻着“供御”二字，它却从没进过宫。窑工的儿子每天用它喝水，长成了一个老窑工。'],
+
+    ['guan', 'white peony', '粉彩牡丹纹罐', '清 · 雍正', '罐上的牡丹开了三百年，从没谢过。老宅拆迁那天，它被遗忘在堂屋条案下，碎得很安静。'],
+    ['shangping', 'white butterfly', '粉彩花蝶纹赏瓶', '清 · 雍正', '画师调了一整个春天的粉彩，才画出蝶翅上那一点光。蝴蝶还在，瓶却先飞走了一次。'],
+    ['guan', 'white peach', '粉彩桃花纹罐', '清 · 雍正', '桃花是给新娘画的。婚礼前夜，喜轿的颠簸把它震碎，新娘捡起一片，一直揣在怀里。'],
+    ['shangping', 'white panel rose', '粉彩开光花卉纹瓶', '清 · 乾隆', '开光里的花只有指甲盖大。修复师用放大镜看了一下午，说那一点花蕊，是画工最后才点的。'],
+    ['guan', 'yellow panel peony', '黄地粉彩开光花卉纹罐', '清 · 乾隆', '黄地是皇家的颜色。它在宫墙里住了一百年，又在当铺里待了三年，最后碎在一场地震里。'],
+    ['shangping', 'white rose', '粉彩月季纹天球瓶', '清 · 雍正', '月季一年开好几回，画在瓶上只开一回，却开得很久。奶奶说，这瓶子比她嫁过来还早。'],
+    ['guan', 'rouge panel peach', '胭脂红地粉彩开光罐', '清 · 雍正', '胭脂红是用金子调出来的。主人落魄时想卖掉它，走到当铺门口又折回来，在门槛上绊了一下。'],
+    ['shangping', 'white peach', '粉彩折枝花卉纹瓶', '清 · 乾隆', '折枝花卉画得疏疏落落，像随手采来插在案头。一阵穿堂风吹倒了它，也吹乱了满桌的字。'],
+    ['guan', 'coral panel peony', '珊瑚红地粉彩牡丹纹罐', '清 · 乾隆', '珊瑚红地上的牡丹，像炉火映着的脸。除夕夜孩子们追着跑，它在鞭炮声里碎得不声不响。'],
+    ['shangping', 'white many', '粉彩百花纹赏瓶', '清 · 乾隆', '百花纹上找不到两朵相同的花。画工说，他把一辈子见过的花都画上去了，只差一朵没画完。'],
+
+    ['ewer', 'drip', '三彩执壶', '唐', '驼队从长安出发，执壶挂在驼峰旁叮当作响。走到敦煌时，它和一场沙暴一起停了下来。'],
+    ['wannian', 'drip', '三彩万年罐', '唐', '釉色从罐肩流下来，像夕阳淌过城墙。它陪主人睡进墓里，一千年后被一把铁锹惊醒。'],
+    ['ewer', 'dots', '三彩点彩执壶', '唐', '点彩是窑工用指尖蘸釉点的。他的孩子在一旁看，也偷偷点了一下，那一点比别的都圆。'],
+    ['wannian', 'drip', '三彩流釉罐', '唐', '黄、绿、白三种釉在火里相遇，谁也不肯让谁，最后流成了一片连窑工都没见过的山水。'],
+    ['ewer', 'blue', '三彩蓝彩执壶', '唐', '那一抹蓝来自很远的波斯。长安的胡商把它供在铺子里，说这是他故乡天空的颜色。'],
+    ['wannian', 'appl', '三彩贴花罐', '唐', '罐上的宝相花是一朵一朵按上去的。按花的女孩后来嫁去了洛阳，再没回过窑场。'],
+    ['ewer', 'drip', '三彩双色流釉执壶', '唐', '绿釉和褐釉在壶腹上流到一半就停住了，像两个吵过架的人，各自转过身去。'],
+    ['wannian', 'blue', '三彩蓝彩罐', '唐', '蓝彩稀少，比金还贵。修复它的人说，这几块碎片拼起来，正好是长安城上空的一块晴天。'],
+    ['ewer', 'appl', '三彩联珠纹执壶', '唐', '联珠纹一颗接着一颗，像旅人数过的驿站。执壶走完了整条丝路，最后碎在了自家门口。'],
+    ['wannian', 'drip', '三彩垂釉万年罐', '唐', '垂下来的釉像屋檐的冰凌。考古队员在泥土里蹲了一整天，才把它的碎片一片不落地取出。'],
+
+    ['jingping', 'facet', '秘色瓷八棱净瓶', '唐 · 咸通', '九秋风露越窑开，夺得千峰翠色来。八条棱线把光分成八份，它在塔下供了一千一百年。'],
+    ['msbowl', 'lotus', '秘色瓷莲瓣纹碗', '唐 · 咸通', '碗壁刻着莲瓣，盛满清水时，像一朵莲在水下开放。地宫的门打开，它才第一次见到天光。'],
+    ['jingping', 'plain', '越窑秘色瓷净瓶', '五代 · 吴越', '秘色到底是什么颜色，人们争论了很多年。直到它从地宫里出来，大家看了一眼，都不说话了。'],
+    ['msbowl', 'plain', '秘色瓷葵口碗', '唐 · 咸通', '这样的碗只供皇家。烧成它的匠人没有留下名字，只在碗底留下了一枚模糊的指纹。'],
+    ['jingping', 'carve', '越窑青釉刻花净瓶', '五代 · 吴越', '刻花的刀要快，也要轻。年轻的匠人刻坏了九十九只瓶，第一百只被师父悄悄藏进了塔里。'],
+    ['msbowl', 'lotus', '秘色瓷五瓣花口碗', '唐 · 咸通', '五瓣花口，盛过供佛的清水。一场地动之后，它碎在莲台下，还在等那一滴水落下来。'],
+    ['jingping', 'lotus', '秘色瓷暗刻莲纹净瓶', '五代 · 吴越', '暗刻的莲纹只在侧光下出现，像不肯说出口的话。修复它的人，悄悄把灯调低了一点。'],
+    ['msbowl', 'plain', '越窑秘色瓷盏', '五代 · 吴越', '越窑的盏很薄，薄得能透光。采茶的姑娘把它捧在手心，说像捧着一小片湖水。'],
+    ['jingping', 'facet', '秘色瓷刻花长颈净瓶', '唐 · 咸通', '长颈净瓶像一只抬头的鹤。它在佛前站了千年，碎掉的那一刻，大殿里的灯都晃了一下。'],
+    ['msbowl', 'lotus', '秘色瓷莲花碗', '五代 · 吴越', '最后一只碗，也是最初那一只。千峰翠色在你手里重新合拢，金线流过的地方，就是它的来路。']
+  ];
+  var TOTAL = LEVELS.length;
+  function pieceCount(idx) { return Math.round(3 + 11 * idx / (TOTAL - 1)); }
+  function stepsFor(ch) { return ch === 0 ? 0 : ch < 3 ? 4 : 8; }
+
+  function makeLevel(o) {
+    var rng = makeRng(o.seed);
+    var V = buildVessel(o.type, o.variant, rng);
+    var sh = shatter(V, o.n, rng);
+    return { V: V, pieces: sh.pieces, seams: sh.seams, rng: rng };
+  }
+  var cache = {};
+  function genLevel(idx) {
+    if (cache[idx]) return cache[idx];
+    var ch = Math.floor(idx / 10), d = LEVELS[idx], n = pieceCount(idx), seed = hashStr('jvci-' + idx + '-' + d[2]);
+    var g = makeLevel({ seed: seed, type: d[0], variant: d[1], n: n });
+    var steps = stepsFor(ch), rng = g.rng;
+    var init = g.pieces.map(function () { return { rot: 0, flip: false }; });
+    if (steps) {
+      init.forEach(function (s) { s.rot = rng.int(0, steps - 1); if (s.rot === 0 && rng.chance(.75)) s.rot = rng.int(1, steps - 1); });
+      if (!init.some(function (s) { return s.rot; })) init[0].rot = 1;
+    }
+    if (ch === 5) {
+      var nf = Math.max(1, Math.round(n * .3)), order = init.map(function (_, i) { return i; });
+      for (var i = order.length - 1; i > 0; i--) { var j = rng.int(0, i), t = order[i]; order[i] = order[j]; order[j] = t; }
+      for (i = 0; i < nf; i++) init[order[i]].flip = true;
+    }
+    var L = {
+      idx: idx, ch: ch, k: idx % 10, n: n, type: d[0], variant: d[1], name: d[2], era: d[3], story: d[4],
+      V: g.V, pieces: g.pieces, seams: g.seams, steps: steps, flips: ch === 5, init: init, seed: seed
+    };
+    cache[idx] = L;
+    return L;
+  }
+  function snapOK(piece, x, y, rot, steps, flipped, R) {
+    var upright = !steps || ((rot % steps) + steps) % steps === 0;
+    return upright && !flipped && Math.hypot(x - piece.c[0], y - piece.c[1]) <= R;
+  }
+  /* 命中检测：pt 为器物坐标；piece 位于 (px,py)，显示角度 ang，mirror 表示背面朝上（镜像） */
+  function hitPiece(piece, x, y, px, py, ang, mirror) {
+    var dx = x - px, dy = y - py, c = Math.cos(-ang), s = Math.sin(-ang);
+    var lx = dx * c - dy * s, ly = dx * s + dy * c;
+    if (mirror) lx = -lx;
+    for (var k = 0; k < piece.local.length; k++) if (pip(lx, ly, piece.local[k])) return true;
+    return false;
+  }
+  return {
+    TAU: TAU, makeRng: makeRng, hashStr: hashStr, area: area, centroid: centroid, pip: pip, clipHalf: clipHalf, bboxOf: bboxOf,
+    buildVessel: buildVessel, shatter: shatter, makeLevel: makeLevel, genLevel: genLevel, snapOK: snapOK, hitPiece: hitPiece,
+    pieceCount: pieceCount, stepsFor: stepsFor, CHAPTERS: CHAPTERS, LEVELS: LEVELS, TOTAL: TOTAL, CN: CN
+  };
+})();
+if (typeof module !== 'undefined' && module.exports) module.exports = KG;
+/* ===================== 程序化美术：釉色 / 纹样 / 碎片精灵 / 金缝 ===================== */
+var RD = (function () {
+  'use strict';
+  var TAU = Math.PI * 2, TS = 1;
+  function mk(w, h) { var c = document.createElement('canvas'); c.width = Math.max(1, Math.ceil(w)); c.height = Math.max(1, Math.ceil(h)); return c; }
+  function polyTo(ctx, p, mirror) {
+    var m = mirror ? -1 : 1;
+    ctx.moveTo(p[0][0] * m, p[0][1]);
+    for (var i = 1; i < p.length; i++) ctx.lineTo(p[i][0] * m, p[i][1]);
+    ctx.closePath();
+  }
+  function vesselPath(ctx, V) { ctx.beginPath(); V.parts.forEach(function (p) { polyTo(ctx, p); }); }
+  function polysPath(ctx, polys, mirror) { ctx.beginPath(); polys.forEach(function (p) { polyTo(ctx, p, mirror); }); }
+  function rAt(V, t) { return V.R * V.rf(Math.min(1, Math.max(0, t))); }
+  function yAt(V, t) { return V.y0 + V.H * t; }
+  function arcY(V, t, x) { var rr = rAt(V, t), u = (x - V.cx) / rr; return yAt(V, t) + V.persp * rr * Math.sqrt(Math.max(0, 1 - u * u)); }
+  function bandLine(ctx, V, t, col, w) {
+    var rr = rAt(V, t) * 1.02; ctx.beginPath();
+    for (var i = 0; i <= 48; i++) { var x = V.cx - rr + 2 * rr * i / 48; var y = arcY(V, t, Math.max(V.cx - rr * .999, Math.min(V.cx + rr * .999, x))); i ? ctx.lineTo(x, y) : ctx.moveTo(x, y); }
+    ctx.strokeStyle = col; ctx.lineWidth = w; ctx.stroke();
+  }
+  function belowPath(ctx, V, t, wave, cont) {
+    var rr = rAt(V, t) * 1.6; if (!cont) ctx.beginPath(); ctx.moveTo(V.cx - rr - 80, yAt(V, t));
+    for (var i = 0; i <= 80; i++) { var x = V.cx - rr + 2 * rr * i / 80; var xx = Math.max(V.cx - rAt(V, t) * .999, Math.min(V.cx + rAt(V, t) * .999, x)); ctx.lineTo(x, arcY(V, t, xx) + (wave ? wave(x) : 0)); }
+    ctx.lineTo(V.cx + rr + 80, yAt(V, t)); ctx.lineTo(V.cx + rr + 80, V.y0 + V.H + 200); ctx.lineTo(V.cx - rr - 80, V.y0 + V.H + 200); ctx.closePath();
+  }
+  function around(ctx, V, t, th, fn) {
+    var k = Math.cos(th); if (k < 0.06) return;
+    var rr = rAt(V, t);
+    ctx.save(); ctx.translate(V.cx + rr * Math.sin(th), yAt(V, t) + V.persp * rr * k); ctx.scale(k, 1); fn(k, rr); ctx.restore();
+  }
+  function bez(p0, c1, c2, p1, n) {
+    var o = [];
+    for (var i = 0; i <= n; i++) { var t = i / n, u = 1 - t; o.push([u * u * u * p0[0] + 3 * u * u * t * c1[0] + 3 * u * t * t * c2[0] + t * t * t * p1[0], u * u * u * p0[1] + 3 * u * u * t * c1[1] + 3 * u * t * t * c2[1] + t * t * t * p1[1]]); }
+    return o;
+  }
+  /* 带粗细变化的毛笔笔触 */
+  function brush(ctx, pts, w, col, rng) {
+    var n = pts.length, L = [], R = [];
+    for (var i = 0; i < n; i++) {
+      var a = pts[Math.max(0, i - 1)], b = pts[Math.min(n - 1, i + 1)], dx = b[0] - a[0], dy = b[1] - a[1], l = Math.hypot(dx, dy) || 1;
+      var u = i / (n - 1), ww = w * (0.25 + 0.75 * Math.pow(Math.sin(Math.PI * (0.08 + u * 0.84)), 0.7)) * (rng ? rng.range(.85, 1.15) : 1) / 2;
+      L.push([pts[i][0] - dy / l * ww, pts[i][1] + dx / l * ww]); R.push([pts[i][0] + dy / l * ww, pts[i][1] - dx / l * ww]);
+    }
+    ctx.beginPath(); polyTo(ctx, L.concat(R.reverse())); ctx.fillStyle = col; ctx.fill();
+  }
+  function line(ctx, pts, col, w) { ctx.beginPath(); pts.forEach(function (p, i) { i ? ctx.lineTo(p[0], p[1]) : ctx.moveTo(p[0], p[1]); }); ctx.strokeStyle = col; ctx.lineWidth = w; ctx.stroke(); }
+  function specks(ctx, V, rng, n, col, r0, r1) {
+    ctx.fillStyle = col;
+    for (var i = 0; i < n; i++) { var x = rng.range(0, V.TW), y = rng.range(0, V.TH), r = rng.range(r0, r1); ctx.beginPath(); ctx.arc(x, y, r, 0, TAU); ctx.fill(); }
+  }
+  function blobs(ctx, V, rng, n, cols, r0, r1) {
+    for (var i = 0; i < n; i++) {
+      var x = rng.range(0, V.TW), y = rng.range(0, V.TH), r = rng.range(r0, r1), g = ctx.createRadialGradient(x, y, 0, x, y, r);
+      g.addColorStop(0, rng.pick(cols)); g.addColorStop(1, 'rgba(0,0,0,0)'); ctx.fillStyle = g; ctx.fillRect(x - r, y - r, 2 * r, 2 * r);
+    }
+  }
+  /* 开片：随机分叉的细线网络 */
+  function crackle(ctx, rng, cx, cy, rad, count, col, w, step) {
+    var q = [];
+    for (var i = 0; i < count; i++) { var a = rng.f() * TAU, r = Math.sqrt(rng.f()) * rad; q.push([cx + Math.cos(a) * r, cy + Math.sin(a) * r, rng.f() * TAU, rng.range(30, 130), 0]); }
+    ctx.strokeStyle = col; ctx.lineWidth = w; ctx.lineCap = 'round';
+    while (q.length) {
+      var c = q.pop(), x = c[0], y = c[1], ang = c[2], len = c[3];
+      ctx.beginPath(); ctx.moveTo(x, y);
+      for (var d = 0; d < len; d += step) {
+        ang += rng.range(-.32, .32); x += Math.cos(ang) * step; y += Math.sin(ang) * step; ctx.lineTo(x, y);
+        if (c[4] < 3 && rng.chance(.07)) q.push([x, y, ang + (rng.chance(.5) ? 1 : -1) * rng.range(.7, 1.4), (len - d) * rng.range(.4, .8), c[4] + 1]);
+      }
+      ctx.stroke();
+    }
+  }
+  /* 体积感：逐行按局部半径做圆柱明暗 + 竖向高光 */
+  function shadeProfile(ctx, V, o) {
+    var dark = o.dark, hl = o.hl, top = V.y0 - rAt(V, 0) * V.persp - 2, bot = V.y0 + V.H + rAt(V, 1) * V.persp + 2;
+    for (var y = top; y < bot; y += 2) {
+      var t = Math.min(1, Math.max(0, (y - V.y0) / V.H)), rr = Math.max(rAt(V, t), rAt(V, t + 2.4 / V.H)), vf = Math.sin(Math.PI * Math.min(1, Math.max(0, (t + .04) / 1.06)));
+      var g = ctx.createLinearGradient(V.cx - rr, 0, V.cx + rr, 0);
+      g.addColorStop(0, 'rgba(0,0,0,' + (.62 * dark) + ')');
+      g.addColorStop(.1, 'rgba(0,0,0,' + (.3 * dark) + ')');
+      g.addColorStop(.22, 'rgba(255,255,255,0)');
+      g.addColorStop(.285, 'rgba(255,252,245,' + (.5 * hl * vf) + ')');
+      g.addColorStop(.33, 'rgba(255,255,255,0)');
+      g.addColorStop(.55, 'rgba(0,0,0,' + (.05 * dark) + ')');
+      g.addColorStop(.74, 'rgba(255,250,240,' + (.07 * hl * vf) + ')');
+      g.addColorStop(.86, 'rgba(0,0,0,' + (.28 * dark) + ')');
+      g.addColorStop(1, 'rgba(0,0,0,' + (.66 * dark) + ')');
+      ctx.fillStyle = g; ctx.fillRect(V.cx - rr - 1, y, rr * 2 + 2, 2.3);
+    }
+    var vg = ctx.createLinearGradient(0, V.y0, 0, V.y0 + V.H);
+    vg.addColorStop(0, 'rgba(255,240,220,' + .05 * hl + ')'); vg.addColorStop(.75, 'rgba(0,0,0,0)'); vg.addColorStop(1, 'rgba(0,0,0,' + .3 * dark + ')');
+    ctx.fillStyle = vg; ctx.fillRect(0, 0, V.TW, V.TH);
+    V.extras && V.extras.forEach(function (e) {
+      ctx.save(); ctx.beginPath(); polyTo(ctx, e.poly); ctx.clip();
+      var b = KG.bboxOf([e.poly]), g2 = ctx.createLinearGradient(b.x0, b.y0, b.x1, b.y1);
+      g2.addColorStop(0, 'rgba(255,250,235,' + .25 * hl + ')'); g2.addColorStop(.5, 'rgba(0,0,0,0)'); g2.addColorStop(1, 'rgba(0,0,0,' + .4 * dark + ')');
+      ctx.fillStyle = g2; ctx.fillRect(b.x0, b.y0, b.x1 - b.x0, b.y1 - b.y0); ctx.restore();
+    });
+  }
+  function mouth(ctx, V, inner, rim) {
+    var rx = rAt(V, 0) * .97, ry = rx * V.persp;
+    ctx.save(); ctx.beginPath(); ctx.ellipse(V.cx, V.y0, rx, ry, 0, 0, TAU);
+    var g = ctx.createRadialGradient(V.cx, V.y0 + ry * .5, 0, V.cx, V.y0, rx);
+    g.addColorStop(0, inner[0]); g.addColorStop(1, inner[1]); ctx.fillStyle = g; ctx.fill();
+    ctx.lineWidth = 1.6; ctx.strokeStyle = rim; ctx.stroke(); ctx.restore();
+  }
+  function footBand(ctx, V, col, t) { belowPath(ctx, V, t || .968); ctx.fillStyle = col; ctx.fill(); }
+
+  /* ---------- 青花 ---------- */
+  var BLUE_D = 'rgba(22,42,112,.92)', BLUE_W = 'rgba(46,86,172,.42)', BLUE_M = 'rgba(34,66,150,.75)';
+  function cobalt(ctx) { ctx.shadowColor = 'rgba(40,80,170,.5)'; ctx.shadowBlur = 1.8 * TS; }
+  function noShadow(ctx) { ctx.shadowColor = 'rgba(0,0,0,0)'; ctx.shadowBlur = 0; }
+  function petalShape(ctx, len, wid) { ctx.beginPath(); ctx.moveTo(0, 0); ctx.bezierCurveTo(-wid, -len * .3, -wid * .7, -len * .85, 0, -len); ctx.bezierCurveTo(wid * .7, -len * .85, wid, -len * .3, 0, 0); ctx.closePath(); }
+  function qhFlower(ctx, kind, s, rng) {
+    ctx.lineWidth = .9; ctx.strokeStyle = BLUE_D;
+    if (kind === 'lotus') {
+      [[-1.25, .8], [1.25, .8], [-.75, .95], [.75, .95], [-.3, 1.05], [.3, 1.05], [0, 1.1]].forEach(function (pp) {
+        ctx.save(); ctx.translate(0, s * .3); ctx.rotate(pp[0] * .9); petalShape(ctx, s * pp[1], s * .36);
+        ctx.fillStyle = BLUE_W; ctx.fill(); ctx.stroke();
+        ctx.beginPath(); ctx.moveTo(0, -s * .15); ctx.lineTo(0, -s * pp[1] * .7); ctx.lineWidth = .6; ctx.stroke(); ctx.lineWidth = .9; ctx.restore();
+      });
+      ctx.beginPath(); ctx.ellipse(0, s * .22, s * .3, s * .12, 0, 0, TAU); ctx.fillStyle = BLUE_M; ctx.fill();
+    } else if (kind === 'peony') {
+      for (var ring = 0; ring < 3; ring++) {
+        var r = s * (1 - ring * .3), bumps = 9 - ring * 2; ctx.beginPath();
+        for (var i = 0; i <= bumps * 6; i++) { var a = i / (bumps * 6) * TAU, rr = r * (0.82 + 0.18 * Math.abs(Math.sin(a * bumps / 2))); var x = Math.cos(a) * rr, y = Math.sin(a) * rr * .8; i ? ctx.lineTo(x, y) : ctx.moveTo(x, y); }
+        ctx.closePath(); ctx.fillStyle = ring === 1 ? 'rgba(46,86,172,.25)' : BLUE_W; ctx.fill(); ctx.stroke();
+      }
+      ctx.fillStyle = BLUE_D; for (i = 0; i < 6; i++) { ctx.beginPath(); ctx.arc(rng.range(-s * .15, s * .15), rng.range(-s * .12, s * .12), .9, 0, TAU); ctx.fill(); }
+    } else {
+      for (ring = 0; ring < 2; ring++) {
+        var n = 16 - ring * 4, L = s * (1 - ring * .4);
+        for (i = 0; i < n; i++) { ctx.save(); ctx.rotate(i / n * TAU + ring * .2); ctx.scale(1, .82); petalShape(ctx, L, s * .14); ctx.fillStyle = ring ? BLUE_M : BLUE_W; ctx.fill(); ctx.stroke(); ctx.restore(); }
+      }
+      ctx.beginPath(); ctx.arc(0, 0, s * .22, 0, TAU); ctx.fillStyle = BLUE_D; ctx.fill();
+    }
+  }
+  function leaf(ctx, len, wid, fill, stroke, lw) {
+    ctx.beginPath(); ctx.moveTo(0, 0); ctx.quadraticCurveTo(len * .45, -wid, len, 0); ctx.quadraticCurveTo(len * .45, wid, 0, 0); ctx.closePath();
+    ctx.fillStyle = fill; ctx.fill(); if (stroke) { ctx.strokeStyle = stroke; ctx.lineWidth = lw || .8; ctx.stroke(); ctx.beginPath(); ctx.moveTo(0, 0); ctx.lineTo(len * .85, 0); ctx.stroke(); }
+  }
+  function meander(ctx, V, tA, tB) {
+    var tm = (tA + tB) / 2, rr = rAt(V, tm), h = (yAt(V, tB) - yAt(V, tA)) * .62, n = Math.max(6, Math.round(Math.PI * rr / (h * 1.25)));
+    for (var k = 0; k < n * 2; k++) {
+      var th = -Math.PI + (k + .5) * Math.PI / n;
+      around(ctx, V, tm, th, function () {
+        ctx.translate(0, -h * .1); ctx.beginPath(); ctx.moveTo(-h / 2, h / 2); ctx.lineTo(-h / 2, -h / 2); ctx.lineTo(h / 2, -h / 2); ctx.lineTo(h / 2, h * .3); ctx.lineTo(-h * .18, h * .3); ctx.lineTo(-h * .18, -h * .16); ctx.lineTo(h * .2, -h * .16);
+        ctx.strokeStyle = BLUE_D; ctx.lineWidth = 1.15; ctx.stroke();
+      });
+    }
+  }
+  function bananaLeaves(ctx, V, tA, tB, up, rng, style) {
+    var tb = up ? tB : tA, rr = rAt(V, tb), h = Math.abs(yAt(V, tB) - yAt(V, tA)) * .95, n = Math.max(5, Math.round(rr / 24)) * 2;
+    for (var k = 0; k < n; k++) {
+      var th = -Math.PI + (k + .5) * TAU / n;
+      around(ctx, V, tb, th, function () {
+        var w = Math.PI * rr / n * .95, d = up ? -1 : 1;
+        ctx.beginPath(); ctx.moveTo(-w / 2, 0); ctx.quadraticCurveTo(-w * .62, d * h * .55, 0, d * h); ctx.quadraticCurveTo(w * .62, d * h * .55, w / 2, 0); ctx.closePath();
+        if (style === 'ms') { ctx.fillStyle = 'rgba(50,80,55,.07)'; ctx.fill(); incise(ctx); return; }
+        ctx.fillStyle = BLUE_W; ctx.fill(); ctx.strokeStyle = BLUE_D; ctx.lineWidth = 1; ctx.stroke();
+        ctx.beginPath(); ctx.moveTo(0, 0); ctx.lineTo(0, d * h * .92); ctx.lineWidth = 1.3; ctx.stroke();
+        ctx.lineWidth = .55;
+        for (var v = 1; v < 7; v++) { var yy = d * h * v / 8; ctx.beginPath(); ctx.moveTo(0, yy); ctx.lineTo(-w * .32 * (1 - v / 9), yy - d * h * .06); ctx.moveTo(0, yy); ctx.lineTo(w * .32 * (1 - v / 9), yy - d * h * .06); ctx.stroke(); }
+      });
+    }
+  }
+  function lappets(ctx, V, t, h, rng) {
+    var rr = rAt(V, t), n = 8;
+    for (var k = 0; k < n; k++) {
+      var th = -Math.PI + (k + .5) * TAU / n;
+      around(ctx, V, t, th, function () {
+        var w = Math.PI * rr / n * .9;
+        ctx.beginPath(); ctx.moveTo(-w / 2, 0); ctx.bezierCurveTo(-w / 2, h * .55, -w * .25, h * .62, -w * .12, h * .75); ctx.quadraticCurveTo(0, h * 1.05, w * .12, h * .75); ctx.bezierCurveTo(w * .25, h * .62, w / 2, h * .55, w / 2, 0);
+        ctx.fillStyle = BLUE_W; ctx.fill(); ctx.strokeStyle = BLUE_D; ctx.lineWidth = 1; ctx.stroke();
+        ctx.beginPath(); ctx.arc(-w * .12, h * .35, w * .13, 0, Math.PI * 1.6); ctx.moveTo(w * .25, h * .35); ctx.arc(w * .12, h * .35, w * .13, 0, Math.PI * 1.6, true); ctx.lineWidth = .8; ctx.stroke();
+      });
+    }
+  }
+  function scroll(ctx, V, tA, tB, kind, rng, style) {
+    var tm = (tA + tB) / 2, rr = rAt(V, tm), amp = (yAt(V, tB) - yAt(V, tA)) * .26, k = 2 * Math.max(2, Math.round(rr / 70)), ph = rng.f() * TAU;
+    var stem = [];
+    for (var i = 0; i <= 90; i++) { var th = -Math.PI / 2 + Math.PI * i / 90, x = V.cx + rr * Math.sin(th); stem.push([x, arcY(V, tm, x) + amp * Math.sin(th * k + ph)]); }
+    if (style === 'ms') { line(ctx, stem, 'rgba(45,70,50,.4)', 1.4); line(ctx, stem.map(function (p) { return [p[0] + .9, p[1] + .9]; }), 'rgba(235,245,225,.3)', .8); }
+    else { cobalt(ctx); brush(ctx, stem, 3, BLUE_D, null); }
+    // 卷须与叶
+    for (var j = 0; j < 4 * k; j++) {
+      var thj = -Math.PI / 2 + (j + .5) * Math.PI / (4 * k), phase = thj * k + ph;
+      var side = Math.cos(phase) > 0 ? -1 : 1;
+      around(ctx, V, tm, thj, function () {
+        ctx.translate(0, amp * Math.sin(phase));
+        if (j % 2) {
+          ctx.rotate(side * .9 + rng.range(-.3, .3));
+          if (style === 'ms') { ctx.beginPath(); ctx.moveTo(0, 0); ctx.quadraticCurveTo(amp * .5, -amp * .3, amp * .8, 0); ctx.strokeStyle = 'rgba(45,70,50,.35)'; ctx.lineWidth = 1; ctx.stroke(); }
+          else leaf(ctx, amp * .85, amp * .26, BLUE_W, BLUE_D, .8);
+        } else {
+          var pts = [], r0 = amp * .45;
+          for (var q = 0; q < 26; q++) { var a = q / 26 * TAU * 1.15, r = r0 * (1 - q / 30); pts.push([side * Math.sin(a) * r, -Math.cos(a) * r * side + side * r0 * .1 - side * r0]); }
+          if (style === 'ms') line(ctx, pts, 'rgba(45,70,50,.3)', .8); else brush(ctx, pts, 1.3, BLUE_M, rng);
+        }
+      });
+    }
+    // 花朵坐在卷曲里
+    for (j = 0; j < k; j++) {
+      var thf = -Math.PI / 2 + ((j + .5) / k) * Math.PI;
+      thf = (Math.round(((thf * k + ph) - Math.PI / 2) / Math.PI) * Math.PI + Math.PI / 2 - ph) / k;
+      if (thf < -1.45 || thf > 1.45) continue;
+      var up = Math.sin(thf * k + ph) > 0;
+      around(ctx, V, tm, thf, function () {
+        ctx.translate(0, up ? -amp * .15 : amp * .15);
+        if (style === 'ms') { ctx.save(); ctx.scale(.9, .9); msFlower(ctx, amp * 1.0); ctx.restore(); }
+        else { cobalt(ctx); qhFlower(ctx, kind, amp * .95, rng); }
+      });
+    }
+    noShadow(ctx);
+    if (style !== 'ms') { ctx.fillStyle = 'rgba(10,20,70,.55)'; for (i = 0; i < 40; i++) { var p = stem[rng.int(0, stem.length - 1)]; ctx.beginPath(); ctx.arc(p[0] + rng.range(-2, 2), p[1] + rng.range(-2, 2), rng.range(.4, 1.3), 0, TAU); ctx.fill(); } }
+  }
+  function paintQinghua(ctx, L, rng) {
+    var V = L.V, g = ctx.createLinearGradient(0, V.y0, 0, V.y0 + V.H);
+    g.addColorStop(0, '#f5f3ec'); g.addColorStop(1, '#e9e7de'); ctx.fillStyle = g; ctx.fillRect(0, 0, V.TW, V.TH);
+    blobs(ctx, V, rng, 25, ['rgba(200,215,240,.18)', 'rgba(255,255,255,.3)'], 20, 70);
+    specks(ctx, V, rng, 140, 'rgba(70,80,110,.18)', .3, .8);
+    var bl = function (t) { bandLine(ctx, V, t, BLUE_D, 1.1); bandLine(ctx, V, t + .006, BLUE_D, .7); };
+    var fk = /peony/.test(L.variant) ? 'peony' : /chrys/.test(L.variant) ? 'chrys' : 'lotus';
+    if (L.type === 'meiping') {
+      bl(.06); meander(ctx, V, .068, .108); bl(.11);
+      lappets(ctx, V, .118, V.H * .13, rng); bl(.29);
+      scroll(ctx, V, .31, .69, fk, rng); bl(.705);
+      bananaLeaves(ctx, V, .72, .925, true, rng); bl(.935);
+    } else {
+      bl(.05); bananaLeaves(ctx, V, .07, .29, true, rng); bl(.3);
+      meander(ctx, V, .315, .37); bl(.38);
+      scroll(ctx, V, .45, .82, fk, rng); bl(.84);
+      meander(ctx, V, .855, .91); bl(.92);
+    }
+    noShadow(ctx);
+    footBand(ctx, V, '#e4dccb');
+    shadeProfile(ctx, V, { dark: .55, hl: 1 });
+    mouth(ctx, V, ['#2a2622', '#7d776d'], 'rgba(40,60,120,.6)');
+  }
+
+  /* ---------- 汝窑 ---------- */
+  function paintRu(ctx, L, rng) {
+    var V = L.V, cx = V.cx, cy = V.cy, R = V.R, fq = /fq/.test(L.variant);
+    var g = ctx.createRadialGradient(cx - R * .15, cy - R * .2, 0, cx, cy, R);
+    g.addColorStop(0, fq ? '#cfe0e0' : '#cfe0d6'); g.addColorStop(.7, fq ? '#a9c6c9' : '#aac5bc'); g.addColorStop(1, fq ? '#8fb0b5' : '#8faca4');
+    ctx.fillStyle = g; ctx.fillRect(0, 0, V.TW, V.TH);
+    blobs(ctx, V, rng, 40, ['rgba(255,255,255,.08)', 'rgba(60,100,95,.06)', 'rgba(230,240,225,.1)'], 15, 60);
+    if (V.xi) {
+      ctx.save(); ctx.beginPath(); ctx.arc(cx, cy, R * .88, 0, TAU); ctx.arc(cx, cy, R * .56, 0, TAU, true); ctx.clip();
+      var wg = ctx.createLinearGradient(cx - R, cy - R, cx + R, cy + R);
+      wg.addColorStop(0, 'rgba(30,60,55,.22)'); wg.addColorStop(.5, 'rgba(0,0,0,0)'); wg.addColorStop(1, 'rgba(255,255,255,.18)');
+      ctx.fillStyle = wg; ctx.fillRect(0, 0, V.TW, V.TH); ctx.restore();
+      ctx.beginPath(); ctx.arc(cx, cy, R * .88, 0, TAU); ctx.strokeStyle = 'rgba(255,255,255,.22)'; ctx.lineWidth = 1.4; ctx.stroke();
+      ctx.beginPath(); ctx.arc(cx, cy, R * .56, 0, TAU); ctx.strokeStyle = 'rgba(40,70,65,.2)'; ctx.lineWidth = 2; ctx.stroke();
+      if (/弦/.test(L.name) || !V.lobes) { ctx.beginPath(); ctx.arc(cx, cy, R * .72, 0, TAU); ctx.strokeStyle = 'rgba(50,80,75,.16)'; ctx.lineWidth = 1.6; ctx.stroke(); }
+    } else {
+      var rg = ctx.createRadialGradient(cx, cy, R * .5, cx, cy, R);
+      rg.addColorStop(0, 'rgba(0,0,0,0)'); rg.addColorStop(.25, 'rgba(30,60,55,.12)'); rg.addColorStop(.42, 'rgba(255,255,255,.13)'); rg.addColorStop(.8, 'rgba(0,0,0,0)'); rg.addColorStop(1, 'rgba(20,40,40,.18)');
+      ctx.fillStyle = rg; ctx.fillRect(0, 0, V.TW, V.TH);
+      if (/折沿/.test(L.name)) { ctx.beginPath(); ctx.arc(cx, cy, R * .84, 0, TAU); ctx.strokeStyle = 'rgba(40,70,65,.22)'; ctx.lineWidth = 2; ctx.stroke(); }
+    }
+    if (V.lobes) {
+      for (var k = 0; k < V.lobes; k++) {
+        var a = k / V.lobes * TAU - Math.PI / 2, r0 = R * .97, r1 = R * (V.xi ? .58 : .66);
+        ctx.beginPath(); ctx.moveTo(cx + Math.cos(a) * r0, cy + Math.sin(a) * r0); ctx.lineTo(cx + Math.cos(a) * r1, cy + Math.sin(a) * r1);
+        ctx.strokeStyle = 'rgba(50,80,75,.2)'; ctx.lineWidth = 2.2; ctx.stroke();
+        ctx.beginPath(); ctx.moveTo(cx + Math.cos(a + .012) * r0, cy + Math.sin(a + .012) * r0); ctx.lineTo(cx + Math.cos(a + .02) * r1, cy + Math.sin(a + .02) * r1);
+        ctx.strokeStyle = 'rgba(255,255,255,.18)'; ctx.lineWidth = 1; ctx.stroke();
+      }
+    }
+    crackle(ctx, rng, cx, cy, R, 70, 'rgba(85,72,58,.38)', .55, 4);
+    crackle(ctx, rng, cx, cy, R, 45, 'rgba(215,185,125,.22)', .4, 3);
+    var dg = ctx.createLinearGradient(cx - R, cy - R, cx + R, cy + R);
+    dg.addColorStop(0, 'rgba(255,255,255,.06)'); dg.addColorStop(.6, 'rgba(0,0,0,0)'); dg.addColorStop(1, 'rgba(0,20,20,.22)');
+    ctx.fillStyle = dg; ctx.fillRect(0, 0, V.TW, V.TH);
+    ctx.save(); ctx.translate(cx - R * .38, cy - R * .42); ctx.rotate(-.6); ctx.scale(1, .55);
+    var hg = ctx.createRadialGradient(0, 0, 0, 0, 0, R * .32); hg.addColorStop(0, 'rgba(255,255,255,.5)'); hg.addColorStop(1, 'rgba(255,255,255,0)');
+    ctx.fillStyle = hg; ctx.fillRect(-R, -R, 2 * R, 2 * R); ctx.restore();
+    ctx.beginPath(); ctx.arc(cx, cy, R * .93, Math.PI * 1.05, Math.PI * 1.45); ctx.strokeStyle = 'rgba(255,255,255,.35)'; ctx.lineWidth = 2.5; ctx.stroke();
+    vesselPath(ctx, V); ctx.strokeStyle = 'rgba(150,120,100,.45)'; ctx.lineWidth = 3.5; ctx.stroke();
+  }
+
+  /* ---------- 建盏 ---------- */
+  function paintJian(ctx, L, rng) {
+    var V = L.V, v = L.variant, brown = /brown/.test(v);
+    var fur = /silver/.test(v) ? [196, 202, 210] : brown ? [176, 116, 58] : [200, 140, 66];
+    var base = brown ? '#3b2414' : '#16100c';
+    ctx.fillStyle = '#4b3022'; ctx.fillRect(0, 0, V.TW, V.TH);
+    specks(ctx, V, rng, 200, 'rgba(20,10,5,.35)', .3, 1);
+    var stopT = rng.range(.74, .8), ph = rng.f() * TAU, drips = [];
+    for (var i = 0; i < 9; i++) drips.push([V.cx + rng.range(-1, 1) * V.R, rng.range(5, 16), rng.range(5, 10)]);
+    var wave = function (x) { var y = 3 * Math.sin(x * .07 + ph); drips.forEach(function (d) { var u = (x - d[0]) / d[2]; y += d[1] * Math.exp(-u * u); }); return y; };
+    ctx.save(); ctx.beginPath(); ctx.rect(0, 0, V.TW, V.TH); belowPath(ctx, V, stopT, wave, true); ctx.clip('evenodd');
+    ctx.fillStyle = base; ctx.fillRect(0, 0, V.TW, V.TH);
+    var rg = ctx.createLinearGradient(0, V.y0, 0, V.y0 + V.H * .14);
+    rg.addColorStop(0, brown ? '#8a5428' : '#6b3f1d'); rg.addColorStop(1, 'rgba(0,0,0,0)'); ctx.fillStyle = rg; ctx.fillRect(0, 0, V.TW, V.TH);
+    var nf = 900;
+    for (i = 0; i < nf; i++) {
+      var u = rng.range(-1, 1), t0 = rng.range(0, .12), t1 = Math.min(stopT + .02, t0 + rng.range(.15, .75)), pts = [], wv = rng.range(-1.5, 1.5);
+      for (var s = 0; s <= 8; s++) { var t = t0 + (t1 - t0) * s / 8, rr = rAt(V, t), x = V.cx + rr * u + wv * Math.sin(s * .8); pts.push([x, arcY(V, t, x)]); }
+      var a = rng.range(.25, .72), m = rng.range(.85, 1.25), fc = rng.chance(.3) ? [214, 220, 228] : fur;
+      line(ctx, pts, 'rgba(' + Math.min(255, fc[0] * m | 0) + ',' + Math.min(255, fc[1] * m | 0) + ',' + Math.min(255, fc[2] * m | 0) + ',' + a + ')', rng.range(.35, 1));
+    }
+    if (/partridge/.test(v)) jianSpots(ctx, rng, V, 110, function () { return [rng.range(V.cx - V.R, V.cx + V.R), rng.range(V.y0, yAt(V, stopT))]; }, 'p');
+    if (/oil/.test(v)) jianSpots(ctx, rng, V, 340, function () { return [rng.range(V.cx - V.R, V.cx + V.R), rng.range(V.y0, yAt(V, stopT))]; }, 'o');
+    ctx.restore();
+    belowPath(ctx, V, stopT, wave); ctx.strokeStyle = 'rgba(8,5,4,.9)'; ctx.lineWidth = 4.5; ctx.stroke();
+    ctx.save(); ctx.translate(0, -2.2); belowPath(ctx, V, stopT, wave); ctx.strokeStyle = 'rgba(255,235,210,.14)'; ctx.lineWidth = 1.2; ctx.stroke(); ctx.restore();
+    if (/shu/.test(v)) { bandLine(ctx, V, .1, 'rgba(0,0,0,.5)', 2); bandLine(ctx, V, .112, 'rgba(255,230,200,.1)', 1); }
+    shadeProfile(ctx, V, { dark: .7, hl: 1.3 });
+    ctx.save(); ctx.globalCompositeOperation = 'lighter';
+    var ir = ctx.createLinearGradient(V.cx - V.R, V.y0, V.cx + V.R, V.y0 + V.H);
+    ir.addColorStop(0, 'rgba(60,90,170,0)'); ir.addColorStop(.3, 'rgba(70,110,200,.16)'); ir.addColorStop(.5, 'rgba(120,80,170,.07)'); ir.addColorStop(.7, 'rgba(60,140,170,.13)'); ir.addColorStop(1, 'rgba(60,90,170,0)');
+    ctx.fillStyle = ir; ctx.fillRect(0, 0, V.TW, V.TH);
+    blobs(ctx, V, rng, 14, ['rgba(80,120,210,.12)', 'rgba(90,170,190,.10)'], 12, 40);
+    ctx.restore();
+    bandLine(ctx, V, .015, 'rgba(230,170,100,.55)', 2.2);
+    // 盏心
+    var rx = rAt(V, 0) * .975, ry = rx * V.persp, cy = V.y0;
+    ctx.save(); ctx.beginPath(); ctx.ellipse(V.cx, cy, rx, ry, 0, 0, TAU); ctx.clip();
+    var ig = ctx.createRadialGradient(V.cx, cy + ry * .3, 0, V.cx, cy, rx);
+    ig.addColorStop(0, '#060403'); ig.addColorStop(.7, brown ? '#2e1b0f' : '#140e0a'); ig.addColorStop(1, brown ? '#6a3f1e' : '#4a2c16');
+    ctx.fillStyle = ig; ctx.fillRect(0, 0, V.TW, V.TH);
+    for (i = 0; i < 520; i++) {
+      var an = rng.f() * TAU, r1 = rng.range(.2, .8), m2 = rng.range(.7, 1.15);
+      ctx.beginPath(); ctx.moveTo(V.cx + Math.cos(an) * rx, cy + Math.sin(an) * ry); ctx.lineTo(V.cx + Math.cos(an) * rx * r1, cy + Math.sin(an) * ry * r1);
+      ctx.strokeStyle = 'rgba(' + Math.min(255, fur[0] * m2 * 1.1 | 0) + ',' + Math.min(255, fur[1] * m2 * 1.1 | 0) + ',' + Math.min(255, fur[2] * m2 * 1.1 | 0) + ',' + rng.range(.18, .55) + ')'; ctx.lineWidth = rng.range(.3, .8); ctx.stroke();
+    }
+    if (/partridge/.test(v)) jianSpots(ctx, rng, V, 40, function () { var a = rng.f() * TAU, r = Math.sqrt(rng.f()) * .9; return [V.cx + Math.cos(a) * rx * r, cy + Math.sin(a) * ry * r]; }, 'p', .45);
+    if (/oil/.test(v)) jianSpots(ctx, rng, V, 140, function () { var a = rng.f() * TAU, r = Math.sqrt(rng.f()) * .95; return [V.cx + Math.cos(a) * rx * r, cy + Math.sin(a) * ry * r]; }, 'o', .6);
+    ctx.beginPath(); ctx.ellipse(V.cx, cy, rx * .9, ry * .8, 0, Math.PI * 1.1, Math.PI * 1.45); ctx.strokeStyle = 'rgba(255,245,230,.45)'; ctx.lineWidth = 2.6; ctx.stroke();
+    ctx.restore();
+    ctx.beginPath(); ctx.ellipse(V.cx, cy, rx, ry, 0, 0, TAU); ctx.strokeStyle = brown ? '#b07a42' : '#a06a38'; ctx.lineWidth = 2.8; ctx.stroke();
+    ctx.beginPath(); ctx.ellipse(V.cx, cy - .8, rx, ry, 0, Math.PI * 1.05, Math.PI * 1.95); ctx.strokeStyle = 'rgba(255,232,200,.7)'; ctx.lineWidth = 1.1; ctx.stroke();
+    ctx.beginPath(); ctx.ellipse(V.cx, cy + .9, rx, ry, 0, Math.PI * .1, Math.PI * .9); ctx.strokeStyle = 'rgba(200,215,240,.4)'; ctx.lineWidth = 1; ctx.stroke();
+  }
+  function jianSpots(ctx, rng, V, n, pos, kind, sy) {
+    for (var i = 0; i < n; i++) {
+      var p = pos(), r = kind === 'p' ? rng.range(2, 5.5) : rng.range(.5, 2.1);
+      ctx.save(); ctx.translate(p[0], p[1]); ctx.scale(1, sy || (kind === 'p' ? rng.range(.6, 1) : 1));
+      var g = ctx.createRadialGradient(-r * .2, -r * .2, 0, 0, 0, r);
+      if (kind === 'p') { g.addColorStop(0, 'rgba(240,230,210,.95)'); g.addColorStop(.7, 'rgba(215,190,150,.75)'); g.addColorStop(1, 'rgba(120,80,40,0)'); }
+      else { g.addColorStop(0, 'rgba(255,255,255,.95)'); g.addColorStop(.4, 'rgba(190,200,215,.8)'); g.addColorStop(.8, 'rgba(110,140,190,.35)'); g.addColorStop(1, 'rgba(60,80,120,0)'); }
+      ctx.fillStyle = g; ctx.beginPath(); ctx.arc(0, 0, r, 0, TAU); ctx.fill(); ctx.restore();
+    }
+  }
+
+  /* ---------- 粉彩 ---------- */
+  var GOLD = '#c9a14e';
+  function fcPetalFill(ctx, x, y, r, c0, c1) { var g = ctx.createRadialGradient(x, y, 0, x, y, r); g.addColorStop(0, c0); g.addColorStop(1, c1); return g; }
+  function fcFlower(ctx, kind, s, rng, col) {
+    col = col || ['#fff6f3', '#e58f9e', 'rgba(170,60,85,.45)'];
+    if (kind === 'peony') {
+      for (var ring = 0; ring < 3; ring++) {
+        var r = s * (1 - ring * .27), n = 8 - ring;
+        for (var i = 0; i < n; i++) {
+          ctx.save(); ctx.rotate(i / n * TAU + ring * .4); ctx.beginPath(); ctx.moveTo(0, 0);
+          ctx.bezierCurveTo(-r * .55, -r * .25, -r * .6, -r * .95, -r * .2, -r); ctx.quadraticCurveTo(0, -r * .9, r * .2, -r); ctx.bezierCurveTo(r * .6, -r * .95, r * .55, -r * .25, 0, 0);
+          ctx.fillStyle = fcPetalFill(ctx, 0, 0, r, col[0], col[1]); ctx.fill(); ctx.strokeStyle = col[2]; ctx.lineWidth = .5; ctx.stroke(); ctx.restore();
+        }
+      }
+      ctx.fillStyle = '#e8c35a'; for (i = 0; i < 10; i++) { ctx.beginPath(); ctx.arc(rng.range(-s * .12, s * .12), rng.range(-s * .12, s * .12), .9, 0, TAU); ctx.fill(); }
+    } else if (kind === 'peach') {
+      for (i = 0; i < 5; i++) { ctx.save(); ctx.rotate(i / 5 * TAU); ctx.beginPath(); ctx.ellipse(0, -s * .5, s * .38, s * .5, 0, 0, TAU); ctx.fillStyle = fcPetalFill(ctx, 0, -s * .1, s, col[0], col[1]); ctx.fill(); ctx.strokeStyle = col[2]; ctx.lineWidth = .4; ctx.stroke(); ctx.restore(); }
+      ctx.fillStyle = '#c2464f'; for (i = 0; i < 7; i++) { var a = i / 7 * TAU; ctx.beginPath(); ctx.arc(Math.cos(a) * s * .22, Math.sin(a) * s * .22, .7, 0, TAU); ctx.fill(); }
+      ctx.beginPath(); ctx.arc(0, 0, s * .1, 0, TAU); ctx.fillStyle = '#e8c35a'; ctx.fill();
+    } else {
+      for (var k = 0; k < 4; k++) {
+        var rr = s * (1 - k * .22);
+        ctx.beginPath(); ctx.arc(k * s * .04, -k * s * .03, rr, Math.PI * (.1 + k * .3), Math.PI * (1.6 + k * .3));
+        ctx.quadraticCurveTo(0, 0, Math.cos(Math.PI * (.1 + k * .3)) * rr, Math.sin(Math.PI * (.1 + k * .3)) * rr);
+        ctx.fillStyle = fcPetalFill(ctx, 0, 0, rr, col[0], col[1]); ctx.fill(); ctx.strokeStyle = col[2]; ctx.lineWidth = .5; ctx.stroke();
+      }
+    }
+  }
+  function fcLeaf(ctx, len, wid) {
+    var g = ctx.createLinearGradient(0, -wid, len, wid); g.addColorStop(0, '#c8db8a'); g.addColorStop(1, '#4f7d43');
+    leaf(ctx, len, wid, g, 'rgba(50,80,40,.45)', .5);
+  }
+  function fcSpray(ctx, x, y, sc, kind, rng, cols) {
+    ctx.save(); ctx.translate(x, y); ctx.scale(sc, sc);
+    var br = bez([-60, 70], [-30, 20], [10, 10], [50, -60], 20); brush(ctx, br, 4, '#6a4a35', rng);
+    var br2 = bez([-20, 30], [0, 10], [30, 20], [60, 10], 12); brush(ctx, br2, 2.4, '#6a4a35', rng);
+    for (var i = 0; i < 7; i++) { var p = br[rng.int(3, 18)]; ctx.save(); ctx.translate(p[0], p[1]); ctx.rotate(rng.range(-2.6, .6)); fcLeaf(ctx, rng.range(16, 24), rng.range(5, 7)); ctx.restore(); }
+    var spots = kind === 'peach' ? [[50, -60, 11], [10, 10, 10], [60, 10, 9], [-30, 30, 8], [30, -25, 7]] : [[30, -30, 24], [60, 10, 14], [-25, 30, 12]];
+    spots.forEach(function (sp, j) { ctx.save(); ctx.translate(sp[0], sp[1]); ctx.rotate(rng.range(-.5, .5)); fcFlower(ctx, kind, sp[2], rng, cols && cols[j % cols.length]); ctx.restore(); });
+    ctx.restore();
+  }
+  function butterfly(ctx, x, y, s, rng) {
+    ctx.save(); ctx.translate(x, y); ctx.rotate(rng.range(-.4, .4));
+    [[-1, 0], [1, 0]].forEach(function (d) {
+      ctx.save(); ctx.scale(d[0], 1);
+      var g = ctx.createRadialGradient(s * .3, -s * .3, 0, s * .3, -s * .3, s); g.addColorStop(0, '#fff3c4'); g.addColorStop(.6, '#f0b65a'); g.addColorStop(1, '#a8553a');
+      ctx.beginPath(); ctx.ellipse(s * .5, -s * .35, s * .55, s * .38, -.5, 0, TAU); ctx.fillStyle = g; ctx.fill();
+      ctx.beginPath(); ctx.ellipse(s * .4, s * .25, s * .35, s * .25, .5, 0, TAU); ctx.fillStyle = '#e9a0b0'; ctx.fill();
+      ctx.fillStyle = '#3a2a2a'; ctx.beginPath(); ctx.arc(s * .7, -s * .45, s * .07, 0, TAU); ctx.fill(); ctx.restore();
+    });
+    ctx.fillStyle = '#3a2a2a'; ctx.beginPath(); ctx.ellipse(0, 0, s * .08, s * .4, 0, 0, TAU); ctx.fill(); ctx.restore();
+  }
+  function paintFencai(ctx, L, rng) {
+    var V = L.V, v = L.variant, grounds = { white: '#f7f0e7', yellow: '#e8c25c', rouge: '#d6798a', coral: '#d66a4c' };
+    var gk = /yellow/.test(v) ? 'yellow' : /rouge/.test(v) ? 'rouge' : /coral/.test(v) ? 'coral' : 'white';
+    ctx.fillStyle = grounds[gk]; ctx.fillRect(0, 0, V.TW, V.TH);
+    if (gk !== 'white') {
+      ctx.strokeStyle = 'rgba(255,255,255,.16)'; ctx.lineWidth = .5;
+      for (var i = 0; i < 700; i++) { var x = rng.range(0, V.TW), y = rng.range(0, V.TH), r = rng.range(1.5, 3); ctx.beginPath(); ctx.arc(x, y, r, 0, Math.PI * 1.4); ctx.stroke(); }
+    } else blobs(ctx, V, rng, 20, ['rgba(255,235,225,.35)', 'rgba(240,230,215,.3)'], 20, 60);
+    var shoulder = L.type === 'guan' ? .14 : .3, tm = L.type === 'guan' ? .48 : .66;
+    var cols = [['#fff6f3', '#e58f9e', 'rgba(170,60,85,.45)'], ['#fffaf0', '#f2cf72', 'rgba(170,120,40,.4)'], ['#fbf6ff', '#b8a2d8', 'rgba(100,70,140,.4)'], ['#fffefc', '#e9e2dc', 'rgba(120,100,90,.35)'], ['#f6fbff', '#8db4dc', 'rgba(50,90,140,.4)'], ['#fff2ee', '#d9505a', 'rgba(140,30,40,.45)']];
+    var kind = /peach/.test(v) ? 'peach' : /rose/.test(v) ? 'rose' : 'peony', cx = V.cx, cy = yAt(V, tm), rr = rAt(V, tm);
+    if (/panel/.test(v)) {
+      var prx = rr * .58, pry = V.H * (L.type === 'guan' ? .2 : .16);
+      var panel = function () { ctx.beginPath(); for (var k = 0; k <= 96; k++) { var a = k / 96 * TAU, q = 1 + .07 * Math.cos(4 * a); var px = cx + Math.cos(a) * prx * q, py = cy + Math.sin(a) * pry * q; k ? ctx.lineTo(px, py) : ctx.moveTo(px, py); } ctx.closePath(); };
+      // 地上卷草
+      ctx.strokeStyle = 'rgba(255,250,240,.4)'; ctx.lineWidth = 1.1;
+      for (i = 0; i < 26; i++) { var sx = rng.range(0, V.TW), sy = rng.range(yAt(V, shoulder + .05), yAt(V, .92)); ctx.beginPath(); ctx.arc(sx, sy, rng.range(4, 8), 0, Math.PI * 1.5); ctx.stroke(); ctx.save(); ctx.translate(sx, sy); fcFlower(ctx, 'peach', 4, rng, cols[rng.int(1, 4)]); ctx.restore(); }
+      panel(); ctx.fillStyle = '#f9f4ec'; ctx.fill(); ctx.strokeStyle = GOLD; ctx.lineWidth = 2.4; ctx.stroke();
+      ctx.save(); panel(); ctx.clip(); fcSpray(ctx, cx, cy + pry * .1, pry / 110, kind, rng, cols); ctx.restore();
+      ctx.save(); ctx.translate(cx, cy); ctx.scale(.92, .92); ctx.translate(-cx, -cy); panel(); ctx.restore(); ctx.strokeStyle = 'rgba(70,110,160,.5)'; ctx.lineWidth = .7; ctx.stroke();
+    } else if (/many/.test(v)) {
+      for (i = 0; i < 70; i++) {
+        var t = rng.range(shoulder + .03, .93), th = rng.range(-1.4, 1.4);
+        around(ctx, V, t, th, function () { ctx.rotate(rng.range(-2, 2)); if (rng.chance(.4)) fcLeaf(ctx, 18, 6); ctx.rotate(1); fcFlower(ctx, rng.pick(['peony', 'peach', 'rose']), rng.range(7, 14), rng, rng.pick(cols)); });
+      }
+    } else {
+      fcSpray(ctx, cx - rr * .1, cy, rr / 120, kind, rng, kind === 'peony' ? [cols[0], cols[5], cols[0]] : [cols[0]]);
+      around(ctx, V, tm + .06, 1.05, function () { fcSpray(ctx, 0, 0, rr / 260, kind, rng, [cols[1], cols[0]]); });
+      around(ctx, V, tm - .1, -1.0, function () { fcSpray(ctx, 0, 0, rr / 280, kind, rng, [cols[2], cols[0]]); });
+      if (/butterfly/.test(v)) { butterfly(ctx, cx + rr * .35, cy - V.H * .17, 13, rng); butterfly(ctx, cx - rr * .45, cy - V.H * .05, 9, rng); }
+    }
+    // 金边与如意
+    bandLine(ctx, V, shoulder, GOLD, 1.6);
+    for (var k2 = 0; k2 < 10; k2++) around(ctx, V, shoulder, -Math.PI + (k2 + .5) * TAU / 10, function (kk, r2) {
+      var w = Math.PI * r2 / 10 * .8; ctx.beginPath(); ctx.moveTo(-w / 2, 0); ctx.quadraticCurveTo(0, V.H * .05, w / 2, 0); ctx.strokeStyle = 'rgba(90,140,160,.55)'; ctx.lineWidth = 1.1; ctx.stroke();
+      ctx.beginPath(); ctx.arc(0, V.H * .018, 2, 0, TAU); ctx.fillStyle = 'rgba(220,120,140,.6)'; ctx.fill();
+    });
+    bandLine(ctx, V, .935, GOLD, 1.4);
+    footBand(ctx, V, '#d9b664', .965);
+    shadeProfile(ctx, V, { dark: .5, hl: .95 });
+    mouth(ctx, V, ['#8f877a', '#ece5d9'], GOLD);
+    ctx.save(); vesselPath(ctx, V); ctx.clip(); ctx.beginPath(); ctx.ellipse(V.cx, V.y0, rAt(V, 0), rAt(V, 0) * V.persp, 0, 0, TAU); ctx.strokeStyle = GOLD; ctx.lineWidth = 3.2; ctx.stroke(); ctx.restore();
+  }
+
+  /* ---------- 唐三彩 ---------- */
+  function paintSancai(ctx, L, rng) {
+    var V = L.V, v = L.variant;
+    ctx.fillStyle = '#ead8c2'; ctx.fillRect(0, 0, V.TW, V.TH); specks(ctx, V, rng, 160, 'rgba(160,120,90,.25)', .3, .9);
+    var stopT = L.type === 'ewer' ? rng.range(.68, .76) : rng.range(.62, .72), drips = [];
+    for (var i = 0; i < 12; i++) drips.push([V.cx + rng.range(-1.1, 1.1) * V.R, rng.range(8, 34), rng.range(4, 9)]);
+    var wave = function (x) { var y = 4 * Math.sin(x * .05); drips.forEach(function (d) { var u = (x - d[0]) / d[2]; y += d[1] * Math.exp(-u * u * u * u / 2); }); return y; };
+    ctx.save(); ctx.beginPath(); ctx.rect(0, 0, V.TW, V.TH); belowPath(ctx, V, stopT, wave, true); ctx.clip('evenodd');
+    ctx.fillStyle = '#efe3c6'; ctx.fillRect(0, 0, V.TW, V.TH);
+    var pal = [['#c8862a', .4], ['#3f7a3a', .27], ['#9a5a22', .15], ['#f4ead0', .18]];
+    if (/blue/.test(v)) pal = [['#c8862a', .38], ['#3f7a3a', .25], ['#f4ead0', .17], ['#9a5a22', .12], ['#2f5a9e', .08]];
+    if (/dots/.test(v)) pal = [['#c8862a', .55], ['#80461f', .3], ['#3f7a3a', .15]];
+    var pick = function () { var r = rng.f(), a = 0; for (var k = 0; k < pal.length; k++) { a += pal[k][1]; if (r <= a) return pal[k][0]; } return pal[0][0]; };
+    var nd = /dots/.test(v) ? 60 : 46;
+    for (i = 0; i < nd; i++) {
+      var x = rng.range(V.cx - V.R * 1.35, V.cx + V.R * 1.35), ys = V.y0 + V.H * rng.range(-.1, .3), len = V.H * rng.range(.25, .8), w = rng.range(12, 40), col = pick();
+      ctx.beginPath(); ctx.moveTo(x - w / 2, ys);
+      for (var s = 0; s <= 10; s++) { var yy = ys + len * s / 10; ctx.lineTo(x - w / 2 * (1 - s * .03) + Math.sin(s * 1.3 + x) * 3, yy); }
+      ctx.quadraticCurveTo(x, ys + len + w * .5, x + w / 2 * .7, ys + len);
+      for (s = 10; s >= 0; s--) ctx.lineTo(x + w / 2 * (1 - s * .03) + Math.sin(s * 1.7 + x * 2) * 3, ys + len * s / 10);
+      ctx.closePath();
+      var g = ctx.createLinearGradient(0, ys, 0, ys + len); g.addColorStop(0, col); g.addColorStop(1, col);
+      ctx.globalAlpha = rng.range(.5, .85); ctx.fillStyle = g; ctx.fill();
+      ctx.globalAlpha = .25; ctx.strokeStyle = '#3a2410'; ctx.lineWidth = .6; ctx.stroke(); ctx.globalAlpha = 1;
+    }
+    if (/dots/.test(v)) {
+      for (var row = .12; row < stopT; row += .07) for (var th = -1.5; th < 1.5; th += .3) around(ctx, V, row, th + (Math.round(row * 100) % 2 ? .15 : 0), function () {
+        ctx.beginPath(); ctx.arc(0, 0, 4.5, 0, TAU); ctx.fillStyle = 'rgba(244,234,208,.9)'; ctx.fill(); ctx.beginPath(); ctx.arc(0, 0, 2, 0, TAU); ctx.fillStyle = '#3f7a3a'; ctx.fill();
+      });
+    }
+    if (/appl/.test(v)) {
+      [-.9, 0, .9].forEach(function (th) {
+        around(ctx, V, L.type === 'ewer' ? .55 : .42, th, function () {
+          var R = 26; ctx.shadowColor = 'rgba(60,30,10,.5)'; ctx.shadowBlur = 3 * TS; ctx.shadowOffsetY = 1.5 * TS;
+          for (var k = 0; k < 8; k++) { ctx.save(); ctx.rotate(k / 8 * TAU); ctx.beginPath(); ctx.ellipse(0, -R * .55, R * .22, R * .45, 0, 0, TAU); ctx.fillStyle = k % 2 ? '#3f7a3a' : '#c8862a'; ctx.fill(); ctx.restore(); }
+          ctx.beginPath(); ctx.arc(0, 0, R * .32, 0, TAU); ctx.fillStyle = '#f4ead0'; ctx.fill(); noShadow(ctx); ctx.shadowOffsetY = 0;
+          for (k = 0; k < 18; k++) { var a = k / 18 * TAU; ctx.beginPath(); ctx.arc(Math.cos(a) * R * 1.15, Math.sin(a) * R * 1.15, 2.2, 0, TAU); ctx.fillStyle = 'rgba(244,234,208,.85)'; ctx.fill(); }
+          ctx.beginPath(); ctx.arc(-R * .1, -R * .1, R * .2, 0, TAU); ctx.fillStyle = 'rgba(255,255,255,.35)'; ctx.fill();
+        });
+      });
+    }
+    crackle(ctx, rng, V.cx, V.y0 + V.H * .4, V.R * 1.2, 50, 'rgba(90,60,30,.16)', .35, 3);
+    ctx.restore();
+    belowPath(ctx, V, stopT, wave); ctx.strokeStyle = 'rgba(120,70,30,.35)'; ctx.lineWidth = 1.2; ctx.stroke();
+    footBand(ctx, V, '#e2cdb3', .97);
+    shadeProfile(ctx, V, { dark: .55, hl: 1.05 });
+    mouth(ctx, V, ['#3a2515', '#a57a3c'], 'rgba(100,60,20,.6)');
+  }
+
+  /* ---------- 秘色瓷 ---------- */
+  function incise(ctx) {
+    ctx.strokeStyle = 'rgba(40,65,45,.45)'; ctx.lineWidth = 1.3; ctx.stroke();
+    ctx.save(); ctx.translate(.9, .9); ctx.strokeStyle = 'rgba(235,245,225,.32)'; ctx.lineWidth = .7; ctx.stroke(); ctx.restore();
+  }
+  function msFlower(ctx, s) {
+    for (var i = 0; i < 6; i++) { ctx.save(); ctx.rotate(i / 6 * TAU); petalShape(ctx, s * .8, s * .3); ctx.fillStyle = 'rgba(40,70,45,.06)'; ctx.fill(); incise(ctx); ctx.restore(); }
+  }
+  function lotusRing(ctx, V, tA, tB, up, count) {
+    var tb = up ? tB : tA, rr = rAt(V, tb), h = Math.abs(yAt(V, tB) - yAt(V, tA)) * .95, n = count;
+    for (var k = 0; k < n; k++) {
+      var th = -Math.PI + (k + .5) * TAU / n;
+      around(ctx, V, tb, th, function () {
+        var w = Math.PI * rr / n * 1.15, d = up ? -1 : 1;
+        [1, .7].forEach(function (sc) {
+          ctx.beginPath(); ctx.moveTo(-w / 2 * sc, 0); ctx.bezierCurveTo(-w * .6 * sc, d * h * .7 * sc, -w * .15 * sc, d * h * .9 * sc, 0, d * h * sc); ctx.bezierCurveTo(w * .15 * sc, d * h * .9 * sc, w * .6 * sc, d * h * .7 * sc, w / 2 * sc, 0);
+          if (sc === 1) { ctx.fillStyle = 'rgba(40,70,45,.07)'; ctx.fill(); }
+          incise(ctx);
+        });
+      });
+    }
+  }
+  function paintMise(ctx, L, rng) {
+    var V = L.V, v = L.variant, bowl = L.type === 'msbowl';
+    var g = ctx.createLinearGradient(0, V.y0, 0, V.y0 + V.H); g.addColorStop(0, '#a9bfa3'); g.addColorStop(1, '#88a28a');
+    ctx.fillStyle = g; ctx.fillRect(0, 0, V.TW, V.TH);
+    var gl = ctx.createRadialGradient(V.cx - V.R * .2, V.y0 + V.H * .45, 0, V.cx, V.y0 + V.H * .5, V.R * 1.2);
+    gl.addColorStop(0, 'rgba(225,238,205,.42)'); gl.addColorStop(1, 'rgba(225,238,205,0)'); ctx.fillStyle = gl; ctx.fillRect(0, 0, V.TW, V.TH);
+    blobs(ctx, V, rng, 30, ['rgba(255,255,240,.08)', 'rgba(50,80,60,.07)'], 15, 50);
+    if (bowl) {
+      if (/lotus/.test(v)) lotusRing(ctx, V, .12, .9, true, 12);
+      else { bandLine(ctx, V, .12, 'rgba(40,65,45,.3)', 1.2); }
+      if (/葵|花口/.test(L.name)) for (var k = 0; k < 10; k++) around(ctx, V, 0, -Math.PI + (k + .5) * TAU / 10, function () { ctx.beginPath(); ctx.moveTo(0, 0); ctx.lineTo(0, V.H * .25); incise(ctx); });
+    } else {
+      bandLine(ctx, V, .42, 'rgba(40,65,45,.32)', 1.1); bandLine(ctx, V, .425, 'rgba(235,245,225,.25)', .6);
+      if (/facet/.test(v)) {
+        for (var f = 0; f < 8; f++) {
+          var th = -Math.PI / 2 + (f + .5) * Math.PI / 8 * 2 - Math.PI / 2, pts = [], pts2 = [];
+          if (Math.cos(th) < .05) continue;
+          for (var t = .44; t <= .97; t += .01) { var x = V.cx + rAt(V, t) * Math.sin(th), y = yAt(V, t) + V.persp * rAt(V, t) * Math.cos(th); pts.push([x, y]); pts2.push([x + 1, y]); }
+          line(ctx, pts, 'rgba(40,65,45,.28)', 1.4); line(ctx, pts2, 'rgba(235,245,225,.25)', .7);
+        }
+      }
+      if (/lotus|facet/.test(v)) { lotusRing(ctx, V, .72, .95, true, 10); lotusRing(ctx, V, .45, .56, false, 12); }
+      if (/carve/.test(v)) { scroll(ctx, V, .5, .86, 'lotus', rng, 'ms'); }
+      if (/plain/.test(v)) { bandLine(ctx, V, .6, 'rgba(40,65,45,.2)', 1); bandLine(ctx, V, .64, 'rgba(40,65,45,.2)', 1); }
+      bananaLeaves(ctx, V, .06, .28, true, rng, 'ms');
+    }
+    footBand(ctx, V, '#b9b09a', .972);
+    shadeProfile(ctx, V, { dark: .5, hl: 1.15 });
+    if (bowl) {
+      var rx = rAt(V, 0) * .975, ry = rx * V.persp;
+      ctx.save(); ctx.beginPath(); ctx.ellipse(V.cx, V.y0, rx, ry, 0, 0, TAU); ctx.clip();
+      var ig = ctx.createRadialGradient(V.cx, V.y0 + ry * .3, 0, V.cx, V.y0, rx); ig.addColorStop(0, '#7f9a80'); ig.addColorStop(.75, '#a3b99e'); ig.addColorStop(1, '#c2d1b5');
+      ctx.fillStyle = ig; ctx.fillRect(0, 0, V.TW, V.TH);
+      if (/lotus/.test(v)) for (k = 0; k < 10; k++) { ctx.save(); ctx.translate(V.cx, V.y0 + ry * .25); ctx.scale(1, V.persp); ctx.rotate(k / 10 * TAU); petalShape(ctx, rx * .55, rx * .15); incise(ctx); ctx.restore(); }
+      ctx.beginPath(); ctx.ellipse(V.cx, V.y0, rx * .9, ry * .8, 0, Math.PI * 1.1, Math.PI * 1.45); ctx.strokeStyle = 'rgba(255,255,245,.35)'; ctx.lineWidth = 2.4; ctx.stroke();
+      ctx.restore();
+      ctx.beginPath(); ctx.ellipse(V.cx, V.y0, rx, ry, 0, 0, TAU); ctx.strokeStyle = 'rgba(210,225,195,.8)'; ctx.lineWidth = 2; ctx.stroke();
+    } else mouth(ctx, V, ['#3f4e40', '#9db199'], 'rgba(220,235,205,.7)');
+    vesselPath(ctx, V); ctx.strokeStyle = 'rgba(210,230,195,.16)'; ctx.lineWidth = 7; ctx.stroke();
+  }
+
+  var PAINT = [paintQinghua, paintRu, paintJian, paintFencai, paintSancai, paintMise];
+  function drawTexture(ctx, L) {
+    var rng = KG.makeRng((L.seed ^ 0x5bd1e995) >>> 0), V = L.V;
+    ctx.save(); vesselPath(ctx, V); ctx.clip();
+    PAINT[L.ch](ctx, L, rng);
+    ctx.restore();
+    vesselPath(ctx, V); ctx.strokeStyle = 'rgba(0,0,0,.28)'; ctx.lineWidth = .8; ctx.stroke();
+  }
+  function buildTexture(L, ts) {
+    var c = mk(L.V.TW * ts, L.V.TH * ts), x = c.getContext('2d');
+    TS = ts; x.scale(ts, ts); drawTexture(x, L); return c;
+  }
+  /* 碎片背面（瓷胎内壁，镜像） */
+  function paintBack(ctx, p, rng) {
+    var b = KG.bboxOf(p.local);
+    ctx.fillStyle = '#bdb5a0'; ctx.fillRect(b.x1 * -1 - 4, b.y0 - 4, b.x1 - b.x0 + 8, b.y1 - b.y0 + 8);
+    for (var y = b.y0; y < b.y1; y += rng.range(4, 8)) {
+      ctx.beginPath(); for (var x = -b.x1 - 4; x <= -b.x0 + 4; x += 4) ctx.lineTo(x, y + Math.sin(x * .05 + y) * 1.2);
+      ctx.strokeStyle = rng.chance(.5) ? 'rgba(90,80,60,.2)' : 'rgba(255,250,235,.18)'; ctx.lineWidth = rng.range(.5, 1.2); ctx.stroke();
+    }
+    ctx.fillStyle = 'rgba(90,70,50,.3)';
+    for (var i = 0; i < 40; i++) { ctx.beginPath(); ctx.arc(rng.range(-b.x1, -b.x0), rng.range(b.y0, b.y1), rng.range(.3, .9), 0, TAU); ctx.fill(); }
+    var g = ctx.createLinearGradient(0, b.y0, 0, b.y1); g.addColorStop(0, 'rgba(255,255,255,.12)'); g.addColorStop(1, 'rgba(0,0,0,.18)');
+    ctx.fillStyle = g; ctx.fillRect(-b.x1 - 4, b.y0 - 4, b.x1 - b.x0 + 8, b.y1 - b.y0 + 8);
+    polysPath(ctx, p.local, true); ctx.strokeStyle = 'rgba(150,180,140,.9)'; ctx.lineWidth = 3; ctx.stroke();
+  }
+  function faceSprite(L, p, tex, ts, back) {
+    var r = p.rad + 6, size = 2 * r * ts;
+    var A = mk(size, size), a = A.getContext('2d');
+    a.scale(ts, ts); a.translate(r, r); polysPath(a, p.local, back); a.clip();
+    if (back) paintBack(a, p, KG.makeRng(L.seed + p.id * 31));
+    else a.drawImage(tex, -p.c[0], -p.c[1], L.V.TW, L.V.TH);
+    var B = mk(size, size), b = B.getContext('2d');
+    b.drawImage(A, 0, 0); b.globalCompositeOperation = 'source-in'; b.fillStyle = KG.CHAPTERS[L.ch].body; b.fillRect(0, 0, size, size);
+    var D = mk(size, size), d = D.getContext('2d');
+    d.drawImage(B, 0, 0); d.globalCompositeOperation = 'source-atop'; d.fillStyle = 'rgba(40,25,15,.45)'; d.fillRect(0, 0, size, size);
+    var S = mk(size, size), s = S.getContext('2d');
+    s.drawImage(D, 1.6 * ts, 2.6 * ts); s.drawImage(B, .8 * ts, 1.4 * ts); s.drawImage(A, 0, 0);
+    s.save(); s.scale(ts, ts); s.translate(r, r); polysPath(s, p.local, back); s.clip();
+    s.strokeStyle = L.ch === 2 ? 'rgba(235,225,210,.6)' : 'rgba(255,252,240,.45)'; s.lineWidth = 1.4; s.stroke(); s.restore();
+    var F = mk(size, size), f = F.getContext('2d');
+    f.shadowColor = L.ch === 2 ? 'rgba(205,220,245,.75)' : 'rgba(255,235,200,.5)'; f.shadowBlur = (L.ch === 2 ? 3.2 : 2.2) * ts; f.drawImage(S, 0, 0);
+    f.shadowColor = 'rgba(0,0,0,0)'; f.shadowBlur = 0; f.drawImage(S, 0, 0);
+    return { c: F, r: r };
+  }
+  function buildSprites(L, tex, ts) {
+    TS = ts;
+    return L.pieces.map(function (p) { return { front: faceSprite(L, p, tex, ts, false), back: L.flips ? faceSprite(L, p, tex, ts, true) : null }; });
+  }
+  function renderPlaced(L, tex, ts, placed, canvas) {
+    var c = canvas && canvas.width === tex.width && canvas.height === tex.height ? canvas : mk(tex.width, tex.height), x = c.getContext('2d');
+    x.setTransform(1, 0, 0, 1, 0, 0); x.clearRect(0, 0, c.width, c.height); x.scale(ts, ts);
+    x.save(); x.beginPath(); L.pieces.forEach(function (p, i) { if (placed[i]) p.polys.forEach(function (q) { polyTo(x, q); }); }); x.clip();
+    x.drawImage(tex, 0, 0, L.V.TW, L.V.TH); x.restore();
+    x.save(); vesselPath(x, L.V); x.clip(); x.lineCap = 'round'; x.lineJoin = 'round';
+    L.seams.forEach(function (sm) {
+      if (!placed[sm.a] || !placed[sm.b]) return;
+      x.beginPath(); sm.pts.forEach(function (q, i) { i ? x.lineTo(q[0], q[1]) : x.moveTo(q[0], q[1]); });
+      x.strokeStyle = 'rgba(25,15,10,.55)'; x.lineWidth = 1; x.stroke();
+    });
+    x.restore();
+    return c;
+  }
+  /* 熔金：front 为流动前沿（器物单位长度），null 表示全部 */
+  function goldPath(L, front) {
+    var P = new Path2D(), tips = [];
+    L.seams.forEach(function (sm) {
+      var pts = sm.pts, cum = sm.cum, d0 = sm.d0 || 0, rev = sm.rev;
+      var amt = front == null ? sm.len : Math.min(sm.len, front - d0);
+      if (amt <= 0) return;
+      var n = pts.length, first = true, last = null;
+      for (var k = 0; k < n; k++) {
+        var idx = rev ? n - 1 - k : k, dist = rev ? sm.len - cum[idx] : cum[idx];
+        var q = pts[idx];
+        if (dist > amt) {
+          var pidx = rev ? idx + 1 : idx - 1, pd = rev ? sm.len - cum[pidx] : cum[pidx], pq = pts[pidx], u = (amt - pd) / Math.max(1e-6, dist - pd);
+          q = [pq[0] + (q[0] - pq[0]) * u, pq[1] + (q[1] - pq[1]) * u];
+          P.lineTo(q[0], q[1]); last = q; break;
+        }
+        if (first) { P.moveTo(q[0], q[1]); first = false; } else P.lineTo(q[0], q[1]);
+        last = q;
+      }
+      if (amt < sm.len && last) tips.push(last);
+    });
+    return { P: P, tips: tips };
+  }
+  function drawGold(ctx, L, front, ts, glow) {
+    var g = goldPath(L, front);
+    ctx.save(); vesselPath(ctx, L.V); ctx.clip(); ctx.lineCap = 'round'; ctx.lineJoin = 'round';
+    if (glow) { ctx.shadowColor = 'rgba(255,196,96,.9)'; ctx.shadowBlur = 9 * ts; }
+    ctx.strokeStyle = '#a87a2e'; ctx.lineWidth = 3.6; ctx.stroke(g.P);
+    ctx.shadowBlur = 0; ctx.shadowColor = 'rgba(0,0,0,0)';
+    ctx.strokeStyle = '#e2b65c'; ctx.lineWidth = 2.2; ctx.stroke(g.P);
+    ctx.strokeStyle = 'rgba(255,244,205,.9)'; ctx.lineWidth = .7; ctx.stroke(g.P);
+    ctx.restore();
+    return g.tips;
+  }
+  function orderSeams(L) {
+    var V = L.V, o = V.kind === 'disc' ? [V.cx, V.cy] : [V.cx, V.y0], mx = 0;
+    L.seams.forEach(function (sm) {
+      var a = sm.pts[0], b = sm.pts[sm.pts.length - 1], da = Math.hypot(a[0] - o[0], a[1] - o[1]), db = Math.hypot(b[0] - o[0], b[1] - o[1]);
+      sm.rev = db < da; sm.d0 = Math.min(da, db) * .8; mx = Math.max(mx, sm.d0 + sm.len);
+    });
+    return mx;
+  }
+  function sweep(ctx, V, x, a) {
+    ctx.save(); vesselPath(ctx, V); ctx.clip(); ctx.globalCompositeOperation = 'lighter';
+    var g = ctx.createLinearGradient(x - 70, 0, x + 70, 60);
+    g.addColorStop(0, 'rgba(255,240,210,0)'); g.addColorStop(.5, 'rgba(255,236,200,' + (a == null ? .28 : a) + ')'); g.addColorStop(1, 'rgba(255,240,210,0)');
+    ctx.fillStyle = g; ctx.fillRect(0, 0, V.TW, V.TH); ctx.restore();
+  }
+  /* 完整器物（缩略图 / 标题页） */
+  function drawWhole(ctx, L, tex, ts, gold) {
+    ctx.drawImage(tex, 0, 0, L.V.TW, L.V.TH);
+    if (gold) drawGold(ctx, L, null, ts, true);
+  }
+  return {
+    mk: mk, vesselPath: vesselPath, polysPath: polysPath, buildTexture: buildTexture, buildSprites: buildSprites, renderPlaced: renderPlaced,
+    drawGold: drawGold, orderSeams: orderSeams, sweep: sweep, drawWhole: drawWhole
+  };
+})();
+/* ===================== WebAudio 合成音效 ===================== */
+var AU = (function () {
+  'use strict';
+  var ac = null, master = null, wet = null, muted = false, ksCache = {};
+  function init() {
+    if (ac) { if (ac.state === 'suspended') ac.resume(); return; }
+    try {
+      var C = window.AudioContext || window.webkitAudioContext; if (!C) return;
+      ac = new C();
+      var comp = ac.createDynamicsCompressor(); comp.threshold.value = -18; comp.ratio.value = 4; comp.connect(ac.destination);
+      master = ac.createGain(); master.gain.value = muted ? 0 : .8; master.connect(comp);
+      // 简易混响：衰减噪声脉冲
+      var len = ac.sampleRate * 2.4, buf = ac.createBuffer(2, len, ac.sampleRate);
+      for (var ch = 0; ch < 2; ch++) { var d = buf.getChannelData(ch); for (var i = 0; i < len; i++) d[i] = (Math.random() * 2 - 1) * Math.pow(1 - i / len, 3.2); }
+      var conv = ac.createConvolver(); conv.buffer = buf; wet = ac.createGain(); wet.gain.value = .32; wet.connect(conv); conv.connect(master);
+      // 极轻的环境底噪（棕噪声 + 低通）
+      var nb = ac.createBuffer(1, ac.sampleRate * 4, ac.sampleRate), nd = nb.getChannelData(0), last = 0;
+      for (i = 0; i < nd.length; i++) { last = (last + .02 * (Math.random() * 2 - 1)) / 1.02; nd[i] = last * 3.2; }
+      var ns = ac.createBufferSource(); ns.buffer = nb; ns.loop = true;
+      var lp = ac.createBiquadFilter(); lp.type = 'lowpass'; lp.frequency.value = 380;
+      var ng = ac.createGain(); ng.gain.value = .028; ns.connect(lp); lp.connect(ng); ng.connect(master); ns.start();
+    } catch (e) { ac = null; }
+  }
+  function out(g, w) { g.connect(master); if (w && wet) { var s = ac.createGain(); s.gain.value = w; g.connect(s); s.connect(wet); } }
+  function tone(f, t, dur, vol, type, w) {
+    var o = ac.createOscillator(), g = ac.createGain(); o.type = type || 'sine'; o.frequency.value = f;
+    g.gain.setValueAtTime(0, t); g.gain.linearRampToValueAtTime(vol, t + .003); g.gain.exponentialRampToValueAtTime(.0001, t + dur);
+    o.connect(g); out(g, w); o.start(t); o.stop(t + dur + .05); return o;
+  }
+  function noise(t, dur, vol, f, q) {
+    var n = Math.ceil(ac.sampleRate * dur), b = ac.createBuffer(1, n, ac.sampleRate), d = b.getChannelData(0);
+    for (var i = 0; i < n; i++) d[i] = (Math.random() * 2 - 1) * (1 - i / n);
+    var s = ac.createBufferSource(); s.buffer = b; var bp = ac.createBiquadFilter(); bp.type = 'bandpass'; bp.frequency.value = f; bp.Q.value = q || 1;
+    var g = ac.createGain(); g.gain.value = vol; s.connect(bp); bp.connect(g); out(g, .1); s.start(t);
+  }
+  function ok() { return ac && !muted; }
+  /* 瓷器“叮”：不谐和泛音 + 快速衰减 */
+  function ding(strength) {
+    if (!ok()) return; var t = ac.currentTime + .005, f0 = 1750 + Math.random() * 900, v = .16 * (strength || 1);
+    [[1, 1, 1.1], [2.32, .55, .7], [4.25, .32, .45], [6.63, .16, .3], [9.1, .08, .2]].forEach(function (p) { tone(f0 * p[0] * (1 + (Math.random() - .5) * .006), t, p[2], v * p[1], 'sine', .45); });
+    noise(t, .02, .08, 5200, 1.2);
+  }
+  function lift() { if (!ok()) return; var t = ac.currentTime; noise(t, .06, .06, 1400, .8); tone(520, t, .08, .03, 'sine'); }
+  function tick() { if (!ok()) return; var t = ac.currentTime; tone(1180 + Math.random() * 120, t, .07, .06, 'triangle', .15); tone(2650, t, .04, .025, 'sine'); }
+  function soft() { if (!ok()) return; var t = ac.currentTime; tone(330, t, .12, .04, 'sine'); }
+  function flip() { if (!ok()) return; var t = ac.currentTime; noise(t, .12, .07, 900, .7); tone(760, t + .05, .12, .04, 'triangle', .2); }
+  /* 熔金：上扬泛音的“嗡” */
+  function hum(dur) {
+    if (!ok()) return; var t = ac.currentTime;
+    var g = ac.createGain(); g.gain.setValueAtTime(0, t); g.gain.linearRampToValueAtTime(.07, t + dur * .35); g.gain.linearRampToValueAtTime(.05, t + dur * .8); g.gain.exponentialRampToValueAtTime(.0001, t + dur + 1.2);
+    var lp = ac.createBiquadFilter(); lp.type = 'lowpass'; lp.frequency.setValueAtTime(500, t); lp.frequency.exponentialRampToValueAtTime(3200, t + dur); lp.connect(g); out(g, .5);
+    [[1, 0], [2, 4], [3, -5], [5, 3]].forEach(function (h, i) {
+      var o = ac.createOscillator(); o.type = i ? 'sine' : 'triangle';
+      o.frequency.setValueAtTime(146.8 * h[0], t); o.frequency.exponentialRampToValueAtTime(220 * h[0], t + dur); o.detune.value = h[1];
+      var og = ac.createGain(); og.gain.value = 1 / (i + 1); o.connect(og); og.connect(lp); o.start(t); o.stop(t + dur + 1.4);
+    });
+  }
+  /* 古琴感拨弦：Karplus–Strong + 轻微吟揉 */
+  function ksBuf(f) {
+    var key = Math.round(f); if (ksCache[key]) return ksCache[key];
+    var sr = ac.sampleRate, n = Math.floor(sr * 3.2), b = ac.createBuffer(1, n, sr), d = b.getChannelData(0), P = Math.max(2, Math.round(sr / f)), i;
+    for (i = 0; i < P; i++) d[i] = (Math.random() * 2 - 1) * .8;
+    for (i = 1; i < P; i++) d[i] = d[i] * .5 + d[i - 1] * .5;
+    for (i = P; i < n; i++) d[i] = .4985 * (d[i - P] + d[i - P - 1 < 0 ? 0 : i - P - 1]);
+    ksCache[key] = b; return b;
+  }
+  function pluck(f, t, vol) {
+    var s = ac.createBufferSource(); s.buffer = ksBuf(f);
+    s.playbackRate.setValueAtTime(1, t); s.playbackRate.linearRampToValueAtTime(1.012, t + .5); s.playbackRate.linearRampToValueAtTime(.996, t + 1.1); s.playbackRate.linearRampToValueAtTime(1.004, t + 1.8);
+    var lp = ac.createBiquadFilter(); lp.type = 'lowpass'; lp.frequency.value = 2400;
+    var g = ac.createGain(); g.gain.setValueAtTime(vol, t); g.gain.exponentialRampToValueAtTime(.0001, t + 3.1);
+    s.connect(lp); lp.connect(g); out(g, .55); s.start(t);
+  }
+  function finale() {
+    if (!ok()) return; var t = ac.currentTime + .05;
+    var scale = [196, 220, 261.6, 293.7, 329.6, 392, 440, 523.3], seq = [0, 2, 3, 4, 6, 5].map(function (i) { return scale[i]; });
+    seq.forEach(function (f, i) { pluck(f, t + i * .2 + Math.random() * .03, .5); });
+    tone(1046.5, t + 1.35, 2.2, .035, 'sine', .7); tone(1569.8, t + 1.36, 1.8, .015, 'sine', .7);
+  }
+  function setMuted(m) { muted = m; if (master) master.gain.setTargetAtTime(m ? 0 : .8, ac.currentTime, .05); }
+  return { init: init, ding: ding, lift: lift, tick: tick, soft: soft, flip: flip, hum: hum, finale: finale, setMuted: setMuted, isMuted: function () { return muted; } };
+})();
+/* ===================== 界面 / 交互 / 游戏循环 ===================== */
+(function () {
+  'use strict';
+  var RM = !!(window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches);
+  var $ = function (id) { return document.getElementById(id); };
+  var CN = KG.CN, TAU = KG.TAU;
+  var Store = {
+    d: { done: {}, seen: {}, muted: false },
+    load: function () { try { var s = localStorage.getItem('kintsugi.v1'); if (s) { var o = JSON.parse(s); if (o && typeof o === 'object') { this.d.done = o.done || {}; this.d.seen = o.seen || {}; this.d.muted = !!o.muted; } } } catch (e) { } },
+    save: function () { try { localStorage.setItem('kintsugi.v1', JSON.stringify(this.d)); } catch (e) { } }
+  };
+  Store.load();
+  AU.setMuted(Store.d.muted);
+  var muteBtn = $('mute');
+  muteBtn.classList.toggle('muted', Store.d.muted);
+  muteBtn.addEventListener('click', function () {
+    AU.init(); Store.d.muted = !Store.d.muted; AU.setMuted(Store.d.muted); muteBtn.classList.toggle('muted', Store.d.muted); Store.save();
+  });
+  document.addEventListener('pointerdown', function () { AU.init(); }, true);
+  function vib(ms) { try { if (navigator.vibrate) navigator.vibrate(ms); } catch (e) { } }
+  var probe = document.createElement('div');
+  probe.style.cssText = 'position:fixed;visibility:hidden;pointer-events:none;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)';
+  document.body.appendChild(probe);
+  function safe() { var cs = getComputedStyle(probe); return [parseFloat(cs.paddingTop) || 0, parseFloat(cs.paddingBottom) || 0]; }
+  function doneCount() { return Object.keys(Store.d.done).length; }
+  function easeOut(u) { return 1 - Math.pow(1 - u, 3); }
+  function easeInOut(u) { return u < .5 ? 4 * u * u * u : 1 - Math.pow(-2 * u + 2, 3) / 2; }
+
+  /* ---------- 屏幕切换 ---------- */
+  var cur = 'title', SCR = { title: 'sTitle', select: 'sSelect', shelf: 'sShelf', game: 'sGame' };
+  var fade = null, fadeTimer = 0;
+  function show(name) {
+    Object.keys(SCR).forEach(function (k) { $(SCR[k]).classList.toggle('on', k === name); });
+    // 实时计时的淡入：始终在约 400ms 内完成，不受帧率影响
+    var el = $(SCR[name]); el.style.opacity = RM ? '1' : '0'; fade = RM ? null : { el: el, t0: performance.now() };
+    clearTimeout(fadeTimer); fadeTimer = setTimeout(function () { el.style.opacity = '1'; fade = null; }, 420);
+    cur = name;
+    if (name === 'title') resizeTitle();
+    if (name === 'select') buildSelect();
+    if (name === 'shelf') buildShelf();
+  }
+  Array.prototype.forEach.call(document.querySelectorAll('[data-go]'), function (b) { b.addEventListener('click', function () { show(b.getAttribute('data-go')); }); });
+  $('bStart').addEventListener('click', function () {
+    var i = 0; while (i < KG.TOTAL && Store.d.done[i]) i++;
+    startLevel(i >= KG.TOTAL ? 0 : i);
+  });
+  $('bSelect').addEventListener('click', function () { show('select'); });
+  $('bShelf').addEventListener('click', function () { show('shelf'); });
+  $('gBack').addEventListener('click', function () { G.phase = 'idle'; show('select'); });
+
+  /* ---------- 标题页 ---------- */
+  var T = { L: null, tex: null, ts: 0, s: 1, O: [0, 0], W: 0, H: 0, dpr: 1, motes: [] };
+  var tcv = $('tcv'), tctx = tcv.getContext('2d');
+  function resizeTitle() {
+    if (!T.L) {
+      var g = KG.makeLevel({ seed: 20240611, type: 'meiping', variant: 'lotus', n: 9 });
+      T.L = { ch: 0, type: 'meiping', variant: 'lotus', seed: 20240611, name: '', V: g.V, pieces: g.pieces, seams: g.seams };
+    }
+    var W = innerWidth, H = innerHeight, dpr = Math.min(window.devicePixelRatio || 1, 2.5), V = T.L.V;
+    tcv.width = Math.round(W * dpr); tcv.height = Math.round(H * dpr); T.W = W; T.H = H; T.dpr = dpr;
+    var portrait = W < H * .9, s, cx, cy;
+    if (portrait) { s = Math.min(W * .6 / V.TW, H * .34 / V.TH); cx = W / 2; cy = H * .555; }
+    else { s = Math.min(H * .74 / V.TH, W * .36 / V.TW); cx = W * .66; cy = H * .52; }
+    T.s = s; T.O = [cx - V.TW * s / 2, cy - V.TH * s / 2];
+    var ts = s * dpr; if (!T.tex || Math.abs(ts - T.ts) / ts > .02) { T.ts = ts; T.tex = RD.buildTexture(T.L, ts); }
+    if (!T.motes.length) for (var i = 0; i < (RM ? 0 : 40); i++) T.motes.push({ x: Math.random(), y: Math.random(), v: .004 + Math.random() * .01, r: .5 + Math.random() * 1.4, p: Math.random() * TAU });
+  }
+  function titleFrame(now) {
+    var c = tctx, V = T.L.V, s = T.s, t = now / 1000;
+    c.setTransform(T.dpr, 0, 0, T.dpr, 0, 0); c.clearRect(0, 0, T.W, T.H);
+    var cx = T.O[0] + V.TW * s / 2, cy = T.O[1] + V.TH * s * .45, rad = V.TH * s;
+    var g = c.createRadialGradient(cx, cy - rad * .2, 0, cx, cy, rad); g.addColorStop(0, 'rgba(255,198,130,.14)'); g.addColorStop(1, 'rgba(255,198,130,0)');
+    c.fillStyle = g; c.fillRect(0, 0, T.W, T.H);
+    var dy = RM ? 0 : Math.sin(t * .7) * 7, fy = T.O[1] + (V.y0 + V.H) * s + 14;
+    c.save(); c.translate(cx, fy); c.scale(1, .14); var sg = c.createRadialGradient(0, 0, 0, 0, 0, V.R * s * (1 - dy / 90));
+    sg.addColorStop(0, 'rgba(0,0,0,.55)'); sg.addColorStop(1, 'rgba(0,0,0,0)'); c.fillStyle = sg; c.beginPath(); c.arc(0, 0, V.R * s * 1.1, 0, TAU); c.fill(); c.restore();
+    c.save(); c.translate(T.O[0], T.O[1] + dy); c.scale(s, s);
+    RD.drawWhole(c, T.L, T.tex, T.ts, true);
+    var cyc = (t % 8) / 8; if (!RM && cyc < .35) RD.sweep(c, V, -80 + cyc / .35 * (V.TW + 160), .22);
+    c.restore();
+    c.globalCompositeOperation = 'lighter';
+    T.motes.forEach(function (m) {
+      m.y -= m.v * .016; if (m.y < -.05) { m.y = 1.05; m.x = Math.random(); }
+      var x = (m.x + Math.sin(t * .3 + m.p) * .02) * T.W, y = m.y * T.H, a = .25 + .25 * Math.sin(t * 1.3 + m.p);
+      c.fillStyle = 'rgba(241,205,140,' + a + ')'; c.beginPath(); c.arc(x, y, m.r, 0, TAU); c.fill();
+    });
+    c.globalCompositeOperation = 'source-over';
+  }
+
+  /* ---------- 器物名录 ---------- */
+  function buildSelect() {
+    var host = $('chapList'); host.innerHTML = '';
+    KG.CHAPTERS.forEach(function (C, ci) {
+      var box = document.createElement('div'); box.className = 'chap';
+      var n = 0; for (var k = 0; k < 10; k++) if (Store.d.done[ci * 10 + k]) n++;
+      box.innerHTML = '<div class="chapH"><span class="chapNo">第' + CN[ci] + '章</span><span class="chapName">' + C.name + '</span><span class="chapEra">' + C.era + ' · ' + C.sub + ' · ' + n + ' / 10</span><span class="chapMech">' + C.mech + '</span></div>';
+      var grid = document.createElement('div'); grid.className = 'grid';
+      for (k = 0; k < 10; k++) (function (idx) {
+        var b = document.createElement('button'), st = Store.d.done[idx] || 0;
+        b.className = 'lv' + (ci === 2 ? ' dark' : '') + (st ? ' done' : '');
+        b.style.background = 'radial-gradient(circle at 34% 28%,rgba(255,255,255,.55),rgba(255,255,255,0) 32%),radial-gradient(circle at 50% 60%,' + C.sw[0] + ' 0 52%,' + C.sw[1] + ' 125%)';
+        b.setAttribute('aria-label', KG.LEVELS[idx][2] + (st ? '（已修复）' : ''));
+        b.innerHTML = (st ? '<svg viewBox="0 0 40 40"><path d="M9 14 L17 19 L15 27 L24 31 M17 19 L27 12 L31 17" fill="none" stroke="#d6ad62" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg>' : '') +
+          '<span>' + (idx % 10 + 1) + '</span><span class="dots">' + (st ? [1, 2, 3].map(function (j) { return '<i class="' + (j <= st ? 'on' : '') + '"></i>'; }).join('') : '') + '</span>';
+        b.addEventListener('click', function () { startLevel(idx); });
+        grid.appendChild(b);
+      })(ci * 10 + k);
+      box.appendChild(grid); host.appendChild(box);
+    });
+  }
+
+  /* ---------- 博古架 ---------- */
+  var thumbQ = [], thumbBusy = false;
+  function pumpThumbs() {
+    var job = thumbQ.shift(); if (!job) { thumbBusy = false; return; }
+    thumbBusy = true;
+    try { drawThumb(job.c, job.idx, job.done); } catch (e) { }
+    setTimeout(pumpThumbs, 12);
+  }
+  function drawThumb(cvs, idx, done, fixed) {
+    var L = KG.genLevel(idx), V = L.V, dpr = Math.min(window.devicePixelRatio || 1, 2);
+    var w = fixed ? cvs.width / 2 : (cvs.clientWidth || 80), h = fixed ? cvs.height / 2 : (cvs.clientHeight || 106);
+    if (!fixed) { cvs.width = Math.round(w * dpr); cvs.height = Math.round(h * dpr); } else dpr = 2;
+    var c = cvs.getContext('2d'), s = Math.min(w * .8 / V.TW, h * .78 / V.TH);
+    c.setTransform(dpr, 0, 0, dpr, 0, 0); c.clearRect(0, 0, w, h);
+    var ox = w / 2 - V.TW * s / 2, oy = h * .46 - V.TH * s / 2;
+    if (done) {
+      var g = c.createRadialGradient(w / 2, h * .4, 0, w / 2, h * .4, h * .6); g.addColorStop(0, 'rgba(255,200,140,.16)'); g.addColorStop(1, 'rgba(255,200,140,0)');
+      c.fillStyle = g; c.fillRect(0, 0, w, h);
+      c.save(); c.translate(w / 2, oy + V.TH * s - 16 * s); c.scale(1, .16); c.beginPath(); c.arc(0, 0, V.R * s, 0, TAU); c.fillStyle = 'rgba(0,0,0,.5)'; c.fill(); c.restore();
+      var tex = RD.buildTexture(L, s * dpr);
+      c.save(); c.translate(ox, oy); c.scale(s, s); RD.drawWhole(c, L, tex, s * dpr, true); c.restore();
+    } else {
+      c.save(); c.translate(ox, oy); c.scale(s, s); RD.vesselPath(c, V);
+      c.fillStyle = 'rgba(236,220,190,.035)'; c.fill(); c.setLineDash([3 / s, 4 / s]); c.lineWidth = 1 / s; c.strokeStyle = 'rgba(214,173,98,.22)'; c.stroke(); c.restore();
+    }
+  }
+  function buildShelf() {
+    var host = $('shelfList'); host.innerHTML = ''; thumbQ.length = 0;
+    $('shelfSub').textContent = '已修复 ' + doneCount() + ' / ' + KG.TOTAL + ' · 点击器物看它的故事';
+    KG.CHAPTERS.forEach(function (C, ci) {
+      var n = 0; for (var k = 0; k < 10; k++) if (Store.d.done[ci * 10 + k]) n++;
+      var lab = document.createElement('div'); lab.className = 'shelfLabel'; lab.innerHTML = '<span><b>' + C.name + '</b>　' + C.era + '</span><span>' + n + ' / 10</span>';
+      var sh = document.createElement('div'); sh.className = 'shelf';
+      for (k = 0; k < 10; k++) (function (idx) {
+        var done = !!Store.d.done[idx], cell = document.createElement('div'); cell.className = 'cell' + (done ? ' done' : '');
+        var cv2 = document.createElement('canvas'); cell.appendChild(cv2);
+        if (!done) { var tg = document.createElement('div'); tg.className = 'tag'; tg.textContent = '待修'; cell.appendChild(tg); }
+        else { cell.setAttribute('role', 'button'); cell.setAttribute('aria-label', KG.LEVELS[idx][2]); cell.addEventListener('click', function () { openCard(idx, 'view'); }); }
+        sh.appendChild(cell); thumbQ.push({ c: cv2, idx: idx, done: done });
+      })(ci * 10 + k);
+      host.appendChild(lab); host.appendChild(sh);
+    });
+    thumbQ.sort(function (a, b) { return (b.done ? 1 : 0) - (a.done ? 1 : 0); });
+    if (!thumbBusy) setTimeout(pumpThumbs, 30);
+  }
+
+  /* ---------- 故事卡 ---------- */
+  var cardIdx = 0, cardMode = 'game';
+  var PHRASE = ['', '慢慢来，也很好', '心静手稳', '一气呵成'];
+  function openCard(idx, mode) {
+    var L = KG.genLevel(idx), st = Store.d.done[idx] || 1; cardIdx = idx; cardMode = mode;
+    $('cName').textContent = L.name;
+    $('cEra').textContent = L.era + ' · ' + KG.CHAPTERS[L.ch].name;
+    $('cStory').textContent = L.story;
+    $('cStars').innerHTML = [1, 2, 3].map(function (j) { return '<i class="' + (j <= st ? 'on' : '') + '"></i>'; }).join('') + '<span style="margin-left:8px">' + PHRASE[st] + '</span>';
+    var bt = $('cBtns'); bt.innerHTML = '';
+    var add = function (txt, cls, fn) { var b = document.createElement('button'); b.className = 'btn sm' + (cls ? ' ' + cls : ''); b.textContent = txt; b.addEventListener('click', fn); bt.appendChild(b); return b; };
+    $('cardBox').classList.toggle('view', mode === 'view');
+    if (mode === 'view') {
+      drawThumb($('cThumb'), idx, true, true);
+      add('再修一次', '', function () { startLevel(idx); });
+      add('收起', 'gold', closeCard);
+    } else {
+      add('名录', '', function () { closeCard(); show('select'); });
+      add('博古架', '', function () { closeCard(); show('shelf'); });
+      var nb = add(idx + 1 < KG.TOTAL ? '下一件' : '六十器皆圆', 'gold', function () { if (idx + 1 < KG.TOTAL) startLevel(idx + 1); else { closeCard(); show('shelf'); } });
+      setTimeout(function () { try { nb.focus({ preventScroll: true }); } catch (e) { } }, 50);
+    }
+    $('card').classList.add('on');
+  }
+  function closeCard() { $('card').classList.remove('on'); }
+  $('card').addEventListener('click', function (e) { if (e.target === $('card') && cardMode === 'view') closeCard(); });
+  document.addEventListener('keydown', function (e) { if (e.key === 'Escape' && cardMode === 'view') closeCard(); });
+
+  /* ---------- 游戏 ---------- */
+  var cv = $('cv'), ctx = cv.getContext('2d');
+  var G = { L: null, W: 0, H: 0, dpr: 1, s: 1, O: [0, 0], ts: 0, tex: null, spr: null, placedC: null, pcs: [], board: null, drag: null,
+    phase: 'idle', ph0: 0, hints: 0, parts: [], hint: null, zTop: 0, tapTimer: 0, lastTap: null, goldMax: 1, goldDur: 2.8, hummed: false };
+  var TUT = {
+    drag: '拖动碎片，放回它原来的位置——靠近时，它会自己落进去。',
+    rot90: '这些碎片转了方向：轻点一下旋转九十度，转正才能归位。',
+    rot45: '粉彩娇贵，如今每次轻点只转四十五度。',
+    flip: '有的碎片背面朝上，只露出素胎——双击把它翻回正面。'
+  };
+  var toastT = 0;
+  function toast(msg, ms) {
+    var el = $('toast'); el.textContent = msg; el.classList.add('on');
+    clearTimeout(toastT); toastT = setTimeout(function () { el.classList.remove('on'); }, ms || 3200);
+  }
+  function stepA() { return G.L.steps ? TAU / G.L.steps : 0; }
+  function isBack(pc) { return pc.flip || pc.flipT < .5; }
+
+  function startLevel(idx) {
+    closeCard();
+    var L = KG.genLevel(idx), sa = L.steps ? TAU / L.steps : 0;
+    G.L = L; G.hints = 0; G.parts = []; G.hint = null; G.drag = null; G.phase = 'play'; G.hummed = false;
+    clearTimeout(G.tapTimer); G.lastTap = null;
+    G.pcs = L.pieces.map(function (p, i) {
+      return { i: i, p: p, x: 0, y: 0, rot: L.init[i].rot, ang: L.init[i].rot * sa, flip: L.init[i].flip, flipT: 1, placed: false, done: false, z: i, lift: 0, lifting: false, snap: null, wig: 0 };
+    });
+    G.zTop = G.pcs.length; G.ts = 0; G.tex = null; G.placedC = null;
+    show('game');
+    layout(); scatter();
+    G.goldMax = RD.orderSeams(L);
+    var C = KG.CHAPTERS[L.ch];
+    $('gTitle').innerHTML = '第' + CN[L.ch] + '章<b>' + C.name + '</b>第 <em>' + (L.k + 1) + '</em> 件';
+    updateProg();
+    var key = L.ch === 0 ? 'drag' : L.ch < 3 ? 'rot90' : L.ch < 5 ? 'rot45' : 'flip';
+    var first = (L.ch === 0 && L.k === 0) || (L.k === 0 && (L.ch === 1 || L.ch === 3 || L.ch === 5));
+    if (!Store.d.seen[key] || first) { setTimeout(function () { if (G.L === L) toast(TUT[key], 6500); }, 500); Store.d.seen[key] = 1; Store.save(); }
+    else $('toast').classList.remove('on');
+  }
+  function updateProg() {
+    var n = G.pcs.filter(function (p) { return p.done; }).length;
+    $('gProg').innerHTML = '已归位 <em>' + n + ' / ' + G.pcs.length + '</em>';
+  }
+  function layout() {
+    var W = innerWidth, H = innerHeight, dpr = Math.min(window.devicePixelRatio || 1, 2.5), sf = safe();
+    cv.width = Math.round(W * dpr); cv.height = Math.round(H * dpr); G.W = W; G.H = H; G.dpr = dpr;
+    var V = G.L.V, top = 60 + sf[0], bottom = 64 + sf[1], portrait = W < H * .9, s, cx, cy;
+    if (portrait) { var rh = (H - top - bottom) * .54; s = Math.min((W - 40) / V.TW, rh / V.TH); cx = W / 2; cy = top + rh / 2 + 6; }
+    else { rh = H - top - bottom; s = Math.min(rh * .94 / V.TH, W * .42 / V.TW); cx = W / 2; cy = top + rh / 2; }
+    s = Math.min(s, 2.4); G.s = s; G.O = [cx - V.TW * s / 2, cy - V.TH * s / 2];
+    G.board = { x0: (8 - G.O[0]) / s, x1: (W - 8 - G.O[0]) / s, y0: (top - G.O[1]) / s, y1: (H - bottom + 10 - G.O[1]) / s };
+    var ts = s * dpr;
+    if (!G.tex || Math.abs(ts - G.ts) / ts > .02) {
+      G.ts = ts; G.tex = RD.buildTexture(G.L, ts); G.spr = RD.buildSprites(G.L, G.tex, ts); G.placedC = null; rebuildPlaced();
+    }
+    G.pcs.forEach(function (pc) { if (!pc.done && !pc.snap) clampPc(pc); });
+  }
+  function clampPc(pc) {
+    var b = G.board, r = pc.p.rad * .45;
+    pc.x = Math.min(Math.max(pc.x, b.x0 + r), b.x1 - r); pc.y = Math.min(Math.max(pc.y, b.y0 + r), b.y1 - r);
+  }
+  function scatter() {
+    var rng = KG.makeRng(G.L.seed + 7), b = G.board, V = G.L.V, used = [];
+    var order = G.pcs.map(function (p) { return p; });
+    for (var i = order.length - 1; i > 0; i--) { var j = rng.int(0, i), t = order[i]; order[i] = order[j]; order[j] = t; }
+    order.forEach(function (pc) {
+      var r = pc.p.rad * .9, best = null, bs = 1e9;
+      for (var c = 0; c < 120; c++) {
+        var xa = b.x0 + r, xb = b.x1 - r, ya = b.y0 + r, yb = b.y1 - r;
+        var x = xb > xa ? rng.range(xa, xb) : (b.x0 + b.x1) / 2, y = yb > ya ? rng.range(ya, yb) : (b.y0 + b.y1) / 2;
+        var ox = Math.max(0, Math.min(x + r, V.TW - 10) - Math.max(x - r, 10)), oy = Math.max(0, Math.min(y + r, V.TH - 10) - Math.max(y - r, 10));
+        var sc = ox * oy / (r * r) * 3;
+        used.forEach(function (q) { var d = Math.hypot(q[0] - x, q[1] - y); sc += Math.max(0, q[2] + r - d) / (q[2] + r) * 2; });
+        if (sc < bs) { bs = sc; best = [x, y]; }
+      }
+      pc.x = best[0]; pc.y = best[1]; used.push([pc.x, pc.y, r]);
+    });
+  }
+  function rebuildPlaced() { if (G.tex) G.placedC = RD.renderPlaced(G.L, G.tex, G.ts, G.pcs.map(function (p) { return p.done; }), G.placedC); }
+  function toV(e) { var r = cv.getBoundingClientRect(); return [(e.clientX - r.left - G.O[0]) / G.s, (e.clientY - r.top - G.O[1]) / G.s]; }
+  function findPiece(v) {
+    var list = G.pcs.filter(function (p) { return !p.placed; }).sort(function (a, b) { return b.z - a.z; });
+    for (var i = 0; i < list.length; i++) { var pc = list[i]; if (KG.hitPiece(pc.p, v[0], v[1], pc.x, pc.y, pc.ang, isBack(pc))) return pc; }
+    var best = null, bd = 20 / G.s;
+    list.forEach(function (pc) { var d = Math.hypot(pc.x - v[0], pc.y - v[1]) - pc.p.rad * .6; if (d < bd) { bd = d; best = pc; } });
+    return best;
+  }
+  cv.addEventListener('pointerdown', function (e) {
+    if (G.phase !== 'play' || G.drag) return;
+    var v = toV(e), pc = findPiece(v); if (!pc) return;
+    e.preventDefault();
+    G.drag = { pc: pc, id: e.pointerId, sx: e.clientX, sy: e.clientY, t: performance.now(), ox: pc.x - v[0], oy: pc.y - v[1], moved: false };
+    pc.z = ++G.zTop;
+    try { cv.setPointerCapture(e.pointerId); } catch (err) { }
+  });
+  cv.addEventListener('pointermove', function (e) {
+    var d = G.drag; if (!d || d.id !== e.pointerId) return;
+    if (!d.moved && Math.hypot(e.clientX - d.sx, e.clientY - d.sy) > 7) { d.moved = true; d.pc.lifting = true; AU.lift(); }
+    if (d.moved) { var v = toV(e); d.pc.x = v[0] + d.ox; d.pc.y = v[1] + d.oy; clampPc(d.pc); }
+  });
+  function endDrag(e, cancel) {
+    var d = G.drag; if (!d || d.id !== e.pointerId) return;
+    G.drag = null; var pc = d.pc; pc.lifting = false;
+    if (!d.moved && !cancel && performance.now() - d.t < 450) onTap(pc);
+    else if (d.moved) { if (!trySnap(pc)) { AU.soft(); nearMiss(pc); } }
+  }
+  cv.addEventListener('pointerup', function (e) { endDrag(e, false); });
+  cv.addEventListener('pointercancel', function (e) { endDrag(e, true); });
+  cv.addEventListener('contextmenu', function (e) { e.preventDefault(); });
+
+  function onTap(pc) {
+    var L = G.L, now = performance.now();
+    if (!L.steps) { pc.wig = now; AU.tick(); return; }
+    if (L.flips && pc.flip) {
+      if (G.lastTap && G.lastTap.pc === pc && now - G.lastTap.t < 340) { clearTimeout(G.tapTimer); G.lastTap = null; doFlip(pc); return; }
+      G.lastTap = { pc: pc, t: now }; clearTimeout(G.tapTimer);
+      G.tapTimer = setTimeout(function () { G.lastTap = null; if (!pc.placed && G.phase === 'play') doRotate(pc); }, 300);
+      return;
+    }
+    doRotate(pc);
+  }
+  function nearMiss(pc) {
+    if (Math.hypot(pc.x - pc.p.c[0], pc.y - pc.p.c[1]) > Math.max(30, 64 / G.s)) return;
+    if (pc.flip) toast('这一片背面朝上——双击把它翻回来。', 2400);
+    else if (G.L.steps && pc.rot % G.L.steps) toast('位置对了，方向还差一点——轻点旋转。', 2400);
+  }
+  function doRotate(pc) { pc.rot++; AU.tick(); trySnap(pc); }
+  function doFlip(pc) { pc.flip = false; pc.flipT = 0; AU.flip(); vib(8); trySnap(pc); }
+  function trySnap(pc) {
+    var L = G.L, R = Math.max(14, 32 / G.s);
+    if (!KG.snapOK(pc.p, pc.x, pc.y, pc.rot, L.steps, pc.flip, R)) return false;
+    pc.placed = true; pc.lifting = false;
+    pc.snap = { t0: performance.now(), d: RM ? 90 : 230, fx: pc.x, fy: pc.y, fa: pc.ang, ta: pc.rot * stepA() };
+    if (G.hint && G.hint.pc === pc) G.hint = null;
+    AU.ding(); vib(12);
+    var sx = G.O[0] + pc.p.c[0] * G.s, sy = G.O[1] + pc.p.c[1] * G.s;
+    burst(sx, sy, 18, 70);
+    return true;
+  }
+  function onPlaced(pc) {
+    pc.done = true; rebuildPlaced(); updateProg();
+    if (G.pcs.every(function (p) { return p.done; })) beginGold();
+  }
+  function beginGold() {
+    var L = G.L, st = G.hints === 0 ? 3 : G.hints <= 2 ? 2 : 1;
+    Store.d.done[L.idx] = Math.max(Store.d.done[L.idx] || 0, st); Store.save();
+    G.phase = 'gold'; G.ph0 = performance.now() + 380; G.goldDur = RM ? .9 : 2.8; G.hint = null;
+    $('toast').classList.remove('on');
+  }
+  $('gHint').addEventListener('click', function () {
+    if (G.phase !== 'play') return;
+    var cand = G.pcs.filter(function (p) { return !p.placed; }); if (!cand.length) return;
+    var pc = cand[G.hints % cand.length];
+    G.hint = { pc: pc, t0: performance.now() }; G.hints++; AU.soft();
+    if (pc.flip) toast('这一片背面朝上——双击把它翻回来。', 2600);
+    else if (G.L.steps && pc.rot % G.L.steps !== 0) toast('这一片还需要转正，轻点它旋转。', 2600);
+  });
+
+  function burst(x, y, n, sp) {
+    if (RM) n = Math.ceil(n / 5);
+    for (var i = 0; i < n && G.parts.length < 420; i++) {
+      var a = Math.random() * TAU, v = sp * (.3 + Math.random());
+      G.parts.push({ x: x, y: y, vx: Math.cos(a) * v, vy: Math.sin(a) * v - sp * .25, life: 0, max: .5 + Math.random() * .8, r: .7 + Math.random() * 1.8 });
+    }
+  }
+
+  /* ---------- 渲染 ---------- */
+  function drawPiece(c, pc, now) {
+    var sp = G.spr[pc.i], back = isBack(pc), S = back && sp.back ? sp.back : sp.front, s = G.s, dpr = G.dpr;
+    var fx = Math.max(.04, Math.abs(Math.cos(Math.PI * pc.flipT))), sc = 1 + .07 * pc.lift, ang = pc.ang;
+    if (pc.wig) { var u = (now - pc.wig) / 420; if (u < 1) ang += Math.sin(u * 22) * .07 * (1 - u); else pc.wig = 0; }
+    c.save(); c.translate(G.O[0] + pc.x * s, G.O[1] + pc.y * s); c.rotate(ang); c.scale(sc * fx, sc);
+    c.shadowColor = 'rgba(0,0,0,.78)'; c.shadowBlur = (9 + 20 * pc.lift) * dpr; c.shadowOffsetX = (2 + 5 * pc.lift) * dpr; c.shadowOffsetY = (6 + 14 * pc.lift) * dpr;
+    c.drawImage(S.c, -S.r * s, -S.r * s, 2 * S.r * s, 2 * S.r * s);
+    c.shadowColor = 'rgba(0,0,0,0)'; c.shadowBlur = 0; c.shadowOffsetX = 0; c.shadowOffsetY = 0;
+    if (G.hint && G.hint.pc === pc) {
+      var a = hintAlpha(now);
+      c.scale(s, s); RD.polysPath(c, pc.p.local, back); c.strokeStyle = 'rgba(241,216,156,' + a + ')'; c.lineWidth = 2 / s; c.stroke();
+    }
+    c.restore();
+  }
+  function hintAlpha(now) {
+    var u = (now - G.hint.t0) / 2200; if (u >= 1) { G.hint = null; return 0; }
+    return (.55 + .45 * Math.sin(u * 22)) * (1 - u * u);
+  }
+  function gameFrame(now, dt) {
+    var L = G.L, V = L.V, c = ctx, s = G.s, O = G.O, sa = stepA();
+    // 更新
+    G.pcs.forEach(function (pc) {
+      if (pc.snap) {
+        var u = Math.min(1, (now - pc.snap.t0) / pc.snap.d), e = easeOut(u);
+        pc.x = pc.snap.fx + (pc.p.c[0] - pc.snap.fx) * e; pc.y = pc.snap.fy + (pc.p.c[1] - pc.snap.fy) * e;
+        pc.ang = pc.snap.fa + (pc.snap.ta - pc.snap.fa) * e; pc.lift = Math.max(0, pc.lift - dt * 8); pc.flipT = Math.min(1, pc.flipT + dt / .38);
+        if (u >= 1) { pc.snap = null; pc.x = pc.p.c[0]; pc.y = pc.p.c[1]; onPlaced(pc); }
+      } else if (!pc.done) {
+        pc.ang += (pc.rot * sa - pc.ang) * Math.min(1, dt * 16);
+        pc.lift += ((pc.lifting ? 1 : 0) - pc.lift) * Math.min(1, dt * 14);
+        if (pc.flipT < 1) pc.flipT = Math.min(1, pc.flipT + dt / .38);
+      }
+    });
+    // 背景光
+    c.setTransform(G.dpr, 0, 0, G.dpr, 0, 0); c.clearRect(0, 0, G.W, G.H);
+    var vx = O[0] + V.TW * s / 2, vy = O[1] + V.TH * s * .45, rad = Math.max(V.TW, V.TH) * s;
+    var g = c.createRadialGradient(vx, vy - rad * .4, 0, vx, vy, rad * 1.1); g.addColorStop(0, 'rgba(255,218,165,.30)'); g.addColorStop(.45, 'rgba(255,200,140,.13)'); g.addColorStop(1, 'rgba(255,196,130,0)');
+    c.fillStyle = g; c.fillRect(0, 0, G.W, G.H);
+    var bw = V.TW * s * .7, bg = c.createLinearGradient(0, 0, 0, vy + rad * .6); bg.addColorStop(0, 'rgba(255,225,180,.07)'); bg.addColorStop(1, 'rgba(255,225,180,0)');
+    c.fillStyle = bg; c.beginPath(); c.moveTo(vx - bw * .35, 0); c.lineTo(vx + bw * .35, 0); c.lineTo(vx + bw * 1.1, vy + rad * .6); c.lineTo(vx - bw * 1.1, vy + rad * .6); c.closePath(); c.fill();
+    var by = V.kind === 'disc' ? O[1] + (V.cy + V.R * .55) * s : O[1] + (V.y0 + V.H) * s + 6 * s, brx = V.R * s * (V.kind === 'disc' ? 1.05 : .95);
+    c.save(); c.translate(vx, by); c.scale(1, V.kind === 'disc' ? .55 : .15);
+    var sg = c.createRadialGradient(0, 0, 0, 0, 0, brx); sg.addColorStop(0, 'rgba(0,0,0,.5)'); sg.addColorStop(1, 'rgba(0,0,0,0)');
+    c.fillStyle = sg; c.beginPath(); c.arc(0, 0, brx, 0, TAU); c.fill(); c.restore();
+    // 器物区
+    c.save(); c.translate(O[0], O[1]); c.scale(s, s);
+    RD.vesselPath(c, V); c.fillStyle = G.phase === 'play' ? 'rgba(241,216,156,.075)' : 'rgba(255,236,210,.04)'; c.fill();
+    if (G.phase === 'play') { c.setLineDash([6 / s, 5 / s]); c.lineWidth = 1.3 / s; c.strokeStyle = 'rgba(241,216,156,.55)'; c.stroke(); c.setLineDash([]); }
+    if (G.placedC) c.drawImage(G.placedC, 0, 0, V.TW, V.TH);
+    if (G.phase === 'gold') {
+      var u = Math.max(0, Math.min(1, (now - G.ph0) / (G.goldDur * 1000)));
+      if (now >= G.ph0 && !G.hummed) { G.hummed = true; AU.hum(G.goldDur); }
+      if (now >= G.ph0) {
+        var tips = RD.drawGold(c, L, easeInOut(u) * G.goldMax, G.ts, true);
+        tips.forEach(function (tp) { if (Math.random() < (RM ? .08 : .6)) burst(O[0] + tp[0] * s, O[1] + tp[1] * s, 2, 30); });
+      }
+      if (u >= 1) {
+        G.phase = 'sweep'; G.ph0 = now; AU.finale(); vib(20);
+        for (var k = 0; k < (RM ? 4 : 14); k++) { var sm = L.seams[Math.floor(Math.random() * L.seams.length)], q = sm.pts[Math.floor(Math.random() * sm.pts.length)]; burst(O[0] + q[0] * s, O[1] + q[1] * s, 4, 50); }
+      }
+    } else if (G.phase === 'sweep' || G.phase === 'done' || (G.phase === 'idle' && G.pcs.every(function (p) { return p.done; }))) {
+      RD.drawGold(c, L, null, G.ts, true);
+      if (G.phase === 'sweep') {
+        var su = Math.min(1, (now - G.ph0) / (RM ? 300 : 2600));
+        if (!RM) { RD.sweep(c, V, -90 + su * (V.TW + 180), .3 * Math.sin(Math.PI * su)); RD.sweep(c, V, -90 + Math.max(0, su * 1.3 - .3) * (V.TW + 180), .12); }
+        if (su >= 1) { G.phase = 'done'; openCard(L.idx, 'game'); }
+      } else if (G.phase === 'done' && !RM) {
+        var cyc = (now / 1000 % 7) / 7; if (cyc < .3) RD.sweep(c, V, -90 + cyc / .3 * (V.TW + 180), .16);
+      }
+    }
+    if (G.hint && !G.hint.pc.placed) {
+      var a = hintAlpha(now);
+      if (G.hint) {
+        RD.polysPath(c, G.hint.pc.p.polys); c.fillStyle = 'rgba(241,216,156,' + a * .14 + ')'; c.fill();
+        c.shadowColor = 'rgba(255,200,110,.9)'; c.shadowBlur = 10 * G.dpr; c.strokeStyle = 'rgba(241,216,156,' + a + ')'; c.lineWidth = 2 / s; c.stroke();
+        c.shadowColor = 'rgba(0,0,0,0)'; c.shadowBlur = 0;
+      }
+    }
+    c.restore();
+    // 碎片
+    var list = G.pcs.filter(function (p) { return !p.done; }).sort(function (a, b) { return (a.snap ? -1 : 0) - (b.snap ? -1 : 0) || a.z - b.z; });
+    list.forEach(function (pc) { drawPiece(c, pc, now); });
+    // 金粉
+    if (G.parts.length) {
+      c.globalCompositeOperation = 'lighter';
+      G.parts = G.parts.filter(function (p) {
+        p.life += dt; if (p.life >= p.max) return false;
+        p.vx *= .955; p.vy = p.vy * .955 + 26 * dt; p.x += p.vx * dt; p.y += p.vy * dt;
+        var al = 1 - p.life / p.max;
+        c.fillStyle = 'rgba(255,190,90,' + al * .22 + ')'; c.beginPath(); c.arc(p.x, p.y, p.r * 3, 0, TAU); c.fill();
+        c.fillStyle = 'rgba(255,226,160,' + al + ')'; c.beginPath(); c.arc(p.x, p.y, p.r, 0, TAU); c.fill();
+        return true;
+      });
+      c.globalCompositeOperation = 'source-over';
+    }
+  }
+
+  /* ---------- 主循环 / 尺寸 ---------- */
+  var last = performance.now();
+  function frame(now) {
+    requestAnimationFrame(frame);
+    var dt = Math.min(.05, Math.max(0, (now - last) / 1000)); last = now;
+    if (fade) { var fu = Math.min(1, (performance.now() - fade.t0) / 400); fade.el.style.opacity = String(fu); if (fu >= 1) fade = null; }
+    try {
+      if (cur === 'title') titleFrame(now);
+      else if (cur === 'game' && G.L) gameFrame(now, dt);
+    } catch (e) { if (!frame.err) { frame.err = 1; console.error(e); } }
+  }
+  var rzT = 0;
+  window.addEventListener('resize', function () {
+    clearTimeout(rzT); rzT = setTimeout(function () { if (cur === 'title') resizeTitle(); else if (cur === 'game' && G.L) layout(); }, 120);
+  });
+  window.KJ_DEBUG = { G: G, startLevel: startLevel, show: show, openCard: openCard, buildShelf: buildShelf, pumpThumbs: pumpThumbs };
+  resizeTitle();
+  requestAnimationFrame(frame);
+})();
+</script>
+</body>
+</html>

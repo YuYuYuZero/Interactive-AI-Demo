@@ -1,0 +1,645 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>AI 游戏选题本</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=ZCOOL+QingKe+HuangYou&family=Ma+Shan+Zheng&family=ZCOOL+XiaoWei&family=Noto+Sans+SC:wght@400;500;700;900&family=JetBrains+Mono:wght@500;700&display=swap">
+<style>
+/* Layout: risograph proposal sheet in the event's orange-ink language — one column of sections, cards only where an item is a playable object */
+:root{
+  --paper:#FBFAF8; --ink:#17181C; --ink-2:#5A5C64; --rule:#E3E0DB;
+  --orange:#EE5A24; --orange-ink:#C2410C; --tint:#FDEEE6; --card:#FFFFFF;
+  --f-display:"ZCOOL QingKe HuangYou","Noto Sans SC","PingFang SC","Microsoft YaHei",sans-serif;
+  --f-body:"Noto Sans SC","PingFang SC","Hiragino Sans GB","Microsoft YaHei",system-ui,sans-serif;
+  --f-mono:"JetBrains Mono",ui-monospace,"SF Mono",Menlo,monospace;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --paper:#131315; --ink:#F1EFEA; --ink-2:#A5A39F; --rule:#2B2B2F;
+  --orange:#FF6B35; --orange-ink:#FF8D5E; --tint:#2A1912; --card:#1B1B1E; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --paper:#131315; --ink:#F1EFEA; --ink-2:#A5A39F; --rule:#2B2B2F;
+  --orange:#FF6B35; --orange-ink:#FF8D5E; --tint:#2A1912; --card:#1B1B1E; color-scheme:dark}
+
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--f-body);font-size:15px;line-height:1.7;
+  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+.wrap{max-width:1120px;margin:0 auto;padding-block:40px 96px;display:flex;flex-direction:column;gap:72px}
+h1,h2,h3{text-wrap:balance;margin:0}
+p{margin:0}
+a{color:var(--orange-ink)}
+:focus-visible{outline:2px solid var(--orange);outline-offset:3px}
+.mono{font-family:var(--f-mono);letter-spacing:.04em}
+.eyebrow{font-family:var(--f-mono);font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--orange-ink);font-weight:700}
+
+/* hero */
+.hero{position:relative;display:grid;gap:20px;padding-top:12px}
+.hero::after{content:"";position:absolute;right:-16px;top:-40px;width:min(46vw,420px);height:300px;pointer-events:none;
+  background-image:radial-gradient(var(--orange) 1.1px,transparent 1.6px);background-size:7px 7px;
+  -webkit-mask-image:radial-gradient(ellipse at 80% 20%,#000 10%,transparent 68%);mask-image:radial-gradient(ellipse at 80% 20%,#000 10%,transparent 68%);opacity:.55}
+.hero h1{font-family:var(--f-display);font-weight:400;font-size:clamp(44px,9vw,104px);line-height:.98;letter-spacing:.01em;position:relative;z-index:1}
+.hero h1 em{font-style:normal;color:var(--orange)}
+.hero .lede{max-width:62ch;font-size:17px;color:var(--ink-2);position:relative;z-index:1}
+.hero .lede b{color:var(--ink)}
+
+/* section head */
+.sh{display:grid;gap:8px;border-top:3px solid var(--ink);padding-top:16px}
+.sh h2{font-family:var(--f-display);font-weight:400;font-size:clamp(30px,5vw,46px);line-height:1.1}
+.sh p{color:var(--ink-2);max-width:66ch}
+section{display:grid;gap:28px}
+
+/* combos */
+.combos{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:0;border:1.5px solid var(--ink)}
+.combo{padding:22px 22px 24px;display:flex;flex-direction:column;gap:12px;min-width:0}
+.combo+.combo{border-left:1.5px solid var(--ink)}
+.combo.lead{background:var(--tint)}
+.combo .tag{font-family:var(--f-mono);font-size:12px;font-weight:700;letter-spacing:.1em}
+.combo h3{font-size:22px;font-weight:900;line-height:1.3}
+.combo .tracks{display:flex;flex-wrap:wrap;gap:6px}
+.chip{font-size:12px;font-weight:500;padding:2px 9px;border:1px solid currentColor;border-radius:999px;color:var(--orange-ink);white-space:nowrap}
+.chip.ink{color:var(--ink-2)}
+.combo p{color:var(--ink-2);font-size:14px}
+
+/* demos */
+.demos{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:20px}
+.demo{display:flex;flex-direction:column;background:var(--card);border:1.5px solid var(--ink);min-width:0}
+.cover{position:relative;aspect-ratio:4/3;max-width:100%;overflow:hidden;display:flex;align-items:flex-end;padding:18px;cursor:pointer;border:0;width:100%;text-align:left}
+.cover .ct{position:relative;z-index:1;display:grid;gap:4px}
+.cover .ct b{font-size:34px;line-height:1.1;font-weight:400}
+.cover .ct span{font-family:var(--f-mono);font-size:11px;letter-spacing:.16em;opacity:.8}
+.cover .play{position:absolute;right:16px;top:16px;z-index:1;font-family:var(--f-mono);font-size:12px;font-weight:700;letter-spacing:.1em;padding:6px 12px;border-radius:999px}
+/* covers are fixed art surfaces: each defines its own fg/bg */
+.cv-k{background:radial-gradient(ellipse 60% 70% at 50% 35%,#3a2a1c 0%,#140e0a 70%);color:#F2E6C9}
+.cv-k .ct b{font-family:"Ma Shan Zheng","STKaiti","KaiTi",serif;font-size:48px}
+.cv-k .play{background:#D9B25C;color:#1A120A}
+.cv-r{background:linear-gradient(180deg,#0B1424 0%,#132640 58%,#2B1A0E 58%,#5A3415 100%);color:#FFD9A0}
+.cv-r .play{background:#FFB65C;color:#1E1208}
+.cv-f{background:radial-gradient(ellipse 55% 60% at 50% 40%,#d9d6cf 0%,#6d6b67 45%,#141414 85%);color:#FFFFFF}
+.cv-f .play{background:#F1EFEA;color:#111}
+.cv-f .ct{text-shadow:0 1px 8px rgba(0,0,0,.6)}
+.cv-t{background:radial-gradient(circle at 72% 26%,#2c3f7a 0%,#141c3e 45%,#0b0f24 100%);color:#FCE3D4}
+.cv-t .ct b{font-family:"ZCOOL XiaoWei","Noto Serif SC",serif}
+.cv-t .play{background:#D8322B;color:#fff}
+.cv-c{background:#F3EEE3;color:#2B2A27}
+.cv-c .ct b{font-family:"Ma Shan Zheng","STKaiti","KaiTi",serif;font-size:44px}
+.cv-c .play{background:#B8322A;color:#fff}
+.cv-l{background:linear-gradient(180deg,#CFE6D9 0%,#CFE6D9 62%,#E9DFC6 62%,#E9DFC6 100%);color:#1F3A33}
+.cv-l .ct b{font-size:28px;font-weight:900}
+.cv-l .play{background:#E8742C;color:#fff}
+.cv-e{background:#16181C;color:#FFB15C}
+.cv-e .ct b{font-weight:900}
+.cv-e .play{background:#FF9A3D;color:#16181C}
+canvas.art{position:absolute;inset:0;width:100%;height:100%}
+.demo .body{padding:18px 20px 20px;display:flex;flex-direction:column;gap:12px;flex:1}
+.demo .body h3{font-size:18px;font-weight:900}
+.demo .body p{font-size:14px;color:var(--ink-2)}
+.kv{display:grid;grid-template-columns:auto 1fr;gap:4px 12px;font-size:13px;margin:0}
+.kv dt{font-family:var(--f-mono);font-size:11px;letter-spacing:.08em;color:var(--orange-ink);padding-top:3px;white-space:nowrap}
+.kv dd{margin:0;color:var(--ink)}
+.actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:auto;padding-top:6px}
+.btn{font:700 14px var(--f-body);padding:9px 16px;border:1.5px solid var(--ink);background:var(--ink);color:var(--paper);cursor:pointer;text-decoration:none;display:inline-flex;align-items:center;gap:6px}
+.btn.ghost{background:transparent;color:var(--ink)}
+.btn:hover{background:var(--orange);border-color:var(--orange);color:#fff}
+
+.dgroup{display:grid;gap:16px}
+.dgroup+.dgroup{margin-top:12px}
+.dhead{display:flex;align-items:baseline;gap:12px;flex-wrap:wrap}
+.dhead .n{font-family:var(--f-display);font-size:36px;line-height:1;color:var(--orange)}
+.dhead h3{font-size:20px;font-weight:900}
+.demo .style{font-family:var(--f-mono);font-size:11px;letter-spacing:.08em;color:var(--orange-ink);font-weight:700}
+.cnote{grid-column:span 2;align-self:start;border:1.5px dashed var(--rule);padding:20px 22px;display:grid;gap:8px;min-width:0}
+.cnote h4{margin:0;font-size:16px;font-weight:900}
+.cnote p{font-size:14px;color:var(--ink-2)}
+.cnote b{color:var(--ink)}
+/* ideas */
+.dir{display:grid;grid-template-columns:220px minmax(0,1fr);gap:28px;border-top:1.5px solid var(--rule);padding-top:22px}
+.dir .side{display:grid;gap:8px;align-content:start;position:sticky;top:calc(env(safe-area-inset-top,0px) + 16px)}
+.dir .side .n{font-family:var(--f-display);font-size:64px;line-height:.9;color:var(--orange)}
+.dir .side h3{font-size:20px;font-weight:900}
+.dir .side p{font-size:13px;color:var(--ink-2)}
+.ideas{display:grid;gap:0}
+.idea{display:grid;grid-template-columns:64px minmax(0,1fr);gap:16px;padding:18px 0;border-bottom:1px solid var(--rule)}
+.idea:first-child{padding-top:0}
+.idea .code{font-family:var(--f-mono);font-weight:700;font-size:14px;color:var(--ink-2);padding-top:4px}
+.idea .main{display:grid;gap:8px;min-width:0}
+.idea .top{display:flex;flex-wrap:wrap;align-items:baseline;gap:8px 12px}
+.idea h4{margin:0;font-size:19px;font-weight:900}
+.idea .pitch{font-size:15px}
+.idea .meta{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:6px 24px;font-size:13px;color:var(--ink-2)}
+.idea .meta b{font-family:var(--f-mono);font-size:11px;letter-spacing:.08em;color:var(--orange-ink);font-weight:700;margin-right:6px}
+.badge{font-family:var(--f-mono);font-size:11px;font-weight:700;letter-spacing:.08em;background:var(--orange);color:#fff;padding:2px 8px}
+.badge.alt{background:transparent;color:var(--orange-ink);border:1px solid var(--orange-ink)}
+
+/* matrix */
+.tablewrap{overflow-x:auto;border:1.5px solid var(--ink)}
+table{border-collapse:collapse;width:100%;min-width:760px;font-size:14px}
+th,td{padding:10px 14px;text-align:left;border-bottom:1px solid var(--rule);white-space:nowrap}
+thead th{font-family:var(--f-mono);font-size:11px;letter-spacing:.1em;color:var(--ink-2);font-weight:700;background:var(--tint);border-bottom:1.5px solid var(--ink)}
+tbody tr:last-child td{border-bottom:0}
+td.name{font-weight:700}
+td.name small{font-family:var(--f-mono);color:var(--ink-2);font-weight:500;margin-right:8px}
+.dots{display:inline-flex;gap:3px;vertical-align:middle}
+.dots i{width:8px;height:8px;border-radius:50%;border:1.2px solid var(--orange);display:block}
+.dots i.on{background:var(--orange)}
+td.sum{font-family:var(--f-mono);font-weight:700;font-variant-numeric:tabular-nums}
+tr.pick td{background:var(--tint)}
+
+/* pipeline */
+.pipe{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));border:1.5px solid var(--ink)}
+.step{padding:18px;display:grid;gap:8px;align-content:start;min-width:0}
+.step+.step{border-left:1.5px solid var(--ink)}
+.step .k{font-family:var(--f-mono);font-size:12px;font-weight:700;color:var(--orange-ink)}
+.step h4{margin:0;font-size:16px;font-weight:900}
+.step p{font-size:13px;color:var(--ink-2)}
+.shared{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:20px}
+.shared .col{border-left:3px solid var(--orange);padding:4px 0 4px 16px;display:grid;gap:6px}
+.shared h4{margin:0;font-size:16px;font-weight:900}
+.shared ul{margin:0;padding-left:18px;color:var(--ink-2);font-size:14px}
+
+/* roadmap */
+.road{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:20px}
+.road .r{display:grid;gap:10px;align-content:start}
+.road h4{margin:0;font-size:17px;font-weight:900;padding-bottom:8px;border-bottom:1.5px solid var(--ink)}
+.road ol{margin:0;padding-left:20px;font-size:14px;color:var(--ink-2);display:grid;gap:6px}
+.road ol b{color:var(--ink)}
+
+footer{font-size:13px;color:var(--ink-2);border-top:1px solid var(--rule);padding-top:18px}
+
+/* player */
+.player{position:fixed;inset:0;z-index:50;background:rgba(10,10,12,.82);display:flex;flex-direction:column;
+  padding:calc(env(safe-area-inset-top,0px) + 12px) max(12px,env(safe-area-inset-right,0px)) calc(env(safe-area-inset-bottom,0px) + 12px) max(12px,env(safe-area-inset-left,0px));gap:10px}
+.player .bar{display:flex;justify-content:space-between;align-items:center;gap:12px;color:#F1EFEA}
+.player .bar b{font-weight:900}
+.player .bar .btn{background:#F1EFEA;color:#111;border-color:#F1EFEA}
+.player .bar a.btn{background:transparent;color:#F1EFEA}
+.player iframe{flex:1;width:100%;border:0;background:#000;min-height:0}
+
+@media (max-width:860px){
+  .combos,.demos,.road{grid-template-columns:minmax(0,1fr)}
+  .cnote{grid-column:auto}
+  .combo+.combo{border-left:0;border-top:1.5px solid var(--ink)}
+  .dir{grid-template-columns:minmax(0,1fr);gap:16px}
+  .dir .side{position:static}
+  .dir .side .n{font-size:48px}
+  .pipe{grid-template-columns:minmax(0,1fr)}
+  .step+.step{border-left:0;border-top:1.5px solid var(--ink)}
+  .shared{grid-template-columns:minmax(0,1fr)}
+}
+@media (max-width:520px){
+  .idea{grid-template-columns:minmax(0,1fr);gap:4px}
+  .idea .meta{grid-template-columns:minmax(0,1fr)}
+  .wrap{gap:56px;padding-block:24px 72px}
+}
+@media (prefers-reduced-motion: reduce){*{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body>
+
+<div class="wrap">
+
+<header class="hero">
+  <div class="eyebrow">AI 互动游戏 × 叙事影像 · 选题本 · 2026.11</div>
+  <h1>15 个选题<br><em>7 个能玩的 demo</em></h1>
+  <p class="lede">按你给的三个方向各出 5 个候选：<b>休闲解压（≥50 关）</b>、<b>互动叙事 + 叙事影像双赛道</b>、<b>自由发挥</b>（含 第二玩家 / 第二十五帧 / 世界的回信 / 点火时刻 子方向）。每个方向挑了几个风格和思路差异最大的做成浏览器里直接能玩的 demo：休闲 3 个、叙事 3 个、自由发挥 1 个。美术全部是代码绘制，后续可以用 AI 出图整体升级。</p>
+</header>
+
+<section aria-labelledby="s-combo">
+  <div class="sh">
+    <div class="eyebrow">先说结论</div>
+    <h2 id="s-combo">三套参赛组合</h2>
+    <p>一次报两条赛道时，最省力的做法是游戏和短片共用一套世界观、角色和镜头素材，游戏里产出的剧情直接变成短片的分镜。</p>
+  </div>
+  <div class="combos">
+    <article class="combo lead">
+      <div class="tag" style="color:var(--orange-ink)">主推 · 一套素材两份作品</div>
+      <h3>《第二十五帧》</h3>
+      <div class="tracks"><span class="chip">互动游戏</span><span class="chip">叙事影像 · 第二十五帧</span></div>
+      <p>库里肖夫效应做成解谜：排列镜头让观众读出指定情绪。游戏里剪出来的就是短片分镜，叙事影像赛道交同一个故事的 AI 短片。子赛道名字和玩法几乎一一对应，评委一眼能看懂。</p>
+    </article>
+    <article class="combo">
+      <div class="tag" style="color:var(--ink-2)">备选 · AI 味最浓</div>
+      <h3>《夜航电台》</h3>
+      <div class="tracks"><span class="chip">互动游戏 · 第二玩家</span><span class="chip">叙事影像</span></div>
+      <p>深夜电台接 5 通来电。参赛版让每个来电者由大模型扮演，每局来电都不一样，正好扣“第二玩家”。短片《凌晨三点的五通来电》用游戏结局生成的分镜单直接拍。</p>
+    </article>
+    <article class="combo">
+      <div class="tag" style="color:var(--ink-2)">保底 · 完成度最高</div>
+      <h3>《锔 · 碎瓷重圆》</h3>
+      <div class="tracks"><span class="chip">互动游戏</span><span class="chip ink">可延伸 商业创意 · 文旅</span></div>
+      <p>拼碎瓷、熔金补缝，60 关。程序化碎裂可以无限出关卡，没有失败、没有倒计时。可以和博物馆、文创做联名，延伸到商业创意赛道。</p>
+    </article>
+  </div>
+</section>
+
+<section aria-labelledby="s-demo">
+  <div class="sh">
+    <div class="eyebrow">可试玩</div>
+    <h2 id="s-demo">七个 demo，七种风格</h2>
+    <p>每个方向都做了不止一个，玩法和美术刻意拉开：同一方向里有暗色也有亮色，有手感型也有叙事型。点封面在本页试玩，建议开声音。全部适配手机竖屏，进度存在本地浏览器。</p>
+  </div>
+
+  <div class="dgroup">
+    <div class="dhead"><span class="n">A</span><h3>休闲解压</h3><span class="chip ink">3 个 demo · 关卡都 ≥ 60</span></div>
+    <div class="demos">
+      <article class="demo">
+        <button class="cover cv-k" data-play="demos/kintsugi.html" data-name="锔 · 碎瓷重圆" aria-label="试玩 锔 · 碎瓷重圆">
+          <canvas class="art" data-art="k" aria-hidden="true"></canvas><span class="play">▶ 试玩</span>
+          <span class="ct"><b>锔</b><span>KINTSUGI · 60 LEVELS</span></span>
+        </button>
+        <div class="body">
+          <div class="style">大漆暗金 · 博物馆展柜</div>
+          <h3>锔 · 碎瓷重圆</h3>
+          <p>把碎片拖回原位，裂缝被熔金填满，弹出器物的身世。</p>
+          <dl class="kv"><dt>关卡</dt><dd>6 窑口 × 10 关，碎片 3 → 14 块</dd><dt>递进</dt><dd>拖动 → 90° → 45° 旋转 → 翻面</dd></dl>
+          <div class="actions"><button class="btn" data-play="demos/kintsugi.html" data-name="锔 · 碎瓷重圆">在本页试玩</button><a class="btn ghost" href="demos/kintsugi.html" target="_blank" rel="noopener">新窗口</a></div>
+        </div>
+      </article>
+      <article class="demo">
+        <button class="cover cv-t" data-play="demos/red-thread.html" data-name="月下红线" aria-label="试玩 月下红线">
+          <canvas class="art" data-art="t" aria-hidden="true"></canvas><span class="play">▶ 试玩</span>
+          <span class="ct"><b>月下红线</b><span>UNTANGLE · 120 LEVELS</span></span>
+        </button>
+        <div class="body">
+          <div class="style">剪纸 · 靛蓝夜空</div>
+          <h3>月下红线</h3>
+          <p>替月老理红线，拖动线结直到没有交叉。解开一对，桥上两盏灯笼相遇。</p>
+          <dl class="kv"><dt>关卡</dt><dd>6 个节日 × 20 关，线结 4 → 22 个</dd><dt>手感</dt><dd>柔软的绳子物理，每解一处一声拨弦</dd></dl>
+          <div class="actions"><button class="btn" data-play="demos/red-thread.html" data-name="月下红线">在本页试玩</button><a class="btn ghost" href="demos/red-thread.html" target="_blank" rel="noopener">新窗口</a></div>
+        </div>
+      </article>
+      <article class="demo">
+        <button class="cover cv-c" data-play="demos/color-shop.html" data-name="中国色 · 调色铺" aria-label="试玩 中国色 · 调色铺">
+          <canvas class="art" data-art="c" aria-hidden="true"></canvas><span class="play">▶ 试玩</span>
+          <span class="ct"><b>中国色</b><span>COLOR SHOP · 64 COLORS</span></span>
+        </button>
+        <div class="body">
+          <div class="style">宣纸水彩 · 明亮通透</div>
+          <h3>中国色 · 调色铺</h3>
+          <p>往白瓷碟里滴颜料、画圈搅匀，调出月白、天水碧、胭脂这些传统色。</p>
+          <dl class="kv"><dt>关卡</dt><dd>春夏秋冬 4 章 × 16 色</dd><dt>手感</dt><dd>颜料在水里晕开，搅动拉出漩涡</dd></dl>
+          <div class="actions"><button class="btn" data-play="demos/color-shop.html" data-name="中国色 · 调色铺">在本页试玩</button><a class="btn ghost" href="demos/color-shop.html" target="_blank" rel="noopener">新窗口</a></div>
+        </div>
+      </article>
+    </div>
+  </div>
+
+  <div class="dgroup">
+    <div class="dhead"><span class="n">B</span><h3>互动叙事 × 叙事影像</h3><span class="chip ink">3 个 demo · 结尾都生成短片分镜</span></div>
+    <div class="demos">
+      <article class="demo">
+        <button class="cover cv-f" data-play="demos/25th-frame.html" data-name="第二十五帧" aria-label="试玩 第二十五帧">
+          <canvas class="art" data-art="f" aria-hidden="true"></canvas><span class="play">▶ 试玩</span>
+          <span class="ct"><b>第二十五帧</b><span>THE 25TH FRAME · SHANGHAI 1939</span></span>
+        </button>
+        <div class="body">
+          <div class="style">黑白默片 · Art Deco</div>
+          <h3>第二十五帧</h3>
+          <p>1930 年代上海的剪辑师，按失踪导演的字条排列镜头，让观众读出他要的情绪。</p>
+          <dl class="kv"><dt>关卡</dt><dd>8 关，含“同素材相反含义”和“第 25 帧”</dd><dt>乐趣</dt><dd>剪错时观众的“误读”反馈</dd></dl>
+          <div class="actions"><button class="btn" data-play="demos/25th-frame.html" data-name="第二十五帧">在本页试玩</button><a class="btn ghost" href="demos/25th-frame.html" target="_blank" rel="noopener">新窗口</a></div>
+        </div>
+      </article>
+      <article class="demo">
+        <button class="cover cv-r" data-play="demos/night-radio.html" data-name="夜航电台" aria-label="试玩 夜航电台">
+          <canvas class="art" data-art="r" aria-hidden="true"></canvas><span class="play">▶ 试玩</span>
+          <span class="ct"><b>夜航电台</b><span>FM 88.7 · 1:00–5:00 AM</span></span>
+        </button>
+        <div class="body">
+          <div class="style">雨夜窗景 · 冷蓝暖橙</div>
+          <h3>夜航电台</h3>
+          <p>暴雨夜代班深夜电台。调频接线、回应、点歌，五个陌生人天亮时会不一样。</p>
+          <dl class="kv"><dt>手感</dt><dd>拧旋钮找信号，静电声随距离变化</dd><dt>结局</dt><dd>多结局 + 隐藏好结局，生成本局分镜单</dd></dl>
+          <div class="actions"><button class="btn" data-play="demos/night-radio.html" data-name="夜航电台">在本页试玩</button><a class="btn ghost" href="demos/night-radio.html" target="_blank" rel="noopener">新窗口</a></div>
+        </div>
+      </article>
+      <article class="demo">
+        <button class="cover cv-l" data-play="demos/lost-and-found.html" data-name="末班车失物招领" aria-label="试玩 末班车失物招领">
+          <canvas class="art" data-art="l" aria-hidden="true"></canvas><span class="play">▶ 试玩</span>
+          <span class="ct"><b>末班车失物招领</b><span>QINGSHIQIAO STATION · LINE 9</span></span>
+        </button>
+        <div class="body">
+          <div class="style">扁平插画 · 90 年代地铁</div>
+          <h3>末班车失物招领</h3>
+          <p>终点站夜班管理员。翻看失物找线索，推理主人，三夜的物件拼成一个故事。</p>
+          <dl class="kv"><dt>玩法</dt><dd>检查物品 → 登记簿推理 → 归还片段</dd><dt>AI 位</dt><dd>预留“玩家投递旧物，AI 生成主人”接口</dd></dl>
+          <div class="actions"><button class="btn" data-play="demos/lost-and-found.html" data-name="末班车失物招领">在本页试玩</button><a class="btn ghost" href="demos/lost-and-found.html" target="_blank" rel="noopener">新窗口</a></div>
+        </div>
+      </article>
+    </div>
+  </div>
+
+  <div class="dgroup">
+    <div class="dhead"><span class="n">C</span><h3>自由发挥</h3><span class="chip ink">1 个 demo · 其余偏装置和部署，适合现场</span></div>
+    <div class="demos">
+      <article class="demo">
+        <button class="cover cv-e" data-play="demos/echo.html" data-name="昨日之我" aria-label="试玩 昨日之我">
+          <canvas class="art" data-art="e" aria-hidden="true"></canvas><span class="play">▶ 试玩</span>
+          <span class="ct"><b>昨日之我</b><span>ECHO OF YESTERDAY · 12 LEVELS</span></span>
+        </button>
+        <div class="body">
+          <div class="style">几何极简 · 石墨冷暖</div>
+          <h3>昨日之我</h3>
+          <p>每回合的你会变成回声，下一回合和你一起行动。第 6 关起回声会学你、等你、改道。</p>
+          <dl class="kv"><dt>子赛道</dt><dd>第二玩家：陪你玩的是“昨天的你”</dd><dt>操作</dt><dd>键盘，手机上有虚拟按键</dd></dl>
+          <div class="actions"><button class="btn" data-play="demos/echo.html" data-name="昨日之我">在本页试玩</button><a class="btn ghost" href="demos/echo.html" target="_blank" rel="noopener">新窗口</a></div>
+        </div>
+      </article>
+      <div class="cnote">
+        <h4>C 组其他选题为什么没做 demo</h4>
+        <p><b>无限说书人</b>和<b>城市回信</b>的价值在实时大模型和真实商户数据，纯前端脚本 demo 体现不出来，适合直接在 DGX Spark 上搭原型。<b>方言守夜人</b>和<b>掌中皮影</b>依赖语音或摄像头模型，要先验证模型可用性再动美术。</p>
+      </div>
+    </div>
+  </div>
+</section>
+<section aria-labelledby="s-ideas">
+  <div class="sh">
+    <div class="eyebrow">全部候选</div>
+    <h2 id="s-ideas">15 个选题</h2>
+    <p>编号前缀对应你的三个方向。每个选题写了玩法、AI 用在哪、能报哪条赛道。每个选题开头一句是它的立意。</p>
+  </div>
+
+  <div class="dir">
+    <div class="side"><div class="n">A</div><h3>休闲解压</h3><p>关卡 ≥ 50，有趣、解压。关卡都靠程序化生成，50 关和 500 关的工作量差不多。</p></div>
+    <div class="ideas">
+      <div class="idea"><div class="code">A1</div><div class="main">
+        <div class="top"><h4>锔 · 碎瓷重圆</h4><span class="badge">DEMO</span></div>
+        <p class="pitch">一件瓷器碎成几块，拖回原位拼好，裂缝被熔金填满发光，弹出器物的一句身世。</p>
+        <div class="meta"><span><b>关卡</b>60 关 / 6 窑口，碎片 3 → 14 块</span><span><b>解压点</b>吸附“叮”声、熔金、无失败</span><span><b>AI</b>玩家拍自家旧碗，AI 生成纹样和身世，变成专属关卡</span><span><b>赛道</b>互动游戏，可联名博物馆报商业创意</span></div>
+      </div></div>
+      <div class="idea"><div class="code">A2</div><div class="main">
+        <div class="top"><h4>月下红线</h4><span class="badge">DEMO</span></div>
+        <p class="pitch">替月老理红线：拖动线结，让缠成一团的红绳不再交叉。线有柔软的绳子物理，解开一对，桥上两盏灯笼相遇。</p>
+        <div class="meta"><span><b>关卡</b>120 关程序生成，交叉越多越难</span><span><b>解压点</b>绳子回弹、一下子全部松开的瞬间</span><span><b>AI</b>输入两个名字，AI 写一页“姻缘簿”</span><span><b>完成度</b>最高，核心玩法两天能出</span></div>
+      </div></div>
+      <div class="idea"><div class="code">A3</div><div class="main">
+        <div class="top"><h4>中国色 · 调色铺</h4><span class="badge">DEMO</span></div>
+        <p class="pitch">往瓷碟里滴颜料，调出指定的传统色：月白、天水碧、胭脂、秋香。颜料在水里晕开、旋转。</p>
+        <div class="meta"><span><b>关卡</b>以几百个传统色名做关卡</span><span><b>解压点</b>流体晕染、命中色号时的色卡翻面</span><span><b>AI</b>拍一张照片，AI 取出“今日中国色”并配一句诗</span><span><b>赛道</b>互动游戏，可做品牌色营销</span></div>
+      </div></div>
+      <div class="idea"><div class="code">A4</div><div class="main">
+        <div class="top"><h4>雨落青瓦</h4></div>
+        <p class="pitch">转动屋瓦，把雨水引到院子里浇花。雨声是全程的 ASMR，花随节气开。</p>
+        <div class="meta"><span><b>关卡</b>二十四节气 × 3 = 72 关</span><span><b>解压点</b>水流顺着瓦当滴落的声音</span><span><b>AI</b>按玩家所在城市当天天气生成每日关</span><span><b>赛道</b>互动游戏，可接文旅</span></div>
+      </div></div>
+      <div class="idea"><div class="code">A5</div><div class="main">
+        <div class="top"><h4>灯会 · 光路</h4></div>
+        <p class="pitch">摆放铜镜和窗棂，让一束烛光折射点亮整条街的花灯。</p>
+        <div class="meta"><span><b>关卡</b>50+ 关，元宵、七夕、中秋分章</span><span><b>解压点</b>一盏接一盏亮起的连锁</span><span><b>AI</b>用一句话描述一盏灯，AI 生成灯样放进关卡</span><span><b>赛道</b>互动游戏</span></div>
+      </div></div>
+    </div>
+  </div>
+
+  <div class="dir">
+    <div class="side"><div class="n">B</div><h3>互动叙事 × 叙事影像</h3><p>有创意、有可玩性、有故事。每个都能拆出一部 AI 短片，两个赛道同时报。</p></div>
+    <div class="ideas">
+      <div class="idea"><div class="code">B1</div><div class="main">
+        <div class="top"><h4>第二十五帧</h4><span class="badge">DEMO</span><span class="badge alt">主推</span></div>
+        <p class="pitch">库里肖夫效应解谜。同一个面无表情的特写，接在汤后面观众觉得他饿，接在棺木后面觉得他悲伤。你按失踪导演的字条排列镜头，最后替他剪出那部被禁电影的结局。</p>
+        <div class="meta"><span><b>AI · 游戏</b>参赛版让多模态模型当“AI 观众”，看你的剪辑写出解读，没有标准答案</span><span><b>AI · 影像</b>沈先生的电影用 AI 生成镜头拍成短片</span><span><b>子赛道</b>第二十五帧 + 互动游戏</span><span><b>亮点</b>玩法本身就是电影语言，两条赛道互相背书</span></div>
+      </div></div>
+      <div class="idea"><div class="code">B2</div><div class="main">
+        <div class="top"><h4>夜航电台</h4><span class="badge">DEMO</span></div>
+        <p class="pitch">暴雨夜代班深夜电台，接 5 通来电。他们住在同一个街区却互不认识，你的回应和点歌决定他们天亮时会不会遇见。</p>
+        <div class="meta"><span><b>AI · 游戏</b>来电者由大模型扮演、TTS 发声，每局来电都不同</span><span><b>AI · 影像</b>短片《凌晨三点的五通来电》</span><span><b>子赛道</b>第二玩家</span><span><b>亮点</b>调频找信号的手感 + 群像故事</span></div>
+      </div></div>
+      <div class="idea"><div class="code">B3</div><div class="main">
+        <div class="top"><h4>外婆的菜谱</h4></div>
+        <p class="pitch">外婆得了阿尔茨海默，只记得味道。你在她的厨房里切菜、颠勺、调味，每做对一道菜，她想起一段往事。</p>
+        <div class="meta"><span><b>AI · 游戏</b>上传自家老照片和家乡菜名，AI 生成专属章节</span><span><b>AI · 影像</b>AI MV《外婆的厨房》</span><span><b>赛道</b>双赛道，地方菜可接文旅</span><span><b>风险</b>烹饪手感要打磨</span></div>
+      </div></div>
+      <div class="idea"><div class="code">B4</div><div class="main">
+        <div class="top"><h4>末班车失物招领</h4><span class="badge">DEMO</span></div>
+        <p class="pitch">地铁终点站的失物招领员。从一把伞、一张票根里推理主人是谁，把东西送回去，也把他们的故事拼起来。</p>
+        <div class="meta"><span><b>AI · 游戏</b>玩家拍一件自己的旧物，AI 为它编主人和故事，成为别人游戏里的失物</span><span><b>AI · 影像</b>选集短片，一件物一集</span><span><b>赛道</b>双赛道</span><span><b>亮点</b>UGC 循环，内容越玩越多</span></div>
+      </div></div>
+      <div class="idea"><div class="code">B5</div><div class="main">
+        <div class="top"><h4>梦境当铺</h4></div>
+        <p class="pitch">你是收记忆的当铺掌柜。客人典当一段记忆换一个愿望，你要压价、识破谎言，收下的记忆会改变店里的陈设。</p>
+        <div class="meta"><span><b>AI · 游戏</b>每个客人是有底线和秘密的大模型角色，靠对话套话</span><span><b>AI · 影像</b>每段被典当的记忆是一支短片</span><span><b>子赛道</b>第二玩家</span><span><b>风险</b>对话系统调优工作量大</span></div>
+      </div></div>
+    </div>
+  </div>
+
+  <div class="dir">
+    <div class="side"><div class="n">C</div><h3>自由发挥</h3><p>覆盖“点火时刻”“世界的回信”等子方向，偏装置、现场效果和商业闭环。</p></div>
+    <div class="ideas">
+      <div class="idea"><div class="code">C1</div><div class="main">
+        <div class="top"><h4>无限说书人</h4></div>
+        <p class="pitch">在 DGX Spark 上本地部署开源大模型当评书艺人。现场观众扫码，用手机喊“且慢！”改写剧情，醒木一拍定生死。</p>
+        <div class="meta"><span><b>子赛道</b>点火时刻 · DGX 开源模型部署</span><span><b>为什么本地</b>低延迟、多人并发、展台离线可用</span><span><b>亮点</b>现场演示效果最强</span><span><b>风险</b>部署与语音合成要提前压测</span></div>
+      </div></div>
+      <div class="idea"><div class="code">C2</div><div class="main">
+        <div class="top"><h4>城市回信</h4></div>
+        <p class="pitch">给一座城市写一封信，城市 Agent 用本地口吻回信：一条为你定制的路线、一张 AI 明信片、沿途小店的盖章任务。到店打卡，解锁下一封。</p>
+        <div class="meta"><span><b>子赛道</b>世界的回信 · 商业创意</span><span><b>商业闭环</b>文旅局与商户付费投放</span><span><b>AI</b>营销 Agent + 文生图明信片</span><span><b>风险</b>需要真实商户数据做演示</span></div>
+      </div></div>
+      <div class="idea"><div class="code">C3</div><div class="main">
+        <div class="top"><h4>方言守夜人</h4></div>
+        <p class="pitch">夜里的小镇只听得懂方言。学会说一句方言，才能点亮一户人家的灯，听到这家人的故事。</p>
+        <div class="meta"><span><b>AI</b>方言语音识别打分 + 方言语音合成</span><span><b>赛道</b>互动游戏 / 文旅</span><span><b>亮点</b>方言保护，故事性强</span><span><b>风险</b>方言模型可用性要先验证</span></div>
+      </div></div>
+      <div class="idea"><div class="code">C4</div><div class="main">
+        <div class="top"><h4>掌中皮影</h4></div>
+        <p class="pitch">摄像头识别手影，你摆出的手势变成幕布上的皮影角色，AI 根据你摆出的角色即兴编一出戏。</p>
+        <div class="meta"><span><b>AI</b>手势识别 + 即兴编剧 + 配音</span><span><b>赛道</b>互动体验 / 非遗文旅</span><span><b>亮点</b>适合做展会装置</span><span><b>风险</b>识别稳定性</span></div>
+      </div></div>
+      <div class="idea"><div class="code">C5</div><div class="main">
+        <div class="top"><h4>昨日之我</h4><span class="badge">DEMO</span></div>
+        <p class="pitch">第二玩家是“之前的你”：每关都要和自己前几次尝试的回放合作，一个踩机关、一个过门。AI 在回放基础上学你的习惯微调动作。</p>
+        <div class="meta"><span><b>子赛道</b>第二玩家</span><span><b>AI</b>行为克隆，越玩“昨天的你”越像你</span><span><b>亮点</b>机制新、好解释</span><span><b>风险</b>关卡设计门槛高</span></div>
+      </div></div>
+    </div>
+  </div>
+</section>
+
+<section aria-labelledby="s-matrix">
+  <div class="sh">
+    <div class="eyebrow">横向对比</div>
+    <h2 id="s-matrix">打分表</h2>
+    <p>五分制，是我的主观判断。“完成度”指黑客松周期内做到可演示的把握，“AI 结合”指 AI 是不是玩法本身而不只是生产工具。高亮行是做了 demo 的七个。</p>
+  </div>
+  <div class="tablewrap">
+    <table>
+      <thead><tr><th>选题</th><th>创意</th><th>可玩</th><th>故事</th><th>美术上限</th><th>完成度</th><th>AI 结合</th><th>合计</th></tr></thead>
+      <tbody id="matrix"></tbody>
+    </table>
+  </div>
+</section>
+
+<section aria-labelledby="s-pipe">
+  <div class="sh">
+    <div class="eyebrow">双赛道怎么做</div>
+    <h2 id="s-pipe">一套素材，两份作品</h2>
+    <p>以《第二十五帧》和《夜航电台》为例。游戏结局页已经会生成分镜单，这张表就是短片的剪辑表。</p>
+  </div>
+  <div class="pipe">
+    <div class="step"><div class="k">1 · 剧本</div><h4>世界观和角色</h4><p>大模型辅助写人物小传、字条和台词，人工定稿。游戏和短片用同一份人设。</p></div>
+    <div class="step"><div class="k">2 · 设定图</div><h4>锁定画风</h4><p>文生图出角色和场景设定，用参考图或 LoRA 保持角色一致。</p></div>
+    <div class="step"><div class="k">3 · 镜头</div><h4>图生视频</h4><p>每个镜头 3–5 秒。游戏里的镜头卡片和短片镜头是同一批素材。</p></div>
+    <div class="step"><div class="k">4 · 声音</div><h4>配音与配乐</h4><p>TTS 配音，AI 作曲做电台歌曲和片尾曲，游戏和短片共用。</p></div>
+    <div class="step"><div class="k">5 · 成片</div><h4>按分镜单剪</h4><p>游戏玩出的分镜单直接剪成短片，3–5 分钟。</p></div>
+  </div>
+  <div class="shared">
+    <div class="col"><h4>交给互动游戏赛道</h4><ul><li>可玩网页版（现在的 demo 升级美术）</li><li>参赛版接入大模型：AI 观众 / AI 来电者</li><li>演示视频：同一关两种剪法、两种结局</li></ul></div>
+    <div class="col"><h4>交给叙事影像赛道</h4><ul><li>3–5 分钟 AI 短片，故事和游戏同源</li><li>片尾彩蛋：“这部片子是玩家剪出来的”</li><li>附游戏链接，形成两件作品互相导流</li></ul></div>
+  </div>
+</section>
+
+<section aria-labelledby="s-road">
+  <div class="sh">
+    <div class="eyebrow">下一步</div>
+    <h2 id="s-road">从 demo 到参赛版</h2>
+  </div>
+  <div class="road">
+    <div class="r"><h4>第二十五帧</h4><ol>
+      <li><b>换美术：</b>用 AI 生成 1930 年代黑白剧照风格的镜头素材，替换代码绘制的镜头。</li>
+      <li><b>接 AI 观众：</b>多模态模型看剪好的序列，输出观众解读，规则判定作为兜底。</li>
+      <li><b>扩到 15 关：</b>加入节奏（镜头时长）和声音蒙太奇两个新机制。</li>
+      <li><b>拍短片：</b>沈先生的电影，两个结局各一版。</li>
+    </ol></div>
+    <div class="r"><h4>夜航电台</h4><ol>
+      <li><b>接大模型：</b>按人设和已发生事件生成来电台词，剧本节点保留为主线骨架。</li>
+      <li><b>加语音：</b>每个来电者一个 TTS 声线，电话滤波处理。</li>
+      <li><b>做“第六通电话”：</b>玩家可以自己打进来，AI 主持人接听。</li>
+      <li><b>拍短片：</b>用隐藏好结局的分镜单。</li>
+    </ol></div>
+    <div class="r"><h4>锔 · 碎瓷重圆</h4><ol>
+      <li><b>换纹样：</b>AI 批量生成各窑口纹样贴图，替换程序化纹样。</li>
+      <li><b>专属关卡：</b>拍一张自家碗碟，AI 抠图、碎裂、写身世。</li>
+      <li><b>加分享：</b>修好的器物导出成带金缝的卡片。</li>
+      <li><b>找联名：</b>以一家博物馆馆藏做一章，报商业创意。</li>
+    </ol></div>
+  </div>
+</section>
+
+<footer>源码在 <a href="https://github.com/YuYuYuZero/Interactive-AI-Demo">GitHub 仓库</a>：<span class="mono">index.html</span> 和 <span class="mono">demos/</span> 里的 kintsugi、red-thread、color-shop、25th-frame、night-radio、lost-and-found、echo 七个 HTML，每个都是单文件，双击即可在浏览器打开。</footer>
+</div>
+
+<div class="player" id="player" hidden role="dialog" aria-modal="true" aria-labelledby="pname">
+  <div class="bar"><b id="pname"></b><span style="display:flex;gap:8px"><a class="btn ghost" id="pnew" href="#" target="_blank" rel="noopener">新窗口</a><button class="btn" id="pclose">关闭</button></span></div>
+  <iframe id="pframe" title="demo" allow="autoplay; fullscreen"></iframe>
+</div>
+
+<script>
+(function(){
+  // scores: [创意, 可玩, 故事, 美术上限, 完成度, AI结合]
+  const rows=[
+    ["A1","锔 · 碎瓷重圆",[4,4,3,5,5,3],1],["A2","月下红线",[3,5,2,4,5,2],1],["A3","中国色 · 调色铺",[4,3,2,5,4,3],1],
+    ["A4","雨落青瓦",[3,4,2,4,4,2]],["A5","灯会 · 光路",[3,4,2,4,4,3]],
+    ["B1","第二十五帧",[5,4,5,5,4,4],1],["B2","夜航电台",[4,3,5,5,4,5],1],["B3","外婆的菜谱",[4,3,5,4,3,3]],
+    ["B4","末班车失物招领",[4,3,4,4,3,5],1],["B5","梦境当铺",[5,3,4,4,2,5]],
+    ["C1","无限说书人",[5,4,4,3,3,5]],["C2","城市回信",[4,2,3,4,3,5]],["C3","方言守夜人",[4,3,4,3,2,5]],
+    ["C4","掌中皮影",[5,4,3,4,2,4]],["C5","昨日之我",[4,4,2,3,3,3],1]
+  ];
+  const dots=n=>'<span class="dots" aria-label="'+n+' 分">'+[1,2,3,4,5].map(i=>'<i class="'+(i<=n?'on':'')+'"></i>').join('')+'</span>';
+  document.getElementById('matrix').innerHTML=rows.map(([c,n,s,p])=>
+    '<tr class="'+(p?'pick':'')+'"><td class="name"><small>'+c+'</small>'+n+'</td>'+s.map(v=>'<td>'+dots(v)+'</td>').join('')+'<td class="sum">'+s.reduce((a,b)=>a+b,0)+'</td></tr>').join('');
+
+  // player
+  const P=document.getElementById('player'),F=document.getElementById('pframe'),N=document.getElementById('pname'),L=document.getElementById('pnew');
+  let last=null;
+  document.querySelectorAll('[data-play]').forEach(b=>b.addEventListener('click',()=>{
+    last=b;N.textContent=b.dataset.name;F.src=b.dataset.play;L.href=b.dataset.play;P.hidden=false;
+    document.body.style.overflow='hidden';document.getElementById('pclose').focus();
+  }));
+  function close(){P.hidden=true;F.src='about:blank';document.body.style.overflow='';last&&last.focus()}
+  document.getElementById('pclose').addEventListener('click',close);
+  addEventListener('keydown',e=>{if(e.key==='Escape'&&!P.hidden)close()});
+
+  // cover art
+  const reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const arts=[...document.querySelectorAll('canvas.art')];
+  function size(c){const r=c.getBoundingClientRect(),d=Math.min(devicePixelRatio||1,2);c.width=r.width*d;c.height=r.height*d;c.getContext('2d').setTransform(d,0,0,d,0,0);c._w=r.width;c._h=r.height}
+  arts.forEach(size);addEventListener('resize',()=>arts.forEach(size));
+  const drops=Array.from({length:40},()=>({x:Math.random(),y:Math.random(),r:1+Math.random()*2.5,v:.0006+Math.random()*.0018}));
+  const bokeh=Array.from({length:26},()=>({x:Math.random(),y:Math.random()*.55,r:4+Math.random()*12,h:Math.random()<.6?35:200}));
+  const dust=Array.from({length:50},()=>({x:Math.random(),y:Math.random(),v:(Math.random()-.5)*.0006}));
+  function vase(g,w,h,t){
+    const cx=w*.62,top=h*.16,bot=h*.86,H=bot-top;
+    const prof=y=>{const u=(y-top)/H;return w*(.05+.17*Math.sin(Math.PI*Math.pow(u,.8))*(u<.12?.4+u*5:1))};
+    g.save();g.beginPath();
+    for(let y=top;y<=bot;y+=2)g.lineTo(cx-prof(y),y);
+    for(let y=bot;y>=top;y-=2)g.lineTo(cx+prof(y),y);
+    g.closePath();
+    const gr=g.createLinearGradient(cx-w*.22,0,cx+w*.22,0);
+    gr.addColorStop(0,'#c9cfd4');gr.addColorStop(.35,'#f4f1ea');gr.addColorStop(.6,'#e4e2dc');gr.addColorStop(1,'#8f969c');
+    g.fillStyle=gr;g.shadowColor='rgba(0,0,0,.5)';g.shadowBlur=24;g.fill();g.shadowBlur=0;g.clip();
+    g.strokeStyle='rgba(30,60,140,.75)';g.lineWidth=2.2;
+    for(let i=0;i<5;i++){g.beginPath();const yy=top+H*(.3+i*.12);for(let x=cx-w*.25;x<cx+w*.25;x+=4)g.lineTo(x,yy+Math.sin(x*.08+i)*6);g.stroke()}
+    g.restore();
+    // gold seams
+    g.save();g.strokeStyle='#E3BC63';g.lineWidth=1.8;g.shadowColor='rgba(255,200,90,.9)';g.shadowBlur=8+4*Math.sin(t*.002);
+    const seams=[[[-.08,.25],[.02,.42],[-.04,.6],[.06,.82]],[[.02,.42],[.15,.5]],[[-.04,.6],[-.16,.66]]];
+    seams.forEach(s=>{g.beginPath();s.forEach(([x,y],i)=>{const X=cx+x*w,Y=top+y*H;i?g.lineTo(X,Y):g.moveTo(X,Y)});g.stroke()});
+    g.restore();
+  }
+  function frame(t){
+    arts.forEach(c=>{
+      const g=c.getContext('2d'),w=c._w,h=c._h;g.clearRect(0,0,w,h);
+      if(c.dataset.art==='k'){vase(g,w,h,t)}
+      else if(c.dataset.art==='r'){
+        bokeh.forEach(b=>{const gr=g.createRadialGradient(b.x*w,b.y*h,0,b.x*w,b.y*h,b.r);gr.addColorStop(0,'hsla('+b.h+',90%,70%,.55)');gr.addColorStop(1,'hsla('+b.h+',90%,60%,0)');g.fillStyle=gr;g.beginPath();g.arc(b.x*w,b.y*h,b.r,0,7);g.fill()});
+        g.fillStyle='rgba(8,14,26,.9)';for(let i=0;i<9;i++){const bw=w/9;g.fillRect(i*bw,h*(.38+((i*37)%17)/100),bw-3,h)}
+        g.fillStyle='rgba(255,196,110,.8)';for(let i=0;i<30;i++){const x=((i*53)%97)/97*w,y=h*(.45+((i*29)%11)/100);g.fillRect(x,y,3,4)}
+        g.fillStyle='#3b230f';g.fillRect(0,h*.58,w,h*.42);
+        const lg=g.createRadialGradient(w*.25,h*.62,0,w*.25,h*.62,w*.6);lg.addColorStop(0,'rgba(255,170,80,.35)');lg.addColorStop(1,'rgba(255,170,80,0)');g.fillStyle=lg;g.fillRect(0,h*.58,w,h*.42);
+        g.fillStyle='#FFB65C';g.globalAlpha=.9;g.fillRect(w*.08,h*.66,w*.84,3);g.globalAlpha=1;
+        const nx=w*(.5+.3*Math.sin(t*.0006));g.fillStyle='#ff4d2e';g.fillRect(nx,h*.64,2,h*.06);
+        drops.forEach(d=>{if(!reduce){d.y+=d.v;if(d.y>.58){d.y=0;d.x=Math.random()}}g.strokeStyle='rgba(190,215,255,.35)';g.lineWidth=d.r*.6;g.beginPath();g.moveTo(d.x*w,d.y*h);g.lineTo(d.x*w,d.y*h-d.r*6);g.stroke()});
+      } else if(c.dataset.art==='t'){
+        g.fillStyle='rgba(255,240,210,.9)';g.beginPath();g.arc(w*.74,h*.26,h*.13,0,7);g.fill();
+        g.fillStyle='rgba(255,255,255,.6)';for(let i=0;i<30;i++){g.fillRect(((i*71)%97)/97*w,((i*43)%53)/100*h,1.3,1.3)}
+        const P=[[.18,.32],[.46,.22],[.62,.52],[.3,.6],[.52,.4],[.82,.6],[.4,.44]].map(([x,y],i)=>[x*w+Math.sin(t*.0012+i)*4,y*h+Math.cos(t*.001+i*2)*4]);
+        const E=[[0,2],[1,3],[2,4],[3,5],[4,0],[5,1],[6,2],[6,5],[0,3]];
+        g.lineCap='round';E.forEach(([a,b])=>{const mx=(P[a][0]+P[b][0])/2,my=(P[a][1]+P[b][1])/2+10;g.strokeStyle='#E0352B';g.lineWidth=2.4;g.beginPath();g.moveTo(...P[a]);g.quadraticCurveTo(mx,my,...P[b]);g.stroke()});
+        P.forEach(p=>{g.fillStyle='#F4C14E';g.beginPath();g.arc(p[0],p[1],6,0,7);g.fill();g.fillStyle='#B4231C';g.beginPath();g.arc(p[0],p[1],2.5,0,7);g.fill()});
+        g.fillStyle='#070a1a';g.beginPath();g.moveTo(0,h*.82);g.quadraticCurveTo(w*.5,h*.66,w,h*.82);g.lineTo(w,h);g.lineTo(0,h);g.fill();
+      } else if(c.dataset.art==='c'){
+        const cx=w*.6,cy=h*.42,R=Math.min(w,h)*.3;
+        g.fillStyle='rgba(0,0,0,.08)';g.beginPath();g.ellipse(cx+6,cy+10,R*1.05,R*.98,0,0,7);g.fill();
+        g.fillStyle='#FDFCF9';g.beginPath();g.arc(cx,cy,R,0,7);g.fill();
+        g.strokeStyle='rgba(120,140,160,.25)';g.lineWidth=2;g.beginPath();g.arc(cx,cy,R*.82,0,7);g.stroke();
+        const cols=['rgba(185,40,40,.5)','rgba(40,96,150,.45)','rgba(222,170,40,.45)'];
+        g.save();g.beginPath();g.arc(cx,cy,R*.8,0,7);g.clip();
+        cols.forEach((col,k)=>{g.strokeStyle=col;for(let i=0;i<6;i++){g.lineWidth=6-i*.7;g.beginPath();for(let a=0;a<6.3;a+=.1){const rr=R*(.15+.08*i+.05*k)+Math.sin(a*3+t*.0008+k)*R*.06;const X=cx+Math.cos(a+t*.0003*(k+1))*rr,Y=cy+Math.sin(a+t*.0003*(k+1))*rr;a?g.lineTo(X,Y):g.moveTo(X,Y)}g.stroke()}});
+        g.restore();
+        [['#B8322A',.12],['#2E6E9E',.24],['#E2B13C',.36]].forEach(([col,y])=>{g.fillStyle=col;g.fillRect(w*.08,h*y,w*.12,h*.08)});
+      } else if(c.dataset.art==='l'){
+        g.strokeStyle='rgba(31,58,51,.12)';g.lineWidth=1;for(let x=0;x<w;x+=18){g.beginPath();g.moveTo(x,0);g.lineTo(x,h*.62);g.stroke()}for(let y=0;y<h*.62;y+=12){g.beginPath();g.moveTo(0,y);g.lineTo(w,y);g.stroke()}
+        g.fillStyle='rgba(255,255,255,.85)';g.fillRect(w*.1,h*.08,w*.5,4);g.fillRect(w*.65,h*.08,w*.25,4);
+        g.fillStyle='#1F3A33';g.fillRect(w*.56,h*.16,w*.34,h*.12);g.fillStyle='#fff';g.font='700 12px "Noto Sans SC",sans-serif';g.fillText('青石桥',w*.6,h*.235);
+        g.fillStyle='#E8742C';g.fillRect(w*.56,h*.28,w*.34,3);
+        // umbrella
+        g.save();g.translate(w*.32,h*.5);g.rotate(-.25+Math.sin(t*.001)*.03);g.fillStyle='#2E5E8C';g.beginPath();g.moveTo(-50,0);g.quadraticCurveTo(0,-56,50,0);g.closePath();g.fill();g.strokeStyle='#5A3B22';g.lineWidth=3;g.beginPath();g.moveTo(0,-28);g.lineTo(0,40);g.arc(-7,40,7,0,Math.PI);g.stroke();g.restore();
+        // ticket
+        g.save();g.translate(w*.7,h*.66);g.rotate(.12);g.fillStyle='#FFF7E2';g.shadowColor='rgba(0,0,0,.15)';g.shadowBlur=8;g.fillRect(-34,-18,68,36);g.shadowBlur=0;g.fillStyle='#E8742C';g.fillRect(-34,-18,68,7);g.fillStyle='#1F3A33';g.fillRect(-26,0,30,3);g.fillRect(-26,7,20,3);g.fillStyle='#E9DFC6';g.beginPath();g.arc(24,4,4,0,7);g.fill();g.restore();
+      } else if(c.dataset.art==='e'){
+        g.strokeStyle='rgba(255,255,255,.05)';for(let x=0;x<w;x+=16){g.beginPath();g.moveTo(x,0);g.lineTo(x,h);g.stroke()}for(let y=0;y<h;y+=16){g.beginPath();g.moveTo(0,y);g.lineTo(w,y);g.stroke()}
+        const gy=h*.66;g.fillStyle='#2A2E36';g.fillRect(0,gy,w,h-gy);g.fillStyle='rgba(120,230,255,.6)';g.fillRect(0,gy,w,2);
+        const ph=(t*.00012)%1;
+        for(let k=3;k>=0;k--){const x=((ph+.06*(4-k))%1)*w*1.1-20,bob=Math.abs(Math.sin((ph*8+k)*Math.PI))*-10;
+          if(k===0){g.fillStyle='#FF9A3D';g.shadowColor='rgba(255,154,61,.8)';g.shadowBlur=14}else{g.fillStyle='rgba(110,225,255,'+(.55-k*.1)+')';g.shadowBlur=0}
+          const x2=x-k*34;g.beginPath();g.roundRect?g.roundRect(x2,gy-22+bob,20,20,5):g.rect(x2,gy-22+bob,20,20);g.fill();g.shadowBlur=0;
+          g.fillStyle=k===0?'#16181C':'rgba(22,24,28,.6)';g.fillRect(x2+11,gy-16+bob,3,4);g.fillRect(x2+16,gy-16+bob,3,4)}
+        g.fillStyle='#FF9A3D';g.fillRect(w*.78,gy-4,w*.1,4);
+      } else {
+        g.save();g.globalCompositeOperation='screen';
+        const bx=w*.5,by=-h*.1;const gr=g.createLinearGradient(bx,by,bx,h);gr.addColorStop(0,'rgba(255,255,240,.35)');gr.addColorStop(1,'rgba(255,255,240,0)');
+        g.fillStyle=gr;g.beginPath();g.moveTo(bx-6,by);g.lineTo(bx+w*.45,h);g.lineTo(bx-w*.45,h);g.closePath();g.fill();
+        dust.forEach(d=>{if(!reduce){d.x+=d.v;d.y-=.0004;if(d.y<0)d.y=1}g.fillStyle='rgba(255,255,255,.5)';g.fillRect(d.x*w,d.y*h,1.4,1.4)});
+        g.restore();
+        for(let i=0;i<(reduce?0:90);i++){g.fillStyle='rgba(255,255,255,'+(Math.random()*.08)+')';g.fillRect(Math.random()*w,Math.random()*h,1.5,1.5)}
+        if(!reduce&&Math.random()<.08){g.fillStyle='rgba(255,255,255,.15)';g.fillRect(Math.random()*w,0,1,h)}
+      }
+    });
+    if(!reduce)requestAnimationFrame(frame);
+  }
+  requestAnimationFrame(frame);
+})();
+</script>
+</body>
+</html>

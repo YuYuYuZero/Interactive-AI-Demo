@@ -1,0 +1,2123 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>夜航电台</title>
+<meta name="theme-color" content="#05080e">
+<meta name="description" content="夜航电台 FM 88.7：凌晨一点到五点，五通来电。你说的每一句话，都会改变陌生人天亮时的样子。">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Noto+Serif+SC:wght@400;600;900&family=VT323&display=swap" rel="stylesheet">
+<style>
+:root{
+  color-scheme: dark;
+  --bg:#05080e;
+  --ink:#f4e8d2;
+  --ink-dim:rgba(244,232,210,.62);
+  --ink-faint:rgba(244,232,210,.36);
+  --cold:#a7c0dc;
+  --amber:#ffb24a;
+  --amber-hi:#ffd99a;
+  --amber-deep:#c8681b;
+  --relay:#9fdcc0;
+  --red:#ff4a36;
+  --serif:"Noto Serif SC","Source Han Serif SC","Songti SC","STSong","SimSun",serif;
+  --digit:"VT323","IBM Plex Mono",ui-monospace,"SFMono-Regular",Menlo,Consolas,monospace;
+  --mono:"IBM Plex Mono",ui-monospace,"SFMono-Regular",Menlo,Consolas,monospace;
+}
+*{box-sizing:border-box}
+html,body{height:100%;margin:0;background:#05080e;overflow:hidden}
+body{font-family:var(--serif);color:var(--ink);-webkit-tap-highlight-color:transparent;overscroll-behavior:none;-webkit-font-smoothing:antialiased;-webkit-user-select:none;user-select:none}
+button{font:inherit;color:inherit}
+#scene{position:fixed;inset:0;width:100%;height:100%;display:block;background:#05080e}
+#app{position:fixed;inset:0;display:flex;flex-direction:column;overflow:hidden}
+
+/* ---------- HUD ---------- */
+.hud{flex:0 0 auto;display:flex;align-items:center;justify-content:space-between;gap:12px;padding:calc(10px + env(safe-area-inset-top)) calc(16px + env(safe-area-inset-right)) 6px calc(16px + env(safe-area-inset-left));position:relative;z-index:3}
+.clock{font-family:var(--digit);font-size:34px;line-height:1;color:var(--amber-hi);letter-spacing:.04em;text-shadow:0 0 10px rgba(255,170,70,.65),0 0 26px rgba(255,140,40,.25);min-width:5.2em}
+.clock small{font-size:.55em;margin-left:.35em;opacity:.75}
+.station{font-family:var(--mono);font-size:11px;letter-spacing:.32em;color:var(--ink-faint);white-space:nowrap}
+.mute{flex:0 0 auto;width:42px;height:42px;border-radius:50%;border:1px solid rgba(255,210,150,.25);background:rgba(10,12,18,.5);color:var(--amber-hi);display:grid;place-items:center;cursor:pointer;transition:background .2s,border-color .2s}
+.mute:hover,.mute:focus-visible{background:rgba(255,180,90,.14);border-color:rgba(255,210,150,.55);outline:none}
+.mute svg{width:20px;height:20px}
+.mute .off{display:none}
+.mute[aria-pressed="true"] .on{display:none}
+.mute[aria-pressed="true"] .off{display:block}
+
+/* ---------- stage / subtitles ---------- */
+.stage{flex:1 1 auto;min-height:0;display:flex;flex-direction:column;justify-content:flex-end;align-items:center;padding:6px calc(16px + env(safe-area-inset-right)) 16px calc(16px + env(safe-area-inset-left));position:relative;z-index:2;cursor:default}
+.subtitle{position:relative;width:100%;max-width:760px;max-height:100%;overflow-y:auto;overscroll-behavior:contain;padding:16px 18px 16px;border-radius:14px;
+  background:linear-gradient(180deg,rgba(16,13,10,.80),rgba(8,8,11,.88));
+  border:1px solid rgba(255,190,110,.18);
+  box-shadow:0 24px 60px rgba(0,0,0,.55),inset 0 1px 0 rgba(255,220,170,.08);
+  opacity:0;transform:translateY(8px);transition:opacity .6s,transform .6s}
+.subtitle.show{opacity:1;transform:none}
+.subtitle::before{content:"";position:absolute;left:18px;right:18px;top:0;height:1px;background:linear-gradient(90deg,transparent,rgba(255,190,110,.55),transparent)}
+.np{position:absolute;right:14px;top:12px;display:flex;align-items:center;gap:8px;font-size:12px;color:var(--ink-dim);max-width:48%}
+.np span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.np[hidden]{display:none}
+.np-disc{flex:0 0 auto;width:16px;height:16px;border-radius:50%;background:radial-gradient(circle,var(--amber) 0 2px,#111 2.5px 4px,#222 4px 5px,#111 5px);animation:spin 1.8s linear infinite}
+.prev{font-size:13px;line-height:1.6;color:var(--ink-faint);margin:0 0 6px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-height:1.6em;padding-right:40%}
+.who{font-family:var(--mono);font-size:12px;letter-spacing:.16em;color:var(--amber);display:flex;gap:10px;align-items:baseline;min-height:18px;margin-bottom:6px}
+.who .freq{font-family:var(--digit);font-size:16px;letter-spacing:.06em;color:rgba(255,190,110,.55)}
+.who.host{color:var(--amber-hi)}
+.line{font-size:clamp(17px,4.5vw,21px);line-height:1.8;letter-spacing:.02em;min-height:3.6em;color:var(--ink);text-shadow:0 0 18px rgba(255,180,90,.10);-webkit-user-select:text;user-select:text}
+.line.narr{color:var(--cold)}
+.line.host{color:var(--amber-hi)}
+.caret{display:inline-block;width:0;height:0;border-left:5px solid transparent;border-right:5px solid transparent;border-top:7px solid var(--amber);margin-left:10px;vertical-align:middle;animation:bob 1.1s ease-in-out infinite}
+.choices{display:grid;gap:8px;margin-top:10px}
+.choices:empty{display:none}
+.choice{display:flex;gap:10px;align-items:flex-start;text-align:left;width:100%;padding:11px 14px;border-radius:10px;border:1px solid rgba(255,200,130,.22);background:rgba(255,190,110,.05);font-size:16px;line-height:1.6;cursor:pointer;transition:background .2s,border-color .2s,transform .2s;animation:rise .45s both}
+.choice:hover,.choice:focus-visible{background:rgba(255,180,90,.14);border-color:rgba(255,200,130,.55);outline:none}
+.choice:active{transform:scale(.99)}
+.tag{flex:0 0 auto;font-family:var(--mono);font-size:11px;letter-spacing:.08em;padding:2px 8px;border-radius:999px;border:1px solid rgba(255,190,110,.42);color:var(--amber);margin-top:3px;white-space:nowrap}
+.tag[data-k="沉默"],.tag[data-k="等待"]{color:var(--cold);border-color:rgba(167,192,220,.45)}
+.tag[data-k="转述"],.tag[data-k="替他开口"],.tag[data-k="追问"]{color:var(--relay);border-color:rgba(159,220,192,.45)}
+.tag[data-k="挂断"]{color:#ff8a7a;border-color:rgba(255,138,122,.45)}
+.records{display:grid;gap:10px;margin-top:12px;grid-template-columns:1fr}
+.record{display:flex;gap:14px;align-items:center;text-align:left;width:100%;padding:10px 12px;border-radius:10px;border:1px solid rgba(255,200,130,.2);background:rgba(255,190,110,.04);cursor:pointer;transition:background .2s,border-color .2s;animation:rise .45s both}
+.record:hover,.record:focus-visible{background:rgba(255,180,90,.12);border-color:rgba(255,200,130,.5);outline:none}
+.rec-art{position:relative;flex:0 0 auto;width:64px;height:64px}
+.rec-art .disc{position:absolute;top:5%;left:22%;width:90%;height:90%;border-radius:50%;background:radial-gradient(circle,#c98a3a 0 8%,#111 9% 11%,transparent 12%),repeating-radial-gradient(circle,#141414 0 1px,#232323 1px 2.5px);box-shadow:0 2px 6px rgba(0,0,0,.6);transition:left .35s}
+.record:hover .disc,.record:focus-visible .disc{left:36%}
+.sleeve{position:absolute;inset:0;border-radius:3px;box-shadow:0 4px 12px rgba(0,0,0,.55),inset 0 0 0 1px rgba(255,255,255,.08);overflow:hidden}
+.sleeve em{position:absolute;left:6px;bottom:4px;font-style:normal;font-family:var(--digit);font-size:12px;color:rgba(255,255,255,.7);letter-spacing:.05em}
+.rmeta{display:flex;flex-direction:column;gap:3px;min-width:0}
+.rtitle{font-weight:600;font-size:16px}
+.rdesc{font-size:13px;color:var(--ink-dim);line-height:1.55}
+@media (min-width:760px){
+  .records{grid-template-columns:repeat(3,1fr)}
+  .record{flex-direction:column;align-items:flex-start}
+  .rec-art{width:72%;height:auto;aspect-ratio:1}
+}
+
+/* ---------- console ---------- */
+.console{position:relative;flex:0 0 auto;z-index:3;background-color:#3a2114;background-image:linear-gradient(180deg,rgba(255,200,140,.10),rgba(0,0,0,0) 30%,rgba(0,0,0,.35)),var(--wood,none);background-size:100% 100%,1024px 256px;border-top:1px solid rgba(255,214,150,.4);box-shadow:0 -22px 46px rgba(0,0,0,.6),inset 0 2px 0 rgba(255,220,170,.16)}
+.console::before{content:"";position:absolute;left:0;right:0;top:-9px;height:9px;background:linear-gradient(180deg,rgba(40,22,12,0),#2a170c 70%,#6b4428);pointer-events:none}
+.console::after{content:"";position:absolute;inset:-80px 0 0 0;background:radial-gradient(ellipse 55% 85% at 86% 0%,rgba(255,168,80,.34),rgba(255,140,60,.08) 55%,transparent 72%);pointer-events:none;mix-blend-mode:screen}
+.lamp{display:none;position:absolute;right:5%;top:-96px;width:150px;height:96px;pointer-events:none;z-index:4}
+.lamp::before{content:"";position:absolute;left:0;right:0;top:20px;height:46px;background:linear-gradient(180deg,#24382b,#13221a 70%,#0b140f);clip-path:polygon(18% 0,82% 0,100% 100%,0 100%);box-shadow:inset 0 0 0 1px #000}
+.lamp::after{content:"";position:absolute;left:-8%;right:-8%;top:62px;height:8px;border-radius:50%;background:radial-gradient(ellipse at 50% 30%,#fff2cf,#ffbf66 40%,rgba(255,160,60,0) 72%);filter:blur(1px)}
+.lamp i{position:absolute;left:50%;top:0;width:4px;height:22px;margin-left:-2px;background:linear-gradient(90deg,#6d4b1c,#e6bf6e,#6d4b1c)}
+@media (min-width:1100px){.lamp{display:block}}
+.panel{position:relative;z-index:1;max-width:980px;margin:0 auto;padding:12px calc(16px + env(safe-area-inset-right)) calc(10px + env(safe-area-inset-bottom)) calc(16px + env(safe-area-inset-left));display:flex;flex-direction:column;gap:10px}
+.meters{display:flex;align-items:center;gap:10px}
+.spacer{flex:1}
+.onair{font-family:var(--mono);font-weight:500;font-size:11px;letter-spacing:.2em;padding:6px 9px;border-radius:4px;background:#2a0d0a;color:#6b2a24;border:1px solid #120403;box-shadow:inset 0 1px 3px rgba(0,0,0,.85),0 1px 0 rgba(255,220,170,.12);transition:all .35s;white-space:nowrap}
+.onair.on{background:radial-gradient(ellipse at 50% 40%,#ff6a4a,#c21b10 75%);color:#fff4ea;text-shadow:0 0 6px rgba(255,255,255,.8);box-shadow:0 0 16px rgba(255,60,40,.75),0 0 44px rgba(255,60,40,.3),inset 0 1px 0 rgba(255,220,200,.6)}
+.calllamp{display:flex;align-items:center;gap:6px;font-size:12px;color:var(--ink-dim);white-space:nowrap}
+.calllamp i{width:14px;height:14px;border-radius:50%;background:radial-gradient(circle at 40% 35%,#6b4a1c,#2a1806);box-shadow:inset 0 -2px 3px rgba(0,0,0,.6),0 0 0 2px #1c1009}
+.calllamp i.lit{background:radial-gradient(circle at 40% 35%,#fff3c8,#ffb24a 45%,#d0700f);box-shadow:0 0 12px rgba(255,170,60,.9),0 0 0 2px #1c1009}
+.readout{font-family:var(--digit);font-size:26px;line-height:1;color:var(--amber-hi);background:#140b04;padding:4px 10px 2px;border-radius:4px;box-shadow:inset 0 2px 7px rgba(0,0,0,.9),0 1px 0 rgba(255,220,170,.14);text-shadow:0 0 8px rgba(255,170,70,.85);white-space:nowrap;min-width:5.4em;text-align:center}
+.eye{width:44px;height:44px;flex:0 0 auto}
+.vu{width:104px;height:58px;flex:0 0 auto;border-radius:5px;box-shadow:0 0 0 2px #1a0e06,0 0 0 3px #a87d3a,0 2px 10px rgba(0,0,0,.6)}
+.tuner{display:flex;gap:14px;align-items:center}
+.dial{position:relative;flex:1 1 auto;min-width:0;height:clamp(64px,10vh,88px);border-radius:8px;overflow:hidden;cursor:grab;touch-action:none;outline:none;
+  box-shadow:inset 0 0 0 2px #1a0d05,0 0 0 3px #b98a3e,0 0 0 4px #3a220e,0 6px 16px rgba(0,0,0,.55),0 0 26px rgba(255,160,60,.25);transition:box-shadow .4s}
+.dial:active{cursor:grabbing}
+.dial:focus-visible{box-shadow:inset 0 0 0 2px #1a0d05,0 0 0 3px #ffd99a,0 0 0 4px #3a220e,0 0 30px rgba(255,190,90,.55)}
+.dial canvas{width:100%;height:100%;display:block}
+.tuning .dial{box-shadow:inset 0 0 0 2px #1a0d05,0 0 0 3px #d8a650,0 0 0 4px #3a220e,0 6px 16px rgba(0,0,0,.55),0 0 40px rgba(255,170,70,.5)}
+.knob{position:relative;flex:0 0 auto;width:clamp(76px,21vw,104px);aspect-ratio:1;border-radius:50%;touch-action:none;cursor:grab;box-shadow:0 10px 20px rgba(0,0,0,.6),0 0 0 3px #22140a,0 0 0 4px rgba(255,210,150,.12)}
+.knurl{position:absolute;inset:0;border-radius:50%;background:repeating-conic-gradient(from 0deg,#5d3d14 0 5deg,#d7ac5c 5deg 10deg)}
+.cap{position:absolute;inset:10%;border-radius:50%;background:radial-gradient(circle at 34% 28%,#fff3cf 0,#ebc271 16%,#b6852f 46%,#5e3b10 100%);box-shadow:inset 0 -5px 9px rgba(0,0,0,.5),inset 0 3px 4px rgba(255,240,200,.6),0 2px 3px rgba(0,0,0,.5)}
+.markrot{position:absolute;inset:10%;border-radius:50%}
+.markrot i{position:absolute;left:50%;top:7%;width:5px;height:26%;margin-left:-2.5px;border-radius:3px;background:#2a1606;box-shadow:0 1px 0 rgba(255,230,180,.5)}
+.hint{font-size:12px;color:var(--ink-faint);text-align:center;letter-spacing:.08em;min-height:1.5em;line-height:1.5}
+.tuning .hint{color:var(--amber-hi);animation:pulse 2.2s ease-in-out infinite}
+@media (max-width:520px){
+  .clock{font-size:30px}
+  .station{display:none}
+  .readout{font-size:22px;min-width:4.6em;padding:4px 6px 2px}
+  .vu{width:84px;height:48px}
+  .eye{width:38px;height:38px}
+  .onair{font-size:10px;padding:5px 7px;letter-spacing:.14em}
+  .calllamp span{display:none}
+  .panel{gap:8px;padding-top:10px}
+}
+@media (max-width:380px){.meters{gap:7px}.vu{width:72px;height:42px}.eye{width:34px;height:34px}.readout{min-width:0;font-size:20px}}
+@media (max-height:640px){.dial{height:58px}.knob{width:70px}.hint{display:none}}
+
+/* ---------- title ---------- */
+.title{position:fixed;inset:0;z-index:20;display:grid;place-items:center;text-align:center;padding:24px 16px;background:radial-gradient(ellipse at 50% 42%,rgba(5,8,14,.15),rgba(5,8,14,.86) 75%);transition:opacity 1.4s ease}
+.title.gone{opacity:0;pointer-events:none}
+.title .inner{max-width:640px}
+.kick{font-family:var(--mono);font-size:11px;letter-spacing:.42em;color:var(--ink-faint);margin-bottom:18px}
+.title h1{font-weight:900;font-size:clamp(54px,15vw,128px);line-height:1.08;letter-spacing:.16em;margin:0 0 0 .16em;color:#fbe9cc;text-shadow:0 0 28px rgba(255,170,80,.45),0 0 90px rgba(255,140,50,.22)}
+.fm{font-family:var(--digit);font-size:clamp(30px,7.5vw,50px);color:var(--amber);letter-spacing:.24em;margin-top:6px;text-shadow:0 0 10px rgba(255,170,70,.9),0 0 32px rgba(255,140,40,.5);animation:flicker 7s infinite}
+.tagline{font-size:clamp(16px,4.3vw,20px);color:var(--ink-dim);letter-spacing:.22em;margin:30px 0 38px}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:10px;min-width:150px;padding:14px 28px;border-radius:999px;border:1px solid rgba(255,214,150,.6);background:radial-gradient(ellipse at 50% 30%,rgba(255,190,100,.32),rgba(200,104,27,.18));color:#fff3df;font-size:18px;letter-spacing:.3em;cursor:pointer;box-shadow:0 0 30px rgba(255,160,60,.25),inset 0 1px 0 rgba(255,240,210,.35);transition:transform .2s,box-shadow .3s,background .3s}
+.btn:hover,.btn:focus-visible{outline:none;transform:translateY(-1px);box-shadow:0 0 44px rgba(255,170,70,.45),inset 0 1px 0 rgba(255,240,210,.45)}
+.btn .dot{width:8px;height:8px;border-radius:50%;background:var(--red);box-shadow:0 0 10px var(--red)}
+.btn.ghost{background:transparent;border-color:rgba(255,214,150,.3);letter-spacing:.16em;font-size:16px;box-shadow:none}
+.small{font-family:var(--mono);font-size:11px;color:var(--ink-faint);letter-spacing:.14em;margin-top:24px;line-height:1.9}
+
+/* ---------- ending ---------- */
+.ending{position:fixed;inset:0;z-index:30;overflow-y:auto;-webkit-overflow-scrolling:touch;overscroll-behavior:contain;background:linear-gradient(180deg,rgba(12,16,28,.20),rgba(6,8,14,.80) 34%,rgba(6,8,14,.94));opacity:0;pointer-events:none;transition:opacity 1.8s ease;-webkit-user-select:text;user-select:text}
+.ending.show{opacity:1;pointer-events:auto}
+.ending .wrap{max-width:760px;margin:0 auto;padding:calc(56px + env(safe-area-inset-top)) calc(18px + env(safe-area-inset-right)) calc(48px + env(safe-area-inset-bottom)) calc(18px + env(safe-area-inset-left))}
+.e-kick{font-family:var(--digit);font-size:24px;color:var(--amber-hi);letter-spacing:.12em;text-shadow:0 0 10px rgba(255,170,70,.5)}
+.e-title{font-size:clamp(32px,8.6vw,56px);font-weight:900;letter-spacing:.06em;line-height:1.25;margin:8px 0 10px;color:#fff1da}
+.e-badge{display:inline-block;font-family:var(--mono);font-size:11px;letter-spacing:.18em;padding:4px 10px;border-radius:999px;border:1px solid rgba(255,190,110,.4);color:var(--amber)}
+.e-badge.hidden{color:#fff3d6;border-color:#ffd99a;background:rgba(255,190,100,.16);box-shadow:0 0 18px rgba(255,190,100,.35)}
+.e-text{margin:22px 0 8px}
+.e-text p{font-size:17px;line-height:2;margin:0 0 12px;color:var(--ink)}
+.sec{font-size:15px;font-weight:600;letter-spacing:.2em;color:var(--amber-hi);margin:34px 0 12px}
+.threads{display:grid;gap:8px;grid-template-columns:1fr}
+@media (min-width:620px){.threads{grid-template-columns:1fr 1fr}}
+.thread{padding:12px 14px;border-radius:10px;border:1px solid rgba(255,200,130,.13);background:rgba(255,255,255,.025)}
+.thread .t-h{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.thread b{font-weight:600;font-size:15px}
+.thread .pair{font-family:var(--mono);font-size:11px;color:var(--ink-faint);letter-spacing:.06em}
+.thread .dot{width:9px;height:9px;border-radius:50%;background:#2c2721;box-shadow:inset 0 0 0 1px rgba(255,255,255,.08)}
+.thread.on{border-color:rgba(255,190,110,.35);background:rgba(255,180,90,.06)}
+.thread.on .dot{background:var(--amber);box-shadow:0 0 10px var(--amber)}
+.thread p{margin:6px 0 0;font-size:14px;line-height:1.7;color:var(--ink-dim)}
+.secret{font-size:14px;line-height:1.8;color:var(--cold);margin:14px 0 0}
+.board-head{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:8px 12px;margin:38px 0 4px}
+.board-head .sec{margin:0}
+.note{font-family:var(--mono);font-size:11px;letter-spacing:.12em;padding:5px 9px;border:1px dashed rgba(255,190,110,.55);color:var(--amber);border-radius:4px}
+.shots{list-style:none;margin:8px 0 0;padding:0}
+.shot{display:grid;grid-template-columns:44px 1fr;gap:2px 12px;padding:14px 0;border-top:1px solid rgba(255,220,170,.10)}
+.shot .no{font-family:var(--digit);font-size:26px;line-height:1.1;color:rgba(255,190,110,.75);grid-row:span 3}
+.shot .size{font-family:var(--mono);font-size:12px;color:var(--amber);letter-spacing:.18em}
+.shot .pic{font-size:16px;line-height:1.8;margin:2px 0 0}
+.shot .snd{font-size:14px;line-height:1.7;color:var(--cold);margin:2px 0 0}
+.shot .snd b{font-weight:400;font-family:var(--mono);font-size:11px;letter-spacing:.12em;margin-right:6px;opacity:.75}
+.actions{display:flex;gap:12px;flex-wrap:wrap;margin-top:30px}
+.collect{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}
+.chip{font-size:13px;padding:5px 11px;border-radius:999px;border:1px solid rgba(255,200,130,.2);color:var(--ink-dim)}
+.chip.got{color:var(--ink);border-color:rgba(255,190,110,.45);background:rgba(255,180,90,.08)}
+.chip.lock{color:var(--ink-faint);border-style:dashed}
+.toast{font-family:var(--mono);font-size:12px;color:var(--relay);margin-left:4px;align-self:center}
+
+@keyframes bob{0%,100%{transform:translateY(0);opacity:.55}50%{transform:translateY(3px);opacity:1}}
+@keyframes rise{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+@keyframes spin{to{transform:rotate(360deg)}}
+@keyframes pulse{0%,100%{opacity:.6}50%{opacity:1}}
+@keyframes flicker{0%,92%,100%{opacity:1}93%{opacity:.55}94%{opacity:1}96%{opacity:.7}97%{opacity:1}}
+@media (prefers-reduced-motion: reduce){
+  *,*::before,*::after{animation-duration:.001ms!important;animation-iteration-count:1!important;transition-duration:.2s!important}
+  .np-disc{animation:none}
+}
+</style>
+</head>
+<body>
+<canvas id="scene" aria-hidden="true"></canvas>
+
+<div id="app">
+  <header class="hud">
+    <div class="clock" id="clock">1:00<small>AM</small></div>
+    <div class="station">FM 88.7 · 夜航</div>
+    <button class="mute" id="mute" type="button" aria-label="静音" aria-pressed="false">
+      <svg class="on" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 9.5h3.5L12 5.5v13l-4.5-4H4z"/><path d="M15.5 9a4 4 0 0 1 0 6"/><path d="M18 6.5a7.5 7.5 0 0 1 0 11"/></svg>
+      <svg class="off" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 9.5h3.5L12 5.5v13l-4.5-4H4z"/><path d="M16 9.5l5 5M21 9.5l-5 5"/></svg>
+    </button>
+  </header>
+
+  <main class="stage" id="stage">
+    <div class="subtitle" id="subtitle" aria-live="polite">
+      <div class="np" id="np" hidden><i class="np-disc"></i><span id="npTitle"></span></div>
+      <div class="prev" id="prev"></div>
+      <div class="who" id="who"></div>
+      <div class="line" id="line"></div>
+      <div class="choices" id="choices"></div>
+    </div>
+  </main>
+
+  <section class="console" id="console" aria-label="电台控制台">
+    <div class="lamp" aria-hidden="true"><i></i></div>
+    <div class="panel">
+      <div class="meters">
+        <div class="onair" id="onair">ON AIR</div>
+        <div class="calllamp"><i id="bulb"></i><span>来电</span></div>
+        <div class="readout" id="readout">FM 88.7</div>
+        <div class="spacer"></div>
+        <canvas class="eye" id="eye" aria-hidden="true"></canvas>
+        <canvas class="vu" id="vu" aria-hidden="true"></canvas>
+      </div>
+      <div class="tuner">
+        <div class="dial" id="dial" tabindex="0" role="slider" aria-label="调频刻度，左右拖动或用方向键调谐" aria-valuemin="87.5" aria-valuemax="108" aria-valuenow="88.7"><canvas id="dialCv"></canvas></div>
+        <div class="knob" id="knob" aria-hidden="true"><div class="knurl" id="knurl"></div><div class="cap"></div><div class="markrot" id="markrot"><i></i></div></div>
+      </div>
+      <div class="hint" id="hint">雨夜 · 直播间 · 控制台待机中</div>
+    </div>
+  </section>
+</div>
+
+<div class="title" id="title">
+  <div class="inner">
+    <div class="kick">凌晨一点 · 暴雨 · 直播中</div>
+    <h1>夜航电台</h1>
+    <div class="fm">FM 88.7</div>
+    <p class="tagline">今晚，有五个人睡不着。</p>
+    <button class="btn" id="startBtn" type="button"><i class="dot"></i>接通</button>
+    <p class="small" id="titleNote">建议戴上耳机 · 声音会在点击后开启</p>
+  </div>
+</div>
+
+<div class="ending" id="ending" aria-live="polite"><div class="wrap" id="endWrap"></div></div>
+
+<!-- =====================================================================
+     剧本层：纯数据 + 纯逻辑，不碰 DOM（可在 node 里单独加载做剧本图检查）
+     结构：来电者(CALLERS) → 节点(NODES) → 选项(choices) → 状态影响(set / add)
+     ===================================================================== -->
+<script id="story">
+'use strict';
+
+function mulberry32(a){ return function(){ a|=0; a=a+0x6D2B79F5|0; let t=Math.imul(a^a>>>15,1|a); t=t+Math.imul(t^t>>>7,61|t)^t; return ((t^t>>>14)>>>0)/4294967296; }; }
+
+/* 来电者人设：ScriptedEngine 只用 name/role/freq；persona 留给 LLMEngine 作提示词 */
+const CALLERS = {
+  host: { name:'你', role:'代班主持' },
+  narr: { name:'', role:'' },
+  zhou: { name:'老周', role:'夜班出租车司机', freq:101.4,
+    persona:'五十出头，跑了十几年夜班出租。嗓门大，但说到女儿就收着。口头禅“没啥”。女儿朵朵今天七岁。车坏在东环高架槐安里出口底下，正对七号楼。' },
+  lin:  { name:'小林', role:'夜班护士', freq:95.2,
+    persona:'二十七岁，第二人民医院住院部护士，住槐安里。说话轻，习惯先说“也没什么事”。刚送走照顾了三个月的苏秀英奶奶。苏奶奶生前托她给“点歌的陈老头”带一句话。' },
+  zhe:  { name:'阿哲', role:'复读生', freq:105.8,
+    persona:'十九岁，第二年复读，住槐安里八号楼五层。嘴硬，怕被可怜，会用玩笑挡话。每晚听见对面七号楼一位老人放同一首老歌。' },
+  chen: { name:'陈伯', role:'独居老人', freq:91.3,
+    persona:'七十六岁，修车厂退休钳工，住槐安里七号楼三层。亡妻小梅走了九年，他每晚给她点《第三排的槐花》。明早搬去养老院，唱机带不走。' },
+  mute: { name:'？？？', role:'只有雨声', freq:88.7,
+    persona:'不说话的来电者。真实身份由前面的选择决定：朵朵 / 阿哲 / 小林。' },
+  duo:  { name:'朵朵', role:'老周的女儿，今天七岁',
+    persona:'七岁，用爸爸淘汰的旧手机偷偷打进来。说话认真，句子短，喜欢纠正大人。' },
+};
+
+/* 唱片架：虚构歌名 + 一句介绍 + 合成参数（由 WebAudio 音序器实时合成） */
+const SONGS = {
+  liangmianjiao:{ title:'两面焦', desc:'轻快的口琴小调。写给早餐，和赶路的人。', art:['#c8642b','#f6d27a','sun'],
+    bpm:116, meter:4, key:67, mode:'major', timbre:'harmonica', accomp:'pluck', atim:'guitar', prog:[1,4,5,1,1,4,5,1], seed:11 },
+  gaojia:{ title:'高架下的雨', desc:'慢板电钢琴，像雨刮器一样，一下，一下。', art:['#1d2b44','#7fa6d8','rain'],
+    bpm:76, meter:4, key:69, mode:'minor', timbre:'epiano', accomp:'block', atim:'epiano', prog:[1,6,3,7,1,6,4,5], seed:5, lo:-2, hi:9 },
+  xiaoxiang:{ title:'小象的早餐', desc:'八音盒童谣，七岁的孩子都会哼。', art:['#f2c6c2','#7a4a8c','dots'],
+    bpm:112, meter:3, key:72, mode:'major', timbre:'musicbox', accomp:'arp', atim:'musicbox', prog:[1,5,1,4,1,5,1,1], seed:21 },
+  huaihua:{ title:'第三排的槐花', desc:'一首老歌，有一句唱“槐花落在第三排”。', art:['#5a3b22','#efdcae','moon'],
+    bpm:138, meter:3, key:65, mode:'major', timbre:'piano', double:'strings', accomp:'waltz', lofi:true, vinyl:true,
+    melody:"3:2 5:1 | 6:2 5:1 | 3:2 2:1 | 1:3 | 2:2 3:1 | 5:2 6:1 | 5:2 3:1 | 2:3 | 3:2 5:1 | 1':2 6:1 | 5:2 3:1 | 6,:3 | 1:2 6,:1 | 5,:1.5 7,:0.5 2:1 | 3:2 2:1 | 1:3",
+    prog:[1,4,1,1,5,5,1,5,1,4,1,6,4,5,1,1] },
+  tang:{ title:'白大褂口袋里的糖', desc:'温柔的木吉他，写给值夜班的人。', art:['#e9e4d8','#d46b6b','stripes'],
+    bpm:88, meter:4, key:64, mode:'major', timbre:'guitar', accomp:'pluck', atim:'guitar', prog:[1,5,6,4,1,5,4,1], seed:33 },
+  louti:{ title:'楼梯间', desc:'只有大提琴和回声，适合不想说话的时候。', art:['#20242b','#9aa7b8','grid'],
+    bpm:66, meter:4, key:50, mode:'minor', timbre:'cello', accomp:'sparse', atim:'pad', prog:[1,6,4,5,1,6,4,1], seed:8, sparse:true, lo:0, hi:9 },
+  caogao:{ title:'草稿纸', desc:'铅笔一样的合成器节奏，写给还在演算的人。', art:['#d9d4c3','#2c3e50','grid'],
+    bpm:104, meter:4, key:62, mode:'dorian', timbre:'synth', accomp:'arp', atim:'synth', prog:[1,4,1,5,1,4,7,1], seed:44 },
+  budi:{ title:'不必是第一名', desc:'慢一点的钢琴，没有歌词。', art:['#2e3a56','#f0c987','wave'],
+    bpm:80, meter:4, key:60, mode:'major', timbre:'piano', accomp:'block', atim:'piano', prog:[1,6,4,5,1,6,4,1], seed:52 },
+  fangzhi:{ title:'纺织厂的下午', desc:'手风琴华尔兹，那个年代的午休时间。', art:['#7b2f2f','#f1d9a6','stripes'],
+    bpm:144, meter:3, key:62, mode:'major', timbre:'accordion', accomp:'waltz', lofi:true, vinyl:true, prog:[1,1,5,5,5,5,1,1,1,4,1,6,2,5,1,1], seed:61 },
+  banjia:{ title:'搬家', desc:'很轻的钢琴，像把东西一件件装进箱子。', art:['#b9a68a','#3b2f2a','moon'],
+    bpm:70, meter:4, key:63, mode:'major', timbre:'piano', accomp:'sparse', atim:'piano', sparse:true, prog:[1,4,1,5,6,4,5,1], seed:70 },
+  qisui:{ title:'七岁', desc:'八音盒版的生日歌，是这个电台自己写的。', art:['#ffd6a0','#e0567a','dots'],
+    bpm:104, meter:3, key:72, mode:'major', timbre:'musicbox', accomp:'arp', atim:'musicbox',
+    melody:"5:1 3:1 5:1 | 1':3 | 6:1 5:1 3:1 | 5:3 | 4:1 3:1 2:1 | 3:1 5:1 1':1 | 7:2 2':1 | 1':3", prog:[1,1,4,1,5,1,5,1] },
+  tiankuai:{ title:'天快亮了', desc:'电钢琴和很远的鼓点，适合熬到四点的人。', art:['#3c4f7a','#ffb27a','sun'],
+    bpm:90, meter:4, key:65, mode:'major', timbre:'epiano', accomp:'block', atim:'epiano', kick:true, prog:[4,5,1,6,4,5,1,1], seed:81 },
+  huijia:{ title:'回家的路', desc:'木吉他。十分钟的路，慢慢走。', art:['#2f4a3a','#e8d9a8','wave'],
+    bpm:96, meter:4, key:67, mode:'major', timbre:'guitar', accomp:'pluck', atim:'guitar', prog:[1,5,4,1,6,4,5,1], seed:90 },
+};
+
+/*
+  节点类型：
+   - 台词节点  { call, t, lines:[{who,text,if?}], choices?:[{tag,text,say?,if?,set?,add?,next}], next? }
+   - 点歌节点  { song:true, call, prompt, records:[{id,desc?,set?,add?}], next }
+   - 调频节点  { tune:'<caller>', label, next }   —— 两通电话之间，玩家要调到目标频率
+   - 分支节点  { set?, branch:[{if?, next}] }
+   - 结局节点  { ending:true }
+  t = 距凌晨 1:00 的分钟数（左上角时钟）
+  choice.say：主持人实际说出口的话；缺省 = text；null = 不出声（沉默 / 等待 / 挂断）
+*/
+const NODES = {
+  intro: { t:0, lines:[
+    { who:'narr', if:s=>!s.replay, text:'凌晨一点。雨从傍晚下到现在，没有要停的意思。' },
+    { who:'narr', if:s=>s.replay, text:'又是凌晨一点。雨还在下，像是从来没停过。' },
+    { who:'narr', text:'老许病了，台里让你来代班。这档《夜航》，月底就停播了。' },
+    { who:'narr', text:'导播下楼买烟去了。直播间里只剩你、一盏台灯，和一台比你年纪还大的控制台。' },
+    { who:'narr', text:'这台老机器接线要手动调谐。来电灯亮的时候，转动旋钮，或者左右拖动琥珀色的刻度，去找那个信号。' },
+  ], next:'tune_zhou' },
+
+  /* ============ 第一通：老周 ============ */
+  tune_zhou: { tune:'zhou', t:5, label:'第一通来电', next:'zhou_1' },
+  zhou_1: { call:'zhou', t:7, lines:[
+    { who:'narr', text:'（电话那头是雨刮器的声音，一下，一下。）' },
+    { who:'zhou', text:'喂？通了？……哦，通了。我开出租的，姓周，叫我老周就行。' },
+    { who:'zhou', text:'车刚在东环高架底下熄火了，怎么也打不着。拖车说雨太大，得等天亮。' },
+    { who:'zhou', text:'本来也没啥。就是今天我闺女过生日，七岁，叫朵朵。' },
+    { who:'zhou', text:'我答应她，早上回去陪她吃早饭。她点名要我煎的蛋，两面都要焦一点。' },
+  ], choices:[
+    { tag:'倾听', text:'两面焦一点的蛋。她挺会吃的。', add:{zhou_warm:1}, next:'zhou_2a' },
+    { tag:'给建议', text:'要不先打个车回去？车放那儿，天亮再说。', next:'zhou_2b' },
+    { tag:'开玩笑', text:'出租车司机打不着车——这是我今晚听过最好的段子。', add:{zhou_warm:1}, next:'zhou_2c' },
+  ]},
+  zhou_2a: { call:'zhou', t:9, lines:[
+    { who:'zhou', text:'她就那样，嘴刁，随她妈。' },
+    { who:'narr', text:'（他笑了一下，又不笑了。）' },
+    { who:'zhou', text:'跑夜班这一年，我跟她说话的时候，她都睡着了。说好这回一定。结果你看。' },
+  ], next:'zhou_3' },
+  zhou_2b: { call:'zhou', t:9, lines:[
+    { who:'zhou', text:'想过。可这车是我跟人对班的，白班的兄弟六点要接。我扔这儿一走，他今天就跑不成了。' },
+    { who:'zhou', text:'再说这个点、这个雨，打车的人比车多。' },
+  ], next:'zhou_3' },
+  zhou_2c: { call:'zhou', t:9, lines:[
+    { who:'narr', text:'（他愣了一下，然后真笑出了声。）' },
+    { who:'zhou', text:'你还别说，我刚才也这么想的。' },
+    { who:'zhou', text:'笑一下好多了。就是心里还悬着。' },
+  ], next:'zhou_3' },
+  zhou_3: { call:'zhou', t:12, lines:[
+    { who:'zhou', text:'你说，我是走回去，还是在这儿守着？' },
+    { who:'zhou', text:'走回去两个多钟头，兴许赶得上。守着呢，等天亮修好了再开回去，就不知道几点了。' },
+  ], choices:[
+    { tag:'给建议', text:'守着吧。把双闪打开，别让后面的车撞上你——也让人知道，这儿有人。', set:{zhou_stay:true, zhou_light:true}, next:'zhou_4' },
+    { tag:'给建议', text:'走吧。人比车要紧。她要的是你，不是车。', set:{zhou_walk:true}, next:'zhou_4' },
+    { tag:'沉默', text:'（不说话，让他自己想。）', say:null, set:{zhou_stay:true}, next:'zhou_4' },
+  ]},
+  zhou_4: { call:'zhou', t:14, lines:[
+    { who:'zhou', if:s=>s.zhou_light, text:'行，听你的。双闪开着呢，一闪一闪的，跟过年似的。' },
+    { who:'zhou', if:s=>s.zhou_walk, text:'……嗯。我再坐会儿，等雨小一点就走。' },
+    { who:'zhou', if:s=>s.zhou_stay && !s.zhou_light, text:'……你不说话，我反倒想明白了。我守着。电瓶不多了，灯就不开了。' },
+    { who:'zhou', text:'对了，你们这儿还能点歌吗？' },
+  ], choices:[
+    { tag:'替他开口', text:'能。要不要我在节目里，替你跟朵朵说一声生日快乐？', set:{duo_heard:true}, next:'zhou_5a' },
+    { tag:'倾听', text:'能。你想听什么？我去唱片架上找找。', next:'zhou_song' },
+    { tag:'开玩笑', text:'能。点歌费是一个两面焦的煎蛋。', add:{zhou_warm:1}, next:'zhou_5c' },
+  ]},
+  zhou_5a: { call:'zhou', t:15, lines:[
+    { who:'zhou', text:'她这会儿肯定睡着了。不过她妈厨房那台收音机，一直开着你们这个台，说是听着，就像我在路上。' },
+    { who:'zhou', text:'……那你说吧。' },
+    { who:'host', text:'朵朵，生日快乐。你爸爸在路上。他记得，蛋要两面焦。' },
+    { who:'narr', text:'（电话那头很久没有声音。然后是很重的一声鼻音。）' },
+  ], next:'zhou_song' },
+  zhou_5c: { call:'zhou', t:15, lines:[
+    { who:'zhou', text:'哈！那得等我回得去再说。先欠着。' },
+  ], next:'zhou_song' },
+  zhou_song: { song:true, call:'zhou', t:16, prompt:'唱片架 · 替老周挑一张', records:[
+    { id:'liangmianjiao' },
+    { id:'gaojia' },
+    { id:'xiaoxiang', desc:'八音盒童谣。可以说一声：这首送给朵朵。', set:{duo_heard:true} },
+  ], next:'zhou_end' },
+  zhou_end: { call:'zhou', t:20, lines:[
+    { who:'host', if:s=>s.songs.zhou==='xiaoxiang', text:'这首《小象的早餐》，送给今天七岁的朵朵。' },
+    { who:'narr', if:s=>s.songs.zhou==='xiaoxiang', text:'（音乐里，他跟着八音盒小声哼了两句，跑调了。）' },
+    { who:'narr', if:s=>s.songs.zhou!=='xiaoxiang', text:'（音乐里，雨刮器还在一下一下地响。）' },
+    { who:'zhou', text:'谢谢啊。我不占线了，后头肯定还有人等着。' },
+    { who:'zhou', if:s=>s.zhou_light, text:'我就在高架底下，槐安里那个出口。闪灯的那辆就是我。' },
+    { who:'narr', text:'电话挂断了。' },
+  ], next:'tune_lin' },
+
+  /* ============ 第二通：小林 ============ */
+  tune_lin: { tune:'lin', t:36, label:'第二通来电', next:'lin_1' },
+  lin_1: { call:'lin', t:41, lines:[
+    { who:'narr', text:'（回声很重，像在空旷的楼梯间。远处，电梯“叮”了一声。）' },
+    { who:'lin', text:'你好……我是护士，上夜班的。我在医院楼梯间，这儿信号好一点。' },
+    { who:'lin', text:'也没什么事。就是刚才，有位老太太走了。我照顾了她三个月，苏奶奶。' },
+    { who:'lin', text:'她走得很安静。家属还在路上，我把她的手放好，被子拉平，就出来了。' },
+    { who:'lin', text:'干我们这行，不该这样的，见得多了。可今天就是……想找个人说说话。' },
+  ], choices:[
+    { tag:'倾听', text:'我在。你想说多久都行。', add:{lin_warm:1}, next:'lin_2a' },
+    { tag:'给建议', text:'你得歇一歇。下了班好好睡一觉，别一个人扛着。', next:'lin_2b' },
+    { tag:'沉默', text:'（不说话，让电话那头的安静多待一会儿。）', say:null, add:{lin_warm:1}, next:'lin_2c' },
+    { tag:'转述', text:'刚才有个出租车司机打来，车坏在雨里，他也只是想找个人说说话。今晚睡不着的，不止你一个。', next:'lin_2d' },
+  ]},
+  lin_2a: { call:'lin', t:43, lines:[
+    { who:'lin', text:'谢谢。' },
+    { who:'narr', text:'（她吸了吸鼻子。）' },
+    { who:'lin', text:'苏奶奶这人可逗了。每天晚上非要听收音机，就听你们这个台，谁也不许换。' },
+  ], next:'lin_3' },
+  lin_2b: { call:'lin', t:43, lines:[
+    { who:'lin', text:'嗯，我知道，大家都这么说。' },
+    { who:'lin', text:'可我睡不着。一闭眼就是她床头那台小收音机。她每天夜里都听你们这个台。' },
+  ], next:'lin_3' },
+  lin_2c: { call:'lin', t:43, lines:[
+    { who:'narr', text:'（很久。楼梯间的声控灯灭了，又被她跺了一脚，跺亮。）' },
+    { who:'lin', text:'……你还在啊，我以为断了。' },
+    { who:'lin', text:'苏奶奶也这样，不说话，就开着收音机，听你们这个台。' },
+  ], next:'lin_3' },
+  lin_2d: { call:'lin', t:43, lines:[
+    { who:'lin', text:'……是吗。这么晚了，大家都没睡啊。' },
+    { who:'lin', text:'苏奶奶也是，每天夜里都不睡，非要听收音机，就听你们这个台。' },
+  ], next:'lin_3' },
+  lin_3: { call:'lin', t:46, lines:[
+    { who:'lin', text:'她说，每天夜里都有个老爷子打进来，给他老伴点同一首歌。' },
+    { who:'lin', text:'那首歌一出来，她就拍我的手：“小林，这是我们厂里舞会上放的。”' },
+  ], choices:[
+    { tag:'追问', text:'她还说过什么吗？关于那首歌，或者那个老爷子。', set:{lin_msg:true}, next:'lin_4a' },
+    { tag:'给建议', text:'以后再听到那首歌，就当她还在听。', next:'lin_4b' },
+    { tag:'开玩笑', text:'听起来，她是这个节目最忠实的听众。比我这个代班的还忠实。', add:{lin_warm:1}, next:'lin_4c' },
+  ]},
+  lin_4a: { call:'lin', t:49, lines:[
+    { who:'lin', text:'有。前两天她精神好，拉着我说了好久。' },
+    { who:'lin', text:'她说那个点歌的老爷子她认识，姓陈，以前厂里的钳工。他老伴叫小梅，是她最好的姐妹。' },
+    { who:'lin', text:'她说当年舞会，大家都以为是老陈先看上的小梅。其实不是。是小梅先看的他，看了一整首歌。' },
+    { who:'lin', text:'小梅让她保密，她保了五十年。她说：“我要是走了，你替我告诉他。”' },
+    { who:'lin', text:'可我上哪儿找他去呢。' },
+  ], next:'lin_song' },
+  lin_4b: { call:'lin', t:49, lines:[
+    { who:'lin', text:'……嗯。好。我试试。' },
+  ], next:'lin_song' },
+  lin_4c: { call:'lin', t:49, lines:[
+    { who:'narr', text:'（她笑出了声，在楼梯间里荡了好几圈。）' },
+    { who:'lin', text:'那你可得好好干。她要是知道换人了，肯定要挑你毛病。' },
+  ], next:'lin_song' },
+  lin_song: { song:true, call:'lin', t:51, prompt:'唱片架 · 给楼梯间里的小林放一首', records:[
+    { id:'huaihua', desc:'苏奶奶说，这是她们厂里舞会上的歌。' },
+    { id:'tang' },
+    { id:'louti' },
+  ], next:'lin_end' },
+  lin_end: { call:'lin', t:56, lines:[
+    { who:'lin', if:s=>s.songs.lin==='huaihua', text:'……就是这首。她每次听到这儿，手指头就在被子上打拍子。' },
+    { who:'lin', if:s=>s.songs.lin==='tang', text:'我们护士站真有一罐糖。苏奶奶老偷偷往我兜里塞。' },
+    { who:'lin', if:s=>s.songs.lin==='louti', text:'……好听。像是专门给楼梯间写的。' },
+    { who:'lin', if:s=>s.lin_msg, text:'要是那位陈爷爷今晚还打来……你能替我告诉他吗？' },
+    { who:'host', if:s=>s.lin_msg, text:'好。我记着。' },
+    { who:'lin', text:'我五点交班。家就在槐安里，走回去十分钟。到时候雨应该停了吧。' },
+    { who:'lin', text:'谢谢你啊，代班的。' },
+    { who:'narr', text:'电话挂断了。' },
+  ], next:'tune_zhe' },
+
+  /* ============ 第三通：阿哲 ============ */
+  tune_zhe: { tune:'zhe', t:84, label:'第三通来电', next:'zhe_1' },
+  zhe_1: { call:'zhe', t:92, lines:[
+    { who:'narr', text:'（翻书页的声音。笔尖在纸上划得很用力。）' },
+    { who:'zhe', text:'喂。我就想问问，你们这种节目，是不是专门给睡不着的人听的。' },
+    { who:'zhe', text:'我复读，第二年了。这道题我做了四十分钟，还是错的。' },
+    { who:'zhe', text:'我爸妈什么都不说。他们越不说，我越觉得我就是家里的笑话。亲戚一问，他们就说“孩子在努力”。' },
+    { who:'zhe', text:'我不想考了。真的。' },
+  ], choices:[
+    { tag:'倾听', text:'嗯。四十分钟，一道题。你很久没歇过了吧。', add:{zhe_hope:1}, next:'zhe_2a' },
+    { tag:'给建议', text:'别想那么远。先把这道题放下，明天再看，说不定一眼就会了。', add:{zhe_hope:-1}, next:'zhe_2b' },
+    { tag:'转述', text:s=>s.zhou_walk
+        ? '今晚有个出租车司机，车坏在高架下。他决定走两个钟头回家，赶他女儿的生日早饭。'
+        : '今晚有个出租车司机，车坏在高架下。他守着车等天亮，可一句“不回去了”都没说。', add:{zhe_hope:1}, next:'zhe_2c' },
+    { tag:'开玩笑', text:'笑话至少能逗人笑。你这个笑话，我听着一点都不好笑。', next:'zhe_2d' },
+  ]},
+  zhe_2a: { call:'zhe', t:94, lines:[
+    { who:'zhe', text:'……嗯。' },
+    { who:'narr', text:'（他沉默了一会儿。）' },
+    { who:'zhe', text:'其实我也不是做不出来。就是做着做着，脑子里全是别人的声音。' },
+  ], next:'zhe_3' },
+  zhe_2b: { call:'zhe', t:94, lines:[
+    { who:'zhe', text:'明天。我每天都跟自己说明天。明天就是又一个今天。' },
+  ], next:'zhe_3' },
+  zhe_2c: { call:'zhe', t:94, lines:[
+    { who:'zhe', text:'……真的假的。那他回得去吗？' },
+    { who:'zhe', text:'算了，他是他，我是我。不过……挺牛的。' },
+  ], next:'zhe_3' },
+  zhe_2d: { call:'zhe', t:94, lines:[
+    { who:'narr', text:'（电话那头“嗤”了一声，像是没忍住。）' },
+    { who:'zhe', text:'你这人怎么这样。……行吧，是不太好笑。' },
+  ], next:'zhe_3' },
+  zhe_3: { call:'zhe', t:97, lines:[
+    { who:'zhe', text:'对面楼每天晚上这个点，都有个老头放同一首歌。老唱片那种，沙沙的。' },
+    { who:'zhe', text:'我以前嫌吵。现在他不放，我反倒做不进去题。挺可笑的吧。' },
+  ], choices:[
+    { tag:'追问', text:'那首歌，你知道叫什么吗？', set:{zhe_song:true}, next:'zhe_4a' },
+    { tag:'倾听', text:'不可笑。人都需要一个准时的东西。', add:{zhe_hope:1}, next:'zhe_4b' },
+    { tag:'开玩笑', text:'说不定那位老先生也在复读，读了好几十年了。', next:'zhe_4c' },
+  ]},
+  zhe_4a: { call:'zhe', t:99, lines:[
+    { who:'zhe', text:'不知道。我录过一段想搜，没搜出来。就记得有一句，“槐花落在第三排”。' },
+    { who:'zhe', text:'他每回放完，都要对着窗外说句什么。我听不清。' },
+  ], next:'zhe_5' },
+  zhe_4b: { call:'zhe', t:99, lines:[
+    { who:'zhe', text:'……嗯。他那首放完，我就知道该翻下一页了。' },
+  ], next:'zhe_5' },
+  zhe_4c: { call:'zhe', t:99, lines:[
+    { who:'narr', text:'（他噗地笑了。）' },
+    { who:'zhe', text:'那他比我惨。……也不一定，他放完歌还对着窗外说话，好像挺高兴的。' },
+  ], next:'zhe_5' },
+  zhe_5: { call:'zhe', t:101, lines:[
+    { who:'zhe', text:'你说，我是不是该睡了。' },
+  ], choices:[
+    { tag:'给建议', text:'做完这一页就睡。不是为了考试，是为了明天早上的你。', add:{zhe_hope:1}, next:'zhe_6' },
+    { tag:'开玩笑', text:'睡吧。题又不会跑，它会在那儿等你，比谁都有耐心。', add:{zhe_hope:1}, next:'zhe_6' },
+    { tag:'沉默', text:'（不说话，等他自己决定。）', say:null, next:'zhe_6' },
+  ]},
+  zhe_6: { call:'zhe', t:102, lines:[
+    { who:'zhe', if:s=>s.zhe_hope>=2, text:'……行。那我做完这页。' },
+    { who:'zhe', if:s=>s.zhe_hope<2, text:'……我也不知道。我再坐会儿。' },
+    { who:'zhe', text:'能给我放首歌吗？随便什么。' },
+  ], next:'zhe_song' },
+  zhe_song: { song:true, call:'zhe', t:103, prompt:'唱片架 · 给还在刷题的阿哲放一首', records:[
+    { id:'huaihua', desc:'老唱片。点了九年的那位老先生，今晚还没打来。', set:{zhe_song:true}, add:{zhe_hope:1} },
+    { id:'caogao' },
+    { id:'budi' },
+  ], next:'zhe_end' },
+  zhe_end: { call:'zhe', t:108, lines:[
+    { who:'zhe', if:s=>s.songs.zhe==='huaihua', text:'……就是这首！对面那个老头放的就是这首！' },
+    { who:'zhe', if:s=>s.songs.zhe==='huaihua', text:'我开窗了。今晚他还没放呢。你这边先响了，跟回声似的。' },
+    { who:'zhe', if:s=>s.songs.zhe==='caogao', text:'……这个节奏，跟我写字一个速度。' },
+    { who:'zhe', if:s=>s.songs.zhe==='budi', text:'……没有词挺好的。不用跟着想。' },
+    { who:'zhe', text:'我叫阿哲。别跟我爸妈说我打过电话。' },
+    { who:'narr', text:'电话挂断了。' },
+  ], next:'tune_chen' },
+
+  /* ============ 第四通：陈伯 ============ */
+  tune_chen: { tune:'chen', t:134, label:'第四通来电', next:'chen_1' },
+  chen_1: { call:'chen', t:140, lines:[
+    { who:'narr', text:'（唱针落下的沙沙声。）' },
+    { who:'chen', text:'喂，是《夜航》吧？今天这声音不对啊，老许呢？' },
+    { who:'chen', text:'病了啊……那你替他吧。我姓陈，每天这个点打。还是那首，《第三排的槐花》，给我老伴小梅。' },
+    { who:'chen', text:'今天是最后一回了。明天一早，儿子来接我去养老院，房子要卖。' },
+    { who:'chen', text:'别的都收拾好了。就这台唱机带不走，那边说太占地方。' },
+  ], choices:[
+    { tag:'倾听', text:'您跟我说说小梅吧。', add:{chen_warm:1}, next:'chen_2a' },
+    { tag:'开玩笑', text:'那您今晚得多点几遍，把以后的都提前点上。', next:'chen_2b' },
+    { tag:'转述', if:s=>s.lin_msg, text:'陈伯，今晚有个护士打来。她照顾的苏奶奶，托她给您带一句话。', set:{lin_chen:true}, next:'chen_2c' },
+  ]},
+  chen_2a: { call:'chen', t:142, lines:[
+    { who:'chen', text:'小梅啊，厂里织布的，辫子这么长。' },
+    { who:'chen', text:'那年厂里开舞会，就放这首。我在第三排站了一整首歌，才敢过去请她。' },
+    { who:'chen', text:'她走了九年，我打了九年电话。老许从来没嫌我烦过。' },
+  ], next:'chen_3' },
+  chen_2b: { call:'chen', t:142, lines:[
+    { who:'narr', text:'（他笑了，笑着咳了两声。）' },
+    { who:'chen', text:'你这孩子，跟老许一样贫。行，今晚我多听一会儿。' },
+  ], next:'chen_3' },
+  chen_2c: { call:'chen', t:142, lines:[
+    { who:'chen', text:'苏……苏秀英？' },
+    { who:'narr', text:'（很久没有声音。）' },
+    { who:'chen', text:'她也走了啊。她跟小梅，是一个车间的姐妹。' },
+    { who:'host', text:'她说，当年舞会，不是您先看的小梅。是小梅先看的您，看了一整首歌。小梅让她保密，她保了五十年。' },
+    { who:'narr', text:'（唱针在空转。沙，沙，沙。）' },
+    { who:'chen', text:'……这个老太婆。' },
+    { who:'chen', text:'五十年。我一直以为，是我胆子大。' },
+    { who:'chen', text:'替我谢谢那个护士。' },
+  ], next:'chen_3' },
+  chen_3: { call:'chen', t:146, lines:[
+    { who:'chen', text:'这唱机是小梅的陪嫁。我想过送人，可送谁呢？现在谁还听这个。' },
+  ], choices:[
+    { tag:'给建议', text:'问问收旧货的，或者捐给博物馆。总有人懂它。', next:'chen_4b' },
+    { tag:'转述', if:s=>s.zhe_song, text:'陈伯，对面楼有个复读的孩子，每晚都听您放这首歌。您不放，他题都做不进去。', set:{zhe_chen:true}, next:'chen_4a' },
+    { tag:'沉默', text:'（不说话，听唱针转。）', say:null, add:{chen_warm:1}, next:'chen_4c' },
+  ]},
+  chen_4a: { call:'chen', t:148, lines:[
+    { who:'chen', text:'对面？八号楼那个天天亮到天亮的窗户？我还当是谁家忘了关灯。' },
+    { who:'chen', text:'那孩子……听得进去这个？' },
+    { who:'narr', text:'（他像是站起来，走到了窗边。）' },
+    { who:'chen', text:'他窗户开着呢。' },
+    { who:'chen', text:'那就好。天亮了我问问他，愿不愿意帮我把它抬下楼——抬到他家去。' },
+  ], next:'chen_gate' },
+  chen_4b: { call:'chen', t:148, lines:[
+    { who:'chen', text:'嗯，也算个去处。就是到了博物馆，它就不转了。' },
+  ], next:'chen_gate' },
+  chen_4c: { call:'chen', t:148, lines:[
+    { who:'narr', text:'（唱针沙沙地转。他也没说话。）' },
+    { who:'chen', text:'……你跟老许一样，知道什么时候不吭声。' },
+  ], next:'chen_gate' },
+  chen_gate: { branch:[ { if:s=>s.zhou_light, next:'chen_5' }, { next:'chen_5n' } ] },
+  chen_5: { call:'chen', t:150, lines:[
+    { who:'chen', text:'说来也怪。我楼下高架那儿，有辆出租车打着双闪，闪了好几个钟头了。我起来看了三回。' },
+  ], choices:[
+    { tag:'转述', text:'那是个开出租的师傅，车坏了。他在等天亮，赶回家给女儿过七岁生日。', set:{zhou_chen:true}, next:'chen_6a' },
+    { tag:'倾听', text:'您睡不着，就看着它闪。', next:'chen_6b' },
+  ]},
+  chen_6a: { call:'chen', t:151, lines:[
+    { who:'chen', text:'车坏了？' },
+    { who:'chen', text:'我在修车厂干了三十年钳工。' },
+    { who:'narr', text:'（椅子挪动的声音。柜门被拉开。）' },
+    { who:'chen', text:'我下去看看。反正今晚也睡不着了。雨衣在门后头挂着，工具箱还没打包。' },
+    { who:'chen', text:'歌你接着放。我开着收音机下楼。' },
+  ], next:'chen_song' },
+  chen_6b: { call:'chen', t:151, lines:[
+    { who:'chen', text:'是啊。一闪一闪的，像有人在楼下等我。' },
+  ], next:'chen_song' },
+  chen_5n: { call:'chen', t:150, lines:[
+    { who:'chen', text:'楼下高架那儿黑漆漆的。下这么大雨，连辆车都没有。' },
+    { who:'chen', text:'放歌吧。' },
+  ], next:'chen_song' },
+  chen_song: { song:true, call:'chen', t:152, prompt:'唱片架 · 陈伯的最后一次点歌', records:[
+    { id:'huaihua', desc:'他点了九年的歌。今晚是最后一次。' },
+    { id:'fangzhi' },
+    { id:'banjia' },
+  ], next:'chen_end' },
+  chen_end: { call:'chen', t:158, lines:[
+    { who:'chen', if:s=>s.songs.chen==='huaihua' && !s.zhou_chen, text:'对，就是这首。……小梅，今天是最后一回在家里听了。' },
+    { who:'chen', if:s=>s.songs.chen==='fangzhi' && !s.zhou_chen, text:'这首也好，那时候午休，车间里就放这个。小梅，换个歌，你别怪我。' },
+    { who:'chen', if:s=>s.songs.chen==='banjia' && !s.zhou_chen, text:'《搬家》……嗯。是该搬了。' },
+    { who:'chen', if:s=>s.lin_chen && !s.zhou_chen, text:'小梅，你看看你。' },
+    { who:'narr', if:s=>s.zhou_chen, text:'（他没有挂电话。听筒搁在唱机旁边，门“咔”地关上了。屋里只剩下歌。）' },
+    { who:'narr', if:s=>!s.zhou_chen, text:'（他没有挂电话。听筒搁在唱机旁边，一直到歌放完，才传来咔哒一声。）' },
+  ], next:'tune_mute' },
+
+  /* ============ 第五通：无声来电 ============ */
+  tune_mute: { tune:'mute', t:192, label:'第五通来电', next:'mute_1' },
+  mute_1: { call:'mute', t:200, lines:[
+    { who:'narr', text:'（接通了。没有人说话。）' },
+    { who:'narr', text:'（只有雨声。还有很轻的呼吸，很近，像是嘴唇贴着话筒。）' },
+  ], choices:[
+    { tag:'等待', text:'（什么也不说，等着。）', say:null, next:'mute_wait' },
+    { tag:'说话', text:'你好，这里是《夜航》。我在。', next:'mute_speak' },
+    { tag:'挂断', text:'（大概是打错了。挂断。）', say:null, set:{silent_hung:true}, next:'mute_hang' },
+  ]},
+  mute_wait: { call:'mute', t:202, lines:[
+    { who:'narr', text:'（十秒。二十秒。雨声里，有个很小的声音在数数：一、二、三……）' },
+  ], choices:[
+    { tag:'等待', text:'（继续等。）', say:null, next:'mute_reveal' },
+    { tag:'说话', text:'不着急。数到几都行。', next:'mute_reveal' },
+  ]},
+  mute_speak: { call:'mute', t:202, lines:[
+    { who:'narr', text:'（呼吸停了一下。像是被吓了一跳，又像是在鼓勇气。）' },
+  ], choices:[
+    { tag:'等待', text:'（不再说话，等。）', say:null, next:'mute_reveal' },
+    { tag:'说话', text:'要是不想说，就听一会儿雨吧。', next:'mute_reveal' },
+    { tag:'挂断', text:'（没有回应。挂断。）', say:null, set:{silent_hung:true}, next:'mute_hang' },
+  ]},
+  mute_hang: { call:'mute', t:203, lines:[
+    { who:'narr', text:'（你按下了挂断键。来电灯又闪了一下，然后灭了。）' },
+    { who:'narr', text:'（你不会知道那是谁了。至少今晚不会。）' },
+  ], next:'dawn' },
+  mute_reveal: { set:{silent:true}, branch:[
+    { if:s=>s.duo_heard, next:'duo_1' },
+    { if:s=>s.zhe_song, next:'zhe2_1' },
+    { next:'lin2_1' },
+  ]},
+
+  /* —— 身份 A：朵朵 —— */
+  duo_1: { call:'duo', t:206, set:{silent_who:'duo'}, lines:[
+    { who:'duo', text:'……喂？' },
+    { who:'duo', text:'我是朵朵。我用的是爸爸的旧手机。妈妈睡着了。' },
+    { who:'duo', text:'厨房收音机里有人跟我说生日快乐，说爸爸在路上。是你吗？' },
+    { who:'duo', text:'我想给爸爸点一首歌。他一个人在车里，肯定没人跟他说话。' },
+  ], choices:[
+    { tag:'倾听', text:'是我。你想给爸爸点什么歌？', next:'duo_song' },
+    { tag:'转述', if:s=>s.zhou_chen, text:'朵朵，告诉你一个秘密：有个会修车的爷爷，刚刚下楼去帮你爸爸了。', set:{duo_secret:true}, next:'duo_2' },
+    { tag:'开玩笑', text:'七岁就会打电话点歌了，比你爸爸厉害。', next:'duo_2b' },
+  ]},
+  duo_2: { call:'duo', t:208, lines:[
+    { who:'duo', text:'真的吗？那爷爷会修好吗？' },
+    { who:'host', text:'会的。他修了三十年车。' },
+    { who:'duo', text:'那我不睡了。我等爸爸。' },
+  ], next:'duo_song' },
+  duo_2b: { call:'duo', t:208, lines:[
+    { who:'duo', text:'嘻嘻。爸爸都不会用手机点歌，他只会听。' },
+  ], next:'duo_song' },
+  duo_song: { song:true, call:'duo', t:209, prompt:'唱片架 · 朵朵替爸爸点的歌', records:[
+    { id:'qisui' },
+    { id:'liangmianjiao', desc:'口琴小调。名字跟爸爸煎的蛋一样。' },
+    { id:'xiaoxiang' },
+  ], next:'duo_end' },
+  duo_end: { call:'duo', t:214, lines:[
+    { who:'duo', text:'爸爸，你听到了吗？' },
+    { who:'narr', if:s=>s.zhou_chen, text:'（远处，好像有一辆车打着了火。也可能只是雷声。）' },
+    { who:'duo', text:'我把蛋都准备好了。两个。' },
+    { who:'narr', text:'电话挂断了。' },
+  ], next:'dawn' },
+
+  /* —— 身份 B：阿哲 —— */
+  zhe2_1: { call:'zhe', t:206, set:{silent_who:'zhe'}, lines:[
+    { who:'zhe', text:'……是我。阿哲。' },
+    { who:'zhe', if:s=>s.zhe_chen, text:'对面那个老爷爷刚才开窗冲我招手，举着一张唱片。他喊了句什么，雨太大，我没听清。' },
+    { who:'zhe', if:s=>!s.zhe_chen, text:'对面那个老爷爷，今天放完歌，在窗户边站了好久，灯一直没关。我有点担心他。' },
+    { who:'zhe', text:'我不知道打来要说什么。就是不想一个人待着。' },
+  ], choices:[
+    { tag:'转述', if:s=>s.zhe_chen, text:'他想把唱机送给你。天亮了，他想请你帮忙抬过去。', add:{zhe_hope:1}, next:'zhe2_2a' },
+    { tag:'转述', if:s=>!s.zhe_chen, text:'他明天要搬去养老院了。今晚，是他最后一次在家里放这首歌。', next:'zhe2_2b' },
+    { tag:'倾听', text:'那就不用说什么。我在这儿。', add:{zhe_hope:1}, next:'zhe2_2c' },
+  ]},
+  zhe2_2a: { call:'zhe', t:208, lines:[
+    { who:'zhe', text:'送我？……' },
+    { who:'narr', text:'（窗户被推开的声音，雨声一下子大了。）' },
+    { who:'zhe', text:'我去。天一亮我就下去。' },
+  ], next:'zhe2_song' },
+  zhe2_2b: { call:'zhe', t:208, lines:[
+    { who:'zhe', text:'……原来是这样。' },
+    { who:'zhe', text:'那我天亮下去送送他。总得有人跟他说一声，歌很好听。' },
+  ], next:'zhe2_song' },
+  zhe2_2c: { call:'zhe', t:208, lines:[
+    { who:'narr', text:'（很长的安静。他那边的笔，又开始在纸上沙沙地走。）' },
+  ], next:'zhe2_song' },
+  zhe2_song: { song:true, call:'zhe', t:209, prompt:'唱片架 · 给四点还醒着的阿哲', records:[
+    { id:'tiankuai' },
+    { id:'huaihua', desc:'对面那扇窗里，今晚最后一次响起的歌。' },
+    { id:'budi' },
+  ], next:'zhe2_end' },
+  zhe2_end: { call:'zhe', t:214, lines:[
+    { who:'zhe', text:'我做完这页就睡。这回是真的。' },
+    { who:'narr', text:'电话挂断了。' },
+  ], next:'dawn' },
+
+  /* —— 身份 C：小林 —— */
+  lin2_1: { call:'lin', t:206, set:{silent_who:'lin'}, lines:[
+    { who:'lin', text:'……是我。楼梯间那个护士。' },
+    { who:'lin', text:'对不起，刚才没出声。我交班前又去看了一眼苏奶奶的床，一开口就怕忍不住。' },
+    { who:'lin', if:s=>s.lin_chen, text:'我听到了。你替我把话带到了。陈爷爷那句“这个老太婆”，我笑了好久。' },
+    { who:'lin', if:s=>!s.lin_chen, text:'我就是想，有个电话一直通着，就好像这一夜还没过完。' },
+  ], choices:[
+    { tag:'倾听', text:'那就通着。你不说话也行。', next:'lin2_2' },
+    { tag:'给建议', text:'下了班就回家，路上慢一点。雨快停了。', next:'lin2_2' },
+    { tag:'开玩笑', text:'苏奶奶要是在，肯定说你占用热线。', next:'lin2_2b' },
+  ]},
+  lin2_2: { call:'lin', t:208, lines:[
+    { who:'lin', text:'嗯。' },
+    { who:'narr', text:'（她那边，有人推开了楼梯间的门：“小林，交班了。”）' },
+  ], next:'lin2_song' },
+  lin2_2b: { call:'lin', t:208, lines:[
+    { who:'narr', text:'（她笑了，鼻音很重。）' },
+    { who:'lin', text:'她肯定这么说。还得让你赔她一首歌。' },
+  ], next:'lin2_song' },
+  lin2_song: { song:true, call:'lin', t:209, prompt:'唱片架 · 给下夜班的小林', records:[
+    { id:'huijia' },
+    { id:'huaihua', desc:'苏奶奶的歌。' },
+    { id:'louti' },
+  ], next:'lin2_end' },
+  lin2_end: { call:'lin', t:214, lines:[
+    { who:'lin', text:'我走了。天快亮了。' },
+    { who:'narr', text:'电话挂断了。' },
+  ], next:'dawn' },
+
+  dawn: { ending:true, t:240 },
+};
+
+const STORY = { callers:CALLERS, songs:SONGS, nodes:NODES, start:'intro' };
+
+function newState(){
+  return { zhou_warm:0, zhou_stay:false, zhou_light:false, zhou_walk:false, duo_heard:false,
+    lin_warm:0, lin_msg:false, zhe_hope:0, zhe_song:false, chen_warm:0,
+    lin_chen:false, zhe_chen:false, zhou_chen:false, duo_secret:false,
+    silent:false, silent_hung:false, silent_who:'', replay:false, care:0,
+    songs:{}, log:[], path:[] };
+}
+/* 用心程度：倾听 / 沉默 / 等待 / 追问 / 转述 / 替他开口 各 +1，用于区分“错过”与温暖结局 */
+const CARE_TAGS = ['倾听','沉默','等待','追问','转述','替他开口'];
+function applyFx(s, o){
+  if (!o) return;
+  if (o.tag && CARE_TAGS.indexOf(o.tag) >= 0) s.care = (s.care||0) + 1;
+  if (o.set) for (const k in o.set) s[k] = o.set[k];
+  if (o.add) for (const k in o.add) s[k] = (s[k]||0) + o.add[k];
+}
+function resolveText(t, s){ return typeof t === 'function' ? t(s) : t; }
+function pickBranch(br, s){ for (const b of br){ if (!b.if || b.if(s)) return b.next; } return null; }
+function songKey(id){ return id.replace(/_song$/, ''); }
+
+/* ---------------- 结局 ---------------- */
+const ENDINGS = {
+  breakfast: { title:'两面焦', lights:.5, music:'liangmianjiao', text:s=>[
+    s.zhou_chen ? '五点四十，高架下的出租车终于打着了火。修车的老人摆摆手，没留名字，打着伞回了七号楼。'
+      : s.zhou_walk ? '老周是走回去的。雨停的时候，他刚好走到自家楼下，裤腿湿到了膝盖。'
+      : '六点，拖车终于到了。老周把车交出去，一路小跑着回家。',
+    (s.silent_who === 'duo' && !s.zhou_chen) ? '他推开家门，朵朵趴在桌上睡着了，手里还攥着那部旧手机。他轻轻把她叫醒。'
+      : '六点半，老周推开家门，朵朵光着脚跑过来。',
+    s.duo_heard ? '“爸爸，收音机里有人跟我说生日快乐！”' : '',
+    '蛋煎糊了一点，正好两面焦。',
+    !s.zhe_chen ? '同一个早上，七号楼三层的唱机被搬上一辆小货车。没有人知道，对面楼有个孩子也在听。' : '',
+  ]},
+  record: { title:'唱机在阿哲家里继续转', lights:.58, music:'huaihua', text:s=>[
+    s.zhe_chen ? '' : '天刚亮，阿哲下楼去送陈伯。“您那首歌，我听了一年。”陈伯愣了很久，转身上楼，把唱机抱了下来。',
+    (s.zhe_chen ? '天刚亮，' : '') + '七号楼和八号楼之间的空地上，一老一少抬着一台唱机，走得很慢。陈伯一路在念叨：“慢点，慢点。”',
+    s.zhou_chen ? '高架下那辆出租车早就开走了，走之前，冲他们按了两下喇叭。' : '',
+    s.lin_chen ? '陈伯胸前的口袋里揣着一张黑白照片。照片的第三排，有个姑娘正往镜头外看。' : '',
+    '九点，养老院的车来了。',
+    '那天夜里，八号楼五层的窗户里，又响起了那首歌——放歌的人换了，歌没换。',
+  ]},
+  letter: { title:'替人保管的话', lights:.42, music:'banjia', text:s=>[
+    s.lin_chen ? '一句话在一位老太太那里存了五十年，在一个护士那里存了三个钟头，在你这里存了半个夜晚，终于送到了。'
+      : '小林下夜班，路过七号楼，听见三楼的窗户里飘出那首歌。她站了一会儿，上楼敲了门。一句话在一位老太太那里存了五十年，终于送到了。',
+    '天亮时，陈伯把小梅的照片从相框里取出来，揣进了胸口的口袋。',
+    '唱机最后还是没能带走。可他带走了一句话：是她先看的他。',
+    s.zhou_light && !s.zhou_chen ? '高架下那辆打了一夜双闪的出租车，直到七点才等来拖车。' : '',
+  ]},
+  miss: { title:'错过', lights:.12, music:'gaojia', text:s=>[
+    '天亮了。雨停在五点零三分。',
+    '老周、小林、阿哲、陈伯，还有那个没说话的人——他们住得那么近，近到同一场雨落在同一片屋顶上。',
+    '可这一夜，线没有接上。',
+    s.silent_hung ? '你挂断的那通电话，来电灯又闪了一下，就再也没亮。' : '',
+    '每个人都在各自的窗户后面，等到了各自的天亮。也许下一夜，会不一样。',
+  ]},
+  lights: { title:'全城的灯', hidden:true, lights:1, music:'huaihua', text:s=>[
+    '五点整，雨停了。',
+    '高架下，那辆打了一夜双闪的出租车重新亮起大灯。陈伯把扳手收进工具箱，说了句：“走吧。”',
+    '可老周没急着走。他和阿哲一人一头，把唱机从七号楼抬进了八号楼；小林下夜班路过，替他们扶住了单元门。',
+    '他们谁也不认识谁。可每个人都在收音机里，听过另外几个人的声音。',
+    '六点半，老周推开家门。朵朵没睡，坐在桌边，面前摆着两个鸡蛋。',
+    '那个早上，槐安里的窗户一扇接一扇地亮了，像是有人在挨家挨户地接线。',
+  ]},
+};
+const ENDING_ORDER = ['breakfast','record','letter','miss','lights'];
+
+function countLinks(s){ return [s.zhou_chen, s.zhe_chen, s.lin_chen, s.silent].filter(Boolean).length; }
+function computeEnding(s){
+  if (s.zhou_chen && s.zhe_chen && s.lin_chen && s.silent && s.duo_heard) return 'lights';
+  // 接上任意一条“转述”线 → 温暖结局；只剩无声来电时，按来电者身份落到对应结局；
+  // “错过”只留给：一条线都没接上，并且（挂断了无声来电且不太用心 / 一路都很敷衍）
+  const relay = s.zhou_chen || s.zhe_chen || s.lin_chen;
+  if (!relay && ((s.care||0) <= 3 || (s.silent_hung && (s.care||0) <= 6))) return 'miss';
+  if (s.zhe_chen || s.silent_who === 'zhe') return 'record';
+  if (s.zhou_chen || s.silent_who === 'duo') return 'breakfast';
+  if (s.lin_chen || (s.silent_who === 'lin' && s.lin_msg)) return 'letter';
+  return 'breakfast';
+}
+function endingText(s){ return ENDINGS[computeEnding(s)].text(s).filter(Boolean); }
+
+function threadsOf(s){
+  const who = s.silent_who && CALLERS[s.silent_who] ? CALLERS[s.silent_who].name : '';
+  return [
+    { name:'楼下的双闪', pair:'老周 × 陈伯', on:s.zhou_chen,
+      done:'老钳工披着雨衣下了楼，工具箱还没来得及打包。',
+      hint:'让老周被人看见；有人问起楼下那盏灯时，告诉他那是谁。' },
+    { name:'同一首歌', pair:'阿哲 × 陈伯', on:s.zhe_chen,
+      done:'放歌的人知道了，对面那扇窗一直有人在听。',
+      hint:'弄清阿哲每晚听到的是哪首歌，再告诉放歌的人：有人在听。' },
+    { name:'五十年的秘密', pair:'小林 × 陈伯', on:s.lin_chen,
+      done:'一句保管了五十年的话，经过三个人，送到了。',
+      hint:'问问小林，苏奶奶最后还说过什么。' },
+    { name:'没说话的人', pair: who ? ('第五通来电 · '+who) : '第五通来电', on:s.silent,
+      done: who ? ('你等到了。那是'+who+'。') : '你等到了。',
+      hint: s.silent_hung ? '你挂断了。有些电话，需要多等一会儿。' : '有些电话，需要多等一会儿。' },
+  ];
+}
+
+/* ---------------- 今夜分镜单：5–8 个镜头，景别｜画面｜声音 ---------------- */
+function buildStoryboard(s){
+  const E = computeEnding(s), shots = [];
+  const S = (size, pic, sound) => shots.push({ size, pic, sound });
+  const song = id => (id && SONGS[id]) ? '《'+SONGS[id].title+'》' : '一首老歌';
+
+  S('大远景', '凌晨一点，暴雨中的槐安里。东环高架的路灯连成一条橘色的线，远处电台大楼的顶层只亮着一扇窗。',
+    '雨声铺满画面。电流的嘶嘶声里，浮出一句台呼：“FM 88.7，夜航。”');
+
+  if (s.zhou_chen) S('中景', '高架下，打着双闪的出租车掀开了引擎盖。一个穿旧雨衣的老人咬着手电筒探身进去，老周在旁边替他撑伞。',
+    '扳手碰到金属的轻响。雨越下越小，车里的收音机放着'+song(s.songs.zhou)+'。');
+  else if (s.zhou_light) S('中景', '高架下，出租车的双闪一下一下照亮积水。老周趴在方向盘上睡着了，手机屏保是一个缺了门牙的小女孩。',
+    '双闪继电器的咔哒声，收音机低低地放着'+song(s.songs.zhou)+'。');
+  else if (s.zhou_walk) S('跟拍', '老周把外套顶在头上，沿着高架下的人行道往家走。身后那辆熄了火的出租车越来越小。',
+    '踩水的脚步声，远处第一辆洒水车的音乐。');
+  else S('近景', '熄了火的出租车里一片黑。老周把手机屏幕按亮，又按灭，屏保是一个缺了门牙的小女孩。',
+    '车顶的雨声很密，盖过了一切。');
+
+  if (s.lin_chen) S('近景', '医院楼梯间，小林靠着窗台听收音机。听到主持人替她把那句话说出口，她捂住嘴，笑着哭了。',
+    '楼梯间的回声里，传出唱针的沙沙声。');
+  else if (s.lin_msg) S('近景', '小林在楼梯间坐到四点，怀里抱着苏奶奶的小收音机。那句话还在她心里，没有送出去。',
+    '电梯“叮”的一声，有人在走廊尽头叫她的名字。');
+  else S('中景', '交班的走廊，小林把苏奶奶床头的小收音机关掉，装进遗物袋，贴好标签。',
+    '很轻的一声咔哒，然后只剩空调的嗡嗡声。');
+
+  if (s.zhe_chen) S('过肩', '从阿哲的窗口望出去：对面七号楼三层，一位老人推开窗，冲这边举起一张唱片。',
+    song('huaihua')+'被风吹得断断续续，两扇窗之间，雨丝发亮。');
+  else if (s.zhe_hope >= 2) S('特写', '草稿纸上那道错了四十分钟的题，终于画上一个勾。台灯下，阿哲枕着胳膊睡着了。',
+    '铅笔从桌沿滚下去，“嗒”的一声。');
+  else S('中景', '阿哲合上习题册，站在窗前。对面楼那扇窗暗着，今晚没有歌。',
+    '只有雨，和楼下一辆车碾过积水。');
+
+  if (s.lin_chen) S('特写', '陈伯把一张黑白合影从相框里取出来。照片上第三排，一个梳长辫子的姑娘正望向镜头外。',
+    '唱针落下。他轻轻笑了一声：“这个老太婆。”');
+  else S('近景', '陈伯用旧毛巾一遍遍擦唱机的木盖。打包好的纸箱堆在门口。',
+    '最后一圈转完，唱臂自己抬了起来。');
+
+  if (s.silent_hung) S('空镜', '直播间里，挂断的电话机旁，来电灯又闪了一下，然后熄灭。', '忙音，接着是雨声。');
+  else if (s.silent_who === 'duo') S('特写', '厨房里，穿睡衣的小女孩踮着脚，把一部旧手机贴在收音机上。', '她小声说：“爸爸，你听到了吗？”');
+  else if (s.silent_who === 'zhe') S('近景', '阿哲握着电话，额头抵着冰凉的玻璃，看着对面那扇还亮着的窗。', '电话里很久没有人说话，只有两个人的呼吸，和同一场雨。');
+  else if (s.silent_who === 'lin') S('近景', '小林走在下班的路上，手机贴在耳边，一直没挂。', '电话两头都没说话，路灯一盏盏在她身后熄灭。');
+
+  if (E === 'lights'){
+    S('全景', '天刚亮。老周和阿哲一人一头，抬着唱机穿过两栋楼之间的积水；陈伯在前面指路，小林替他们扶住单元门。',
+      '脚步声，陈伯在念叨“慢点，慢点”。远处，有人按了两下喇叭。');
+    S('大远景', '雨停了。镜头从高架缓缓升起，槐安里的窗户一扇接一扇亮起，像有人在挨家挨户地接线。',
+      '所有收音机里同时响起'+song('huaihua')+'，渐弱，鸟叫声进来。');
+  } else if (E === 'record'){
+    S('全景', '清晨，一老一少抬着唱机穿过两栋楼之间的空地，积水里倒映着发白的天。', '脚步声，陈伯在念叨“慢点，慢点”。');
+    S('特写', '当天夜里，八号楼五层的书桌上，唱机转了起来，旁边摊着习题册。', '唱针沙沙，那首歌又响起来——放歌的人换了。');
+  } else if (E === 'breakfast'){
+    S('近景', '清晨六点半，系着围裙的老周在灶台前煎蛋，翻面，两面焦。', '油锅滋滋作响，一双小脚光着跑过木地板。');
+  } else if (E === 'letter'){
+    S('远景', '雨后的清晨，七号楼三层的窗开着。陈伯把照片揣进胸口的口袋，最后看了一眼唱机。', '窗外的鸟叫，楼下儿子的车按了一声喇叭。');
+  } else {
+    S('空镜', '天亮了。直播间的台灯还亮着，椅子空着。窗外，一扇扇窗户各自亮起，又各自熄灭。', '导播的声音：“今晚的节目就到这里。”然后是很长的安静。');
+  }
+  return shots;
+}
+function storyboardText(s){
+  const E = ENDINGS[computeEnding(s)];
+  return ['《夜航电台 FM 88.7》今夜分镜单 · 结局：'+E.title, '（本夜剧本可直接作为 AI 短片分镜）', '']
+    .concat(buildStoryboard(s).map((x,i)=>'镜头'+String(i+1).padStart(2,'0')+'｜'+x.size+'｜'+x.pic+'｜声音：'+x.sound))
+    .join('\n');
+}
+
+if (typeof module !== 'undefined' && module.exports){
+  module.exports = { STORY, CALLERS, SONGS, NODES, ENDINGS, ENDING_ORDER, newState, applyFx, resolveText, pickBranch, songKey, computeEnding, endingText, threadsOf, buildStoryboard, storyboardText };
+}
+</script>
+
+<!-- =====================================================================
+     表现层：画面（Canvas 2D）、声音（WebAudio）、控制台交互、叙事引擎
+     ===================================================================== -->
+<script>
+(() => {
+'use strict';
+const $ = s => document.querySelector(s);
+const clamp = (v,a,b) => v<a?a:v>b?b:v;
+const REDUCE = !!(window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches);
+const store = {
+  get(k, d){ try{ const v = localStorage.getItem(k); return v == null ? d : JSON.parse(v); }catch(e){ return d; } },
+  set(k, v){ try{ localStorage.setItem(k, JSON.stringify(v)); }catch(e){} },
+};
+const KEY_END = 'nightradio.endings.v1', KEY_MUTE = 'nightradio.muted';
+function mk(w,h){ const c=document.createElement('canvas'); c.width=Math.max(1,Math.round(w)); c.height=Math.max(1,Math.round(h)); return c; }
+const esc = t => String(t).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+
+/* =========================================================
+   Scene：被雨打湿的窗 + 窗外柔焦城市
+   ========================================================= */
+const Scene = (() => {
+  const cvs = $('#scene'); const ctx = cvs.getContext('2d', { alpha:false });
+  let W=1, H=1, S=1, k=1, MS=.5;
+  let quality = (Math.min(innerWidth, innerHeight) < 700) ? 1 : 2;
+  let nightC, dawnC, blurN, blurD, overlay, small, sctx, mask, mctx, comp, cctx;
+  let layers=[], cands=[], lit=[], bokeh=[], cars=[], drops=[], streaks=[];
+  let dawn=0, dawnT=0, rain=1, rainT=1, litGoal=0, litClock=0, hwY=0, time=0, fadeClock=0;
+  const spr = {};
+
+  const PAL = {
+    night:{ sky:[[0,'#03060d'],[.34,'#081324'],[.6,'#13223a'],[.74,'#1e2535'],[1,'#0a0c12']], glow:'rgba(255,140,70,.17)', cloud:'rgba(60,80,110,.16)',
+      layer:['#0e1a2b','#0a1322','#060b14'], warm:['rgba(255,196,120,.5)','rgba(255,190,110,.78)','rgba(255,186,104,.95)'],
+      cool:['rgba(150,200,255,.4)','rgba(160,210,255,.65)','rgba(170,215,255,.8)'], hw:'#04070c', lamp:'#ffae5a' },
+    dawn:{ sky:[[0,'#2b3d5e'],[.34,'#56698c'],[.58,'#a597a8'],[.72,'#e9b99c'],[1,'#5d5058']], glow:'rgba(255,205,160,.35)', cloud:'rgba(255,205,190,.22)',
+      layer:['#5a6680','#3c4762','#252c40'], warm:['rgba(255,225,180,.35)','rgba(255,220,170,.5)','rgba(255,214,160,.6)'],
+      cool:['rgba(210,225,255,.25)','rgba(210,225,255,.35)','rgba(210,225,255,.45)'], hw:'#1e2434', lamp:'rgba(255,210,150,.5)' },
+  };
+
+  function makeSprites(){
+    const cols = { amber:[255,176,84], warm:[255,224,180], teal:[110,214,230], blue:[120,160,255], red:[255,80,70], green:[140,255,180], sodium:[255,150,60] };
+    for (const n in cols){
+      const [r,g,b] = cols[n];
+      const c = mk(128,128), x = c.getContext('2d');
+      let gr = x.createRadialGradient(64,64,0,64,64,64);
+      gr.addColorStop(0,`rgba(${r},${g},${b},.42)`); gr.addColorStop(.66,`rgba(${r},${g},${b},.38)`);
+      gr.addColorStop(.84,`rgba(${r},${g},${b},.5)`); gr.addColorStop(.93,`rgba(${r},${g},${b},.16)`); gr.addColorStop(1,`rgba(${r},${g},${b},0)`);
+      x.fillStyle = gr; x.fillRect(0,0,128,128); spr[n] = c;
+      const c2 = mk(64,64), x2 = c2.getContext('2d');
+      gr = x2.createRadialGradient(32,32,0,32,32,32);
+      gr.addColorStop(0,`rgba(${r},${g},${b},1)`); gr.addColorStop(.22,`rgba(${r},${g},${b},.5)`); gr.addColorStop(1,`rgba(${r},${g},${b},0)`);
+      x2.fillStyle = gr; x2.fillRect(0,0,64,64); spr[n+'G'] = c2;
+    }
+    // 大水珠外缘：暗边 + 底部亮弧 + 左上高光
+    const d = mk(128,128), x = d.getContext('2d');
+    let g = x.createRadialGradient(64,64,30,64,64,64);
+    g.addColorStop(0,'rgba(0,0,0,0)'); g.addColorStop(.72,'rgba(0,0,0,.12)'); g.addColorStop(.93,'rgba(0,0,0,.48)'); g.addColorStop(1,'rgba(0,0,0,0)');
+    x.fillStyle = g; x.beginPath(); x.arc(64,64,64,0,Math.PI*2); x.fill();
+    x.strokeStyle = 'rgba(255,236,210,.22)'; x.lineWidth = 5; x.beginPath(); x.arc(64,66,54,.18*Math.PI,.82*Math.PI); x.stroke();
+    g = x.createRadialGradient(44,38,0,44,38,22); g.addColorStop(0,'rgba(255,255,255,.85)'); g.addColorStop(1,'rgba(255,255,255,0)');
+    x.fillStyle = g; x.beginPath(); x.ellipse(44,38,20,13,-.6,0,Math.PI*2); x.fill();
+    spr.rim = d;
+    // 小水珠
+    const s = mk(32,32), y = s.getContext('2d');
+    g = y.createRadialGradient(16,17,0,16,16,16);
+    g.addColorStop(0,'rgba(190,210,235,.10)'); g.addColorStop(.62,'rgba(150,170,200,.12)'); g.addColorStop(.86,'rgba(0,0,0,.30)'); g.addColorStop(1,'rgba(0,0,0,0)');
+    y.fillStyle = g; y.beginPath(); y.arc(16,16,16,0,Math.PI*2); y.fill();
+    y.fillStyle = 'rgba(255,250,240,.38)'; y.beginPath(); y.arc(11,10,3,0,Math.PI*2); y.fill();
+    spr.small = s;
+  }
+
+  function buildModel(){
+    const R = mulberry32(887);
+    layers = [];
+    hwY = H*.6;
+    const defs = [
+      { base:H*.64, minH:H*.14, maxH:H*.40, minW:26*k, maxW:80*k,  win:2.6*k, gap:2.8*k, on:.16 },
+      { base:H*.70, minH:H*.12, maxH:H*.34, minW:46*k, maxW:120*k, win:4.2*k, gap:4.2*k, on:.22 },
+      { base:H*.86, minH:H*.20, maxH:H*.52, minW:76*k, maxW:180*k, win:6.5*k, gap:6.5*k, on:.24 },
+    ];
+    defs.forEach((d, li) => {
+      const bs = []; let x = -R()*40;
+      while (x < W + 20){
+        const w = d.minW + R()*(d.maxW-d.minW);
+        const h = d.minH + Math.pow(R(),1.3)*(d.maxH-d.minH);
+        const top = d.base - h;
+        const b = { x, w, top, wins:[], roof: R()<.28 ? 'step' : (R()<.25 ? 'antenna' : 'flat'), rw: R()*.4+.3 };
+        const cols = Math.max(1, Math.floor((w - d.gap)/(d.win + d.gap)));
+        const rows = Math.max(0, Math.floor((h - d.gap*2)/(d.win*1.45 + d.gap)));
+        const ox = x + (w - cols*(d.win+d.gap) + d.gap)/2;
+        for (let r=0; r<rows; r++) for (let c=0; c<cols; c++){
+          b.wins.push({ x:ox + c*(d.win+d.gap), y: top + d.gap*1.6 + r*(d.win*1.45 + d.gap), w:d.win, h:d.win*1.45, on: R()<d.on, warm: R()<.72, li });
+        }
+        bs.push(b);
+        x += w + (R()<.3 ? R()*18*k : 0);
+      }
+      layers.push({ d, bs });
+    });
+    cands = [];
+    for (const L of layers.slice(1)) for (const b of L.bs) for (const w of b.wins){
+      if (!w.on && w.y > H*.1 && w.y < H*.68 && w.x > 0 && w.x < W) cands.push(w);
+    }
+    for (let i=cands.length-1; i>0; i--){ const j = Math.floor(R()*(i+1)); const t = cands[i]; cands[i] = cands[j]; cands[j] = t; }
+    cands.length = Math.min(cands.length, quality===0 ? 90 : 170);
+  }
+
+  function renderCity(pal){
+    const c = mk(W*S, H*S), x = c.getContext('2d'); x.scale(S,S);
+    let g = x.createLinearGradient(0,0,0,H); pal.sky.forEach(([p,col]) => g.addColorStop(p,col)); x.fillStyle = g; x.fillRect(0,0,W,H);
+    g = x.createRadialGradient(W*.5,H*.64,0,W*.5,H*.64,Math.max(W,H)*.7); g.addColorStop(0,pal.glow); g.addColorStop(1,'rgba(0,0,0,0)'); x.fillStyle = g; x.fillRect(0,0,W,H);
+    const R = mulberry32(31);
+    for (let i=0;i<7;i++){
+      const cx = R()*W, cy = H*(.05+R()*.3), rr = Math.max(W,H)*(.15+R()*.2);
+      g = x.createRadialGradient(cx,cy,0,cx,cy,rr); g.addColorStop(0,pal.cloud); g.addColorStop(1,'rgba(0,0,0,0)');
+      x.fillStyle = g; x.save(); x.translate(cx,cy); x.scale(1.9,.5); x.translate(-cx,-cy); x.beginPath(); x.arc(cx,cy,rr,0,Math.PI*2); x.fill(); x.restore();
+    }
+    layers.forEach((L, i) => {
+      for (const b of L.bs){
+        x.fillStyle = pal.layer[i];
+        x.fillRect(b.x, b.top, b.w, H - b.top);
+        if (b.roof === 'step') x.fillRect(b.x + b.w*.2, b.top - 8*k, b.w*b.rw, 8*k);
+        if (b.roof === 'antenna'){ x.fillRect(b.x + b.w*.5, b.top - 22*k, 1.4*k, 22*k); }
+        for (const w of b.wins){ if (!w.on) continue; x.fillStyle = w.warm ? pal.warm[i] : pal.cool[i]; x.fillRect(w.x, w.y, w.w, w.h); }
+      }
+      if (i === 1){
+        x.fillStyle = pal.hw; x.fillRect(0, hwY, W, 9*k); x.fillRect(0, hwY+9*k, W, 3*k);
+        for (let px = 20*k; px < W; px += 130*k) x.fillRect(px, hwY, 12*k, H - hwY);
+        x.fillStyle = pal.lamp;
+        for (let px = 10*k; px < W; px += 46*k){ x.beginPath(); x.arc(px, hwY - 12*k, 1.8*k, 0, Math.PI*2); x.fill(); }
+      }
+    });
+    return c;
+  }
+  function blurOf(src){
+    const a = mk(src.width/10, src.height/10); a.getContext('2d').drawImage(src,0,0,a.width,a.height);
+    const b = mk(src.width/3.2, src.height/3.2); const bx = b.getContext('2d'); bx.imageSmoothingQuality = 'high'; bx.drawImage(a,0,0,b.width,b.height);
+    return b;
+  }
+  function buildOverlay(){
+    overlay = mk(W*S, H*S); const x = overlay.getContext('2d'); x.scale(S,S);
+    let g = x.createLinearGradient(0,0,0,H);
+    g.addColorStop(0,'rgba(140,160,190,.03)'); g.addColorStop(.6,'rgba(140,160,190,.06)'); g.addColorStop(1,'rgba(160,140,120,.16)');
+    x.fillStyle = g; x.fillRect(0,0,W,H);
+    x.globalCompositeOperation = 'lighter';
+    const m = Math.min(W,H);
+    g = x.createRadialGradient(W*.86,H*.74,0,W*.86,H*.74,m*.55); g.addColorStop(0,'rgba(255,170,90,.15)'); g.addColorStop(.4,'rgba(255,140,60,.05)'); g.addColorStop(1,'rgba(0,0,0,0)');
+    x.fillStyle = g; x.fillRect(0,0,W,H);
+    g = x.createRadialGradient(W*.84,H*.6,0,W*.84,H*.6,26*k); g.addColorStop(0,'rgba(255,225,180,.12)'); g.addColorStop(1,'rgba(0,0,0,0)');
+    x.fillStyle = g; x.fillRect(0,0,W,H);
+    x.globalCompositeOperation = 'source-over';
+    g = x.createRadialGradient(W/2,H*.42,m*.3,W/2,H*.42,Math.max(W,H)*.85); g.addColorStop(0,'rgba(0,0,0,0)'); g.addColorStop(1,'rgba(0,0,0,.62)');
+    x.fillStyle = g; x.fillRect(0,0,W,H);
+    // 窗框与中梃
+    const f = clamp(m*.02, 7, 16), mx = Math.round(W*.63);
+    const edge = (x0,y0,x1,y1) => { const gg = x.createLinearGradient(x0,y0,x1,y1); gg.addColorStop(0,'rgba(0,0,0,.38)'); gg.addColorStop(1,'rgba(0,0,0,0)'); return gg; };
+    x.fillStyle = edge(0,f,0,f+18); x.fillRect(0,f,W,18);
+    x.fillStyle = edge(f,0,f+16,0); x.fillRect(f,0,16,H);
+    x.fillStyle = edge(W-f,0,W-f-16,0); x.fillRect(W-f-16,0,16,H);
+    x.fillStyle = edge(mx+f*.6,0,mx+f*.6+14,0); x.fillRect(mx+f*.6,0,14,H);
+    x.fillStyle = edge(mx-f*.6,0,mx-f*.6-14,0); x.fillRect(mx-f*.6-14,0,14,H);
+    x.fillStyle = '#0b0908';
+    x.fillRect(0,0,W,f); x.fillRect(0,0,f,H); x.fillRect(W-f,0,f,H); x.fillRect(mx-f*.6,0,f*1.2,H);
+    g = x.createLinearGradient(0,0,0,H); g.addColorStop(0,'rgba(255,180,110,0)'); g.addColorStop(1,'rgba(255,180,110,.22)');
+    x.fillStyle = g; x.fillRect(mx+f*.6-1.5,0,1.5,H); x.fillRect(W-f-1.5,0,1.5,H);
+    x.fillStyle = 'rgba(255,190,120,.07)'; x.fillRect(f,f-1,W-2*f,1);
+  }
+  function buildBokeh(){
+    const R = mulberry32(42); bokeh = [];
+    const n = [24,40,56][quality];
+    const pal = ['amber','amber','warm','warm','sodium','teal','blue','red','amber','warm','blue','green'];
+    for (let i=0;i<n;i++){
+      const c = pal[Math.floor(R()*pal.length)];
+      bokeh.push({ x:R()*W, y:H*(.1 + Math.pow(R(),.85)*.62), r:(7 + Math.pow(R(),2)*40)*k, c, a:.10 + R()*.32, tw:.3+R()*1.2, ph:R()*6.28, vx:(R()-.5)*3*k });
+    }
+    for (let px = 10*k; px < W; px += 46*k) bokeh.push({ x:px, y:hwY-12*k, r:9*k, c:'sodium', a:.32, tw:.2, ph:px, vx:0 });
+    cars = [];
+    for (let i=0;i<7;i++){ const dir = R()<.5 ? 1 : -1; cars.push({ x:R()*W, dir, sp:(28 + R()*46)*k, y: hwY + (dir>0 ? 3 : 6)*k }); }
+    streaks = [];
+    const sn = REDUCE ? 0 : [16,30,44][quality];
+    for (let i=0;i<sn;i++) streaks.push({ x:R()*W*1.1, y:R()*H, len:(20+R()*40)*k, sp:(700+R()*500)*k });
+  }
+  function spawn(x,y,r){ drops.push({ x, y, r, mom:0, vx:0, lastT:y, dead:false }); }
+  function smallDrop(x,y,r){ sctx.drawImage(spr.small, (x-r)*S, (y-r)*S, 2*r*S, 2*r*S); }
+  function prefill(){
+    drops = [];
+    sctx.clearRect(0,0,small.width,small.height);
+    if (mctx) mctx.clearRect(0,0,mask.width,mask.height);
+    const rMin = 4*k, rMax = 15*k, n = Math.round([22,40,60][quality]*.7);
+    for (let i=0;i<n;i++) spawn(Math.random()*W, Math.random()*H, rMin + (rMax-rMin)*Math.pow(Math.random(),2.4));
+    const sn = Math.round(W*H/900*[.5,.8,1][quality]);
+    for (let i=0;i<sn;i++) smallDrop(Math.random()*W, Math.random()*H, (.6 + Math.random()*1.8)*k);
+  }
+
+  function resize(){
+    W = Math.max(1, innerWidth); H = Math.max(1, innerHeight);
+    k = clamp(Math.min(W,H)/720, .62, 1.35);
+    const dpr = window.devicePixelRatio || 1;
+    const maxPx = [0.9e6, 1.7e6, 3.2e6][quality];
+    S = Math.max(.6, Math.min(dpr, Math.sqrt(maxPx/(W*H))));
+    cvs.width = Math.round(W*S); cvs.height = Math.round(H*S);
+    buildModel();
+    nightC = renderCity(PAL.night); dawnC = renderCity(PAL.dawn);
+    blurN = blurOf(nightC); blurD = blurOf(dawnC);
+    buildOverlay(); buildBokeh();
+    small = mk(W*S, H*S); sctx = small.getContext('2d');
+    if (quality > 0){
+      mask = mk(W*S*MS, H*S*MS); mctx = mask.getContext('2d'); mctx.fillStyle = '#fff';
+      comp = mk(W*S*MS, H*S*MS); cctx = comp.getContext('2d');
+    } else { mask = comp = mctx = cctx = null; }
+    lit = lit.length ? cands.slice(0, lit.length).map(w => Object.assign({}, w, { a:1 })) : [];
+    prefill();
+    draw();
+  }
+
+  function updateDrops(dt){
+    const d60 = Math.min(dt*60, 3), rMin = 4*k, rMax = 15*k, maxN = [22,40,60][quality];
+    if (!REDUCE && rain > .02){
+      if (drops.length < maxN && Math.random() < .3*rain*d60) spawn(Math.random()*W, Math.random()*H*.92, rMin + (rMax-rMin)*Math.pow(Math.random(),2.6));
+      const sN = Math.round((quality+1)*1.4*rain*d60 + Math.random()*.6);
+      for (let i=0;i<sN;i++) smallDrop(Math.random()*W, Math.random()*H, (.6 + Math.random()*1.7)*k);
+    }
+    fadeClock += dt;
+    if (!REDUCE && fadeClock > .25){
+      fadeClock = 0;
+      sctx.globalCompositeOperation = 'destination-out'; sctx.fillStyle = 'rgba(0,0,0,.03)'; sctx.fillRect(0,0,small.width,small.height); sctx.globalCompositeOperation = 'source-over';
+      if (mctx){ mctx.globalCompositeOperation = 'destination-out'; mctx.fillStyle = 'rgba(0,0,0,.05)'; mctx.fillRect(0,0,mask.width,mask.height); mctx.globalCompositeOperation = 'source-over'; mctx.fillStyle = '#fff'; }
+    }
+    if (REDUCE) return;
+    for (const d of drops){
+      if (d.mom <= 0){
+        if (d.r > rMin*1.5 && Math.random() < .0035*d60*(d.r/rMax)*(.5+rain)){ d.mom = (.8 + Math.random()*1.6)*k; d.lastT = d.y; }
+        continue;
+      }
+      d.mom += .012*k*(d.r/rMax)*d60;
+      if (Math.random() < .006*d60) d.mom *= .25;
+      if (d.mom < .12*k) { d.mom = 0; continue; }
+      d.mom = Math.min(d.mom, 6*k);
+      if (Math.random() < .04*d60) d.vx = (Math.random()-.5)*.6*k;
+      d.y += d.mom*d60; d.x += d.vx*d60*Math.min(1, d.mom/(3*k));
+      sctx.globalCompositeOperation = 'destination-out';
+      sctx.beginPath(); sctx.arc(d.x*S, d.y*S, d.r*.9*S, 0, Math.PI*2); sctx.fill();
+      sctx.globalCompositeOperation = 'source-over';
+      if (mctx){ mctx.beginPath(); mctx.ellipse(d.x*S*MS, d.y*S*MS, d.r*.6*S*MS, d.r*.9*S*MS, 0, 0, Math.PI*2); mctx.fill(); }
+      if (d.y - d.lastT > d.r*.8){
+        d.lastT = d.y;
+        if (Math.random() < .7) smallDrop(d.x + (Math.random()-.5)*d.r*.4, d.y - d.r*1.15, d.r*(.16 + Math.random()*.16));
+        d.r *= .993;
+      }
+    }
+    for (let i=0;i<drops.length;i++){
+      const a = drops[i]; if (a.dead) continue;
+      for (let j=i+1;j<drops.length;j++){
+        const b = drops[j]; if (b.dead || !(a.mom > 0 || b.mom > 0)) continue;
+        const dx = a.x-b.x, dy = a.y-b.y, rr = (a.r+b.r)*.6;
+        if (dx*dx + dy*dy < rr*rr){
+          const big = a.r >= b.r ? a : b, sm = big === a ? b : a;
+          big.r = Math.min(Math.sqrt(big.r*big.r + sm.r*sm.r*.8), rMax*1.5);
+          big.mom = Math.max(big.mom, sm.mom) + .4*k; sm.dead = true;
+        }
+      }
+    }
+    drops = drops.filter(d => !d.dead && d.y - d.r < H && d.r > rMin*.5);
+  }
+
+  function draw(){
+    if (!blurN) return;
+    ctx.setTransform(1,0,0,1,0,0); ctx.globalCompositeOperation = 'source-over'; ctx.globalAlpha = 1;
+    ctx.drawImage(blurN, 0, 0, cvs.width, cvs.height);
+    if (dawn > .003){ ctx.globalAlpha = dawn; ctx.drawImage(blurD, 0, 0, cvs.width, cvs.height); ctx.globalAlpha = 1; }
+    ctx.setTransform(S,0,0,S,0,0);
+    ctx.globalCompositeOperation = 'lighter';
+    const ba = 1 - dawn*.75;
+    for (const b of bokeh){
+      const a = b.a*ba*(.78 + .22*Math.sin(time*b.tw + b.ph));
+      if (a < .01) continue;
+      ctx.globalAlpha = a; ctx.drawImage(spr[b.c], b.x-b.r, b.y-b.r, b.r*2, b.r*2);
+    }
+    for (const c of cars){
+      const s = 8*k; ctx.globalAlpha = .55*ba;
+      const img = c.dir > 0 ? spr.warmG : spr.redG;
+      ctx.drawImage(img, c.x - s - 3*k, c.y - s, s*2, s*2); ctx.drawImage(img, c.x - s + 4*k, c.y - s, s*2, s*2);
+    }
+    for (const w of lit){
+      const s = Math.max(w.w, w.h)*3.4;
+      ctx.globalAlpha = w.a*.85; ctx.drawImage(spr.amberG, w.x + w.w/2 - s/2, w.y + w.h/2 - s/2, s, s);
+      ctx.globalAlpha = w.a*.55; ctx.fillStyle = '#ffd59a'; ctx.fillRect(w.x, w.y, w.w, w.h);
+    }
+    ctx.globalAlpha = 1; ctx.globalCompositeOperation = 'source-over';
+    if (streaks.length && rain > .03){
+      ctx.strokeStyle = `rgba(170,190,220,${(.10*rain).toFixed(3)})`; ctx.lineWidth = 1; ctx.beginPath();
+      for (const r of streaks){ ctx.moveTo(r.x, r.y); ctx.lineTo(r.x - r.len*.16, r.y + r.len); }
+      ctx.stroke();
+    }
+    if (cctx){
+      cctx.globalCompositeOperation = 'copy'; cctx.globalAlpha = 1; cctx.drawImage(mask, 0, 0);
+      cctx.globalCompositeOperation = 'source-in'; cctx.drawImage(nightC, 0, 0, comp.width, comp.height);
+      if (dawn > .003){ cctx.globalCompositeOperation = 'source-atop'; cctx.globalAlpha = dawn; cctx.drawImage(dawnC, 0, 0, comp.width, comp.height); cctx.globalAlpha = 1; }
+      ctx.setTransform(1,0,0,1,0,0); ctx.globalAlpha = .85; ctx.drawImage(comp, 0, 0, cvs.width, cvs.height); ctx.globalAlpha = 1;
+    }
+    ctx.setTransform(1,0,0,1,0,0);
+    ctx.drawImage(small, 0, 0);
+    ctx.setTransform(S,0,0,S,0,0);
+    const sw = nightC.width, sh = nightC.height;
+    for (const d of drops){
+      const r = d.r, ry = r*(1 + Math.min(.28, d.mom*.07/k));
+      ctx.save();
+      ctx.beginPath(); ctx.ellipse(d.x, d.y, r, ry, 0, 0, Math.PI*2); ctx.clip();
+      const f = Math.min(r*7*S, sw, sh);
+      const sx = clamp((d.x - r*3.5)*S, 0, sw - f), sy = clamp((d.y - r*3.5)*S, 0, sh - f);
+      ctx.translate(d.x, d.y); ctx.scale(1, -1);
+      ctx.drawImage(nightC, sx, sy, f, f, -r, -ry, r*2, ry*2);
+      if (dawn > .003){ ctx.globalAlpha = dawn; ctx.drawImage(dawnC, sx, sy, f, f, -r, -ry, r*2, ry*2); ctx.globalAlpha = 1; }
+      ctx.restore();
+      ctx.drawImage(spr.rim, d.x - r*1.04, d.y - ry*1.04, r*2.08, ry*2.08);
+    }
+    ctx.setTransform(1,0,0,1,0,0);
+    ctx.drawImage(overlay, 0, 0);
+  }
+
+  function frame(dt){
+    time += dt;
+    dawn += (dawnT - dawn)*Math.min(1, dt*(dawnT > dawn ? .3 : 1.5));
+    rain += (rainT - rain)*Math.min(1, dt*.4);
+    if (!REDUCE){
+      for (const b of bokeh){ if (!b.vx) continue; b.x += b.vx*dt; if (b.x < -b.r) b.x = W + b.r; if (b.x > W + b.r) b.x = -b.r; }
+      for (const c of cars){ c.x += c.dir*c.sp*dt; if (c.x > W + 20) c.x = -20; if (c.x < -20) c.x = W + 20; }
+      for (const s of streaks){ s.y += s.sp*dt; s.x -= s.sp*dt*.16; if (s.y > H){ s.y = -s.len; s.x = Math.random()*W*1.15; } }
+    }
+    litClock += dt;
+    const step = REDUCE ? .01 : .06;
+    while (lit.length < litGoal && litClock > step){ litClock -= step; lit.push(Object.assign({}, cands[lit.length], { a:0 })); }
+    if (lit.length >= litGoal) litClock = 0;
+    for (const w of lit) w.a = Math.min(1, w.a + dt*(REDUCE ? 10 : 1.2));
+    updateDrops(dt);
+    draw();
+  }
+  function setDawn(frac){ dawnT = 1; rainT = 0; litGoal = Math.round(cands.length*clamp(frac,0,1)); }
+  function reset(){ dawnT = 0; rainT = 1; litGoal = 0; lit = []; }
+  function degrade(){ if (quality > 0){ quality--; resize(); return true; } return false; }
+  function init(){ makeSprites(); resize(); }
+  return { init, resize, frame, setDawn, reset, degrade };
+})();
+
+/* =========================================================
+   AudioEng：雨声、静电、调谐、点歌音序器
+   ========================================================= */
+const AudioEng = (() => {
+  let ctx = null, ready = false, master, bus, analyser, reverb, rainG, staticG, whistle, whistleG, voiceG, hissG, music = null, rainLevel = 1;
+  let muted = !!store.get(KEY_MUTE, false);
+  const buf = {}; let tdata = null;
+  const SCALES = { major:[0,2,4,5,7,9,11], minor:[0,2,3,5,7,8,10], dorian:[0,2,3,5,7,9,10] };
+
+  function noise(sec, kind){
+    const n = Math.floor(ctx.sampleRate*sec), b = ctx.createBuffer(1, n, ctx.sampleRate), d = b.getChannelData(0);
+    let b0=0,b1=0,b2=0,b3=0,b4=0,b5=0,b6=0,last=0;
+    for (let i=0;i<n;i++){
+      const w = Math.random()*2-1;
+      if (kind === 'pink'){ b0=.99886*b0+w*.0555179; b1=.99332*b1+w*.0750759; b2=.969*b2+w*.153852; b3=.8665*b3+w*.3104856; b4=.55*b4+w*.5329522; b5=-.7616*b5-w*.016898; d[i]=(b0+b1+b2+b3+b4+b5+b6+w*.5362)*.11; b6=w*.115926; }
+      else if (kind === 'brown'){ last = (last + .02*w)/1.02; d[i] = last*3.5; }
+      else if (kind === 'crackle'){ d[i] = Math.random() < .0007 ? (Math.random()*2-1)*.8 : w*.01; }
+      else d[i] = w;
+    }
+    return b;
+  }
+  function impulse(sec, decay){
+    const n = Math.floor(ctx.sampleRate*sec), b = ctx.createBuffer(2, n, ctx.sampleRate);
+    for (let c=0;c<2;c++){ const d = b.getChannelData(c); for (let i=0;i<n;i++) d[i] = (Math.random()*2-1)*Math.pow(1-i/n, decay); }
+    return b;
+  }
+  const src = b => { const s = ctx.createBufferSource(); s.buffer = b; s.loop = true; s.start(0, Math.random()*b.duration*.5); return s; };
+  const filt = (type,f,q) => { const x = ctx.createBiquadFilter(); x.type = type; x.frequency.value = f; if (q != null) x.Q.value = q; return x; };
+  const gain = v => { const g = ctx.createGain(); g.gain.value = v; return g; };
+  const chain = (...n) => { for (let i=0;i<n.length-1;i++) n[i].connect(n[i+1]); return n[n.length-1]; };
+  const osc = (type, f) => { const o = ctx.createOscillator(); o.type = type; o.frequency.value = f; return o; };
+
+  function init(){
+    if (ctx){ if (ctx.state === 'suspended') ctx.resume(); return; }
+    const AC = window.AudioContext || window.webkitAudioContext; if (!AC) return;
+    try { ctx = new AC(); } catch(e){ ctx = null; return; }
+    master = gain(muted ? 0 : .9);
+    const comp = ctx.createDynamicsCompressor(); comp.threshold.value = -16; comp.knee.value = 12; comp.ratio.value = 3.5; comp.attack.value = .01; comp.release.value = .25;
+    bus = gain(1); chain(bus, comp, master, ctx.destination);
+    analyser = ctx.createAnalyser(); analyser.fftSize = 512; tdata = new Uint8Array(analyser.fftSize);
+    reverb = ctx.createConvolver(); reverb.buffer = impulse(2.6, 2.4); chain(reverb, gain(.35), bus);
+    buf.white = noise(2,'white'); buf.pink = noise(3,'pink'); buf.brown = noise(4,'brown'); buf.crackle = noise(3,'crackle');
+    // 雨声：低频棕噪 + 高频粉噪（缓慢起伏）
+    rainG = gain(0); rainG.connect(bus);
+    chain(src(buf.brown), filt('lowpass', 620, .4), gain(.6), rainG);
+    const hi = gain(.05); chain(src(buf.pink), filt('highpass', 1800), filt('lowpass', 7000), hi, rainG);
+    const lfo = osc('sine', .11), lg = gain(.025); chain(lfo, lg); lg.connect(hi.gain); lfo.start();
+    rainG.gain.setTargetAtTime(1, ctx.currentTime, 1.2);
+    // 调谐：静电 / 差拍啸叫 / 人声感载波
+    staticG = gain(0); chain(src(buf.white), filt('bandpass', 2400, .5), filt('lowpass', 5200), staticG, bus); staticG.connect(analyser);
+    whistle = osc('sine', 800); whistleG = gain(0); chain(whistle, whistleG, bus); whistle.start();
+    voiceG = gain(0); const am = gain(.6);
+    const o1 = osc('sawtooth', 128), o2 = osc('sawtooth', 192.7), vm = gain(.5); o1.connect(vm); o2.connect(vm);
+    const f1 = filt('bandpass', 620, 5), f2 = filt('bandpass', 1180, 6), fm = gain(1.4);
+    vm.connect(f1); vm.connect(f2); f1.connect(fm); f2.connect(fm);
+    chain(fm, filt('lowpass', 2200), am, voiceG, bus); voiceG.connect(analyser);
+    const l1 = osc('sine', 4.2), l1g = gain(.35); chain(l1, l1g); l1g.connect(am.gain);
+    const l2 = osc('sine', .9), l2g = gain(.22); chain(l2, l2g); l2g.connect(am.gain);
+    const l3 = osc('sine', 2.3), l3g = gain(9); chain(l3, l3g); l3g.connect(o1.frequency); l3g.connect(o2.frequency);
+    [o1,o2,l1,l2,l3].forEach(o => o.start());
+    // 电话线底噪
+    hissG = gain(0); chain(src(buf.pink), filt('bandpass', 1700, .35), hissG, bus);
+    ready = true;
+  }
+
+  function tuneUpdate(d, on){
+    if (!ready) return;
+    const now = ctx.currentTime, a = Math.abs(d), s = clamp(1 - a/1.4, 0, 1);
+    staticG.gain.setTargetAtTime(on ? (.035 + .2*(1 - s*s))*(.7 + Math.random()*.6) : 0, now, .04);
+    const wOn = on && a > .05 && a < 1.1;
+    whistle.frequency.setTargetAtTime(90 + a*1500, now, .03);
+    whistleG.gain.setTargetAtTime(wOn ? .02*(1 - a/1.1) : 0, now, .05);
+    voiceG.gain.setTargetAtTime(on ? Math.pow(s, 2.2)*.28 : 0, now, .06);
+  }
+  function burst(t, f, q, g0, len){
+    const s = ctx.createBufferSource(); s.buffer = buf.white; const g = gain(0);
+    chain(s, filt('bandpass', f, q), g, bus);
+    g.gain.setValueAtTime(g0, t); g.gain.exponentialRampToValueAtTime(.0001, t + len);
+    s.start(t, Math.random()); s.stop(t + len + .02);
+  }
+  function lock(){
+    if (!ready) return; const t = ctx.currentTime;
+    burst(t, 2600, .8, .55, .05);
+    const o = osc('sine', 150), g = gain(0); chain(o, g, bus);
+    o.frequency.setValueAtTime(150, t); o.frequency.exponentialRampToValueAtTime(50, t + .14);
+    g.gain.setValueAtTime(.5, t); g.gain.exponentialRampToValueAtTime(.0001, t + .18); o.start(t); o.stop(t + .2);
+    const b = osc('sine', 1760), bg = gain(0); chain(b, bg, bus);
+    bg.gain.setValueAtTime(.0001, t + .05); bg.gain.linearRampToValueAtTime(.05, t + .06); bg.gain.exponentialRampToValueAtTime(.0001, t + .3); b.start(t + .05); b.stop(t + .32);
+    [staticG, voiceG, whistleG].forEach(n => { n.gain.cancelScheduledValues(t); n.gain.setTargetAtTime(0, t, .03); });
+  }
+  function tick(){ if (ready) burst(ctx.currentTime, 3400, 2, .07, .012); }
+  function click(){ if (ready) burst(ctx.currentTime, 1800, 1.4, .1, .02); }
+  function hiss(on){ if (ready) hissG.gain.setTargetAtTime(on ? .018 : 0, ctx.currentTime, .3); }
+  function rainTo(v, tc){ rainLevel = v; if (ready) rainG.gain.setTargetAtTime(v, ctx.currentTime, tc || 2); }
+  function setMuted(m){ muted = m; store.set(KEY_MUTE, m); if (ready) master.gain.setTargetAtTime(m ? 0 : .9, ctx.currentTime, .05); }
+  function update(dt){
+    if (!ready || rainLevel < .1 || muted) return;
+    if (Math.random() < dt*.8){
+      const t = ctx.currentTime, f = 1700 + Math.random()*1800, o = osc('sine', f), g = gain(0);
+      let out = g;
+      if (ctx.createStereoPanner){ const p = ctx.createStereoPanner(); p.pan.value = Math.random()*1.6 - .8; g.connect(p); out = p; }
+      o.connect(g); out.connect(bus);
+      o.frequency.setValueAtTime(f, t); o.frequency.exponentialRampToValueAtTime(f*.55, t + .05);
+      g.gain.setValueAtTime(.0001, t); g.gain.linearRampToValueAtTime(.012*rainLevel, t + .004); g.gain.exponentialRampToValueAtTime(.0001, t + .07);
+      o.start(t); o.stop(t + .09);
+    }
+  }
+  function level(){
+    if (!ready) return 0;
+    analyser.getByteTimeDomainData(tdata);
+    let s = 0; for (let i=0;i<tdata.length;i++){ const v = (tdata[i]-128)/128; s += v*v; }
+    return Math.sqrt(s/tdata.length);
+  }
+
+  /* ---- 音序器 ---- */
+  function degMidi(key, sc, idx){ const n = sc.length, o = Math.floor(idx/n), i = ((idx%n)+n)%n; return key + 12*o + sc[i]; }
+  function parseMelody(str){
+    const out = [];
+    str.split(/[\s|]+/).filter(Boolean).forEach(tok => {
+      const [n, b] = tok.split(':'); const beats = parseFloat(b || '1');
+      if (n === '0'){ out.push({ idx:null, beats }); return; }
+      const deg = parseInt(n, 10); let oct = 0;
+      for (const ch of n){ if (ch === "'") oct++; if (ch === ',') oct--; }
+      out.push({ idx:(deg-1) + oct*7, beats });
+    });
+    return out;
+  }
+  function genMelody(def, R){
+    const m = def.meter || 4, lo = def.lo != null ? def.lo : 0, hi = def.hi != null ? def.hi : 11;
+    const pats = m === 3 ? [[1,1,1],[2,1],[1.5,.5,1],[3],[1,2],[2,.5,.5]] : [[1,1,1,1],[1.5,.5,1,1],[2,1,1],[1,1,2],[.5,.5,1,2],[3,1],[1,.5,.5,2],[2,2]];
+    const sparse = def.sparse ? (m === 3 ? [[3],[2,1]] : [[4],[2,2],[3,1]]) : null;
+    const pick = a => a[Math.floor(R()*a.length)];
+    const bars = []; let prev = 4; const half = Math.floor(def.prog.length/2);
+    def.prog.forEach((deg, bi) => {
+      const last = bi === def.prog.length - 1;
+      if (!last && bi >= half && def.prog[bi] === def.prog[bi-half] && R() < .85){
+        bars.push(bars[bi-half].map(n => Object.assign({}, n)));
+        const ln = bars[bi].filter(n => n.idx != null).pop(); if (ln) prev = ln.idx;
+        return;
+      }
+      const pat = last ? [m] : (sparse ? pick(sparse) : pick(pats));
+      const root = deg - 1, ct = [root, root+2, root+4], bar = [];
+      pat.forEach((d, j) => {
+        let idx;
+        if (last){ idx = Math.abs(prev - 7) < Math.abs(prev) ? 7 : 0; }
+        else if (j === 0){
+          const c = []; for (const t of ct) for (let o=-1;o<=2;o++){ const v = t + o*7; if (v >= lo && v <= hi) c.push(v); }
+          c.sort((a,b) => Math.abs(a-prev) - Math.abs(b-prev));
+          idx = c.length ? c[R() < .7 ? 0 : Math.min(1, c.length-1)] : prev;
+        } else idx = clamp(prev + pick([-2,-1,-1,1,1,2,0,-3,3]), lo, hi);
+        if (!last && j > 0 && R() < .07) bar.push({ idx:null, beats:d });
+        else { bar.push({ idx, beats:d }); prev = idx; }
+      });
+      bars.push(bar);
+    });
+    return [].concat(...bars);
+  }
+  function compose(def){
+    const sc = SCALES[def.mode] || SCALES.major, R = mulberry32(def.seed || 7), m = def.meter || 4, ev = [];
+    const mel = def.melody ? parseMelody(def.melody) : genMelody(def, R);
+    let b = 0;
+    for (const n of mel){
+      if (n.idx != null){
+        const accent = (b % m) === 0 ? 1 : .82;
+        ev.push({ b, midi:degMidi(def.key, sc, n.idx), d:n.beats, v:.55*accent, tim:def.timbre });
+        if (def.double) ev.push({ b, midi:degMidi(def.key, sc, n.idx) - 12, d:n.beats, v:.22, tim:def.double });
+      }
+      b += n.beats;
+    }
+    def.prog.forEach((deg, i) => {
+      const bb = i*m, root = deg - 1, ch = [root, root+2, root+4];
+      const bass = degMidi(def.key - 24, sc, root), cm = c => degMidi(def.key - 12, sc, c), at = def.atim || def.timbre;
+      switch (def.accomp){
+        case 'waltz':
+          ev.push({ b:bb, midi:bass, d:1, v:.42, tim:'bass' });
+          for (const kk of [1,2]) ch.forEach(c => ev.push({ b:bb+kk, midi:cm(c), d:.55, v:.14, tim:def.timbre === 'accordion' ? 'accordion' : 'piano' }));
+          break;
+        case 'arp': {
+          ev.push({ b:bb, midi:bass, d:m, v:.3, tim:'bass' });
+          const ord = [0,1,2,1,0,2,1,2];
+          for (let s=0; s<m*2; s++) ev.push({ b:bb + s*.5, midi:cm(ch[ord[s%8]]) + (s%4 === 3 ? 12 : 0), d:.9, v:.12, tim:at });
+          break;
+        }
+        case 'block':
+          ev.push({ b:bb, midi:bass, d:m, v:.32, tim:'bass' });
+          for (const kk of (m === 4 ? [0,2] : [0])) ch.forEach(c => ev.push({ b:bb+kk, midi:cm(c), d:1.6, v:.12, tim:at }));
+          if (def.kick){ ev.push({ b:bb, tim:'kick', midi:36, d:.5, v:.5 }); ev.push({ b:bb+2, tim:'kick', midi:36, d:.5, v:.35 }); }
+          break;
+        case 'pluck':
+          ev.push({ b:bb, midi:bass, d:m*.9, v:.32, tim:'bass' });
+          for (let kk=1; kk<m; kk++) ch.forEach((c, j) => ev.push({ b:bb + kk + j*.03, midi:cm(c), d:.8, v:.1, tim:at }));
+          break;
+        default:
+          ev.push({ b:bb, midi:bass, d:m, v:.3, tim:'bass' });
+          ch.forEach(c => ev.push({ b:bb, midi:cm(c), d:m, v:.08, tim:at }));
+      }
+    });
+    return { ev, beats:def.prog.length*m, bpm:def.bpm };
+  }
+  function perc(g, t, a, peak, decay){ g.gain.setValueAtTime(.0001, t); g.gain.linearRampToValueAtTime(peak, t + a); g.gain.exponentialRampToValueAtTime(.0001, t + a + decay); }
+  function adsr(g, t, a, peak, d, sus, relAt, rel){
+    g.gain.setValueAtTime(.0001, t); g.gain.linearRampToValueAtTime(peak, t + a);
+    g.gain.setTargetAtTime(sus, t + a, d/3); g.gain.setTargetAtTime(.0001, Math.max(relAt, t + a + .01), rel/3);
+  }
+  function voice(t, midi, dur, v, tim, out){
+    const f = 440*Math.pow(2, (midi-69)/12), g = gain(0); g.connect(out);
+    const oscs = [];
+    const O = (type, fr, gv, det, to) => { const o = osc(type, fr); if (det) o.detune.value = det; const gg = gain(gv == null ? 1 : gv); o.connect(gg); gg.connect(to || g); oscs.push(o); return o; };
+    const vib = (rate, depth, from) => { const l = osc('sine', rate), lg = gain(0); l.connect(lg); oscs.forEach(o => lg.connect(o.frequency)); lg.gain.setValueAtTime(0, t); lg.gain.linearRampToValueAtTime(depth, from); l.start(t); l.stop(end); };
+    let end = t + dur + 1;
+    switch (tim){
+      case 'musicbox': end = t + 2.1; O('sine', f, 1); O('sine', f*2, .18); O('sine', f*5.04, .05); perc(g, t, .003, v*.5, 1.9); break;
+      case 'epiano': {
+        end = t + Math.max(dur, 1) + 1.8; O('sine', f, 1);
+        const tg = gain(0); tg.connect(g); O('sine', f*2, 1, 0, tg); perc(tg, t, .002, .35, .3);
+        perc(g, t, .005, v*.5, Math.min(3, .6 + dur*.8)); break;
+      }
+      case 'piano': {
+        end = t + Math.min(2.6, .9 + dur) + .2; const lp = filt('lowpass', 2600, .5); lp.connect(g);
+        O('triangle', f, .7, 0, lp); O('sine', f*2, .22, 0, lp); O('sine', f*3, .05, 0, lp);
+        perc(g, t, .004, v*.55, Math.min(2.4, .8 + dur)); break;
+      }
+      case 'guitar': {
+        end = t + 1.5; const lp = filt('lowpass', 3200, .8); lp.connect(g);
+        lp.frequency.setValueAtTime(3200, t); lp.frequency.exponentialRampToValueAtTime(700, t + .35);
+        O('triangle', f, 1, 0, lp); O('sawtooth', f, .2, 0, lp); perc(g, t, .002, v*.5, 1.3); break;
+      }
+      case 'strings': {
+        end = t + dur + 1.4; const lp = filt('lowpass', 1400, .5); lp.connect(g);
+        O('sawtooth', f, .5, 0, lp); O('sawtooth', f, .5, 7, lp); adsr(g, t, .2, v*.32, .4, v*.26, t + dur, .35); vib(5.2, f*.004, t + .3); break;
+      }
+      case 'cello': {
+        end = t + dur + 2; const lp = filt('lowpass', 900, .8); lp.connect(g);
+        O('sawtooth', f, .5, 0, lp); O('sawtooth', f, .5, -5, lp); adsr(g, t, .28, v*.45, .5, v*.36, t + dur, .5); vib(5, f*.006, t + .4); break;
+      }
+      case 'harmonica': {
+        end = t + dur + .6; const bp = filt('bandpass', 1500, .6), lp = filt('lowpass', 3000); chain(bp, lp, g);
+        O('square', f, .35, 0, bp); O('sawtooth', f, .45, 0, bp); adsr(g, t, .04, v*.5, .2, v*.38, t + dur*.92, .08); vib(5.5, f*.004, t + .15); break;
+      }
+      case 'accordion': {
+        end = t + dur + .5; const lp = filt('lowpass', 2200, .6); lp.connect(g);
+        O('sawtooth', f, .4, -8, lp); O('sawtooth', f, .4, 8, lp); O('square', f*2, .1, 0, lp); adsr(g, t, .03, v*.32, .15, v*.27, t + dur*.95, .07); break;
+      }
+      case 'synth': {
+        end = t + .7; const lp = filt('lowpass', 2800, 4); lp.connect(g);
+        lp.frequency.setValueAtTime(2800, t); lp.frequency.exponentialRampToValueAtTime(420, t + .28);
+        O('square', f, .6, 0, lp); perc(g, t, .004, v*.34, .45); break;
+      }
+      case 'pad': {
+        end = t + dur + 3; const lp = filt('lowpass', 700, .5); lp.connect(g);
+        O('sawtooth', f, .5, 0, lp); O('sawtooth', f, .5, 9, lp); adsr(g, t, .5, v*.2, .5, v*.18, t + dur, .9); break;
+      }
+      case 'bass': end = t + dur + .8; O('sine', f, 1); O('triangle', f, .3); adsr(g, t, .01, v*.7, dur*.5, v*.35, t + dur*.9, .12); break;
+      case 'kick': {
+        end = t + .4; const o = O('sine', 110, 1); o.frequency.setValueAtTime(110, t); o.frequency.exponentialRampToValueAtTime(42, t + .12);
+        perc(g, t, .002, v*.9, .28); break;
+      }
+      default: O('sine', f, 1); perc(g, t, .01, v*.4, 1);
+    }
+    oscs.forEach(o => { o.start(t); o.stop(end); });
+  }
+  function playSong(id, opts){
+    opts = opts || {};
+    if (!ready || !SONGS[id]) return 0;
+    stopMusic(.6);
+    const def = SONGS[id], c = compose(def), spb = 60/c.bpm, t0 = ctx.currentTime + .15, peak = opts.gain || .55;
+    const g = gain(0); g.gain.setValueAtTime(0, t0 - .1); g.gain.linearRampToValueAtTime(peak, t0 + .4);
+    let head = g;
+    if (def.lofi){ head = gain(1); chain(head, filt('highpass', 140, .7), filt('lowpass', 3400, .7), g); }
+    g.connect(bus); g.connect(analyser);
+    const rs = gain(def.timbre === 'cello' || def.timbre === 'epiano' ? .9 : .6); g.connect(rs); rs.connect(reverb);
+    const dur = Math.min(c.beats*spb, 26), end = t0 + dur;
+    let vin = null;
+    if (def.vinyl){ vin = ctx.createBufferSource(); vin.buffer = buf.crackle; vin.loop = true; chain(vin, filt('highpass', 900), gain(.6), g); vin.start(t0 - .1); vin.stop(end + 2.6); }
+    for (const e of c.ev){
+      const off = e.b*spb; if (off >= dur) continue;
+      voice(t0 + off + (e.tim === 'kick' ? 0 : (Math.random()-.5)*.012), e.midi, Math.max(.08, e.d*spb), e.v, e.tim, head);
+    }
+    g.gain.setValueAtTime(peak, end); g.gain.linearRampToValueAtTime(0, end + 2.2);
+    const m = { g, vin }; music = m;
+    setTimeout(() => { if (music === m) music = null; try { g.disconnect(); } catch(e){} }, (end + 3 - ctx.currentTime)*1000);
+    return dur;
+  }
+  function stopMusic(fade){
+    fade = fade == null ? 1.2 : fade;
+    if (!music || !ready) return;
+    const m = music; music = null; const t = ctx.currentTime;
+    m.g.gain.cancelScheduledValues(t); m.g.gain.setValueAtTime(m.g.gain.value, t); m.g.gain.linearRampToValueAtTime(0, t + fade);
+    setTimeout(() => { try { m.g.disconnect(); if (m.vin) m.vin.stop(); } catch(e){} }, fade*1000 + 300);
+  }
+  function suspend(on){ if (!ctx) return; try { on ? ctx.suspend() : ctx.resume(); } catch(e){} }
+  return { init, tuneUpdate, lock, tick, click, hiss, rainTo, setMuted, update, level, playSong, stopMusic, suspend, get muted(){ return muted; }, get ready(){ return ready; } };
+})();
+
+/* =========================================================
+   控制台：刻度盘 / 旋钮 / 调谐眼 / VU 表 / ON AIR
+   ========================================================= */
+const dial = $('#dial'), dialCv = $('#dialCv'), dctx = dialCv.getContext('2d');
+const eyeCv = $('#eye'), ectx = eyeCv.getContext('2d');
+const vuCv = $('#vu'), vctx = vuCv.getContext('2d');
+const knob = $('#knob'), knurl = $('#knurl'), markrot = $('#markrot');
+const readout = $('#readout'), bulb = $('#bulb'), onairEl = $('#onair'), hintEl = $('#hint'), consoleEl = $('#console');
+let dialW = 300, dialH = 80, DPR = 1, eyeW = 44, vuW = 104, vuH = 58;
+
+function sizeCanvas(c, cx){
+  const r = c.getBoundingClientRect(); const d = Math.min(window.devicePixelRatio || 1, 2);
+  c.width = Math.max(1, Math.round(r.width*d)); c.height = Math.max(1, Math.round(r.height*d)); cx.setTransform(d,0,0,d,0,0);
+  return { w:r.width, h:r.height, d };
+}
+function layoutConsole(){
+  const a = sizeCanvas(dialCv, dctx); dialW = a.w; dialH = a.h; DPR = a.d;
+  eyeW = sizeCanvas(eyeCv, ectx).w; const v = sizeCanvas(vuCv, vctx); vuW = v.w; vuH = v.h;
+  Tuner.dirty = true;
+}
+
+const Tuner = {
+  f:88.7, target:88.7, active:false, drag:false, vel:0, afc:false, hold:0, t:0, hint:0, resolve:null, lastDet:0, lastTick:0, dirty:true,
+  ppm(){ return Math.max(clamp(dialW/11, 26, 56), dialW/20); },
+  begin(target){ this.target = target; this.active = true; this.hold = 0; this.t = 0; this.hint = 0; this.afc = false; this.dirty = true; return new Promise(r => this.resolve = r); },
+  set(v){
+    v = clamp(v, 87.5, 108);
+    if (v === this.f) return;
+    this.f = v; this.dirty = true;
+    const det = Math.round(v*5);
+    if (det !== this.lastDet){ this.lastDet = det; const n = performance.now(); if (this.active && n - this.lastTick > 28){ this.lastTick = n; AudioEng.tick(); } }
+  },
+  update(dt){
+    if (!this.drag){
+      if (this.afc){ const d = this.target - this.f; this.set(Math.abs(d) < .004 ? this.target : this.f + d*Math.min(1, dt*7)); }
+      else if (Math.abs(this.vel) > .02){ this.set(this.f + this.vel*dt); this.vel *= Math.pow(.03, dt); if (this.f <= 87.5 || this.f >= 108) this.vel = 0; }
+      else this.vel = 0;
+      if (this.active && !this.afc && Math.abs(this.vel) < .6 && Math.abs(this.f - this.target) < .45) this.afc = true;
+    }
+    if (!this.active) return;
+    this.t += dt;
+    const h = this.t > 14 ? 2 : this.t > 8 ? 1 : 0;
+    if (h !== this.hint){ this.hint = h; this.dirty = true; if (h === 2) hintEl.textContent = '提示：信号大约在 FM ' + Math.round(this.target) + ' 附近，看刻度上的微光'; }
+    if (Math.abs(this.f - this.target) < .1){ this.hold += dt; if (this.hold > .32) this.lock(); } else this.hold = 0;
+  },
+  lock(){ this.active = false; this.afc = false; this.vel = 0; this.drag = false; this.set(this.target); const r = this.resolve; this.resolve = null; if (r) r(); },
+};
+
+function drawDial(){
+  const x = dctx, w = dialW, h = dialH, T = Tuner;
+  x.setTransform(DPR,0,0,DPR,0,0);
+  let g = x.createLinearGradient(0,0,0,h);
+  g.addColorStop(0,'#6e360a'); g.addColorStop(.42,'#eea042'); g.addColorStop(.58,'#f4ae55'); g.addColorStop(1,'#7c3e0e');
+  x.fillStyle = g; x.fillRect(0,0,w,h);
+  g = x.createRadialGradient(w/2,h*.55,0,w/2,h*.55,w*.6); g.addColorStop(0,'rgba(255,238,195,.55)'); g.addColorStop(1,'rgba(120,50,0,0)');
+  x.fillStyle = g; x.fillRect(0,0,w,h);
+  // 刻度窗口夹在 87.0–108.5 内：两端时刻度不再滚动、改为指针移动，整条刻度始终连续
+  const ppm = T.ppm(), f0 = T.f, half = w/2/ppm, LO = 87.0, HI = 108.5;
+  const vc = (HI - LO) <= half*2 ? (LO + HI)/2 : clamp(f0, LO + half, HI - half);
+  const X = f => w/2 + (f - vc)*ppm, base = h*.66;
+  if (T.active && T.hint){
+    const tx = X(T.target), rr = T.hint === 2 ? 40 : 26;
+    g = x.createRadialGradient(tx,base,0,tx,base,rr); g.addColorStop(0,'rgba(255,252,225,.75)'); g.addColorStop(1,'rgba(255,240,200,0)');
+    x.fillStyle = g; x.fillRect(tx-rr, 0, rr*2, h);
+  }
+  const fmin = Math.max(LO, vc - half - .5), fmax = Math.min(HI, vc + half + .5);
+  x.strokeStyle = 'rgba(52,20,3,.9)'; x.fillStyle = 'rgba(52,20,3,.92)';
+  x.textAlign = 'center'; x.textBaseline = 'middle'; x.font = Math.round(h*.3) + 'px VT323, "IBM Plex Mono", monospace';
+  for (let i = Math.ceil(fmin*10); i <= Math.floor(fmax*10); i++){
+    const f = i/10, inR = f >= 87.5 - 1e-6 && f <= 108 + 1e-6;
+    const px = X(f), major = i % 10 === 0, half = i % 5 === 0;
+    if (!major && !half && ppm < 34) continue;
+    const len = major ? h*.24 : half ? h*.15 : h*.08;
+    x.globalAlpha = (major ? 1 : half ? .8 : .5)*(inR ? 1 : .45); x.lineWidth = major ? 1.6 : 1;
+    x.beginPath(); x.moveTo(px, base); x.lineTo(px, base - len); x.stroke();
+    if (inR && major && (i % 20 === 0 || ppm > 40)){ x.globalAlpha = .95; x.fillText(String(i/10), px, h*.24); }
+  }
+  x.globalAlpha = .7; x.lineWidth = 1.2;
+  x.beginPath(); x.moveTo(Math.max(0, X(LO)), base); x.lineTo(Math.min(w, X(HI)), base); x.stroke();
+  const sx = X(88.7);
+  if (sx > -20 && sx < w + 20){
+    x.globalAlpha = .9; x.beginPath(); x.moveTo(sx, base + 3); x.lineTo(sx - 4, base + 9); x.lineTo(sx + 4, base + 9); x.closePath(); x.fill();
+    x.font = Math.round(h*.16) + 'px "Noto Serif SC", serif'; x.fillText('夜航', sx, base + h*.2);
+  }
+  x.globalAlpha = .55; x.font = Math.round(h*.17) + 'px VT323, monospace'; x.textAlign = 'right'; x.fillText('MHz', w - 8, h*.86);
+  x.textAlign = 'left'; x.fillText('FM', 8, h*.86);
+  x.globalAlpha = 1;
+  x.save(); x.shadowColor = 'rgba(255,50,20,.9)'; x.shadowBlur = 8; x.fillStyle = '#c81d12'; x.fillRect(X(f0) - 1.25, 3, 2.5, h - 6); x.restore();
+  g = x.createLinearGradient(0,0,w,0);
+  g.addColorStop(0,'rgba(30,10,0,.45)'); g.addColorStop(.08,'rgba(30,10,0,0)'); g.addColorStop(.92,'rgba(30,10,0,0)'); g.addColorStop(1,'rgba(30,10,0,.45)');
+  x.fillStyle = g; x.fillRect(0,0,w,h);
+  g = x.createLinearGradient(0,0,0,h*.45); g.addColorStop(0,'rgba(255,255,255,.22)'); g.addColorStop(1,'rgba(255,255,255,0)');
+  x.fillStyle = g; x.fillRect(0,0,w,h*.45);
+}
+function drawEye(s){
+  const w = eyeW, c = w/2, R = w/2 - 1, x = ectx;
+  x.clearRect(0,0,w,w);
+  x.fillStyle = '#0a0f0b'; x.beginPath(); x.arc(c,c,R,0,Math.PI*2); x.fill();
+  const g = x.createRadialGradient(c,c,R*.2,c,c,R*.95); g.addColorStop(0,'#c8ffd9'); g.addColorStop(.5,'#4fe08a'); g.addColorStop(1,'#11502c');
+  x.fillStyle = g; x.beginPath(); x.arc(c,c,R*.9,0,Math.PI*2); x.fill();
+  const a = (1 - s)*1.45 + .06;
+  x.fillStyle = '#06110a'; x.beginPath(); x.moveTo(c,c); x.arc(c,c,R*.92,-Math.PI/2 - a,-Math.PI/2 + a); x.closePath(); x.fill();
+  x.fillStyle = '#0b120d'; x.beginPath(); x.arc(c,c,R*.3,0,Math.PI*2); x.fill();
+  x.strokeStyle = 'rgba(255,220,170,.25)'; x.lineWidth = 1.5; x.beginPath(); x.arc(c,c,R,0,Math.PI*2); x.stroke();
+  const gg = x.createLinearGradient(0,0,0,w); gg.addColorStop(0,'rgba(255,255,255,.18)'); gg.addColorStop(.45,'rgba(255,255,255,0)');
+  x.fillStyle = gg; x.beginPath(); x.arc(c,c,R*.9,0,Math.PI*2); x.fill();
+}
+function drawVU(v){
+  const w = vuW, h = vuH, x = vctx;
+  let g = x.createLinearGradient(0,0,0,h); g.addColorStop(0,'#fbe9c4'); g.addColorStop(1,'#e8c88a');
+  x.fillStyle = g; x.fillRect(0,0,w,h);
+  g = x.createRadialGradient(w/2,h*.8,0,w/2,h*.8,w*.7); g.addColorStop(0,'rgba(255,200,120,.35)'); g.addColorStop(1,'rgba(255,200,120,0)');
+  x.fillStyle = g; x.fillRect(0,0,w,h);
+  const cx = w/2, cy = h*1.18, R = h*.92, a0 = -Math.PI/2 - .82, a1 = -Math.PI/2 + .82;
+  x.lineWidth = 1; x.strokeStyle = '#3a2410';
+  x.beginPath(); x.arc(cx,cy,R,a0,a1); x.stroke();
+  x.strokeStyle = '#c0281b'; x.lineWidth = 2.5; x.beginPath(); x.arc(cx,cy,R,a0 + (a1-a0)*.72,a1); x.stroke();
+  x.lineWidth = 1;
+  for (let i=0;i<=10;i++){
+    const a = a0 + (a1-a0)*i/10, l = i % 5 === 0 ? 7 : 4;
+    x.strokeStyle = i > 7 ? '#c0281b' : '#3a2410';
+    x.beginPath(); x.moveTo(cx + Math.cos(a)*R, cy + Math.sin(a)*R); x.lineTo(cx + Math.cos(a)*(R-l), cy + Math.sin(a)*(R-l)); x.stroke();
+  }
+  x.fillStyle = '#3a2410'; x.font = Math.round(h*.2) + 'px VT323, monospace'; x.textAlign = 'center'; x.fillText('VU', cx, h*.72);
+  const a = a0 + (a1-a0)*clamp(v,0,1.05);
+  x.strokeStyle = '#1a0f06'; x.lineWidth = 1.4; x.beginPath(); x.moveTo(cx,cy); x.lineTo(cx + Math.cos(a)*R*1.02, cy + Math.sin(a)*R*1.02); x.stroke();
+  g = x.createLinearGradient(0,0,0,h*.5); g.addColorStop(0,'rgba(255,255,255,.35)'); g.addColorStop(1,'rgba(255,255,255,0)');
+  x.fillStyle = g; x.fillRect(0,0,w,h*.5);
+}
+
+/* 刻度盘拖动（带惯性） */
+(() => {
+  let lastX = 0, lastT = 0, pid = null;
+  dial.addEventListener('pointerdown', e => {
+    if (!Tuner.active) return;
+    pid = e.pointerId; try { dial.setPointerCapture(pid); } catch(_){}
+    Tuner.drag = true; Tuner.afc = false; Tuner.vel = 0; lastX = e.clientX; lastT = performance.now();
+    e.preventDefault();
+  });
+  dial.addEventListener('pointermove', e => {
+    if (!Tuner.drag || e.pointerId !== pid) return;
+    const now = performance.now(), dx = e.clientX - lastX, df = -dx/Tuner.ppm();
+    Tuner.set(Tuner.f + df);
+    const dt = Math.max(.008, (now - lastT)/1000);
+    Tuner.vel = clamp(.65*Tuner.vel + .35*(df/dt), -24, 24);
+    lastX = e.clientX; lastT = now;
+  });
+  const up = e => { if (e.pointerId !== pid) return; Tuner.drag = false; pid = null; if (performance.now() - lastT > 90) Tuner.vel = 0; };
+  dial.addEventListener('pointerup', up); dial.addEventListener('pointercancel', up);
+  dial.addEventListener('wheel', e => { if (!Tuner.active) return; e.preventDefault(); Tuner.afc = false; Tuner.vel = 0; Tuner.set(Tuner.f + clamp(e.deltaY + e.deltaX, -60, 60)*.004); }, { passive:false });
+  dial.addEventListener('keydown', e => {
+    if (!Tuner.active) return;
+    const map = { ArrowLeft:-.1, ArrowDown:-.1, ArrowRight:.1, ArrowUp:.1, PageDown:-1, PageUp:1 };
+    if (map[e.key] != null){ e.preventDefault(); Tuner.afc = false; Tuner.vel = 0; Tuner.set(Math.round((Tuner.f + map[e.key]*(e.shiftKey ? 5 : 1))*10)/10); }
+  });
+})();
+/* 旋钮旋转：一圈 = 2.5 MHz */
+(() => {
+  let lastA = 0, pid = null, cx = 0, cy = 0, lastT = 0;
+  const ang = e => Math.atan2(e.clientY - cy, e.clientX - cx);
+  knob.addEventListener('pointerdown', e => {
+    if (!Tuner.active) return;
+    const r = knob.getBoundingClientRect(); cx = r.left + r.width/2; cy = r.top + r.height/2;
+    pid = e.pointerId; try { knob.setPointerCapture(pid); } catch(_){}
+    Tuner.drag = true; Tuner.afc = false; Tuner.vel = 0; lastA = ang(e); lastT = performance.now(); e.preventDefault();
+  });
+  knob.addEventListener('pointermove', e => {
+    if (!Tuner.drag || e.pointerId !== pid) return;
+    const a = ang(e); let da = a - lastA; if (da > Math.PI) da -= Math.PI*2; if (da < -Math.PI) da += Math.PI*2; lastA = a;
+    const now = performance.now(), df = da/(Math.PI*2)*2.5; Tuner.set(Tuner.f + df);
+    Tuner.vel = clamp(.6*Tuner.vel + .4*(df/Math.max(.008,(now-lastT)/1000)), -10, 10); lastT = now;
+  });
+  const up = e => { if (e.pointerId !== pid) return; Tuner.drag = false; pid = null; if (performance.now() - lastT > 90) Tuner.vel = 0; };
+  knob.addEventListener('pointerup', up); knob.addEventListener('pointercancel', up);
+  knob.addEventListener('wheel', e => { if (!Tuner.active) return; e.preventDefault(); Tuner.afc = false; Tuner.vel = 0; Tuner.set(Tuner.f + clamp(e.deltaY, -60, 60)*.002); }, { passive:false });
+})();
+
+/* =========================================================
+   CallerEngine：剧本的抽象接口
+   ========================================================= */
+class CallerEngine {
+  /** 返回指定节点（可异步）。节点结构见剧本层注释。 */
+  async node(id, state){ throw new Error('CallerEngine.node 未实现'); }
+}
+/** 默认引擎：直接读取写死的剧本 */
+class ScriptedEngine extends CallerEngine {
+  constructor(story){ super(); this.story = story; }
+  async node(id){ const n = this.story.nodes[id]; if (!n) throw new Error('剧本缺少节点：' + id); return n; }
+}
+/**
+ * LLMEngine（桩，未启用，UI 不暴露）
+ * ------------------------------------------------------------------
+ * 目标：让“第二玩家”真正即兴——同一个夜晚，来电者每次说的话都不一样。
+ * 做法：保留剧本的“骨架”，只把“血肉”交给模型。
+ *   - 骨架（不交给模型）：节点 ID、跳转 next / branch、状态影响 set / add、选项可见条件 if。
+ *     这些决定隐藏线索能否接上、走向哪个结局，必须可控、可被剧本图检查脚本验证。
+ *   - 血肉（交给模型）：lines 的台词文本、choices 的措辞。
+ * 提示词组成：
+ *   1) 来电者人设  STORY.callers[id].persona（性格、口头禅、处境、和街区里其他人的隐藏关系）
+ *   2) 今夜已发生事件  state.log（主持人对谁说过什么、放了哪首歌）+ 关键状态位（如 zhou_light、lin_msg）
+ *   3) 当前节点的“意图”  —— 原剧本台词作为参考与安全底稿，要求保留必须交代的信息点
+ *      （例如 lin_4a 必须说出“是小梅先看的他”，否则线索断掉）
+ *   4) 输出约束：JSON {lines:[{who,text}], choices:[{text}]}，choices 数量与顺序必须与原节点一致；
+ *      口语化、克制、不超过 N 字；不涉及自伤等沉重话题。
+ * 接入：endpoint 可以是本地开源模型的 HTTP 服务（任意兼容的推理服务器），也可以是任意大模型 API。
+ * 容错：请求失败 / 超时 / 解析失败 / 校验不通过 → 回落到 ScriptedEngine 的原节点，游戏永不卡死。
+ */
+class LLMEngine extends CallerEngine {
+  constructor(opts){ super(); opts = opts || {}; this.endpoint = opts.endpoint || ''; this.model = opts.model || ''; this.timeoutMs = opts.timeoutMs || 6000; this.fallback = new ScriptedEngine(STORY); }
+  buildPrompt(base, state){
+    const who = base.call && STORY.callers[base.call];
+    return {
+      system: '你在一档深夜电台里扮演来电者。说话口语化、克制、有画面感，一句不超过四十字。',
+      persona: who ? who.persona : '',
+      events: state.log.slice(-12),
+      reference: (base.lines || []).map(l => ({ who:l.who, text: typeof l.text === 'function' ? l.text(state) : l.text })),
+      choiceCount: (base.choices || []).length,
+      format: '{"lines":[{"who":"","text":""}],"choices":[{"text":""}]}',
+    };
+  }
+  async node(id, state){
+    const base = await this.fallback.node(id, state);
+    if (!this.endpoint || !base.lines) return base;
+    // 示意：真正接入时在这里 fetch(this.endpoint, { method:'POST', body: JSON.stringify(this.buildPrompt(base, state)) })，
+    // 校验返回 JSON 后，用模型台词替换 base.lines / base.choices[i].text，其余字段原样保留。
+    return base;
+  }
+}
+const engine = new ScriptedEngine(STORY);
+
+/* =========================================================
+   字幕 / 选项 / 唱片架 / 时钟
+   ========================================================= */
+const subEl = $('#subtitle'), prevEl = $('#prev'), whoEl = $('#who'), lineEl = $('#line'), choicesEl = $('#choices');
+const npEl = $('#np'), npTitle = $('#npTitle'), clockEl = $('#clock'), stage = $('#stage');
+let typing = false, typeTimer = 0, typeDone = null, tapWaiter = null, speakingWho = 'narr', lastShown = '', onAir = false, curCall = null, token = 0;
+
+const Clock = {
+  cur:0, target:0, timer:0,
+  fmt(t){ const h = 1 + Math.floor(t/60), m = t % 60; return h + ':' + String(m).padStart(2,'0') + '<small>AM</small>'; },
+  to(t, instant){
+    this.target = t; clearInterval(this.timer);
+    if (instant || REDUCE){ this.cur = t; clockEl.innerHTML = this.fmt(t); return; }
+    this.timer = setInterval(() => {
+      if (this.cur === this.target){ clearInterval(this.timer); return; }
+      this.cur += Math.sign(this.target - this.cur)*Math.max(1, Math.floor(Math.abs(this.target - this.cur)/12));
+      clockEl.innerHTML = this.fmt(this.cur);
+    }, 45);
+  },
+};
+
+function labelFor(who){
+  if (who === 'narr' || !who) return '';
+  if (who === 'host') return '你 · 代班主持';
+  const c = CALLERS[who]; return c ? c.name + ' · ' + c.role : '';
+}
+function setWho(who){
+  const lab = labelFor(who);
+  whoEl.className = 'who' + (who === 'host' ? ' host' : '');
+  whoEl.innerHTML = lab ? esc(lab) + (who !== 'host' ? '<span class="freq">FM ' + Tuner.f.toFixed(1) + '</span>' : '') : '';
+}
+function typewrite(text){
+  return new Promise(res => {
+    clearTimeout(typeTimer); typing = true; let i = 0;
+    lineEl.textContent = '';
+    typeDone = () => { clearTimeout(typeTimer); typing = false; lineEl.textContent = text; typeDone = null; res(); };
+    const step = () => {
+      i++; lineEl.textContent = text.slice(0, i);
+      if (i >= text.length){ if (typeDone) typeDone(); return; }
+      const ch = text[i-1];
+      let d = '，、：'.includes(ch) ? 150 : '。！？…—'.includes(ch) ? 240 : 34;
+      if (REDUCE) d = Math.min(d, 12);
+      typeTimer = setTimeout(step, d);
+    };
+    step();
+  });
+}
+function waitTap(){ return new Promise(r => { tapWaiter = r; }); }
+function advance(){
+  if (typing && typeDone){ typeDone(); return; }
+  if (tapWaiter){ const r = tapWaiter; tapWaiter = null; r(); }
+}
+stage.addEventListener('click', e => { if (e.target.closest('button')) return; advance(); });
+document.addEventListener('keydown', e => {
+  if (e.target === dial) return;
+  if (e.key === ' ' || e.key === 'Enter'){ if (document.activeElement && document.activeElement.tagName === 'BUTTON') return; e.preventDefault(); advance(); }
+  if (/^[1-4]$/.test(e.key)){ const b = choicesEl.querySelectorAll('button')[+e.key - 1]; if (b) b.click(); }
+});
+
+async function showLine(ln, s){
+  const text = resolveText(ln.text, s);
+  prevEl.textContent = lastShown;
+  choicesEl.innerHTML = '';
+  speakingWho = ln.who;
+  setWho(ln.who);
+  lineEl.className = 'line' + (ln.who === 'narr' ? ' narr' : ln.who === 'host' ? ' host' : '');
+  await typewrite(text);
+  const caret = document.createElement('i'); caret.className = 'caret'; lineEl.appendChild(caret);
+  await waitTap();
+  const lab = labelFor(ln.who); lastShown = (lab ? lab.split(' · ')[0] + '：' : '') + text;
+}
+function showText(who, text){
+  prevEl.textContent = lastShown; choicesEl.innerHTML = ''; speakingWho = who; setWho(who);
+  lineEl.className = 'line' + (who === 'narr' ? ' narr' : '');
+  return typewrite(text);
+}
+function choose(list, s){
+  return new Promise(res => {
+    choicesEl.innerHTML = '';
+    list.forEach((c, i) => {
+      const b = document.createElement('button'); b.type = 'button'; b.className = 'choice'; b.style.animationDelay = (i*70) + 'ms';
+      b.innerHTML = '<span class="tag" data-k="' + esc(c.tag) + '">' + esc(c.tag) + '</span><span>' + esc(resolveText(c.text, s)) + '</span>';
+      b.addEventListener('click', e => { e.stopPropagation(); AudioEng.click(); choicesEl.innerHTML = ''; res(c); });
+      choicesEl.appendChild(b);
+    });
+    const f = choicesEl.querySelector('button'); if (f && !('ontouchstart' in window)) f.focus({ preventScroll:true });
+  });
+}
+function sleeveBg(art){
+  const [bg, fg, p] = art;
+  switch (p){
+    case 'dots': return `radial-gradient(circle at 30% 32%, ${fg} 0 16%, transparent 17%), radial-gradient(circle at 70% 66%, ${fg} 0 9%, transparent 10%), radial-gradient(circle at 76% 24%, ${fg} 0 5%, transparent 6%), ${bg}`;
+    case 'stripes': return `repeating-linear-gradient(135deg, ${fg} 0 5px, transparent 5px 13px), ${bg}`;
+    case 'sun': return `radial-gradient(circle at 50% 108%, ${fg} 0 34%, transparent 35%), repeating-linear-gradient(0deg, rgba(255,255,255,.08) 0 2px, transparent 2px 8px), ${bg}`;
+    case 'rain': return `repeating-linear-gradient(100deg, transparent 0 9px, ${fg} 9px 10px), linear-gradient(${bg}, #05070c)`;
+    case 'grid': return `linear-gradient(${fg} 1px, transparent 1px) 0 0/12px 12px, linear-gradient(90deg, ${fg} 1px, transparent 1px) 0 0/12px 12px, ${bg}`;
+    case 'moon': return `radial-gradient(circle at 64% 36%, ${fg} 0 21%, transparent 22%), radial-gradient(circle at 30% 80%, rgba(0,0,0,.25) 0 30%, transparent 31%), ${bg}`;
+    case 'wave': return `repeating-radial-gradient(circle at 0 100%, ${fg} 0 2px, transparent 2px 10px), ${bg}`;
+    default: return bg;
+  }
+}
+function records(node, s){
+  return new Promise(res => {
+    prevEl.textContent = lastShown; speakingWho = 'narr';
+    whoEl.className = 'who'; whoEl.textContent = node.prompt || '唱片架';
+    lineEl.className = 'line narr'; lineEl.textContent = '你转过身，从唱片架上抽出三张。';
+    choicesEl.innerHTML = '';
+    const wrap = document.createElement('div'); wrap.className = 'records';
+    node.records.filter(r => !r.if || r.if(s)).forEach((r, i) => {
+      const song = SONGS[r.id];
+      const b = document.createElement('button'); b.type = 'button'; b.className = 'record'; b.style.animationDelay = (i*90) + 'ms';
+      b.innerHTML = '<span class="rec-art"><i class="disc"></i><span class="sleeve" style="background:' + sleeveBg(song.art) + '"><em>88.7</em></span></span>' +
+        '<span class="rmeta"><b class="rtitle">《' + esc(song.title) + '》</b><span class="rdesc">' + esc(r.desc || song.desc) + '</span></span>';
+      b.addEventListener('click', e => { e.stopPropagation(); AudioEng.click(); choicesEl.innerHTML = ''; res(r); });
+      wrap.appendChild(b);
+    });
+    choicesEl.appendChild(wrap);
+  });
+}
+function setOnAir(v){ onAir = v; onairEl.classList.toggle('on', v); }
+
+/* =========================================================
+   叙事运行器
+   ========================================================= */
+let state = newState();
+async function run(id, tk){
+  while (id && tk === token){
+    const node = await engine.node(id, state);
+    applyFx(state, node);
+    state.path.push(id);
+    if (node.t != null) Clock.to(node.t);
+    if (node.call && node.call !== curCall){ curCall = node.call; }
+    if (node.branch){ id = pickBranch(node.branch, state); continue; }
+    if (node.tune){ await tune(node, tk); if (tk !== token) return; id = node.next; continue; }
+    if (node.ending){ await ending(tk); return; }
+    if (node.song){
+      const rec = await records(node, state); if (tk !== token) return;
+      applyFx(state, rec); state.songs[songKey(id)] = rec.id;
+      state.log.push('点歌：《' + SONGS[rec.id].title + '》');
+      AudioEng.playSong(rec.id);
+      npTitle.textContent = '《' + SONGS[rec.id].title + '》'; npEl.hidden = false;
+      await showLine({ who:'narr', text:'（唱针落下。《' + SONGS[rec.id].title + '》。）' }, state);
+      id = node.next; continue;
+    }
+    for (const ln of (node.lines || [])){
+      if (ln.if && !ln.if(state)) continue;
+      await showLine(ln, state); if (tk !== token) return;
+    }
+    if (node.choices){
+      const avail = node.choices.filter(c => !c.if || c.if(state));
+      const c = await choose(avail, state); if (tk !== token) return;
+      applyFx(state, c);
+      const said = c.say === null ? null : (c.say != null ? c.say : resolveText(c.text, state));
+      state.log.push((CALLERS[node.call] ? CALLERS[node.call].name : '') + '｜主持人' + c.tag + '：' + (said || resolveText(c.text, state)));
+      if (said) await showLine({ who:'host', text:said }, state);
+      if (tk !== token) return;
+      id = c.next; continue;
+    }
+    id = node.next;
+  }
+}
+async function tune(node, tk){
+  setOnAir(false); AudioEng.hiss(false); AudioEng.stopMusic(1.6); npEl.hidden = true; curCall = null;
+  consoleEl.classList.add('tuning');
+  hintEl.textContent = '拖动琥珀色刻度，或旋转黄铜旋钮，找到来电信号';
+  const p = Tuner.begin(CALLERS[node.tune].freq);
+  showText('narr', node.label + '。来电灯在闪。');
+  await p; if (tk !== token) return;
+  if (typeDone) typeDone();
+  AudioEng.lock();
+  try { if (navigator.vibrate) navigator.vibrate(16); } catch(e){}
+  consoleEl.classList.remove('tuning');
+  hintEl.textContent = '已接通 · FM ' + Tuner.f.toFixed(1);
+  setOnAir(true); AudioEng.hiss(true);
+  lastShown = '';
+  await new Promise(r => setTimeout(r, 450));
+}
+async function ending(tk){
+  setOnAir(false); AudioEng.hiss(false); AudioEng.stopMusic(2.5); npEl.hidden = true;
+  hintEl.textContent = '节目结束 · 天亮了';
+  const id = computeEnding(state), E = ENDINGS[id];
+  Scene.setDawn(E.lights); AudioEng.rainTo(0, 2.5);
+  Clock.to(240);
+  showText('narr', '五点整。雨停了。窗外，有灯一盏一盏亮起来。');
+  await new Promise(r => setTimeout(r, REDUCE ? 900 : 4200)); if (tk !== token) return;
+  AudioEng.playSong(E.music, { gain:.42 });
+  renderEnding(id);
+  const en = $('#ending'); en.scrollTop = 0; en.classList.add('show');
+}
+function renderEnding(id){
+  const E = ENDINGS[id];
+  const seen = store.get(KEY_END, []); const list = Array.isArray(seen) ? seen : [];
+  if (!list.includes(id)) list.push(id); store.set(KEY_END, list);
+  const shots = buildStoryboard(state), th = threadsOf(state);
+  const wrap = $('#endWrap');
+  wrap.innerHTML =
+    '<div class="e-kick">5:00 AM · 天亮了</div>' +
+    '<h2 class="e-title">' + esc(E.title) + '</h2>' +
+    '<span class="e-badge' + (E.hidden ? ' hidden' : '') + '">' + (E.hidden ? '隐藏结局' : '结局') + ' · 已见 ' + list.length + ' / ' + ENDING_ORDER.length + '</span>' +
+    '<div class="e-text">' + endingText(state).map(p => '<p>' + esc(p) + '</p>').join('') + '</div>' +
+    '<h3 class="sec">今夜接上的线</h3>' +
+    '<div class="threads">' + th.map(t => '<div class="thread' + (t.on ? ' on' : '') + '"><div class="t-h"><i class="dot"></i><b>' + esc(t.name) + '</b><span class="pair">' + esc(t.pair) + '</span></div><p>' + esc(t.on ? t.done : t.hint) + '</p></div>').join('') + '</div>' +
+    (id !== 'lights' ? '<p class="secret">据说，当所有的线都接上，并且有人在收音机里听见了自己的名字，槐安里会有一个不一样的早晨。</p>' : '') +
+    '<div class="board-head"><h3 class="sec">今夜分镜单</h3><span class="note">本夜剧本可直接作为 AI 短片分镜</span></div>' +
+    '<ol class="shots">' + shots.map((s, i) => '<li class="shot"><span class="no">' + String(i+1).padStart(2,'0') + '</span><span class="size">' + esc(s.size) + '</span><p class="pic">' + esc(s.pic) + '</p><p class="snd"><b>声音</b>' + esc(s.sound) + '</p></li>').join('') + '</ol>' +
+    '<div class="actions"><button class="btn" type="button" id="againBtn">重新开始今夜</button><button class="btn ghost" type="button" id="copyBtn">复制分镜</button><span class="toast" id="toast"></span></div>' +
+    '<h3 class="sec">结局收集</h3><div class="collect">' + ENDING_ORDER.map(k => {
+      const got = list.includes(k), e = ENDINGS[k];
+      return '<span class="chip ' + (got ? 'got' : 'lock') + '">' + (got ? esc(e.title) : (e.hidden ? '隐藏结局 · ？？？' : '？？？')) + '</span>';
+    }).join('') + '</div>';
+  $('#againBtn').addEventListener('click', restart);
+  $('#copyBtn').addEventListener('click', () => copyText(storyboardText(state)));
+}
+function copyText(t){
+  const toast = $('#toast');
+  const ok = () => { if (toast) toast.textContent = '已复制到剪贴板'; };
+  const fallback = () => {
+    try {
+      const ta = document.createElement('textarea'); ta.value = t; ta.setAttribute('readonly', ''); ta.style.position = 'fixed'; ta.style.opacity = '0';
+      document.body.appendChild(ta); ta.select(); const r = document.execCommand('copy'); document.body.removeChild(ta);
+      if (toast) toast.textContent = r ? '已复制到剪贴板' : '复制失败，请手动选择文字';
+    } catch(e){ if (toast) toast.textContent = '复制失败，请手动选择文字'; }
+  };
+  try { if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(t).then(ok, fallback); else fallback(); } catch(e){ fallback(); }
+}
+function begin(replay){
+  token++; const tk = token;
+  state = newState(); state.replay = !!replay;
+  lastShown = ''; prevEl.textContent = ''; curCall = null;
+  Clock.to(0, true);
+  subEl.classList.add('show');
+  run(STORY.start, tk).catch(err => { console.error(err); });
+}
+function restart(){
+  AudioEng.click();
+  $('#ending').classList.remove('show');
+  AudioEng.stopMusic(1.2); AudioEng.rainTo(1, 1.5);
+  Scene.reset(); setOnAir(false); hintEl.textContent = '雨夜 · 直播间 · 控制台待机中';
+  if (typeDone) typeDone(); tapWaiter = null;
+  begin(true);
+}
+
+/* =========================================================
+   启动 / 主循环
+   ========================================================= */
+const muteBtn = $('#mute');
+function syncMute(){ muteBtn.setAttribute('aria-pressed', AudioEng.muted ? 'true' : 'false'); muteBtn.setAttribute('aria-label', AudioEng.muted ? '取消静音' : '静音'); }
+muteBtn.addEventListener('click', e => { e.stopPropagation(); AudioEng.init(); AudioEng.setMuted(!AudioEng.muted); syncMute(); });
+syncMute();
+
+(() => {
+  const seen = store.get(KEY_END, []);
+  if (Array.isArray(seen) && seen.length) $('#titleNote').innerHTML = '建议戴上耳机 · 声音会在点击后开启<br>已见结局 ' + seen.length + ' / ' + ENDING_ORDER.length;
+})();
+$('#startBtn').addEventListener('click', () => {
+  AudioEng.init();
+  $('#title').classList.add('gone');
+  setTimeout(() => begin(false), REDUCE ? 50 : 900);
+});
+
+(() => {
+  try {
+    const R = mulberry32(5), w = 512, h = 256, c = mk(w,h), x = c.getContext('2d'), img = x.createImageData(w,h), d = img.data;
+    const n1 = Array.from({ length:256 }, () => R());
+    const vn = t => { const i = Math.floor(t), f = t - i, a = n1[i & 255], b = n1[(i+1) & 255], u = f*f*(3-2*f); return a + (b-a)*u; };
+    for (let y=0;y<h;y++) for (let X=0;X<w;X++){
+      const warp = vn(X*.012 + y*.002 + 50)*18 + vn(X*.05 + 7)*3;
+      const v = Math.sin((y + warp)*.22 + vn(y*.03 + 20)*4)*.5 + .5;
+      const t = Math.pow(v, 2.2)*.7 + vn(X*.9 + y*13.7)*.14;
+      const i = (y*w + X)*4; d[i] = 40 + t*72; d[i+1] = 21 + t*39; d[i+2] = 10 + t*20; d[i+3] = 255;
+    }
+    x.putImageData(img, 0, 0);
+    consoleEl.style.setProperty('--wood', 'url(' + c.toDataURL('image/jpeg', .85) + ')');
+  } catch(e){}
+})();
+
+Scene.init();
+layoutConsole();
+if (document.fonts && document.fonts.ready) document.fonts.ready.then(() => { Tuner.dirty = true; });
+let rz = 0;
+addEventListener('resize', () => { clearTimeout(rz); rz = setTimeout(() => { Scene.resize(); layoutConsole(); }, 160); });
+document.addEventListener('visibilitychange', () => { if (AudioEng.ready) AudioEng.suspend(document.hidden); });
+
+let last = performance.now(), acc = 0, slow = 0, eyeV = .08, vuV = 0, blinkT = 0, time = 0;
+function loop(now){
+  requestAnimationFrame(loop);
+  let dt = (now - last)/1000; last = now; if (dt > .1) dt = .1; if (dt <= 0) return;
+  time += dt;
+  Tuner.update(dt);
+  if (Tuner.dirty){
+    drawDial(); Tuner.dirty = false;
+    readout.textContent = 'FM ' + Tuner.f.toFixed(1);
+    const rot = 'rotate(' + ((Tuner.f*144) % 360).toFixed(1) + 'deg)';
+    knurl.style.transform = rot; markrot.style.transform = rot;
+    dial.setAttribute('aria-valuenow', Tuner.f.toFixed(1));
+  }
+  const d = Tuner.f - Tuner.target;
+  const strength = Tuner.active ? clamp(1 - Math.abs(d)/1.4, 0, 1) : (onAir ? 1 : .06);
+  AudioEng.tuneUpdate(d, Tuner.active);
+  AudioEng.update(dt);
+  eyeV += (strength - eyeV)*Math.min(1, dt*10); drawEye(eyeV);
+  if (Tuner.active){ blinkT += dt*(5 + strength*14); bulb.classList.toggle('lit', Math.sin(blinkT) > 0); }
+  else bulb.classList.toggle('lit', onAir);
+  let tv = AudioEng.level()*2.4;
+  if (typing && speakingWho !== 'narr') tv = Math.max(tv, .32 + .34*Math.abs(Math.sin(time*13.1)*Math.sin(time*4.7)) + Math.random()*.1);
+  vuV += (tv - vuV)*(tv > vuV ? .45 : .12); drawVU(vuV);
+  if (REDUCE){ acc += dt; if (acc < .1) return; Scene.frame(acc); acc = 0; }
+  else Scene.frame(dt);
+  if (dt > .03) slow++; else slow = Math.max(0, slow - .5);
+  if (slow > 50){ slow = 0; Scene.degrade(); }
+}
+requestAnimationFrame(loop);
+})();
+</script>
+</body>
+</html>
