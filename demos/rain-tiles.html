@@ -1,0 +1,2076 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>雨落青瓦</title>
+<meta name="description" content="雨落青瓦 —— 转动瓦槽，把一场雨引到花圃和水缸里。二十四节气，七十二候，七十二关。">
+<meta name="theme-color" content="#263130">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Ma+Shan+Zheng&family=Zhi+Mang+Xing&family=Noto+Serif+SC:wght@400;600;700&display=swap">
+<style>
+:root{
+  color-scheme: dark;
+  --bg:#263130;
+  --ink:#151c1b;
+  --paper:#e9ece6;
+  --paper2:#c9d1cc;
+  --dim:#94a29d;
+  --faint:#5f6d69;
+  --line:rgba(225,233,228,.14);
+  --panel:rgba(22,30,29,.78);
+  --accent:#e7a0ad;
+  --seal:#b5432f;
+  --brush:"Ma Shan Zheng","Zhi Mang Xing","STXingkai","Xingkai SC","KaiTi","Kaiti SC","STKaiti",serif;
+  --wild:"Zhi Mang Xing","Ma Shan Zheng","STXingkai","KaiTi","Kaiti SC",serif;
+  --serif:"Noto Serif SC","Songti SC","STSong","SimSun","Source Han Serif SC",serif;
+  --st:env(safe-area-inset-top,0px); --sb:env(safe-area-inset-bottom,0px);
+}
+*{box-sizing:border-box}
+html,body{height:100%;margin:0;background:var(--bg);color:var(--paper);overflow:hidden;font-family:var(--serif);-webkit-tap-highlight-color:transparent;overscroll-behavior:none}
+body{position:fixed;inset:0;width:100%;-webkit-user-select:none;user-select:none}
+button{font:inherit;color:inherit;cursor:pointer;-webkit-tap-highlight-color:transparent}
+#cv{position:absolute;inset:0;width:100%;height:100%;display:block;touch-action:none}
+.hidden{display:none!important}
+#probe{position:absolute;visibility:hidden;pointer-events:none;padding-top:var(--st);padding-bottom:var(--sb)}
+
+/* ---------- mute ---------- */
+#mute{position:fixed;top:calc(var(--st) + 8px);right:10px;z-index:50;width:44px;height:44px;border-radius:50%;
+  border:1px solid var(--line);background:rgba(18,25,24,.55);display:grid;place-items:center;padding:0;
+  backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px)}
+#mute svg{width:22px;height:22px;stroke:var(--paper2);fill:none;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round}
+#mute .off{display:none}
+#mute.muted .on{display:none}
+#mute.muted .off{display:block}
+
+/* ---------- title ---------- */
+#title{position:absolute;inset:0;z-index:10;pointer-events:none}
+#title .gate{position:absolute;left:0;right:0;text-align:center;transform:translateY(-50%)}
+#title h1{margin:0;font-family:var(--brush);font-weight:400;font-size:clamp(58px,17vw,116px);line-height:1.05;letter-spacing:.06em;
+  color:#eef1ea;text-shadow:0 2px 18px rgba(10,16,15,.55),0 0 2px rgba(10,16,15,.4)}
+#title .sub{margin:.7em 0 0;font-size:clamp(13px,3.6vw,16px);letter-spacing:.22em;color:#d3dbd5;text-shadow:0 1px 8px rgba(0,0,0,.6)}
+#title .seal{display:inline-flex;flex-direction:column;align-items:center;justify-content:center;width:1.55em;height:2.7em;margin-left:.35em;vertical-align:.6em;border:2px solid #c8573f;color:#d8684d;font-family:var(--brush);font-size:clamp(15px,3.8vw,20px);line-height:1.12;border-radius:3px;transform:rotate(-4deg);background:rgba(181,67,47,.12);letter-spacing:0;text-shadow:none}
+#title .acts{position:absolute;left:0;right:0;display:flex;gap:14px;justify-content:center;pointer-events:auto}
+.btn{min-height:48px;min-width:120px;padding:0 26px;border-radius:999px;border:1px solid rgba(235,240,234,.38);
+  background:linear-gradient(180deg,rgba(54,68,66,.82),rgba(26,34,33,.9));color:#f1f3ee;font-size:17px;letter-spacing:.3em;
+  box-shadow:0 6px 22px rgba(0,0,0,.35), inset 0 1px 0 rgba(255,255,255,.12);backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px);
+  transition:transform .15s ease, background .2s}
+.btn:active{transform:scale(.97)}
+.btn.primary{font-family:var(--brush);font-size:24px;letter-spacing:.4em;padding:0 22px 0 32px;min-width:150px;
+  background:linear-gradient(180deg,rgba(84,104,99,.9),rgba(38,52,50,.94));border-color:rgba(240,244,238,.55)}
+.btn.ghost{background:rgba(20,27,26,.55)}
+#title .foot{position:absolute;left:0;right:0;bottom:calc(var(--sb) + 18px);text-align:center;font-size:12px;letter-spacing:.35em;color:rgba(214,222,217,.66)}
+
+/* ---------- select ---------- */
+#select{position:absolute;inset:0;z-index:12;overflow-y:auto;overflow-x:hidden;-webkit-overflow-scrolling:touch;touch-action:pan-y}
+#select .wrap{max-width:980px;margin:0 auto;padding:calc(var(--st) + 14px) 16px calc(var(--sb) + 40px)}
+#select header{display:flex;align-items:center;gap:10px;padding-right:52px;min-height:48px}
+#select h2{margin:0;font-family:var(--brush);font-weight:400;font-size:34px;letter-spacing:.12em;color:#eef1ea}
+#select .prog{margin-left:auto;font-size:13px;color:var(--dim);letter-spacing:.12em;white-space:nowrap}
+.iconbtn{min-width:44px;min-height:44px;border-radius:22px;border:1px solid var(--line);background:rgba(18,25,24,.55);display:inline-flex;align-items:center;justify-content:center;gap:4px;padding:0 12px;font-size:14px;letter-spacing:.1em;color:var(--paper2)}
+.iconbtn svg{width:16px;height:16px;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+#daily{margin:14px 0 6px;display:flex;align-items:center;gap:14px;width:100%;text-align:left;padding:14px 16px;border-radius:12px;min-height:72px;
+  border:1px solid rgba(235,240,234,.2);background:linear-gradient(110deg,rgba(60,76,72,.86),rgba(26,34,33,.86));color:var(--paper)}
+#daily .dk{font-family:var(--brush);font-size:30px;line-height:1;color:#f2f1e8;min-width:2.2em}
+#daily .dt{flex:1;min-width:0}
+#daily .dt b{display:block;font-weight:600;font-size:15px;letter-spacing:.12em}
+#daily .dt span{display:block;font-size:12.5px;color:var(--dim);margin-top:4px;letter-spacing:.06em;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+#daily .go{font-size:13px;letter-spacing:.2em;color:var(--paper2);white-space:nowrap}
+.tabs{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin:16px 0 14px;position:sticky;top:0;z-index:2;padding:6px 0;
+  background:linear-gradient(180deg,rgba(30,39,38,.92),rgba(30,39,38,.7));backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);border-radius:12px}
+.tab{min-height:48px;border-radius:10px;border:1px solid transparent;background:transparent;color:var(--dim);display:flex;align-items:center;justify-content:center;gap:6px}
+.tab .tz{font-family:var(--brush);font-size:26px;line-height:1}
+.tab .tw{font-size:12px;letter-spacing:.15em}
+.tab.on{color:#f3f3ec;border-color:rgba(235,240,234,.28);background:rgba(255,255,255,.06)}
+.tab .dot{width:7px;height:7px;border-radius:50%;background:var(--c)}
+.terms{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+@media (min-width:760px){.terms{grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}}
+.term{border-radius:12px;padding:12px 10px 8px;border:1px solid var(--line);
+  background:linear-gradient(165deg,rgba(46,58,56,.86),rgba(22,29,28,.9));position:relative;overflow:hidden}
+.term::after{content:"";position:absolute;right:-18px;top:-18px;width:74px;height:74px;border-radius:50%;
+  background:radial-gradient(circle,var(--c) 0,transparent 62%);opacity:.18;pointer-events:none}
+.term .tn{font-family:var(--brush);font-size:30px;line-height:1.1;color:#eff0e8;padding-left:4px}
+.term .td{font-size:11.5px;color:var(--dim);letter-spacing:.1em;margin:2px 0 8px 4px}
+.lv{display:flex;align-items:center;gap:8px;width:100%;min-height:46px;margin:0 0 4px;padding:6px 8px;border-radius:8px;border:1px solid rgba(230,236,232,.08);
+  background:rgba(255,255,255,.035);text-align:left;color:var(--paper)}
+.lv:active{background:rgba(255,255,255,.08)}
+.lv .lk{font-size:11px;color:var(--dim);letter-spacing:.05em;white-space:nowrap}
+.lv .lh{flex:1;min-width:0;font-size:13.5px;letter-spacing:.04em;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.lv .ls{display:flex;gap:3px}
+.lv .ls i{width:7px;height:7px;border-radius:50%;border:1px solid rgba(230,236,232,.35)}
+.lv .ls i.f{background:var(--c);border-color:var(--c);box-shadow:0 0 6px var(--c)}
+.lv:disabled{opacity:.42;cursor:default}
+.lv:disabled .lh{color:var(--dim)}
+.lv.cur{border-color:rgba(235,240,234,.35);background:rgba(255,255,255,.07)}
+
+/* ---------- HUD ---------- */
+#hud{position:absolute;inset:0;z-index:8;pointer-events:none}
+#hud .top{position:absolute;left:0;right:0;top:0;padding:calc(var(--st) + 8px) 62px 0 10px;display:flex;align-items:flex-start;gap:10px}
+#hud .top .iconbtn{pointer-events:auto;flex:none}
+#hud .ttl{flex:1;min-width:0;text-align:center;padding-top:2px}
+#hud .ttl b{display:block;font-family:var(--brush);font-weight:400;font-size:24px;line-height:1.15;letter-spacing:.1em;color:#f0f1ea;text-shadow:0 1px 8px rgba(0,0,0,.5)}
+#hud .ttl span{display:block;font-size:12px;color:#c3ccc7;letter-spacing:.14em;margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;text-shadow:0 1px 6px rgba(0,0,0,.6)}
+#hud .bot{position:absolute;left:0;right:0;bottom:0;padding:0 10px calc(var(--sb) + 10px);display:flex;align-items:center;gap:10px;justify-content:center}
+#hud .bot .iconbtn{pointer-events:auto}
+#hud .mv{font-size:13px;letter-spacing:.14em;color:#d3dad5;min-width:9em;text-align:center;text-shadow:0 1px 6px rgba(0,0,0,.7);
+  padding:8px 12px;border-radius:999px;background:rgba(18,25,24,.45)}
+#hud .mv em{font-style:normal;font-size:17px;color:#f4f4ee;margin:0 .15em}
+#nextBtn{border-color:rgba(240,244,238,.4)!important;color:#f3f3ec!important;background:rgba(70,88,84,.7)!important}
+#side{position:absolute;z-index:7;top:50%;transform:translateY(-50%);writing-mode:vertical-rl;pointer-events:none;
+  font-family:var(--brush);color:rgba(236,240,233,.82);text-shadow:0 2px 14px rgba(0,0,0,.45);letter-spacing:.2em;line-height:1.5}
+#side .s1{font-size:46px}
+#side .s2{font-size:26px;margin-right:14px;color:rgba(226,232,226,.7)}
+#side .s3{font-family:var(--serif);font-size:14px;margin-right:16px;letter-spacing:.3em;color:rgba(214,222,217,.6);max-height:420px}
+#sideR{position:absolute;z-index:7;top:50%;transform:translateY(-50%);writing-mode:vertical-rl;pointer-events:none;
+  font-size:13.5px;letter-spacing:.32em;line-height:2;color:rgba(214,222,217,.62);max-height:60vh;text-shadow:0 1px 8px rgba(0,0,0,.5)}
+
+/* ---------- modal ---------- */
+#win{position:absolute;inset:0;z-index:30;display:grid;place-items:center;padding:20px;background:radial-gradient(ellipse at center,rgba(14,20,19,.35),rgba(14,20,19,.72));
+  opacity:0;transition:opacity .5s ease}
+#win.show{opacity:1}
+#win .card{width:min(360px,100%);text-align:center;padding:26px 22px 20px;border-radius:16px;border:1px solid rgba(235,240,234,.2);
+  background:linear-gradient(170deg,rgba(52,66,63,.94),rgba(22,29,28,.96));box-shadow:0 20px 60px rgba(0,0,0,.5);transform:translateY(8px);transition:transform .6s cubic-bezier(.2,.8,.2,1)}
+#win.show .card{transform:none}
+#win .wk{font-size:12px;letter-spacing:.3em;color:var(--dim)}
+#win .wh{font-family:var(--brush);font-size:44px;line-height:1.2;margin:10px 0 4px;color:#f2f2ea}
+#win .ws{display:flex;justify-content:center;gap:12px;margin:12px 0 8px}
+#win .ws svg{width:34px;height:34px}
+#win .wm{font-size:13px;color:#c9d1cc;letter-spacing:.14em}
+#win .wn{font-size:14px;line-height:1.9;color:#dfe5e0;margin:14px 2px 18px;text-align:left;text-indent:2em;letter-spacing:.04em}
+#win .wb{display:flex;gap:10px;justify-content:center;flex-wrap:wrap}
+#win .wb .btn{min-width:130px;font-size:15px;letter-spacing:.2em;padding:0 18px}
+
+#toast{position:absolute;left:50%;z-index:25;transform:translate(-50%,8px);max-width:min(92vw,440px);padding:10px 18px;border-radius:12px;
+  background:rgba(18,25,24,.86);border:1px solid rgba(235,240,234,.18);font-size:14px;line-height:1.7;letter-spacing:.06em;color:#e8ece6;
+  opacity:0;transition:opacity .4s ease, transform .4s ease;pointer-events:none;text-align:center}
+#toast.show{opacity:1;transform:translate(-50%,0)}
+
+@media (prefers-reduced-motion: reduce){
+  *{transition-duration:.01ms!important;animation-duration:.01ms!important}
+}
+</style>
+</head>
+<body>
+<div id="probe"></div>
+<canvas id="cv" aria-label="雨落青瓦 游戏画面"></canvas>
+
+<div id="title">
+  <div class="gate" id="titleGate">
+    <h1>雨落青瓦<span class="seal"><span>听</span><span>雨</span></span></h1>
+    <p class="sub">把一场雨，好好引到它该去的地方</p>
+  </div>
+  <div class="acts" id="titleActs">
+    <button class="btn primary" id="btnListen">听雨</button>
+    <button class="btn ghost" id="btnBook">节气册</button>
+  </div>
+  <div class="foot">二十四节气 · 七十二候 · 七十二关</div>
+</div>
+
+<div id="select" class="hidden">
+  <div class="wrap">
+    <header>
+      <button class="iconbtn" id="selBack" aria-label="回到屋檐"><svg viewBox="0 0 24 24"><path d="M15 5l-7 7 7 7"/></svg>檐下</button>
+      <h2>节气册</h2>
+      <span class="prog" id="prog"></span>
+    </header>
+    <button id="daily"><span class="dk" id="dailyK"></span><span class="dt"><b id="dailyT"></b><span id="dailyS"></span></span><span class="go" id="dailyGo">今日一局</span></button>
+    <div class="tabs" id="tabs"></div>
+    <div class="terms" id="terms"></div>
+  </div>
+</div>
+
+<div id="hud" class="hidden">
+  <div class="top">
+    <button class="iconbtn" id="hudBack" aria-label="回节气册"><svg viewBox="0 0 24 24"><path d="M15 5l-7 7 7 7"/></svg>节气</button>
+    <div class="ttl"><b id="hudT"></b><span id="hudS"></span></div>
+  </div>
+  <div class="bot">
+    <button class="iconbtn" id="resetBtn" aria-label="重铺"><svg viewBox="0 0 24 24"><path d="M4 12a8 8 0 1 0 2.4-5.7"/><path d="M4 4v4h4"/></svg>重铺</button>
+    <div class="mv" id="mv"></div>
+    <button class="iconbtn hidden" id="nextBtn">下一关<svg viewBox="0 0 24 24"><path d="M9 5l7 7-7 7"/></svg></button>
+  </div>
+</div>
+<div id="side" class="hidden"><span class="s1" id="sideA"></span><span class="s2" id="sideB"></span></div>
+<div id="sideR" class="hidden"></div>
+
+<div id="win" class="hidden">
+  <div class="card">
+    <div class="wk" id="winK"></div>
+    <div class="wh" id="winH"></div>
+    <div class="ws" id="winS"></div>
+    <div class="wm" id="winM"></div>
+    <div class="wn" id="winN"></div>
+    <div class="wb">
+      <button class="btn ghost" id="winStay">再听一会儿</button>
+      <button class="btn" id="winNext">下一关</button>
+    </div>
+  </div>
+</div>
+<div id="toast"></div>
+
+<button id="mute" aria-label="静音开关">
+  <svg class="on" viewBox="0 0 24 24"><path d="M4 9.5h3.5L12 6v12l-4.5-3.5H4z"/><path d="M15.5 9.2a4 4 0 0 1 0 5.6"/><path d="M18 6.8a7.4 7.4 0 0 1 0 10.4"/></svg>
+  <svg class="off" viewBox="0 0 24 24"><path d="M4 9.5h3.5L12 6v12l-4.5-3.5H4z"/><path d="M16 9.5l5 5M21 9.5l-5 5"/></svg>
+</button>
+
+<!-- ======================= 纯逻辑：节气数据 / 关卡生成 / 水流判定（node 测试会单独抽出这一段） ======================= -->
+<script id="logic">
+const RainLogic = (function () {
+  'use strict';
+  const N = 1, E = 2, S = 4, W = 8;
+  const DIRS = [N, E, S, W];
+  const DX = { 1: 0, 2: 1, 4: 0, 8: -1 };
+  const DY = { 1: -1, 2: 0, 4: 1, 8: 0 };
+  const OPP = { 1: 4, 2: 8, 4: 1, 8: 2 };
+
+  function rotCW(m, k) { k = ((k % 4) + 4) % 4; for (let i = 0; i < k; i++) m = ((m << 1) | (m >> 3)) & 15; return m; }
+  function degree(m) { let c = 0; for (const d of DIRS) if (m & d) c++; return c; }
+  function mulberry32(a) {
+    return function () {
+      a |= 0; a = (a + 0x6D2B79F5) | 0;
+      let t = Math.imul(a ^ (a >>> 15), 1 | a);
+      t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
+      return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+    };
+  }
+  function hashStr(s) { let h = 2166136261 >>> 0; for (let i = 0; i < s.length; i++) { h ^= s.charCodeAt(i); h = Math.imul(h, 16777619); } return h >>> 0; }
+  function shuffle(a, rng) { for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(rng() * (i + 1)); const t = a[i]; a[i] = a[j]; a[j] = t; } return a; }
+
+  // 二十四节气与《逸周书·时训解》/《月令七十二候》的三候。note 为本作自拟的小记，非古籍原文。
+  const SEASONS = [
+    { name: '春', word: '细雨' }, { name: '夏', word: '骤雨' }, { name: '秋', word: '疏雨' }, { name: '冬', word: '雨雪' }
+  ];
+  const TERMS = [
+    { name: '立春', date: '2月4日前后', hou: ['东风解冻', '蛰虫始振', '鱼陟负冰'], note: '檐角的冰凌开始滴水。屋里还冷，雨已经先暖了一点。' },
+    { name: '雨水', date: '2月19日前后', hou: ['獭祭鱼', '候雁北', '草木萌动'], note: '从这时起，天上落下来的多半是雨，不再是雪。瓦缝里的青苔一夜绿了一层。' },
+    { name: '惊蛰', date: '3月6日前后', hou: ['桃始华', '仓庚鸣', '鹰化为鸠'], note: '头一声春雷过后，墙根的泥土松了，院里的桃树先开了几朵。' },
+    { name: '春分', date: '3月21日前后', hou: ['玄鸟至', '雷乃发声', '始电'], note: '昼夜一样长。燕子回来了，在檐下找去年的旧窝。' },
+    { name: '清明', date: '4月5日前后', hou: ['桐始华', '田鼠化为鴽', '虹始见'], note: '雨细得像雾。石板缝里冒出新草，巷口有人撑着伞慢慢走过。' },
+    { name: '谷雨', date: '4月20日前后', hou: ['萍始生', '鸣鸠拂其羽', '戴胜降于桑'], note: '雨水养着秧田。缸里浮起第一片浮萍，春天快走到头了。' },
+    { name: '立夏', date: '5月6日前后', hou: ['蝼蝈鸣', '蚯蚓出', '王瓜生'], note: '雨势大了起来，瓦当下的水线连成一片帘子。' },
+    { name: '小满', date: '5月21日前后', hou: ['苦菜秀', '靡草死', '麦秋至'], note: '麦粒渐满，还未全满。河里的水一阵一阵，涨到石阶第三级。' },
+    { name: '芒种', date: '6月6日前后', hou: ['螳螂生', '鵙始鸣', '反舌无声'], note: '江南快要入梅。屋里的木头吸饱了潮气，闻得到一点松香。' },
+    { name: '夏至', date: '6月21日前后', hou: ['鹿角解', '蜩始鸣', '半夏生'], note: '白天最长的一天。雷雨来得快，走得也快，荷叶上的水珠还在滚。' },
+    { name: '小暑', date: '7月7日前后', hou: ['温风至', '蟋蟀居壁', '鹰始挚'], note: '闷热。午后一场急雨，檐下的竹帘被风掀起一角。' },
+    { name: '大暑', date: '7月23日前后', hou: ['腐草为萤', '土润溽暑', '大雨时行'], note: '一年最热的时候。雨落在晒烫的石板上，冒起一层白气。' },
+    { name: '立秋', date: '8月8日前后', hou: ['凉风至', '白露降', '寒蝉鸣'], note: '风里有了一丝凉。夜雨打在梧桐叶上，声音变脆了。' },
+    { name: '处暑', date: '8月23日前后', hou: ['鹰乃祭鸟', '天地始肃', '禾乃登'], note: '暑气到这里止住。雨渐渐稀了，一阵一阵，中间隔得很久。' },
+    { name: '白露', date: '9月8日前后', hou: ['鸿雁来', '玄鸟归', '群鸟养羞'], note: '早上草尖挂着露。雨后推开院门，桂花的香味比人先到。' },
+    { name: '秋分', date: '9月23日前后', hou: ['雷始收声', '蛰虫坯户', '水始涸'], note: '昼夜又一样长了。雷声收起来，雨也跟着安静。' },
+    { name: '寒露', date: '10月8日前后', hou: ['鸿雁来宾', '雀入大水为蛤', '菊有黄华'], note: '露水更凉。雨打着黄菊，檐下晾的衣裳一整天也干不了。' },
+    { name: '霜降', date: '10月23日前后', hou: ['豺乃祭兽', '草木黄落', '蛰虫咸俯'], note: '草木开始黄落。雨里夹着寒意，摸一摸屋顶的瓦，是冷的。' },
+    { name: '立冬', date: '11月7日前后', hou: ['水始冰', '地始冻', '雉入大水为蜃'], note: '雨又冷又细。院里的水缸，早上浮着一层薄冰。' },
+    { name: '小雪', date: '11月22日前后', hou: ['虹藏不见', '天气上升地气下降', '闭塞而成冬'], note: '雨里开始夹着雪粒，落在瓦上沙沙地响。' },
+    { name: '大雪', date: '12月7日前后', hou: ['鹖鴠不鸣', '虎始交', '荔挺出'], note: '雪压在瓦垄上，一垄白，一垄青。' },
+    { name: '冬至', date: '12月22日前后', hou: ['蚯蚓结', '麋角解', '水泉动'], note: '一年里夜最长。雪化成水，沿着瓦槽慢慢往下走。' },
+    { name: '小寒', date: '1月6日前后', hou: ['雁北乡', '鹊始巢', '雉始雊'], note: '冷到骨子里。墙角的梅开了几朵，白得像没化的雪。' },
+    { name: '大寒', date: '1月20日前后', hou: ['鸡始乳', '征鸟厉疾', '水泽腹坚'], note: '最后一个节气。雪水滴进缸里，再过些日子，又是立春。' }
+  ];
+  const HOU_NAME = ['初候', '二候', '三候'];
+  const LEVEL_COUNT = 72;
+
+  // 关卡参数：网格从 4×4 增长到 8×10；四季依次引入：双承雨口、固定瓦、漏瓦、分流
+  function levelSpec(i) {
+    const t = i / (LEVEL_COUNT - 1);
+    const cols = Math.round(4 + 4 * t);
+    const rows = Math.round(4 + 6 * t);
+    const ch = Math.floor(i / 18), k = i % 18;
+    let groups;
+    if (ch === 0) groups = k < 12 ? [1] : [1, 1];
+    else if (ch === 1) groups = (k % 3 === 1) ? [1] : [1, 1];
+    else if (ch === 2) groups = (k % 3 === 0) ? [1] : [1, 1];
+    else groups = k < 6 ? [2] : (k < 12 ? (k % 2 ? [2, 1] : [1, 2]) : (k % 3 === 0 ? [2] : (k % 2 ? [2, 1] : [1, 2])));
+    return {
+      index: i, cols, rows, groups,
+      fixedFrac: ch >= 1 ? 0.14 + 0.04 * (ch - 1) : 0,
+      leakFrac: ch >= 2 ? 0.10 + 0.02 * (ch - 2) : 0,
+      decoyFrac: 0.42 + 0.48 * t,
+      wander: i < 2 ? 0 : 1 + Math.floor(t * 5),
+      jarRate: i < 3 ? 0 : 0.4
+    };
+  }
+
+  function pickCols(cols, n, rng) {
+    for (let tries = 0; tries < 200; tries++) {
+      const all = shuffle([...Array(cols).keys()], rng).slice(0, n).sort((a, b) => a - b);
+      let ok = true;
+      for (let j = 1; j < all.length; j++) if (all[j] - all[j - 1] < 2) ok = false;
+      if (ok) return all;
+    }
+    return null;
+  }
+
+  function findPath(a, b, cols, rows, blocked, rng, minLen, maxLen, budget) {
+    const visited = new Uint8Array(cols * rows);
+    const path = [a]; visited[a] = 1;
+    const bx = b % cols, by = (b / cols) | 0;
+    let left = budget;
+    function dfs(c, depth) {
+      if (c === b) return depth >= minLen;
+      if (--left < 0) return false;
+      const cx = c % cols, cy = (c / cols) | 0;
+      if (depth + Math.abs(cx - bx) + Math.abs(cy - by) > maxLen) return false;
+      const order = shuffle([0, 1, 2, 3], rng);
+      for (const o of order) {
+        const d = DIRS[o]; const nx = cx + DX[d], ny = cy + DY[d];
+        if (nx < 0 || ny < 0 || nx >= cols || ny >= rows) continue;
+        const n = ny * cols + nx;
+        if (visited[n]) continue;
+        if (n !== b && blocked(n)) continue;
+        visited[n] = 1; path.push(n);
+        if (dfs(n, depth + 1)) return true;
+        path.pop(); visited[n] = 0;
+      }
+      return false;
+    }
+    return dfs(a, 0) ? path.slice() : null;
+  }
+  function dirBetween(p, q, cols) {
+    const px = p % cols, py = (p / cols) | 0, qx = q % cols, qy = (q / cols) | 0;
+    if (qx === px + 1) return E; if (qx === px - 1) return W; if (qy === py + 1) return S; return N;
+  }
+
+  function tryGen(spec, rng) {
+    const { cols, rows, groups } = spec;
+    const n = cols * rows;
+    const nSink = groups.reduce((a, b) => a + b, 0);
+    const srcCols = pickCols(cols, groups.length, rng);
+    const sinkCols = pickCols(cols, nSink, rng);
+    if (!srcCols || !sinkCols) return null;
+    const occ = new Int8Array(n);      // 0 空；>0 第几条水网
+    const mask = new Uint8Array(n);
+    const reserved = new Uint8Array(n);
+    srcCols.forEach(c => { reserved[c] = 1; });
+    sinkCols.forEach(c => { reserved[(rows - 1) * cols + c] = 1; });
+    const sinks = [];
+    let si = 0;
+    const paths = [];
+    for (let s = 0; s < groups.length; s++) {
+      const start = srcCols[s];
+      occ[start] = s + 1; mask[start] |= N;
+      const net = [start];
+      for (let g = 0; g < groups[s]; g++) {
+        const end = (rows - 1) * cols + sinkCols[si];
+        const blocked = (c) => occ[c] !== 0 || reserved[c] === 1;
+        let path = null, from = -1;
+        if (g === 0) {
+          const manh = (rows - 1) + Math.abs(sinkCols[si] - srcCols[s]);
+          for (let extra = spec.wander; extra >= 0 && !path; extra--) {
+            const ex = 2 * Math.floor(rng() * (extra + 1));
+            path = findPath(start, end, cols, rows, blocked, rng, manh + ex, manh + ex + (spec.index < 6 ? 2 : 4), 2500);
+          }
+          if (!path) return null;
+        } else {
+          const cand = shuffle(net.slice(), rng);
+          for (const p of cand) {
+            if (degree(mask[p]) >= 3) continue;
+            const px = p % cols, py = (p / cols) | 0;
+            for (const d of shuffle(DIRS.slice(), rng)) {
+              const qx = px + DX[d], qy = py + DY[d];
+              if (qx < 0 || qy < 0 || qx >= cols || qy >= rows) continue;
+              const q = qy * cols + qx;
+              if (q !== end && (occ[q] || reserved[q])) continue;
+              const ex = 2 * Math.floor(rng() * 3);
+              const manh = Math.abs(qx - sinkCols[si]) + (rows - 1 - qy);
+              const pp = q === end ? [q] : findPath(q, end, cols, rows, blocked, rng, manh + ex, manh + ex + 6, 2500);
+              if (pp) { path = pp; from = p; break; }
+            }
+            if (path) break;
+          }
+          if (!path) return null;
+          const d = dirBetween(from, path[0], cols);
+          mask[from] |= d; mask[path[0]] |= OPP[d];
+        }
+        for (let j = 0; j < path.length; j++) {
+          occ[path[j]] = s + 1;
+          if (j > 0) { const d = dirBetween(path[j - 1], path[j], cols); mask[path[j - 1]] |= d; mask[path[j]] |= OPP[d]; }
+          if (net.indexOf(path[j]) < 0) net.push(path[j]);
+        }
+        mask[end] |= S;
+        sinks.push({ col: sinkCols[si], src: s, kind: 'bed' });
+        paths.push(path);
+        si++;
+      }
+    }
+    // 路径太短（几乎是直线）的关卡不要
+    let pathCells = 0, turns = 0;
+    for (let c = 0; c < n; c++) if (occ[c]) { pathCells++; const m = mask[c]; if (m !== 5 && m !== 10) turns++; }
+    if (turns < Math.min(2, pathCells - 1)) return null;
+
+    const cells = [];
+    for (let c = 0; c < n; c++) cells.push({ k: occ[c] ? 'pipe' : 'plain', base: occ[c] ? mask[c] : 0, rot: 0, fixed: false, path: !!occ[c], deco: Math.floor(rng() * 1e6) });
+    // 漏瓦：贴着水路放，固定不转
+    const free = [];
+    for (let c = 0; c < n; c++) if (!occ[c]) free.push(c);
+    const near = (c) => { const x = c % cols, y = (c / cols) | 0; return DIRS.some(d => { const nx = x + DX[d], ny = y + DY[d]; return nx >= 0 && ny >= 0 && nx < cols && ny < rows && occ[ny * cols + nx]; }); };
+    shuffle(free, rng);
+    free.sort((a, b) => (near(b) ? 1 : 0) - (near(a) ? 1 : 0));
+    const leakN = Math.round(free.length * spec.leakFrac) + (spec.leakFrac > 0 ? 1 : 0);
+    const LEAK_SHAPES = [5, 10, 3, 6, 12, 9];
+    let used = 0;
+    for (; used < Math.min(leakN, free.length); used++) {
+      const c = free[used];
+      cells[c].k = 'leak'; cells[c].base = LEAK_SHAPES[Math.floor(rng() * LEAK_SHAPES.length)]; cells[c].fixed = true;
+    }
+    // 干扰瓦
+    const rest = shuffle(free.slice(used), rng);
+    const decoyN = Math.round(rest.length * spec.decoyFrac);
+    const DECOY = [5, 10, 5, 3, 6, 12, 9, 3, 7, 14, 13, 11, 15];
+    for (let j = 0; j < decoyN; j++) { const c = rest[j]; cells[c].k = 'pipe'; cells[c].base = DECOY[Math.floor(rng() * DECOY.length)]; }
+    // 固定瓦：水路中段的一部分，钉在正确朝向
+    if (spec.fixedFrac > 0) {
+      const ends = new Set(srcCols.concat(sinkCols.map(c => (rows - 1) * cols + c)));
+      const mids = shuffle([...Array(n).keys()].filter(c => occ[c] && !ends.has(c)), rng);
+      const fn = Math.max(1, Math.round(mids.length * spec.fixedFrac));
+      for (let j = 0; j < Math.min(fn, mids.length); j++) cells[mids[j]].fixed = true;
+    }
+    // 花圃 / 水缸
+    sinks.forEach((s, j) => { s.kind = (j > 0 || spec.index >= 6) && rng() < spec.jarRate ? 'jar' : 'bed'; });
+
+    const lv = { index: spec.index, cols, rows, sources: srcCols, sinks, cells, spec };
+    // 打乱：记录的解是每格 rot=0
+    for (let tries = 0; tries < 40; tries++) {
+      for (let c = 0; c < n; c++) {
+        const cl = cells[c];
+        if (cl.k !== 'pipe' || cl.fixed) continue;
+        const easy = spec.index < 9;
+        if (cl.path && easy) {
+          // 前几关：大多一两下就能转对
+          if (rng() < 0.22) { cl.rot = 0; continue; }
+          const k = rng() < 0.7 ? 1 : 2;
+          cl.rot = (4 - k) % 4;
+          if (rotCW(cl.base, cl.rot) === cl.base) cl.rot = 3;
+        } else if (cl.path && rng() > 0.12) {
+          const opts = [1, 2, 3].filter(r => rotCW(cl.base, r) !== cl.base);
+          cl.rot = opts.length ? opts[Math.floor(rng() * opts.length)] : 0;
+        } else cl.rot = Math.floor(rng() * 4);
+      }
+      const f = computeFlow(lv);
+      if (!f.sinkWet.some(Boolean)) {
+        lv.par = parOf(lv);
+        if (lv.par >= Math.min(3, pathCells)) return lv;
+      }
+    }
+    return null;
+  }
+
+  function generate(i, opt) {
+    opt = opt || {};
+    const spec = opt.spec || levelSpec(i);
+    const seed = opt.seed != null ? opt.seed : hashStr('rain-tiles#' + i);
+    const rng = mulberry32(seed);
+    for (let a = 0; a < 600; a++) {
+      const lv = tryGen(spec, rng);
+      if (lv) { lv.seed = seed; lv.attempts = a; return lv; }
+    }
+    throw new Error('level generation failed: ' + i);
+  }
+
+  function maskAt(lv, c, rots) {
+    const cl = lv.cells[c];
+    if (cl.k === 'plain') return 0;
+    return rotCW(cl.base, rots ? rots[c] : cl.rot);
+  }
+
+  function computeFlow(lv, rots) {
+    const { cols, rows } = lv; const n = cols * rows;
+    const dist = new Int16Array(n).fill(-1);
+    const entry = new Uint8Array(n);
+    const parent = new Int16Array(n).fill(-1);
+    const order = [], leaks = [], spills = [];
+    const sinkAt = {}; lv.sinks.forEach((s, j) => { sinkAt[s.col] = j; });
+    const srcAt = {}; lv.sources.forEach((c, j) => { srcAt[c] = j; });
+    const q = [];
+    lv.sources.forEach(c => {
+      const m = maskAt(lv, c, rots);
+      if (m & N) { dist[c] = 0; entry[c] = N; q.push(c); }
+    });
+    let h = 0;
+    while (h < q.length) {
+      const c = q[h++]; order.push(c);
+      const m = maskAt(lv, c, rots);
+      const x = c % cols, y = (c / cols) | 0;
+      for (const d of DIRS) {
+        if (!(m & d)) continue;
+        const nx = x + DX[d], ny = y + DY[d];
+        if (nx < 0 || ny < 0 || nx >= cols || ny >= rows) {
+          if (ny === rows && d === S && sinkAt[nx] != null) continue;
+          if (ny < 0 && d === N && srcAt[nx] != null) continue;
+          spills.push({ c, d }); continue;
+        }
+        const j = ny * cols + nx;
+        const mj = maskAt(lv, j, rots);
+        if (!(mj & OPP[d])) { spills.push({ c, d }); continue; }
+        if (dist[j] >= 0) continue;
+        dist[j] = dist[c] + 1; entry[j] = OPP[d]; parent[j] = c;
+        if (lv.cells[j].k === 'leak') { leaks.push(j); continue; }
+        q.push(j);
+      }
+    }
+    const sinkWet = lv.sinks.map(s => {
+      const c = (rows - 1) * cols + s.col;
+      return dist[c] >= 0 && lv.cells[c].k !== 'leak' && !!(maskAt(lv, c, rots) & S);
+    });
+    const solved = sinkWet.every(Boolean) && leaks.length === 0;
+    return { dist, entry, parent, order, leaks, spills, sinkWet, solved };
+  }
+
+  // 每格最少要点几下（只能顺时针转）
+  function clicksNeeded(cl) {
+    if (cl.k !== 'pipe' || cl.fixed) return 0;
+    for (let k = 0; k < 4; k++) if (rotCW(cl.base, cl.rot + k) === cl.base) return k;
+    return 0;
+  }
+  function parOf(lv) { let p = 0; lv.cells.forEach(cl => { if (cl.path) p += clicksNeeded(cl); }); return p; }
+  function starsFor(moves, par) {
+    if (moves <= par + Math.max(4, Math.ceil(par * 0.5))) return 3;
+    if (moves <= par * 2 + 8) return 2;
+    return 1;
+  }
+
+  // 节气按公历近似日期（逐年会差一两天，够每日关用了）
+  const TERM_START = [[2, 4], [2, 19], [3, 6], [3, 21], [4, 5], [4, 20], [5, 6], [5, 21], [6, 6], [6, 21], [7, 7], [7, 23],
+    [8, 8], [8, 23], [9, 8], [9, 23], [10, 8], [10, 23], [11, 7], [11, 22], [12, 7], [12, 22], [1, 6], [1, 20]];
+  function termForDate(y, m, d) {
+    const key = m * 100 + d;
+    let best = -1, bestKey = -1;
+    TERM_START.forEach((md, i) => { const k = md[0] * 100 + md[1]; if (k <= key && k > bestKey) { bestKey = k; best = i; } });
+    let startY = y;
+    if (best < 0) { best = 21; startY = y - 1; }
+    const st = TERM_START[best];
+    const t0 = Date.UTC(startY, st[0] - 1, st[1]), t1 = Date.UTC(y, m - 1, d);
+    const days = Math.round((t1 - t0) / 86400000);
+    return { term: best, hou: Math.max(0, Math.min(2, Math.floor(days / 5))) };
+  }
+  function dateKey(y, m, d) { return y + '-' + String(m).padStart(2, '0') + '-' + String(d).padStart(2, '0'); }
+  function dailyLevel(y, m, d) {
+    const td = termForDate(y, m, d);
+    const base = td.term * 3 + td.hou;
+    const spec = Object.assign({}, levelSpec(Math.min(71, base + 4)), { index: base });
+    const lv = generate(base, { seed: hashStr('rain-daily#' + dateKey(y, m, d)), spec });
+    lv.daily = dateKey(y, m, d); lv.term = td.term; lv.hou = td.hou;
+    return lv;
+  }
+
+  return { N, E, S, W, DIRS, DX, DY, OPP, rotCW, degree, mulberry32, hashStr, SEASONS, TERMS, HOU_NAME, LEVEL_COUNT,
+    levelSpec, generate, computeFlow, maskAt, clicksNeeded, parOf, starsFor, termForDate, dailyLevel, dateKey };
+})();
+</script>
+
+<!-- ======================= 表现层 ======================= -->
+<script>
+(function () {
+'use strict';
+const L = RainLogic;
+const { N, E, S, W, DIRS, DX, DY } = L;
+
+/* ---------- WeatherProvider（桩） ----------
+ * 每日关的“天气来源”。当前是离线实现：按本地日期推算节气，日期做随机种子，所以同一天所有人拿到同一关。
+ * 参赛版可以替换 getToday() 的实现，返回结构不变，游戏其余部分不用改：
+ *   1. 用 navigator.geolocation 或玩家选择的城市，请求一个天气接口，拿到 { rain: 0~1 雨量, snow: bool, windDeg, tempC }；
+ *   2. rain 映射到雨声层强弱与网格大小、承雨口数量；windDeg 映射到画面雨丝的斜度；snow 时改用冬季的雨雪声；
+ *   3. 把“城市 + 节气 + 当天天气”交给 AI，写一段四十字以内的物候小记（克制、具体、不编造古籍），填进 note。
+ */
+const WeatherProvider = {
+  getToday(now) {
+    const y = now.getFullYear(), m = now.getMonth() + 1, d = now.getDate();
+    const td = L.termForDate(y, m, d);
+    return { source: 'offline', y, m, d, key: L.dateKey(y, m, d), term: td.term, hou: td.hou, rain: null, windDeg: null, note: null };
+  }
+};
+
+/* ---------- 季节美术参数 ---------- */
+const STY = [
+  { sky: ['#8ea29b', '#6d817a', '#43504c'], mtn: '#566b63', wall: '#d3d8d0', tileA: '#7b8885', tileB: '#4b5856', moss: ['#5d7a52', '#7c9a63'],
+    petal: '#f2a6b4', deep: '#d4687f', heart: '#f6df9c', leaf: '#5d7f4e', water: [164, 212, 212], rain: { n: 230, spd: 1050, len: 15, ang: .2, a: .26 }, bell: 587.3 },
+  { sky: ['#6d7f79', '#53635e', '#2f3a37'], mtn: '#3f5650', wall: '#c9cfc8', tileA: '#6f7d79', tileB: '#414d4b', moss: ['#4c7448', '#6a9258'],
+    petal: '#f0b2c1', deep: '#d97a95', heart: '#f4d77f', leaf: '#4e7f4a', water: [150, 206, 206], rain: { n: 430, spd: 1500, len: 30, ang: .12, a: .32 }, bell: 523.3 },
+  { sky: ['#a19f90', '#7c7b6e', '#4a4b44'], mtn: '#69685a', wall: '#d6d4c8', tileA: '#7f8580', tileB: '#4d5450', moss: ['#6a7748', '#8c934f'],
+    petal: '#efc455', deep: '#cf9226', heart: '#f8e39a', leaf: '#4f6b45', water: [176, 206, 198], rain: { n: 120, spd: 980, len: 22, ang: .3, a: .25 }, bell: 493.9 },
+  { sky: ['#bcc4c5', '#929c9e', '#5b6466'], mtn: '#7d898c', wall: '#e3e5df', tileA: '#808b8b', tileB: '#4f5a5b', moss: ['#5f7461', '#7d8f78'],
+    petal: '#f8f4ea', deep: '#e6d9c6', heart: '#e2b54a', leaf: '#3e4a44', water: [186, 214, 220], rain: { n: 70, spd: 900, len: 14, ang: .16, a: .22 }, bell: 440 }
+];
+
+const reduceMotion = (() => { try { return matchMedia('(prefers-reduced-motion: reduce)').matches; } catch (e) { return false; } })();
+
+/* ---------- 存档 ---------- */
+const SAVE_KEY = 'rain-tiles-v1';
+let save = { stars: {}, daily: {}, muted: false, last: 0 };
+try { const raw = localStorage.getItem(SAVE_KEY); if (raw) { const o = JSON.parse(raw); if (o && typeof o === 'object') save = Object.assign(save, o); } } catch (e) {}
+if (!save.stars || typeof save.stars !== 'object') save.stars = {};
+if (!save.daily || typeof save.daily !== 'object') save.daily = {};
+function persist() { try { localStorage.setItem(SAVE_KEY, JSON.stringify(save)); } catch (e) {} }
+function starsOf(i) { const v = save.stars[i]; return typeof v === 'number' ? v : 0; }
+function unlocked(i) { return i === 0 || i % 18 === 0 || starsOf(i) > 0 || starsOf(i - 1) > 0; }
+function firstOpen() { for (let i = 0; i < 72; i++) if (!starsOf(i) && unlocked(i)) return i; return 0; }
+
+/* =====================================================================
+ * 声音：全部 WebAudio 合成
+ * ===================================================================== */
+const Snd = (function () {
+  let ctx = null, master, rainBus, revIn, noise, hp, bp, lp, gH, gM, gB, streamG, streamBP, nextDrop = 0, timer = 0, season = 0, mode = 'title';
+  let muted = !!save.muted;
+  const P = [
+    { h: .085, m: .03, b: .02, rate: 7, big: .3 },
+    { h: .13, m: .11, b: .10, rate: 16, big: .5 },
+    { h: .045, m: .02, b: .015, rate: 3.2, big: .85 },
+    { h: .03, m: .015, b: .035, rate: 1.4, big: .2 }
+  ];
+  function mkNoise(sec) {
+    const len = Math.floor(ctx.sampleRate * sec), buf = ctx.createBuffer(1, len, ctx.sampleRate), d = buf.getChannelData(0);
+    let b0 = 0, b1 = 0, b2 = 0, b3 = 0, b4 = 0, b5 = 0;
+    for (let i = 0; i < len; i++) {
+      const w = Math.random() * 2 - 1;
+      b0 = .99886 * b0 + w * .0555179; b1 = .99332 * b1 + w * .0750759; b2 = .969 * b2 + w * .153852;
+      b3 = .8665 * b3 + w * .3104856; b4 = .55 * b4 + w * .5329522; b5 = -.7616 * b5 - w * .016898;
+      d[i] = (b0 + b1 + b2 + b3 + b4 + b5 + w * .5362) * .11;
+    }
+    return buf;
+  }
+  function init() {
+    if (ctx) { if (ctx.state === 'suspended') ctx.resume(); return; }
+    const AC = window.AudioContext || window.webkitAudioContext; if (!AC) return;
+    try { ctx = new AC(); } catch (e) { ctx = null; return; }
+    master = ctx.createGain(); master.gain.value = muted ? 0 : 1;
+    const comp = ctx.createDynamicsCompressor(); comp.threshold.value = -14; comp.ratio.value = 3;
+    master.connect(comp); comp.connect(ctx.destination);
+    // 混响：生成的冲激响应
+    const conv = ctx.createConvolver(); const irLen = Math.floor(ctx.sampleRate * 2.4);
+    const ir = ctx.createBuffer(2, irLen, ctx.sampleRate);
+    for (let ch = 0; ch < 2; ch++) { const d = ir.getChannelData(ch); for (let i = 0; i < irLen; i++) d[i] = (Math.random() * 2 - 1) * Math.pow(1 - i / irLen, 3.2); }
+    conv.buffer = ir; revIn = ctx.createGain(); revIn.gain.value = .32; revIn.connect(conv); const revOut = ctx.createGain(); revOut.gain.value = .55; conv.connect(revOut); revOut.connect(master);
+    noise = mkNoise(4);
+    rainBus = ctx.createGain(); rainBus.gain.value = 0; rainBus.connect(master);
+    const src = ctx.createBufferSource(); src.buffer = noise; src.loop = true;
+    hp = ctx.createBiquadFilter(); hp.type = 'highpass'; hp.frequency.value = 3200;
+    bp = ctx.createBiquadFilter(); bp.type = 'bandpass'; bp.frequency.value = 1400; bp.Q.value = .6;
+    lp = ctx.createBiquadFilter(); lp.type = 'lowpass'; lp.frequency.value = 700;
+    gH = ctx.createGain(); gM = ctx.createGain(); gB = ctx.createGain(); gH.gain.value = gM.gain.value = gB.gain.value = 0;
+    src.connect(hp); hp.connect(gH); src.connect(bp); bp.connect(gM); src.connect(lp); lp.connect(gB);
+    [gH, gM, gB].forEach(g => g.connect(rainBus));
+    src.start();
+    // 水流声
+    const s2 = ctx.createBufferSource(); s2.buffer = noise; s2.loop = true; s2.playbackRate.value = .8;
+    streamBP = ctx.createBiquadFilter(); streamBP.type = 'bandpass'; streamBP.frequency.value = 620; streamBP.Q.value = 1.1;
+    const lfo = ctx.createOscillator(); lfo.frequency.value = .55; const lg = ctx.createGain(); lg.gain.value = 180; lfo.connect(lg); lg.connect(streamBP.frequency); lfo.start();
+    const lfo2 = ctx.createOscillator(); lfo2.frequency.value = 4.7; const lg2 = ctx.createGain(); lg2.gain.value = 60; lfo2.connect(lg2); lg2.connect(streamBP.frequency); lfo2.start();
+    streamG = ctx.createGain(); streamG.gain.value = 0;
+    s2.connect(streamBP); streamBP.connect(streamG); streamG.connect(master); streamG.connect(revIn);
+    s2.start();
+    rainBus.gain.setTargetAtTime(1, ctx.currentTime, 1.2);
+    applySeason(true);
+    nextDrop = ctx.currentTime + .1;
+    timer = setInterval(schedule, 90);
+    document.addEventListener('visibilitychange', () => { if (!ctx) return; if (document.hidden) ctx.suspend(); else ctx.resume(); });
+  }
+  function applySeason(fast) {
+    if (!ctx) return;
+    const p = P[season], t = ctx.currentTime, tc = fast ? .3 : 1.6;
+    const k = mode === 'title' ? .9 : 1;
+    gH.gain.setTargetAtTime(p.h * k, t, tc); gM.gain.setTargetAtTime(p.m * k, t, tc); gB.gain.setTargetAtTime(p.b * k, t, tc);
+    lp.frequency.setTargetAtTime(season === 3 ? 420 : season === 1 ? 900 : 650, t, tc);
+    hp.frequency.setTargetAtTime(season === 3 ? 5200 : season === 0 ? 3800 : 3000, t, tc);
+  }
+  function setSeason(s, m) { season = s; if (m) mode = m; applySeason(false); }
+  function schedule() {
+    if (!ctx || ctx.state !== 'running') return;
+    const p = P[season];
+    while (nextDrop < ctx.currentTime + .25) {
+      drop(nextDrop, p);
+      nextDrop += -Math.log(1 - Math.random()) / p.rate;
+      if (season === 1 && Math.random() < .0035) thunder(nextDrop + Math.random());
+      if (season === 3 && Math.random() < .25) tick(nextDrop + Math.random() * .3);
+    }
+  }
+  function out(node, pan, rev) {
+    let n = node;
+    if (ctx.createStereoPanner) { const pn = ctx.createStereoPanner(); pn.pan.value = pan; n.connect(pn); n = pn; }
+    n.connect(master); if (rev) { const g = ctx.createGain(); g.gain.value = rev; n.connect(g); g.connect(revIn); }
+  }
+  function drop(at, p) {
+    const big = Math.random() < p.big;
+    const o = ctx.createOscillator(), g = ctx.createGain();
+    const f = big ? 700 + Math.random() * 1100 : 1700 + Math.random() * 2600;
+    o.type = 'sine'; o.frequency.setValueAtTime(f, at); o.frequency.exponentialRampToValueAtTime(f * (big ? .45 : .6), at + (big ? .07 : .035));
+    const a = (big ? .05 : .022) * (.4 + Math.random() * .6) * (mode === 'select' ? .6 : 1);
+    g.gain.setValueAtTime(0, at); g.gain.linearRampToValueAtTime(a, at + .003); g.gain.exponentialRampToValueAtTime(.0001, at + (big ? .12 : .06));
+    o.connect(g); out(g, Math.random() * 1.6 - .8, .5); o.start(at); o.stop(at + .15);
+  }
+  function tick(at) {
+    const s = ctx.createBufferSource(); s.buffer = noise; const f = ctx.createBiquadFilter(); f.type = 'highpass'; f.frequency.value = 6000;
+    const g = ctx.createGain(); g.gain.setValueAtTime(.05 * Math.random(), at); g.gain.exponentialRampToValueAtTime(.0001, at + .02);
+    s.connect(f); f.connect(g); out(g, Math.random() * 1.6 - .8, .3); s.start(at, Math.random() * 3, .03);
+  }
+  function thunder(at) {
+    const s = ctx.createBufferSource(); s.buffer = noise; s.loop = true; const f = ctx.createBiquadFilter(); f.type = 'lowpass'; f.frequency.value = 110;
+    const g = ctx.createGain(); g.gain.setValueAtTime(0, at); g.gain.linearRampToValueAtTime(.35, at + 1.2); g.gain.exponentialRampToValueAtTime(.0001, at + 6);
+    s.connect(f); f.connect(g); out(g, Math.random() - .5, .6); s.start(at); s.stop(at + 6.2);
+  }
+  function now() { return ctx ? ctx.currentTime : 0; }
+  // 陶瓦“咔”
+  function click() {
+    if (!ctx) return; const t = now() + .005; const pr = .94 + Math.random() * .12;
+    for (let k = 0; k < 2; k++) {
+      const at = t + k * .045, amp = k ? .16 : .42;
+      const s = ctx.createBufferSource(); s.buffer = noise; const f = ctx.createBiquadFilter(); f.type = 'bandpass'; f.frequency.value = 2900 * pr; f.Q.value = 2.4;
+      const g = ctx.createGain(); g.gain.setValueAtTime(amp, at); g.gain.exponentialRampToValueAtTime(.0001, at + .03);
+      s.connect(f); f.connect(g); out(g, 0, .25); s.start(at, Math.random() * 3, .05);
+    }
+    const o = ctx.createOscillator(), g = ctx.createGain(); o.type = 'triangle';
+    o.frequency.setValueAtTime(1750 * pr, t); o.frequency.exponentialRampToValueAtTime(980 * pr, t + .04);
+    g.gain.setValueAtTime(.12, t); g.gain.exponentialRampToValueAtTime(.0001, t + .07); o.connect(g); out(g, 0, .3); o.start(t); o.stop(t + .1);
+    const o2 = ctx.createOscillator(), g2 = ctx.createGain(); o2.frequency.value = 3650 * pr;
+    g2.gain.setValueAtTime(.035, t); g2.gain.exponentialRampToValueAtTime(.0001, t + .11); o2.connect(g2); out(g2, 0, .4); o2.start(t); o2.stop(t + .14);
+  }
+  function thud() {
+    if (!ctx) return; const t = now() + .005;
+    const o = ctx.createOscillator(), g = ctx.createGain(); o.frequency.setValueAtTime(170, t); o.frequency.exponentialRampToValueAtTime(90, t + .09);
+    g.gain.setValueAtTime(.22, t); g.gain.exponentialRampToValueAtTime(.0001, t + .12); o.connect(g); out(g, 0, .1); o.start(t); o.stop(t + .15);
+  }
+  function trickle(n) {
+    if (!ctx) return; const t = now();
+    const k = Math.min(5, 2 + n);
+    for (let i = 0; i < k; i++) {
+      const at = t + .04 + i * (.05 + Math.random() * .05);
+      const o = ctx.createOscillator(), g = ctx.createGain(); const f = 340 + Math.random() * 380;
+      o.frequency.setValueAtTime(f, at); o.frequency.exponentialRampToValueAtTime(f * 1.7, at + .06);
+      g.gain.setValueAtTime(0, at); g.gain.linearRampToValueAtTime(.045, at + .01); g.gain.exponentialRampToValueAtTime(.0001, at + .08);
+      o.connect(g); out(g, Math.random() - .5, .5); o.start(at); o.stop(at + .1);
+    }
+  }
+  function swell() {
+    if (!ctx) return; const t = now();
+    const s = ctx.createBufferSource(); s.buffer = noise; s.loop = true; const f = ctx.createBiquadFilter(); f.type = 'lowpass';
+    f.frequency.setValueAtTime(380, t); f.frequency.exponentialRampToValueAtTime(2200, t + .9); f.Q.value = 2;
+    const g = ctx.createGain(); g.gain.setValueAtTime(0, t); g.gain.linearRampToValueAtTime(.16, t + .45); g.gain.exponentialRampToValueAtTime(.0001, t + 2.4);
+    s.connect(f); f.connect(g); out(g, 0, .7); s.start(t, Math.random() * 3); s.stop(t + 2.5);
+  }
+  function bell(freq, delay, vol) {
+    if (!ctx) return; const t = now() + (delay || 0); const v = vol || .12;
+    [[1, 1], [2.01, .35], [3.0, .16], [4.23, .08]].forEach(([r, a]) => {
+      const o = ctx.createOscillator(), g = ctx.createGain(); o.type = 'sine'; o.frequency.value = freq * r;
+      g.gain.setValueAtTime(0, t); g.gain.linearRampToValueAtTime(v * a, t + .006); g.gain.exponentialRampToValueAtTime(.0001, t + 2.8 / r + .4);
+      o.connect(g); out(g, 0, .9); o.start(t); o.stop(t + 3.4);
+    });
+  }
+  const PENTA = [0, 2, 4, 7, 9, 12, 14];
+  function bloom(j) { bell(STY[season].bell * Math.pow(2, PENTA[(j * 2 + 2) % PENTA.length] / 12), 0, .1); }
+  function win() { [0, 2, 4, 5].forEach((d, i) => bell(STY[season].bell * Math.pow(2, PENTA[d] / 12), .15 + i * .22, .09)); }
+  function leak() {
+    if (!ctx) return; const t = now();
+    const o = ctx.createOscillator(), g = ctx.createGain(); o.frequency.setValueAtTime(620, t); o.frequency.exponentialRampToValueAtTime(140, t + .14);
+    g.gain.setValueAtTime(.12, t); g.gain.exponentialRampToValueAtTime(.0001, t + .2); o.connect(g); out(g, 0, .6); o.start(t); o.stop(t + .25);
+  }
+  function stream(level) { if (!ctx) return; streamG.gain.setTargetAtTime(level, now(), .4); }
+  function setMuted(m) { muted = m; if (ctx) master.gain.setTargetAtTime(m ? 0 : 1, now(), .06); }
+  return { init, setSeason, click, thud, trickle, swell, bloom, win, leak, stream, setMuted, get muted() { return muted; } };
+})();
+
+/* =====================================================================
+ * 画布与布局
+ * ===================================================================== */
+const cv = document.getElementById('cv');
+const ctx = cv.getContext('2d');
+let VW = 0, VH = 0, dpr = 1, safeT = 0, safeB = 0;
+let screen = 'title';
+let season = 0;
+let bgCanvas = null, titleBg = null, titleFg = null, frameCanvas = null, mistCanvas = null;
+const B = { s: 60, x: 0, y: 0, w: 0, h: 0, ridge: 0, eave: 0, court: 0 };
+const T0 = performance.now();
+
+function mkCanvas(w, h) { const c = document.createElement('canvas'); c.width = Math.max(1, Math.ceil(w)); c.height = Math.max(1, Math.ceil(h)); return c; }
+function clamp(v, a, b) { return v < a ? a : v > b ? b : v; }
+function ease(t) { t = clamp(t, 0, 1); return t * t * (3 - 2 * t); }
+function easeOutBack(t) { t = clamp(t, 0, 1); const c = 1.6; return 1 + (c + 1) * Math.pow(t - 1, 3) + c * Math.pow(t - 1, 2); }
+function h1(n) { n = (n ^ 61) ^ (n >>> 16); n = Math.imul(n, 9); n ^= n >>> 4; n = Math.imul(n, 0x27d4eb2d); n ^= n >>> 15; return (n >>> 0) / 4294967296; }
+function h2(a, b) { return h1(Math.imul(a | 0, 73856093) ^ Math.imul(b | 0, 19349663)); }
+function vnoise(x) { const i = Math.floor(x), f = x - i, u = f * f * (3 - 2 * f); return h1(i * 7919 + 13) * (1 - u) + h1((i + 1) * 7919 + 13) * u; }
+function fbm(x) { return vnoise(x) * .55 + vnoise(x * 2.1 + 31) * .28 + vnoise(x * 4.3 + 77) * .17; }
+function rgba(c, a) { return 'rgba(' + c[0] + ',' + c[1] + ',' + c[2] + ',' + a + ')'; }
+function hexA(hex, a) { const n = parseInt(hex.slice(1), 16); return 'rgba(' + (n >> 16) + ',' + ((n >> 8) & 255) + ',' + (n & 255) + ',' + a + ')'; }
+function rr(g, x, y, w, h, r) { g.beginPath(); g.moveTo(x + r, y); g.arcTo(x + w, y, x + w, y + h, r); g.arcTo(x + w, y + h, x, y + h, r); g.arcTo(x, y + h, x, y, r); g.arcTo(x, y, x + w, y, r); g.closePath(); }
+
+function readSafe() {
+  const p = document.getElementById('probe'); const cs = getComputedStyle(p);
+  safeT = parseFloat(cs.paddingTop) || 0; safeB = parseFloat(cs.paddingBottom) || 0;
+}
+
+function resize() {
+  readSafe();
+  VW = Math.max(320, window.innerWidth); VH = Math.max(400, window.innerHeight);
+  dpr = Math.min(window.devicePixelRatio || 1, 2.5);
+  cv.width = Math.round(VW * dpr); cv.height = Math.round(VH * dpr);
+  bgCanvas = null; titleBg = null; titleFg = null; frameCanvas = null;
+  layoutTitle();
+  if (game.lv) layoutBoard();
+  render(performance.now());
+}
+
+/* ---------- 开始页布局 ---------- */
+const TG = { eave: 120, ground: 600, gr: 200, gcy: 350 };
+function layoutTitle() {
+  TG.eave = clamp(VH * .15, 88, 150);
+  TG.ground = VH * .78;
+  TG.gr = Math.min(VW * .43, (TG.ground - TG.eave) * .42, 240);
+  TG.gcy = TG.eave + (TG.ground - TG.eave) * .47;
+  const gate = document.getElementById('titleGate'); gate.style.top = TG.gcy + 'px';
+  const acts = document.getElementById('titleActs');
+  acts.style.top = Math.min(TG.gcy + TG.gr + 22, VH - 120 - safeB) + 'px';
+}
+
+/* =====================================================================
+ * 背景：水墨远山、粉墙黛瓦、雨雾
+ * ===================================================================== */
+function drawInkMountains(g, w, h, base, col, seed, alpha) {
+  for (let L2 = 0; L2 < 3; L2++) {
+    const y0 = h * (base + L2 * .065), amp = h * (.10 - L2 * .02);
+    g.beginPath(); g.moveTo(0, h);
+    for (let x = 0; x <= w + 8; x += 6) {
+      const y = y0 - amp * fbm(x / (w * .22) + seed + L2 * 9.3) - amp * .5 * Math.pow(fbm(x / (w * .09) + seed * 3 + L2), 2);
+      g.lineTo(x, y);
+    }
+    g.lineTo(w, h); g.closePath();
+    const gr = g.createLinearGradient(0, y0 - amp * 1.2, 0, y0 + h * .12);
+    gr.addColorStop(0, hexA(col, alpha * (1 - L2 * .22)));
+    gr.addColorStop(1, hexA(col, 0));
+    g.fillStyle = gr; g.fill();
+  }
+}
+function drawHouses(g, x0, x1, baseY, sc, wall, cap, alpha, seed) {
+  g.save(); g.globalAlpha = alpha; try { g.filter = 'blur(' + (1.2 * sc).toFixed(1) + 'px)'; } catch (e) {}
+  let x = x0; let k = seed;
+  while (x < x1) {
+    const w = (60 + h1(k++) * 90) * sc, hh = (36 + h1(k++) * 34) * sc;
+    const steps = h1(k++) < .6 ? 2 : 1;
+    // 墙
+    g.fillStyle = wall; g.fillRect(x, baseY - hh, w, hh);
+    // 马头墙
+    const stepW = w * .18, stepH = hh * .22;
+    g.fillStyle = wall;
+    for (let s2 = 1; s2 <= steps; s2++) { g.fillRect(x + stepW * s2 * .5, baseY - hh - stepH * s2, w - stepW * s2, stepH * s2 + 1); }
+    // 黛瓦压顶
+    g.fillStyle = cap;
+    for (let s2 = 0; s2 <= steps; s2++) {
+      const yy = baseY - hh - stepH * s2, xa = x + stepW * s2 * .5 - 3 * sc, xb = x + w - stepW * s2 * .5 + 3 * sc;
+      g.fillRect(xa, yy - 3 * sc, xb - xa, 4 * sc);
+      g.beginPath(); g.moveTo(xa, yy - 3 * sc); g.lineTo(xa - 5 * sc, yy - 7 * sc); g.lineTo(xa + 3 * sc, yy - 2 * sc); g.fill();
+      g.beginPath(); g.moveTo(xb, yy - 3 * sc); g.lineTo(xb + 5 * sc, yy - 7 * sc); g.lineTo(xb - 3 * sc, yy - 2 * sc); g.fill();
+    }
+    // 窗
+    if (h1(k++) < .7) { g.fillStyle = cap; g.globalAlpha = alpha * .55; g.fillRect(x + w * .3, baseY - hh * .62, w * .12, hh * .2); g.fillRect(x + w * .58, baseY - hh * .62, w * .12, hh * .2); g.globalAlpha = alpha; }
+    x += w + (h1(k++) * 30 - 6) * sc;
+  }
+  g.restore();
+}
+function drawStoneFloor(g, x0, y0, w, h, sc, seed, wet) {
+  g.save(); g.beginPath(); g.rect(x0, y0, w, h); g.clip();
+  const gr = g.createLinearGradient(0, y0, 0, y0 + h); gr.addColorStop(0, '#3e4a48'); gr.addColorStop(1, '#2b3433');
+  g.fillStyle = gr; g.fillRect(x0, y0, w, h);
+  const rowH = 34 * sc; let k = seed;
+  for (let y = y0; y < y0 + h; y += rowH) {
+    let x = x0 - h1(k++) * 60 * sc;
+    while (x < x0 + w) {
+      const sw = (60 + h1(k++) * 70) * sc;
+      const l = 40 + h1(k++) * 12;
+      g.fillStyle = 'hsl(170,' + (6 + h1(k++) * 6) + '%,' + (l * .6) + '%)';
+      rr(g, x + 1.5, y + 1.5, sw - 3, rowH - 3, 3 * sc); g.fill();
+      // 湿润高光
+      const hl = g.createLinearGradient(x, y, x + sw * .6, y + rowH);
+      hl.addColorStop(0, 'rgba(220,235,230,' + (wet * .10) + ')'); hl.addColorStop(1, 'rgba(220,235,230,0)');
+      g.fillStyle = hl; g.fill();
+      // 苔藓沿缝
+      if (h1(k++) < .45) {
+        for (let m = 0; m < 9; m++) { g.fillStyle = 'rgba(98,128,82,' + (.25 + h1(k++) * .3) + ')'; g.beginPath(); g.arc(x + h1(k++) * sw, y + (h1(k++) < .5 ? 2 : rowH - 2), (1 + h1(k++) * 2.4) * sc, 0, 7); g.fill(); }
+      }
+      x += sw;
+    }
+  }
+  // 水洼
+  for (let p = 0; p < 4; p++) {
+    const px = x0 + h1(k++) * w, py = y0 + h * (.2 + h1(k++) * .7), pw = (40 + h1(k++) * 80) * sc;
+    const pg = g.createRadialGradient(px, py, 1, px, py, pw);
+    pg.addColorStop(0, 'rgba(170,192,188,.22)'); pg.addColorStop(.7, 'rgba(150,175,170,.10)'); pg.addColorStop(1, 'rgba(150,175,170,0)');
+    g.fillStyle = pg; g.beginPath(); g.ellipse(px, py, pw, pw * .28, 0, 0, 7); g.fill();
+  }
+  g.restore();
+}
+function renderBackground() {
+  const st = STY[season];
+  bgCanvas = mkCanvas(VW * dpr, VH * dpr);
+  const g = bgCanvas.getContext('2d'); g.setTransform(dpr, 0, 0, dpr, 0, 0);
+  const gr = g.createLinearGradient(0, 0, 0, VH);
+  gr.addColorStop(0, st.sky[0]); gr.addColorStop(.5, st.sky[1]); gr.addColorStop(1, st.sky[2]);
+  g.fillStyle = gr; g.fillRect(0, 0, VW, VH);
+  drawInkMountains(g, VW, VH, .2, st.mtn, season * 5 + 1, .75);
+  const sc = clamp(VW / 900, .6, 1.3);
+  // 两侧粉墙黛瓦
+  drawHouses(g, -20, VW * .32, VH * .46, sc, st.wall, '#38423f', .55, 11 + season);
+  drawHouses(g, VW * .66, VW + 40, VH * .47, sc, st.wall, '#38423f', .5, 37 + season);
+  // 雾带
+  const mg = g.createLinearGradient(0, VH * .3, 0, VH * .62);
+  mg.addColorStop(0, hexA(st.sky[0], 0)); mg.addColorStop(.55, hexA(st.sky[0], .55)); mg.addColorStop(1, hexA(st.sky[1], 0));
+  g.fillStyle = mg; g.fillRect(0, VH * .3, VW, VH * .32);
+  drawStoneFloor(g, 0, VH * .58, VW, VH * .42, sc, 900 + season, 1);
+  const fog = g.createLinearGradient(0, VH * .56, 0, VH * .7); fog.addColorStop(0, hexA(st.sky[1], .65)); fog.addColorStop(1, hexA(st.sky[1], 0));
+  g.fillStyle = fog; g.fillRect(0, VH * .56, VW, VH * .14);
+  if (season === 3) { g.fillStyle = 'rgba(240,244,244,.10)'; g.fillRect(0, VH * .58, VW, VH * .42); }
+  // 暗角
+  const vg = g.createRadialGradient(VW / 2, VH * .45, Math.min(VW, VH) * .3, VW / 2, VH * .5, Math.max(VW, VH) * .8);
+  vg.addColorStop(0, 'rgba(10,16,15,0)'); vg.addColorStop(1, 'rgba(10,16,15,.55)');
+  g.fillStyle = vg; g.fillRect(0, 0, VW, VH);
+}
+function renderMist() {
+  mistCanvas = mkCanvas(512, 160);
+  const g = mistCanvas.getContext('2d');
+  for (let i = 0; i < 26; i++) {
+    const x = h1(i * 3 + 1) * 512, y = 40 + h1(i * 3 + 2) * 80, r = 30 + h1(i * 3 + 3) * 60;
+    for (const dx of [-512, 0, 512]) {
+      const rg = g.createRadialGradient(x + dx, y, 0, x + dx, y, r);
+      rg.addColorStop(0, 'rgba(225,232,228,.20)'); rg.addColorStop(1, 'rgba(225,232,228,0)');
+      g.fillStyle = rg; g.fillRect(x + dx - r, y - r, r * 2, r * 2);
+    }
+  }
+}
+function drawMist(t, y, h, alpha, speed) {
+  if (!mistCanvas) renderMist();
+  const w = h * 3.2; const off = reduceMotion ? 0 : ((t * speed) % w + w) % w;
+  ctx.save(); ctx.globalAlpha = alpha;
+  for (let x = -off; x < VW; x += w) ctx.drawImage(mistCanvas, x, y, w, h);
+  ctx.restore();
+}
+
+/* =====================================================================
+ * 开始页：雨中屋檐 + 月洞门
+ * ===================================================================== */
+function renderTitleBg() {
+  titleBg = mkCanvas(VW * dpr, VH * dpr);
+  const g = titleBg.getContext('2d'); g.setTransform(dpr, 0, 0, dpr, 0, 0);
+  const st = STY[0];
+  const gr = g.createLinearGradient(0, 0, 0, VH); gr.addColorStop(0, '#7f948d'); gr.addColorStop(.5, '#6a7d77'); gr.addColorStop(1, '#3a4643');
+  g.fillStyle = gr; g.fillRect(0, 0, VW, VH);
+  drawInkMountains(g, VW, VH, .26, '#4f625b', 3, .6);
+  const { gr: R, gcy: cy, ground } = TG; const cx = VW / 2;
+  const wallTop = Math.max(TG.eave + 20, cy - R - Math.max(36, R * .28));
+  // 墙后远树
+  for (let i = 0; i < 40; i++) {
+    const x = h1(i + 400) * VW, y = wallTop - 4 - h1(i + 500) * 26, r = 10 + h1(i + 600) * 26;
+    g.fillStyle = 'rgba(52,72,64,' + (.18 + h1(i + 700) * .2) + ')'; g.beginPath(); g.ellipse(x, y, r * 1.3, r, 0, 0, 7); g.fill();
+  }
+  // 白墙
+  const wg = g.createLinearGradient(0, wallTop, 0, ground);
+  wg.addColorStop(0, '#d9ddd5'); wg.addColorStop(.7, '#c7cdc5'); wg.addColorStop(1, '#a9b1aa');
+  g.fillStyle = wg; g.fillRect(0, wallTop, VW, ground - wallTop);
+  // 雨渍：竖向水痕
+  for (let i = 0; i < 70; i++) {
+    const x = h1(i * 7 + 3) * VW, len = (ground - wallTop) * (.15 + h1(i * 7 + 4) * .6), w = 2 + h1(i * 7 + 5) * 10;
+    const sg = g.createLinearGradient(0, wallTop, 0, wallTop + len);
+    sg.addColorStop(0, 'rgba(70,84,80,' + (.10 + h1(i * 7 + 6) * .12) + ')'); sg.addColorStop(1, 'rgba(70,84,80,0)');
+    g.fillStyle = sg; g.fillRect(x, wallTop, w, len);
+  }
+  // 墙脚青苔
+  const bg2 = g.createLinearGradient(0, ground - 60, 0, ground); bg2.addColorStop(0, 'rgba(80,104,84,0)'); bg2.addColorStop(1, 'rgba(70,96,74,.55)');
+  g.fillStyle = bg2; g.fillRect(0, ground - 60, VW, 60);
+  // 墙顶黛瓦
+  const capH = 14;
+  g.fillStyle = '#2f3836'; g.fillRect(0, wallTop - capH, VW, capH);
+  g.fillStyle = '#434e4b';
+  for (let x = -4; x < VW + 10; x += 9) { rr(g, x, wallTop - capH - 4, 7, capH + 2, 3); g.fill(); }
+  g.fillStyle = '#1f2726'; g.fillRect(0, wallTop - 3, VW, 5);
+  const shg = g.createLinearGradient(0, wallTop, 0, wallTop + 26); shg.addColorStop(0, 'rgba(30,40,38,.35)'); shg.addColorStop(1, 'rgba(30,40,38,0)');
+  g.fillStyle = shg; g.fillRect(0, wallTop, VW, 26);
+  // 月洞门内：雾中的竹
+  g.save(); g.beginPath(); g.arc(cx, cy, R, 0, Math.PI * 2); g.clip();
+  const ig = g.createLinearGradient(0, cy - R, 0, cy + R); ig.addColorStop(0, '#41564f'); ig.addColorStop(.6, '#2c3d38'); ig.addColorStop(1, '#22302c');
+  g.fillStyle = ig; g.fillRect(cx - R, cy - R, R * 2, R * 2);
+  drawInkMountains(g, VW, VH, (cy - R * .1) / VH, '#6f857c', 8, .35);
+  // 竹
+  for (let i = 0; i < 9; i++) {
+    const bx = cx - R + h1(i + 90) * R * 2, bw = 3 + h1(i + 91) * 5, dark = h1(i + 92);
+    const col = dark > .5 ? 'rgba(18,30,26,.85)' : 'rgba(40,60,52,.55)';
+    g.strokeStyle = col; g.lineWidth = bw; g.lineCap = 'butt';
+    const lean = (h1(i + 93) - .5) * 30;
+    g.beginPath(); g.moveTo(bx, cy + R); g.quadraticCurveTo(bx + lean * .3, cy, bx + lean, cy - R); g.stroke();
+    for (let k = 1; k < 8; k++) { const yy = cy + R - k * R * .27; const xx = bx + lean * (1 - (yy - (cy - R)) / (2 * R)); g.fillStyle = col; g.fillRect(xx - bw * .8, yy, bw * 1.6, 1.5); }
+    // 叶
+    for (let k = 0; k < 14; k++) {
+      const yy = cy - R * .9 + h1(i * 30 + k) * R * 1.2, xx = bx + lean * .5 + (h1(i * 31 + k) - .5) * 60;
+      const ang = -.6 + h1(i * 32 + k) * 1.2 + (h1(i * 33 + k) < .5 ? Math.PI : 0), len = 14 + h1(i * 34 + k) * 18;
+      g.save(); g.translate(xx, yy); g.rotate(ang); g.fillStyle = col;
+      g.beginPath(); g.moveTo(0, 0); g.quadraticCurveTo(len * .5, -len * .16, len, 0); g.quadraticCurveTo(len * .5, len * .12, 0, 0); g.fill(); g.restore();
+    }
+  }
+  const im = g.createLinearGradient(0, cy, 0, cy + R); im.addColorStop(0, 'rgba(180,200,192,0)'); im.addColorStop(1, 'rgba(180,200,192,.35)');
+  g.fillStyle = im; g.fillRect(cx - R, cy, R * 2, R);
+  g.restore();
+  // 门框：砖细边
+  g.lineWidth = Math.max(8, R * .06); g.strokeStyle = '#8f9893'; g.beginPath(); g.arc(cx, cy, R + g.lineWidth / 2, 0, 7); g.stroke();
+  g.lineWidth = 2; g.strokeStyle = 'rgba(40,50,48,.6)'; g.beginPath(); g.arc(cx, cy, R, 0, 7); g.stroke();
+  g.strokeStyle = 'rgba(240,244,238,.5)'; g.beginPath(); g.arc(cx, cy, R + Math.max(8, R * .06) + 1, Math.PI * 1.05, Math.PI * 1.75); g.stroke();
+  // 地面
+  drawStoneFloor(g, 0, ground, VW, VH - ground, clamp(VW / 900, .7, 1.2), 77, 1.2);
+  const fl = g.createLinearGradient(0, ground, 0, ground + 40); fl.addColorStop(0, 'rgba(160,178,172,.35)'); fl.addColorStop(1, 'rgba(160,178,172,0)');
+  g.fillStyle = fl; g.fillRect(0, ground, VW, 40);
+  const vg = g.createRadialGradient(VW / 2, VH * .5, Math.min(VW, VH) * .35, VW / 2, VH * .5, Math.max(VW, VH) * .78);
+  vg.addColorStop(0, 'rgba(10,16,15,0)'); vg.addColorStop(1, 'rgba(10,16,15,.5)');
+  g.fillStyle = vg; g.fillRect(0, 0, VW, VH);
+}
+function eaveCols() { const u = clamp(VW / 13, 34, 72); const n = Math.ceil(VW / u) + 2; return { u, n, x0: (VW - (n - 1) * u) / 2 }; }
+function renderTitleFg() {
+  titleFg = mkCanvas(VW * dpr, (TG.eave + 60) * dpr);
+  const g = titleFg.getContext('2d'); g.setTransform(dpr, 0, 0, dpr, 0, 0);
+  const { u, n, x0 } = eaveCols(); const ey = TG.eave;
+  // 屋面底色
+  const rg = g.createLinearGradient(0, 0, 0, ey); rg.addColorStop(0, '#10171a'); rg.addColorStop(1, '#2b3533');
+  g.fillStyle = rg; g.fillRect(0, 0, VW, ey);
+  // 板瓦（凹）与筒瓦（凸）交替成垄
+  for (let i = -1; i < n; i++) {
+    const cx = x0 + i * u;
+    // 板瓦垄：介于两条筒瓦之间
+    const bx = cx + u / 2;
+    const bg = g.createLinearGradient(bx - u / 2, 0, bx + u / 2, 0);
+    bg.addColorStop(0, '#1d2524'); bg.addColorStop(.5, '#3b4745'); bg.addColorStop(1, '#1d2524');
+    g.fillStyle = bg; g.fillRect(bx - u / 2, 0, u, ey);
+    for (let y = ey - u * .55; y > -u; y -= u * .55) {
+      g.strokeStyle = 'rgba(10,14,14,.55)'; g.lineWidth = 1.2; g.beginPath(); g.moveTo(bx - u * .42, y); g.quadraticCurveTo(bx, y + u * .12, bx + u * .42, y); g.stroke();
+      g.strokeStyle = 'rgba(190,205,200,.09)'; g.beginPath(); g.moveTo(bx - u * .38, y + 2); g.quadraticCurveTo(bx, y + u * .12 + 2, bx + u * .38, y + 2); g.stroke();
+    }
+    // 筒瓦
+    const tw = u * .42;
+    const tg = g.createLinearGradient(cx - tw / 2, 0, cx + tw / 2, 0);
+    tg.addColorStop(0, '#222b2a'); tg.addColorStop(.32, '#6a7774'); tg.addColorStop(.5, '#58646180'); tg.addColorStop(1, '#151c1c');
+    g.fillStyle = tg; g.fillRect(cx - tw / 2, 0, tw, ey - tw * .2);
+    for (let y = ey - u * .7; y > -u; y -= u * .7) { g.fillStyle = 'rgba(10,14,14,.5)'; g.fillRect(cx - tw / 2, y, tw, 1.5); }
+  }
+  // 瓦当与滴水
+  for (let i = -1; i < n; i++) {
+    const cx = x0 + i * u, r = u * .23;
+    // 瓦当（圆）
+    const dg = g.createRadialGradient(cx - r * .35, ey - r * .35, r * .1, cx, ey, r);
+    dg.addColorStop(0, '#8a9693'); dg.addColorStop(.7, '#4e5a58'); dg.addColorStop(1, '#2a3332');
+    g.fillStyle = dg; g.beginPath(); g.arc(cx, ey, r, 0, 7); g.fill();
+    g.strokeStyle = 'rgba(20,26,26,.7)'; g.lineWidth = 1.2; g.beginPath(); g.arc(cx, ey, r * .78, 0, 7); g.stroke();
+    g.strokeStyle = 'rgba(200,214,210,.25)'; g.beginPath(); g.arc(cx, ey, r * .78, Math.PI * 1.1, Math.PI * 1.6); g.stroke();
+    // 当面纹：四瓣
+    g.fillStyle = 'rgba(28,36,35,.7)';
+    for (let k = 0; k < 8; k++) { const a = k * Math.PI / 4; g.beginPath(); g.arc(cx + Math.cos(a) * r * .5, ey + Math.sin(a) * r * .5, r * .07, 0, 7); g.fill(); }
+    g.strokeStyle = 'rgba(28,36,35,.6)'; g.lineWidth = 1; g.beginPath(); g.arc(cx, ey, r * .3, 0, 7); g.stroke();
+    g.beginPath(); g.arc(cx, ey, r * .12, 0, 7); g.fill();
+    g.fillStyle = 'rgba(210,222,218,.18)'; g.beginPath(); g.arc(cx - r * .05, ey - r * .05, r * .1, 0, 7); g.fill();
+    // 滴水（倒三角）
+    const dx = cx + u / 2, dw = u * .36, dh = u * .34;
+    const tgr = g.createLinearGradient(0, ey - dh * .3, 0, ey + dh);
+    tgr.addColorStop(0, '#5f6b69'); tgr.addColorStop(1, '#2a3332');
+    g.fillStyle = tgr; g.beginPath(); g.moveTo(dx - dw, ey - dh * .25); g.quadraticCurveTo(dx, ey - dh * .05, dx + dw, ey - dh * .25);
+    g.quadraticCurveTo(dx + dw * .8, ey + dh * .35, dx, ey + dh); g.quadraticCurveTo(dx - dw * .8, ey + dh * .35, dx - dw, ey - dh * .25); g.fill();
+    g.strokeStyle = 'rgba(200,214,210,.22)'; g.lineWidth = 1; g.stroke();
+    // 湿高光
+    g.strokeStyle = 'rgba(225,238,234,.35)'; g.lineWidth = 1.2; g.beginPath(); g.moveTo(dx - dw * .55, ey + dh * .05); g.quadraticCurveTo(dx - dw * .3, ey + dh * .45, dx - 1, ey + dh * .82); g.stroke();
+  }
+  const sh = g.createLinearGradient(0, ey, 0, ey + 50); sh.addColorStop(0, 'rgba(10,15,15,.35)'); sh.addColorStop(1, 'rgba(10,15,15,0)');
+  g.globalCompositeOperation = 'destination-over'; g.fillStyle = sh; g.fillRect(0, ey, VW, 50);
+}
+function drawTitle(t) {
+  if (!titleBg) renderTitleBg();
+  if (!titleFg) renderTitleFg();
+  ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+  ctx.drawImage(titleBg, 0, 0, VW, VH);
+  drawMist(t, TG.ground - 110, 140, .55, 14);
+  drawMist(t, TG.eave + 10, 120, .32, -8);
+  drawRain(t, 0, .9);
+  // 瓦当滴水成线
+  const { u, n, x0 } = eaveCols(); const ey = TG.eave;
+  for (let i = -1; i < n; i++) {
+    const dx = x0 + i * u + u / 2, tipY = ey + u * .34;
+    const gy = TG.ground + 8 + h1(i + 33) * (VH - TG.ground) * .55;
+    drawDripLine(dx, tipY, gy, t, i, 1);
+  }
+  ctx.drawImage(titleFg, 0, 0, VW, TG.eave + 60);
+}
+// 一条从檐口落下的雨线：细线 + 顺着往下跑的水珠 + 落地涟漪
+function drawDripLine(x, y0, y1, t, i, strength) {
+  const len = y1 - y0; if (len < 4) return;
+  const wob = Math.sin(t * 1.3 + i) * 1.2;
+  const lg = ctx.createLinearGradient(0, y0, 0, y1);
+  lg.addColorStop(0, 'rgba(220,235,232,' + (.55 * strength) + ')'); lg.addColorStop(1, 'rgba(220,235,232,' + (.12 * strength) + ')');
+  ctx.strokeStyle = lg; ctx.lineWidth = 1.1; ctx.beginPath(); ctx.moveTo(x, y0); ctx.quadraticCurveTo(x + wob, (y0 + y1) / 2, x + wob * .5, y1); ctx.stroke();
+  if (!reduceMotion) {
+    const sp = 380 + h1(i + 5) * 160;
+    for (let k = 0; k < 4; k++) {
+      const ph = ((t * sp + k * len / 4 + h1(i) * len) % len);
+      const yy = y0 + ph, xx = x + wob * (ph / len);
+      ctx.fillStyle = 'rgba(235,245,242,' + (.75 * strength) + ')';
+      ctx.beginPath(); ctx.ellipse(xx, yy, 1.4, 3.4, 0, 0, 7); ctx.fill();
+    }
+    const per = .55 + h1(i + 9) * .3, age = ((t + h1(i + 7) * 3) % per) / per;
+    ctx.strokeStyle = 'rgba(220,235,232,' + ((1 - age) * .45 * strength) + ')'; ctx.lineWidth = 1;
+    ctx.beginPath(); ctx.ellipse(x + wob * .5, y1, 3 + age * 14, (3 + age * 14) * .3, 0, 0, 7); ctx.stroke();
+    if (age < .3) { for (let k = 0; k < 3; k++) { const a = -Math.PI / 2 + (k - 1) * .7; ctx.fillStyle = 'rgba(235,245,242,' + (.6 * (1 - age / .3)) + ')'; ctx.fillRect(x + Math.cos(a) * age * 30, y1 + Math.sin(a) * age * 26 + age * age * 60, 1.5, 1.5); } }
+  }
+}
+
+/* =====================================================================
+ * 雨丝 / 雪
+ * ===================================================================== */
+function drawRain(t, sIdx, mult) {
+  const st = STY[sIdx].rain;
+  const area = VW * VH / (1280 * 800);
+  const nRain = Math.round(st.n * clamp(area, .45, 1.4) * (mult || 1) * (reduceMotion ? .35 : 1));
+  const H2 = VH + 120;
+  ctx.lineCap = 'round';
+  for (let b = 0; b < 3; b++) {
+    ctx.strokeStyle = 'rgba(222,234,232,' + (st.a * (.5 + b * .35)) + ')';
+    ctx.lineWidth = .7 + b * .35;
+    ctx.beginPath();
+    for (let i = b; i < nRain; i += 3) {
+      const r1 = h1(i * 3 + 11), r2 = h1(i * 3 + 12), r3 = h1(i * 3 + 13);
+      const sp = st.spd * (.7 + r3 * .6) * (VH / 800 * .5 + .5) * (.75 + b * .2);
+      const len = st.len * (.6 + r3 * .8) * (.8 + b * .3);
+      const yy = ((r2 * H2 + t * sp) % H2) - 60;
+      const xx = ((r1 * (VW + 200) + yy * st.ang) % (VW + 200)) - 100;
+      ctx.moveTo(xx, yy); ctx.lineTo(xx - len * st.ang, yy - len);
+    }
+    ctx.stroke();
+  }
+  if (sIdx === 3) {
+    const nSnow = Math.round(150 * clamp(area, .45, 1.4) * (mult || 1) * (reduceMotion ? .3 : 1));
+    for (let i = 0; i < nSnow; i++) {
+      const r1 = h1(i * 5 + 91), r2 = h1(i * 5 + 92), r3 = h1(i * 5 + 93);
+      const sp = 28 + r3 * 55; const size = .8 + r3 * 2.2;
+      const yy = ((r2 * H2 + t * sp) % H2) - 60;
+      const xx = ((r1 * (VW + 60) + Math.sin(t * (.6 + r1) + i) * 14 + t * 8) % (VW + 60)) - 30;
+      ctx.fillStyle = 'rgba(248,250,250,' + (.45 + r3 * .45) + ')';
+      ctx.beginPath(); ctx.arc(xx, yy, size, 0, 7); ctx.fill();
+    }
+  }
+}
+
+/* =====================================================================
+ * 瓦片精灵
+ * ===================================================================== */
+const GW = .3; // 槽宽 / 瓦宽
+let spriteCache = new Map();
+let spriteSize = 0;
+function tileInset(s) { return Math.max(1.5, s * .035); }
+function bodySprite(kind, v, fixed) {
+  const key = 'b|' + kind + '|' + v + '|' + (fixed ? 1 : 0) + '|' + season;
+  let c = spriteCache.get(key); if (c) return c;
+  const p = Math.round(B.s * dpr); c = mkCanvas(p, p); const g = c.getContext('2d');
+  const st = STY[season];
+  const rnd = L.mulberry32(v * 7919 + season * 131 + (kind === 'leak' ? 999 : 0) + (fixed ? 555 : 0) + 17);
+  const ins = tileInset(B.s) * dpr, R = p * .09;
+  g.save();
+  rr(g, ins, ins, p - ins * 2, p - ins * 2, R);
+  const gr = g.createLinearGradient(0, 0, p, p);
+  const lift = (rnd() - .5) * .08;
+  gr.addColorStop(0, shade(st.tileA, lift + (fixed ? -.08 : 0))); gr.addColorStop(1, shade(st.tileB, lift + (fixed ? -.06 : 0)));
+  g.fillStyle = gr; g.fill(); g.clip();
+  // 瓦楞：三道纵向起伏
+  for (let k = 0; k < 3; k++) {
+    const x = p * k / 3; const lg = g.createLinearGradient(x, 0, x + p / 3, 0);
+    lg.addColorStop(0, 'rgba(10,16,16,.16)'); lg.addColorStop(.45, 'rgba(235,242,240,.07)'); lg.addColorStop(1, 'rgba(10,16,16,.16)');
+    g.fillStyle = lg; g.fillRect(x, 0, p / 3, p);
+  }
+  // 搭接线：鱼鳞般的上下压叠
+  for (let k = 1; k < 3; k++) {
+    const y = p * k / 3 + (rnd() - .5) * p * .04;
+    g.strokeStyle = 'rgba(12,18,18,.32)'; g.lineWidth = Math.max(1, p * .012);
+    g.beginPath(); for (let j = 0; j < 3; j++) { const x = p * j / 3; g.moveTo(x, y); g.quadraticCurveTo(x + p / 6, y + p * .05, x + p / 3, y); } g.stroke();
+    g.strokeStyle = 'rgba(225,235,232,.10)';
+    g.beginPath(); for (let j = 0; j < 3; j++) { const x = p * j / 3; g.moveTo(x, y + p * .018); g.quadraticCurveTo(x + p / 6, y + p * .068, x + p / 3, y + p * .018); } g.stroke();
+  }
+  // 陶土颗粒
+  for (let k = 0; k < 70; k++) {
+    g.fillStyle = rnd() < .5 ? 'rgba(240,244,240,' + (.04 + rnd() * .07) + ')' : 'rgba(8,12,12,' + (.06 + rnd() * .12) + ')';
+    g.beginPath(); g.arc(rnd() * p, rnd() * p, p * (.004 + rnd() * .012), 0, 7); g.fill();
+  }
+  // 雨水打湿的光泽
+  const sg = g.createRadialGradient(p * .28, p * .22, 0, p * .28, p * .22, p * .75);
+  sg.addColorStop(0, 'rgba(230,240,238,.16)'); sg.addColorStop(1, 'rgba(230,240,238,0)');
+  g.fillStyle = sg; g.fillRect(0, 0, p, p);
+  // 苔藓
+  const mossN = kind === 'plain' ? 1 + Math.floor(rnd() * 2) : (rnd() < .32 ? 1 : 0);
+  for (let m = 0; m < mossN + (season === 1 ? 1 : 0); m++) {
+    const corner = Math.floor(rnd() * 4); const mx = (corner % 2 ? .86 : .14) * p, my = (corner > 1 ? .86 : .14) * p;
+    for (let k = 0; k < 18; k++) {
+      const a = rnd() * 7, d = rnd() * p * .14;
+      g.fillStyle = hexA(st.moss[rnd() < .6 ? 0 : 1], .35 + rnd() * .45);
+      g.beginPath(); g.arc(mx + Math.cos(a) * d, my + Math.sin(a) * d, p * (.012 + rnd() * .026), 0, 7); g.fill();
+    }
+  }
+  // 季节点缀（只放在平瓦上，免得挡住水槽）
+  if (kind === 'plain') {
+    if (season === 0) petals(g, p, rnd, st.petal, 4);
+    if (season === 2) { for (let k = 0; k < 6; k++) { g.fillStyle = hexA(rnd() < .5 ? '#e7b84a' : '#d99a32', .85); const x = p * (.2 + rnd() * .6), y = p * (.2 + rnd() * .6); for (let q = 0; q < 4; q++) { g.beginPath(); g.arc(x + Math.cos(q * 1.57) * p * .012, y + Math.sin(q * 1.57) * p * .012, p * .012, 0, 7); g.fill(); } } leafA(g, p, rnd); }
+    if (season === 1) { for (let k = 0; k < 7; k++) bead(g, p * (.15 + rnd() * .7), p * (.15 + rnd() * .7), p * (.015 + rnd() * .02)); }
+  }
+  if (season === 3) {
+    for (let k = 0; k < (kind === 'plain' ? 16 : 7); k++) {
+      const x = rnd() * p, y = (kind === 'plain' ? rnd() : (rnd() < .5 ? rnd() * .2 : .8 + rnd() * .2)) * p;
+      const r = p * (.03 + rnd() * .06);
+      const sgw = g.createRadialGradient(x, y, 0, x, y, r); sgw.addColorStop(0, 'rgba(250,252,252,.9)'); sgw.addColorStop(1, 'rgba(250,252,252,0)');
+      g.fillStyle = sgw; g.beginPath(); g.arc(x, y, r, 0, 7); g.fill();
+    }
+  }
+  if (kind === 'leak') {
+    // 漏瓦：裂纹、水渍、缺角
+    const st2 = g.createRadialGradient(p * .5, p * .5, 0, p * .5, p * .5, p * .5);
+    st2.addColorStop(0, 'rgba(20,24,22,.42)'); st2.addColorStop(1, 'rgba(20,24,22,0)');
+    g.fillStyle = st2; g.fillRect(0, 0, p, p);
+    g.strokeStyle = 'rgba(10,12,12,.85)'; g.lineWidth = Math.max(1.2, p * .016); g.lineJoin = 'round';
+    for (let k = 0; k < 3; k++) {
+      let x = p * .5, y = p * .5; g.beginPath(); g.moveTo(x, y); const a0 = rnd() * 7;
+      for (let j = 0; j < 5; j++) { x += Math.cos(a0 + (rnd() - .5) * 1.2) * p * .1; y += Math.sin(a0 + (rnd() - .5) * 1.2) * p * .1; g.lineTo(x, y); }
+      g.stroke();
+    }
+    g.strokeStyle = 'rgba(210,222,218,.25)'; g.lineWidth = Math.max(.8, p * .007); g.stroke();
+    g.fillStyle = 'rgba(8,10,10,.75)'; g.beginPath(); g.moveTo(p - ins, p * .7); g.lineTo(p * .78, p - ins); g.lineTo(p - ins, p - ins); g.fill();
+  }
+  g.restore();
+  // 倒角
+  g.save(); rr(g, ins, ins, p - ins * 2, p - ins * 2, R); g.lineWidth = Math.max(1, p * .022);
+  g.strokeStyle = 'rgba(8,12,12,.45)'; g.stroke();
+  g.beginPath(); g.moveTo(ins + R, ins + p * .012); g.lineTo(p - ins - R, ins + p * .012); g.moveTo(ins + p * .012, ins + R); g.lineTo(ins + p * .012, p - ins - R);
+  g.strokeStyle = 'rgba(232,240,238,.22)'; g.lineWidth = Math.max(1, p * .014); g.stroke();
+  g.restore();
+  if (fixed) {
+    // 铜钉
+    [[.15, .15], [.85, .85], [.85, .15], [.15, .85]].forEach(([fx, fy], k) => {
+      if (k > 1) return;
+      const x = p * fx, y = p * fy, r = p * .055;
+      const cg = g.createRadialGradient(x - r * .4, y - r * .4, r * .1, x, y, r);
+      cg.addColorStop(0, '#e3c88a'); cg.addColorStop(.5, '#a8814a'); cg.addColorStop(1, '#4c5f4f');
+      g.fillStyle = 'rgba(0,0,0,.4)'; g.beginPath(); g.arc(x + r * .25, y + r * .3, r, 0, 7); g.fill();
+      g.fillStyle = cg; g.beginPath(); g.arc(x, y, r, 0, 7); g.fill();
+      g.fillStyle = 'rgba(110,160,138,.45)'; g.beginPath(); g.arc(x + r * .3, y + r * .2, r * .45, 0, 7); g.fill();
+    });
+  }
+  spriteCache.set(key, c); return c;
+}
+function petals(g, p, rnd, col, n) {
+  for (let k = 0; k < n; k++) {
+    const x = p * (.15 + rnd() * .7), y = p * (.15 + rnd() * .7), a = rnd() * 7, r = p * (.03 + rnd() * .02);
+    g.save(); g.translate(x, y); g.rotate(a); g.fillStyle = hexA(col, .85);
+    g.beginPath(); g.moveTo(0, -r); g.quadraticCurveTo(r * 1.1, -r * .2, 0, r); g.quadraticCurveTo(-r * 1.1, -r * .2, 0, -r); g.fill();
+    g.fillStyle = 'rgba(255,255,255,.25)'; g.beginPath(); g.ellipse(-r * .2, -r * .2, r * .25, r * .5, 0, 0, 7); g.fill(); g.restore();
+  }
+}
+function leafA(g, p, rnd) {
+  if (rnd() < .5) return;
+  const x = p * (.25 + rnd() * .5), y = p * (.25 + rnd() * .5), a = rnd() * 7, r = p * .1;
+  g.save(); g.translate(x, y); g.rotate(a); g.fillStyle = 'rgba(196,140,62,.85)';
+  g.beginPath(); g.moveTo(0, -r); g.quadraticCurveTo(r * .7, 0, 0, r); g.quadraticCurveTo(-r * .7, 0, 0, -r); g.fill();
+  g.strokeStyle = 'rgba(110,70,30,.7)'; g.lineWidth = 1; g.beginPath(); g.moveTo(0, -r); g.lineTo(0, r * 1.3); g.stroke(); g.restore();
+}
+function bead(g, x, y, r) {
+  g.fillStyle = 'rgba(10,16,16,.25)'; g.beginPath(); g.arc(x + r * .3, y + r * .4, r, 0, 7); g.fill();
+  const bg = g.createRadialGradient(x - r * .3, y - r * .3, 0, x, y, r); bg.addColorStop(0, 'rgba(250,255,255,.9)'); bg.addColorStop(1, 'rgba(180,210,210,.25)');
+  g.fillStyle = bg; g.beginPath(); g.arc(x, y, r, 0, 7); g.fill();
+}
+function shade(hex, k) {
+  const n = parseInt(hex.slice(1), 16); let r = n >> 16, gg = (n >> 8) & 255, b = n & 255;
+  const f = (c) => Math.round(clamp(k >= 0 ? c + (255 - c) * k : c * (1 + k), 0, 255));
+  return 'rgb(' + f(r) + ',' + f(gg) + ',' + f(b) + ')';
+}
+// 水槽中心线（单位 0..1）
+function groovePath(mask, p) {
+  const P2 = new Path2D(); const h = p / 2;
+  const deg = L.degree(mask);
+  const ends = { 1: [h, -p * .02], 2: [p * 1.02, h], 4: [h, p * 1.02], 8: [-p * .02, h] };
+  if (deg === 2 && mask !== 5 && mask !== 10) {
+    const C = { 3: [p, 0, Math.PI / 2, Math.PI], 6: [p, p, Math.PI, Math.PI * 1.5], 12: [0, p, Math.PI * 1.5, Math.PI * 2], 9: [0, 0, 0, Math.PI / 2] }[mask];
+    P2.arc(C[0], C[1], h, C[2], C[3]);
+    return P2;
+  }
+  if (mask & 5) { if ((mask & 5) === 5) { P2.moveTo(h, -p * .02); P2.lineTo(h, p * 1.02); } }
+  if ((mask & 10) === 10) { P2.moveTo(-p * .02, h); P2.lineTo(p * 1.02, h); }
+  for (const d of DIRS) {
+    if (!(mask & d)) continue;
+    const opp = L.OPP[d];
+    if (mask & opp) continue;
+    P2.moveTo(h, h); P2.lineTo(ends[d][0], ends[d][1]);
+  }
+  if (deg >= 3) { P2.moveTo(h + p * GW * .5, h); P2.arc(h, h, p * GW * .01, 0, 7); }
+  return P2;
+}
+function grooveSprite(mask, kind) {
+  const key = 'g|' + mask + '|' + kind + '|' + season;
+  let c = spriteCache.get(key); if (c) return c;
+  const p = Math.round(B.s * dpr); c = mkCanvas(p, p); const g = c.getContext('2d');
+  const ins = tileInset(B.s) * dpr, R = p * .09;
+  const path = groovePath(mask, p);
+  const w = p * GW, d = w * .16;
+  g.save(); rr(g, ins, ins, p - ins * 2, p - ins * 2, R); g.clip();
+  g.lineCap = 'butt'; g.lineJoin = 'round';
+  const deg = L.degree(mask);
+  const dot = (col, rad, ox, oy) => { if (deg >= 3) { g.fillStyle = col; g.beginPath(); g.arc(p / 2 + (ox || 0), p / 2 + (oy || 0), rad, 0, 7); g.fill(); } };
+  // 外沿投影与凸起的槽唇
+  g.save(); g.translate(p * .012, p * .02); g.strokeStyle = 'rgba(6,10,10,.38)'; g.lineWidth = w * 1.5; g.stroke(path); dot('rgba(6,10,10,.38)', w * .75); g.restore();
+  g.strokeStyle = kind === 'leak' ? '#59605d' : '#7f8b88'; g.lineWidth = w * 1.4; g.stroke(path); dot(g.strokeStyle, w * .7);
+  g.strokeStyle = 'rgba(240,246,244,.22)'; g.lineWidth = w * 1.4; g.save(); g.translate(-p * .01, -p * .012); g.globalCompositeOperation = 'source-atop'; g.stroke(path); dot(g.strokeStyle, w * .7); g.restore();
+  g.strokeStyle = 'rgba(8,12,12,.5)'; g.lineWidth = w * 1.08; g.stroke(path); dot(g.strokeStyle, w * .54);
+  // 槽底：用位移叠出凹面的明暗（光从左上来，右下内壁受光）
+  const tmp = mkCanvas(p, p), t2 = tmp.getContext('2d');
+  t2.lineCap = 'butt'; t2.lineJoin = 'round';
+  t2.strokeStyle = '#0f1514'; t2.lineWidth = w; t2.stroke(path); if (deg >= 3) { t2.fillStyle = '#0f1514'; t2.beginPath(); t2.arc(p / 2, p / 2, w * .5, 0, 7); t2.fill(); }
+  t2.globalCompositeOperation = 'source-atop';
+  t2.save(); t2.translate(d, d); t2.strokeStyle = '#1b2423'; t2.stroke(path); if (deg >= 3) { t2.fillStyle = '#1b2423'; t2.beginPath(); t2.arc(p / 2, p / 2, w * .5, 0, 7); t2.fill(); } t2.restore();
+  t2.save(); t2.translate(d * 2, d * 2); t2.strokeStyle = '#252f2e'; t2.lineWidth = w * .86; t2.stroke(path); t2.restore();
+  t2.save(); t2.translate(d * 3.3, d * 3.3); t2.strokeStyle = 'rgba(120,140,136,.30)'; t2.lineWidth = w * .5; t2.stroke(path); t2.restore();
+  t2.save(); t2.translate(-d * .6, -d * .6); t2.strokeStyle = 'rgba(0,0,0,.35)'; t2.lineWidth = w * .3; t2.stroke(path); t2.restore();
+  g.drawImage(tmp, 0, 0);
+  g.restore();
+  spriteCache.set(key, c); return c;
+}
+
+/* =====================================================================
+ * 棋盘框架：屋脊、檐口（瓦当 / 滴水）、院中青石板
+ * ===================================================================== */
+const RIDGE = .95, EAVE = .42, COURT = 1.55, MX = .12;
+function layoutBoard() {
+  const lv = game.lv; const wide = VW > VH * 1.05;
+  const topH = 62 + safeT, botH = 66 + safeB;
+  const sidePad = wide ? Math.max(24, Math.min(VW * .2, 260)) : 12;
+  const aw = VW - sidePad * 2, ah = VH - topH - botH - 10;
+  const s = Math.floor(Math.min(aw / (lv.cols + MX * 2), ah / (lv.rows + RIDGE + EAVE + COURT + .1), 92));
+  if (s !== B.s) { spriteCache = new Map(); }
+  B.s = s; B.w = lv.cols * s; B.h = lv.rows * s;
+  const total = (lv.rows + RIDGE + EAVE + COURT) * s;
+  B.x = Math.round((VW - B.w) / 2);
+  B.y = Math.round(topH + 4 + Math.max(0, (ah - total) / 2) + RIDGE * s);
+  B.ridge = RIDGE * s; B.eave = EAVE * s; B.court = COURT * s;
+  frameCanvas = null;
+  // 侧栏文字（桌面横屏）
+  const side = document.getElementById('side'), sideR = document.getElementById('sideR');
+  const room = B.x - 10;
+  if (wide && room > 110 && screen === 'play') {
+    side.classList.remove('hidden'); sideR.classList.remove('hidden');
+    side.style.left = Math.max(16, room / 2 - 60) + 'px';
+    sideR.style.right = Math.max(16, room / 2 - 30) + 'px';
+  } else { side.classList.add('hidden'); sideR.classList.add('hidden'); }
+}
+function renderFrame() {
+  const lv = game.lv; const s = B.s; const st = STY[season];
+  const fx = B.x - s * .5, fy = B.y - B.ridge - s * .2, fw = B.w + s, fh = B.h + B.ridge + B.eave + B.court + s * .4;
+  frameCanvas = { c: mkCanvas(fw * dpr, fh * dpr), x: fx, y: fy, w: fw, h: fh };
+  const g = frameCanvas.c.getContext('2d'); g.setTransform(dpr, 0, 0, dpr, -fx * dpr, -fy * dpr);
+  const m = s * MX;
+  // 院子：青石板
+  const cy0 = B.y + B.h + B.eave * .4, cyH = B.court + B.eave * .6;
+  g.save(); g.shadowColor = 'rgba(0,0,0,.45)'; g.shadowBlur = s * .4; g.shadowOffsetY = s * .1;
+  g.fillStyle = '#2c3534'; rr(g, B.x - m * 1.6, cy0, B.w + m * 3.2, cyH, s * .12); g.fill(); g.restore();
+  g.save(); rr(g, B.x - m * 1.6, cy0, B.w + m * 3.2, cyH, s * .12); g.clip();
+  drawStoneFloor(g, B.x - m * 1.6, cy0, B.w + m * 3.2, cyH, s / 60, 300 + lv.index, 1.3);
+  if (season === 3) { g.fillStyle = 'rgba(240,244,244,.16)'; g.fillRect(B.x - m * 2, cy0, B.w + m * 4, cyH); }
+  const ish = g.createLinearGradient(0, cy0, 0, cy0 + s * .5); ish.addColorStop(0, 'rgba(8,12,12,.55)'); ish.addColorStop(1, 'rgba(8,12,12,0)');
+  g.fillStyle = ish; g.fillRect(B.x - m * 2, cy0, B.w + m * 4, s * .5);
+  g.restore();
+  // 屋面底板（灰缝）
+  g.save(); g.shadowColor = 'rgba(0,0,0,.55)'; g.shadowBlur = s * .5; g.shadowOffsetY = s * .15;
+  g.fillStyle = '#1b2322'; rr(g, B.x - m, B.y - m, B.w + m * 2, B.h + m * 2, s * .08); g.fill(); g.restore();
+  const bgr = g.createLinearGradient(B.x, B.y, B.x + B.w, B.y + B.h); bgr.addColorStop(0, '#2a3433'); bgr.addColorStop(1, '#161d1c');
+  g.fillStyle = bgr; rr(g, B.x - m, B.y - m, B.w + m * 2, B.h + m * 2, s * .08); g.fill();
+  // 边瓦
+  g.strokeStyle = 'rgba(200,214,210,.12)'; g.lineWidth = 1; rr(g, B.x - m + .5, B.y - m + .5, B.w + m * 2 - 1, B.h + m * 2 - 1, s * .08); g.stroke();
+  // 屋脊
+  const ry = B.y - m - B.ridge * .78, rh = B.ridge * .62, rx0 = B.x - m - s * .18, rx1 = B.x + B.w + m + s * .18;
+  g.save(); g.shadowColor = 'rgba(0,0,0,.5)'; g.shadowBlur = s * .25; g.shadowOffsetY = s * .08;
+  const rgd = g.createLinearGradient(0, ry, 0, ry + rh); rgd.addColorStop(0, '#5a6664'); rgd.addColorStop(.35, '#3b4644'); rgd.addColorStop(1, '#1e2625');
+  g.fillStyle = rgd;
+  g.beginPath(); g.moveTo(rx0, ry + rh); g.lineTo(rx0, ry + rh * .3); g.quadraticCurveTo(rx0 - s * .1, ry - rh * .35, rx0 - s * .26, ry - rh * .6);
+  g.quadraticCurveTo(rx0 + s * .05, ry - rh * .15, rx0 + s * .3, ry); g.lineTo(rx1 - s * .3, ry);
+  g.quadraticCurveTo(rx1 - s * .05, ry - rh * .15, rx1 + s * .26, ry - rh * .6); g.quadraticCurveTo(rx1 + s * .1, ry - rh * .35, rx1, ry + rh * .3);
+  g.lineTo(rx1, ry + rh); g.closePath(); g.fill(); g.restore();
+  // 脊身的游脊纹
+  g.save(); g.beginPath(); g.rect(rx0 + s * .3, ry + rh * .22, rx1 - rx0 - s * .6, rh * .5); g.clip();
+  g.fillStyle = 'rgba(12,18,18,.45)'; g.fillRect(rx0, ry + rh * .22, rx1 - rx0, rh * .5);
+  g.lineWidth = Math.max(1.5, s * .045); g.lineCap = 'round';
+  const step = s * .16;
+  for (let x = rx0 + s * .3, k = 0; x < rx1; x += step, k++) {
+    g.strokeStyle = k % 2 ? 'rgba(130,145,141,.75)' : 'rgba(100,115,111,.75)';
+    g.beginPath(); if (k % 2) { g.moveTo(x, ry + rh * .26); g.lineTo(x + step * .9, ry + rh * .68); } else { g.moveTo(x, ry + rh * .68); g.lineTo(x + step * .9, ry + rh * .26); } g.stroke();
+  }
+  g.restore();
+  g.strokeStyle = 'rgba(225,235,232,.28)'; g.lineWidth = Math.max(1, s * .02); g.beginPath(); g.moveTo(rx0 + s * .3, ry + 1); g.lineTo(rx1 - s * .3, ry + 1); g.stroke();
+  if (season === 3) { g.fillStyle = 'rgba(246,248,248,.85)'; rr(g, rx0 + s * .25, ry - s * .05, rx1 - rx0 - s * .5, s * .1, s * .05); g.fill(); }
+  // 檐口：每列一枚滴水，列缝处一枚瓦当
+  const ey = B.y + B.h + m;
+  g.fillStyle = '#1d2524'; g.fillRect(B.x - m, ey - 1, B.w + m * 2, B.eave * .3);
+  for (let c = 0; c <= lv.cols; c++) {
+    const x = B.x + c * s, r = s * .15;
+    const dg = g.createRadialGradient(x - r * .35, ey + r * .2, r * .1, x, ey + r * .55, r);
+    dg.addColorStop(0, '#8d9895'); dg.addColorStop(.7, '#4e5957'); dg.addColorStop(1, '#262f2e');
+    g.fillStyle = 'rgba(0,0,0,.35)'; g.beginPath(); g.arc(x + r * .1, ey + r * .75, r, 0, 7); g.fill();
+    g.fillStyle = dg; g.beginPath(); g.arc(x, ey + r * .55, r, 0, 7); g.fill();
+    g.strokeStyle = 'rgba(20,26,26,.7)'; g.lineWidth = 1; g.beginPath(); g.arc(x, ey + r * .55, r * .72, 0, 7); g.stroke();
+    g.fillStyle = 'rgba(28,36,35,.7)'; for (let k = 0; k < 4; k++) { const a = k * Math.PI / 2 + Math.PI / 4; g.beginPath(); g.arc(x + Math.cos(a) * r * .38, ey + r * .55 + Math.sin(a) * r * .38, r * .12, 0, 7); g.fill(); }
+  }
+  for (let c = 0; c < lv.cols; c++) {
+    const x = B.x + (c + .5) * s, dw = s * .2, dh = B.eave * .78;
+    const tg = g.createLinearGradient(0, ey, 0, ey + dh); tg.addColorStop(0, '#6a7673'); tg.addColorStop(1, '#2b3433');
+    g.fillStyle = 'rgba(0,0,0,.3)'; g.beginPath(); g.moveTo(x - dw, ey + 2); g.quadraticCurveTo(x - dw * .8, ey + dh * .45 + 2, x + 1, ey + dh + 2); g.quadraticCurveTo(x + dw * .8, ey + dh * .45 + 2, x + dw + 1, ey + 2); g.fill();
+    g.fillStyle = tg; g.beginPath(); g.moveTo(x - dw, ey); g.quadraticCurveTo(x - dw * .8, ey + dh * .45, x, ey + dh); g.quadraticCurveTo(x + dw * .8, ey + dh * .45, x + dw, ey); g.closePath(); g.fill();
+    g.strokeStyle = 'rgba(225,235,232,.3)'; g.lineWidth = 1; g.beginPath(); g.moveTo(x - dw * .6, ey + dh * .12); g.quadraticCurveTo(x - dw * .4, ey + dh * .5, x - 1, ey + dh * .85); g.stroke();
+  }
+  // 承雨口底座（铜斗）
+  lv.sources.forEach(c => {
+    const x = B.x + (c + .5) * s, y = B.y - m - B.ridge * .42, r = s * .34;
+    g.fillStyle = 'rgba(0,0,0,.45)'; g.beginPath(); g.ellipse(x + s * .03, y + s * .06, r * 1.05, r * .95, 0, 0, 7); g.fill();
+    const bg2 = g.createRadialGradient(x - r * .4, y - r * .45, r * .1, x, y, r);
+    bg2.addColorStop(0, '#c9a86c'); bg2.addColorStop(.45, '#7d6a45'); bg2.addColorStop(.8, '#4a5e52'); bg2.addColorStop(1, '#2a3530');
+    g.fillStyle = bg2; g.beginPath(); g.arc(x, y, r, 0, 7); g.fill();
+    g.strokeStyle = 'rgba(120,170,148,.4)'; g.lineWidth = s * .03; g.beginPath(); g.arc(x, y, r * .88, Math.PI * .1, Math.PI * .9); g.stroke();
+    const ig = g.createRadialGradient(x + r * .1, y + r * .15, 0, x, y, r * .7);
+    ig.addColorStop(0, '#1a2422'); ig.addColorStop(1, '#2c3a36');
+    g.fillStyle = ig; g.beginPath(); g.arc(x, y, r * .68, 0, 7); g.fill();
+    // 下口导水短槽
+    const sx0 = x - s * GW * .5;
+    g.fillStyle = '#556260'; g.fillRect(sx0 - s * .06, y + r * .4, s * GW + s * .12, (B.y - m) - (y + r * .4) + m + 2);
+    g.fillStyle = '#1e2625'; g.fillRect(sx0, y + r * .4, s * GW, (B.y - m) - (y + r * .4) + m + 2);
+  });
+}
+
+/* =====================================================================
+ * 游戏状态
+ * ===================================================================== */
+const game = {
+  lv: null, idx: 0, daily: null, moves: 0, won: false, winAt: 0, shownWin: false,
+  flow: null, wetT: null, entry: null, dryT: null, dryMask: null, sinkT: [], sinkOn: [], rotAnim: null,
+  hover: -1, parts: [], tipShown: false, leakTold: false, startRots: null
+};
+const STEP = reduceMotion ? 60 : 170; // 每格水流用时 ms
+const ROT_MS = reduceMotion ? 0 : 170;
+
+function loadLevel(lv) {
+  game.lv = lv; game.moves = 0; game.won = false; game.winAt = 0; game.shownWin = false;
+  const n = lv.cols * lv.rows;
+  game.wetT = new Float64Array(n).fill(-1); game.entry = new Uint8Array(n);
+  game.dryT = new Float64Array(n).fill(-1); game.dryMask = new Uint8Array(n);
+  game.rotAnim = new Float64Array(n).fill(-1e9);
+  game.sinkT = lv.sinks.map(() => -1); game.sinkOn = lv.sinks.map(() => false); game.bloomT = lv.sinks.map(() => -1);
+  game.parts = []; game.leakTold = false;
+  game.startRots = lv.cells.map(c => c.rot);
+  const newSeason = Math.floor((lv.daily ? lv.term * 3 : lv.index) / 18);
+  if (newSeason !== season) { season = newSeason; bgCanvas = null; spriteCache = new Map(); }
+  Snd.setSeason(season, 'play');
+  layoutBoard();
+  updateFlow(performance.now(), true);
+}
+function updateFlow(now, initial) {
+  const lv = game.lv; const f = L.computeFlow(lv);
+  const n = lv.cols * lv.rows;
+  const oldT = game.wetT; const newT = new Float64Array(n).fill(-1);
+  let fresh = 0;
+  for (const c of f.order.concat(f.leaks)) {
+    const par = f.parent[c];
+    const anim = game.rotAnim[c] + ROT_MS - now;
+    if (oldT[c] >= 0 && (par < 0 || newT[par] >= 0) && game.entry[c] === f.entry[c] && anim <= 0) newT[c] = oldT[c];
+    else {
+      const pt = par >= 0 ? newT[par] + STEP : now + (initial ? 300 : 0);
+      newT[c] = Math.max(pt, now + Math.max(0, anim)); fresh++;
+    }
+    game.entry[c] = f.entry[c];
+  }
+  for (let c = 0; c < n; c++) {
+    if (oldT[c] >= 0 && newT[c] < 0 && oldT[c] < now) { game.dryT[c] = now; game.dryMask[c] = game.lv.cells[c].k === 'plain' ? 0 : L.rotCW(lv.cells[c].base, lv.cells[c].rot - (game.rotAnim[c] + ROT_MS > now ? 1 : 0)); }
+  }
+  game.wetT = newT; game.flow = f;
+  lv.sinks.forEach((s, j) => {
+    const c = (lv.rows - 1) * lv.cols + s.col;
+    if (f.sinkWet[j]) { if (game.sinkT[j] < 0 || newT[c] !== oldT[c]) game.sinkT[j] = newT[c] + STEP; }
+    else { game.sinkT[j] = -1; game.sinkOn[j] = false; }
+  });
+  if (fresh > 0 && !initial) Snd.trickle(fresh);
+  const wetCount = f.order.length;
+  Snd.stream(Math.min(.15, .02 + wetCount * .006));
+  if (f.solved && !game.won) {
+    game.won = true; game.winAt = Math.max(...game.sinkT) + 1100;
+  } else if (!f.solved && game.won && !game.shownWin) { game.won = false; }
+}
+
+/* =====================================================================
+ * 绘制游戏画面
+ * ===================================================================== */
+function drawBoard(now) {
+  const lv = game.lv, s = B.s, st = STY[season], t = (now - T0) / 1000;
+  if (!frameCanvas) renderFrame();
+  ctx.drawImage(frameCanvas.c, frameCanvas.x, frameCanvas.y, frameCanvas.w, frameCanvas.h);
+  const m = s * MX;
+  // 承雨口：雨落进铜斗，水从下口流出
+  lv.sources.forEach((c, j) => {
+    const x = B.x + (c + .5) * s, y = B.y - m - B.ridge * .42, r = s * .34;
+    const wc = st.water;
+    const wg = ctx.createRadialGradient(x - r * .2, y - r * .2, 0, x, y, r * .66);
+    wg.addColorStop(0, rgba(wc, .55)); wg.addColorStop(1, rgba([60, 96, 96], .7));
+    ctx.fillStyle = wg; ctx.beginPath(); ctx.arc(x, y, r * .6, 0, 7); ctx.fill();
+    if (!reduceMotion) for (let k = 0; k < 3; k++) {
+      const per = .9, age = ((t + k * .3 + j * .17) % per) / per;
+      const a2 = h2(Math.floor((t + k * .3 + j * .17) / per), k + j * 7) * 7, d = r * .3 * h2(k, Math.floor((t + k * .3) / per));
+      ctx.strokeStyle = 'rgba(230,244,242,' + ((1 - age) * .6) + ')'; ctx.lineWidth = 1;
+      ctx.beginPath(); ctx.arc(x + Math.cos(a2) * d, y + Math.sin(a2) * d, 1 + age * r * .3, 0, 7); ctx.stroke();
+    }
+    ctx.strokeStyle = 'rgba(240,248,246,.35)'; ctx.lineWidth = 1; ctx.beginPath(); ctx.arc(x, y, r * .6, Math.PI * 1.1, Math.PI * 1.5); ctx.stroke();
+    // 导水
+    const y0 = y + r * .4, y1 = B.y + 2;
+    waterStroke([[x, y0], [x, y1]], s, 1, t, 1);
+    const cl = lv.cells[c]; const mk = L.maskAt(lv, c);
+    if (!(mk & N) || game.rotAnim[c] + ROT_MS > now) splash(x, B.y + 2, t, j + 50, s, .9);
+  });
+  // 瓦片
+  for (let c = 0; c < lv.cols * lv.rows; c++) {
+    const cl = lv.cells[c]; const x = B.x + (c % lv.cols) * s, y = B.y + ((c / lv.cols) | 0) * s;
+    const ra = (now - game.rotAnim[c]) / Math.max(1, ROT_MS);
+    const rotating = ra >= 0 && ra < 1;
+    const v = cl.deco % 6;
+    const body = bodySprite(cl.k === 'plain' ? 'plain' : cl.k, v, cl.fixed && cl.k === 'pipe');
+    const press = rotating ? 1 - .06 * Math.sin(Math.PI * ra) : 1;
+    ctx.save(); ctx.translate(x + s / 2, y + s / 2); ctx.scale(press, press);
+    ctx.drawImage(body, -s / 2, -s / 2, s, s);
+    if (cl.k !== 'plain') {
+      const mask = L.rotCW(cl.base, cl.rot);
+      const gs = grooveSprite(mask, cl.k);
+      if (rotating) ctx.rotate(-Math.PI / 2 * (1 - easeOutBack(ra)));
+      ctx.drawImage(gs, -s / 2, -s / 2, s, s);
+    }
+    ctx.restore();
+    if (game.hover === c && !game.won && cl.k === 'pipe' && !cl.fixed) { ctx.fillStyle = 'rgba(235,245,242,.08)'; rr(ctx, x + 2, y + 2, s - 4, s - 4, s * .09); ctx.fill(); }
+    // 水
+    if (cl.k === 'plain' || rotating) continue;
+    const wt = game.wetT[c];
+    if (wt >= 0 && now >= wt) {
+      const f = clamp((now - wt) / STEP, 0, 1);
+      drawWaterCell(x, y, s, L.rotCW(cl.base, cl.rot), game.entry[c], f, 1, t, cl.k === 'leak');
+    } else if (game.dryT[c] >= 0) {
+      const a = 1 - (now - game.dryT[c]) / 450;
+      if (a > 0) drawWaterCell(x, y, s, game.dryMask[c], 0, 1, a, t, false); else game.dryT[c] = -1;
+    }
+  }
+  // 漏水：渗下去的水圈
+  if (game.flow) {
+    for (const c of game.flow.leaks) {
+      const wt = game.wetT[c]; if (wt < 0 || now < wt + STEP * .5) continue;
+      const x = B.x + (c % lv.cols + .5) * s, y = B.y + (((c / lv.cols) | 0) + .5) * s;
+      const sg = ctx.createRadialGradient(x, y, 0, x, y, s * .48); sg.addColorStop(0, 'rgba(10,20,22,.5)'); sg.addColorStop(1, 'rgba(10,20,22,0)');
+      ctx.fillStyle = sg; ctx.beginPath(); ctx.arc(x, y, s * .48, 0, 7); ctx.fill();
+      for (let k = 0; k < 2; k++) { const age = ((t * 1.4 + k * .5) % 1); ctx.strokeStyle = 'rgba(200,228,228,' + ((1 - age) * .55) + ')'; ctx.lineWidth = 1.2; ctx.beginPath(); ctx.arc(x, y, s * (.06 + age * .3), 0, 7); ctx.stroke(); }
+      if (!game.leakTold && now > wt + STEP) { game.leakTold = true; toast('水落进了漏瓦的裂缝里。换条路，绕开它。', 3600); Snd.leak(); }
+    }
+    // 断头处溢出的水花
+    for (const sp of game.flow.spills) {
+      const wt = game.wetT[sp.c]; if (wt < 0 || now < wt + STEP) continue;
+      if (game.rotAnim[sp.c] + ROT_MS > now) continue;
+      const cx0 = B.x + (sp.c % lv.cols + .5) * s, cy0 = B.y + (((sp.c / lv.cols) | 0) + .5) * s;
+      splash(cx0 + DX[sp.d] * s * .5, cy0 + DY[sp.d] * s * .5, t, sp.c * 4 + sp.d, s, .7);
+    }
+  }
+  // 檐口落水与院中花圃 / 水缸
+  const ey = B.y + B.h + m;
+  for (let c = 0; c < lv.cols; c++) {
+    const x = B.x + (c + .5) * s; const tip = ey + B.eave * .78;
+    const j = lv.sinks.findIndex(q => q.col === c);
+    const surf = j >= 0 ? sinkSurfaceY(j) : B.y + B.h + B.eave + B.court * (.55 + h1(c + 3) * .35);
+    if (j >= 0 && game.sinkT[j] >= 0 && now >= game.sinkT[j] - STEP) {
+      const f = clamp((now - (game.sinkT[j] - STEP)) / STEP, 0, 1);
+      waterStroke([[x, tip - 2], [x, tip + (surf - tip) * f]], s, .62, t, 1, true);
+      if (f >= 1) splash(x, surf, t, c + 200, s, 1);
+    } else if (!reduceMotion) {
+      const per = 1.1 + h1(c + 70) * .9, ph = ((t + h1(c + 71) * 3) % per) / per;
+      const fall = clamp(ph / .4, 0, 1);
+      if (ph < .4) { ctx.fillStyle = 'rgba(225,240,238,.8)'; ctx.beginPath(); ctx.ellipse(x, tip + (surf - tip) * fall * fall, 1.3, 3, 0, 0, 7); ctx.fill(); }
+      else if (ph < .7) { const a = (ph - .4) / .3; ctx.strokeStyle = 'rgba(225,240,238,' + ((1 - a) * .5) + ')'; ctx.lineWidth = 1; ctx.beginPath(); ctx.ellipse(x, surf, 2 + a * s * .14, (2 + a * s * .14) * .35, 0, 0, 7); ctx.stroke(); }
+    }
+  }
+  lv.sinks.forEach((sk, j) => drawSink(sk, j, now, t));
+  // 粒子
+  game.parts = game.parts.filter(p => now - p.b < p.life);
+  for (const p of game.parts) {
+    const a = (now - p.b) / p.life; const k = 1 - a;
+    ctx.fillStyle = 'rgba(228,242,240,' + (k * .8) + ')';
+    ctx.beginPath(); ctx.arc(p.x + p.vx * a, p.y + p.vy * a + a * a * p.g, p.r * (1 - a * .5), 0, 7); ctx.fill();
+  }
+  // 棋盘上的溅点
+  if (!reduceMotion) {
+    const nS = Math.round(lv.cols * lv.rows * .22 * (season === 1 ? 1.6 : season === 2 ? .7 : season === 3 ? .4 : 1));
+    for (let k = 0; k < nS; k++) {
+      const per = .7 + h1(k + 1000) * .8, tt = t + h1(k + 2000) * per, cyc = Math.floor(tt / per), age = (tt % per) / per;
+      if (age > .45) continue;
+      const a = age / .45;
+      const x = B.x + h2(k, cyc) * B.w, y = B.y + h2(cyc, k + 9) * B.h;
+      ctx.strokeStyle = 'rgba(230,242,240,' + ((1 - a) * .38) + ')'; ctx.lineWidth = .9;
+      ctx.beginPath(); ctx.ellipse(x, y, 1 + a * s * .09, (1 + a * s * .09) * .8, 0, 0, 7); ctx.stroke();
+      if (a < .5) { ctx.fillStyle = 'rgba(235,246,244,' + ((1 - a * 2) * .7) + ')'; for (let q = 0; q < 3; q++) { const an = q * 2.1 + k; ctx.fillRect(x + Math.cos(an) * a * s * .16, y + Math.sin(an) * a * s * .16, 1.3, 1.3); } }
+    }
+  }
+}
+function sinkGeom(j) {
+  const sk = game.lv.sinks[j], s = B.s;
+  const x = B.x + (sk.col + .5) * s, top = B.y + B.h + B.eave + s * .12;
+  return { x, top, w: s * .92, h: B.court - s * .3 };
+}
+function sinkSurfaceY(j) { const g = sinkGeom(j); return game.lv.sinks[j].kind === 'jar' ? g.top + g.h * .3 : g.top + g.h * .45; }
+function drawSink(sk, j, now, t) {
+  const s = B.s, st = STY[season], G = sinkGeom(j);
+  const wet = game.sinkT[j] >= 0 && now >= game.sinkT[j];
+  if (wet && !game.sinkOn[j]) { game.sinkOn[j] = true; game.bloomT[j] = now; Snd.bloom(j); Snd.swell(); }
+  const bloom = game.sinkOn[j] ? ease((now - game.bloomT[j]) / (reduceMotion ? 200 : 1600)) : 0;
+  const x = G.x, y0 = G.top, w = G.w, h = G.h;
+  ctx.save();
+  if (sk.kind === 'jar') {
+    // 水缸：微俯视的釉陶大缸
+    const rimY = y0 + h * .3, rx = w * .5, ry = w * .19;
+    const bot = y0 + h * .86, bellyY = rimY + (bot - rimY) * .45, bx2 = w * .52, by2 = bot - rimY;
+    ctx.fillStyle = 'rgba(0,0,0,.42)'; ctx.beginPath(); ctx.ellipse(x + s * .05, bot + s * .02, bx2 * .8, s * .08, 0, 0, 7); ctx.fill();
+    const jg = ctx.createLinearGradient(x - bx2, 0, x + bx2, 0);
+    jg.addColorStop(0, '#1d211f'); jg.addColorStop(.22, '#59625a'); jg.addColorStop(.38, '#333a35'); jg.addColorStop(1, '#121514');
+    ctx.fillStyle = jg;
+    ctx.beginPath(); ctx.moveTo(x - rx, rimY);
+    ctx.bezierCurveTo(x - bx2 * 1.06, rimY + by2 * .35, x - bx2 * .82, bot - by2 * .05, x - bx2 * .58, bot);
+    ctx.quadraticCurveTo(x, bot + s * .05, x + bx2 * .58, bot);
+    ctx.bezierCurveTo(x + bx2 * .82, bot - by2 * .05, x + bx2 * 1.06, rimY + by2 * .35, x + rx, rimY);
+    ctx.closePath(); ctx.fill();
+    // 凸弦纹与釉光
+    ctx.strokeStyle = 'rgba(200,214,204,.2)'; ctx.lineWidth = Math.max(1, s * .02);
+    ctx.beginPath(); ctx.ellipse(x, bellyY - h * .05, bx2 * .98, ry * .7, 0, .15, Math.PI - .15); ctx.stroke();
+    ctx.strokeStyle = 'rgba(0,0,0,.35)'; ctx.beginPath(); ctx.ellipse(x, bellyY - h * .05 + 2, bx2 * .98, ry * .7, 0, .15, Math.PI - .15); ctx.stroke();
+    const hl = ctx.createLinearGradient(0, rimY, 0, y0 + h * .9); hl.addColorStop(0, 'rgba(235,245,240,.3)'); hl.addColorStop(1, 'rgba(235,245,240,0)');
+    ctx.fillStyle = hl; ctx.beginPath(); ctx.ellipse(x - bx2 * .5, bellyY, bx2 * .1, by2 * .6, .1, 0, 7); ctx.fill();
+    // 缸口
+    ctx.fillStyle = '#4d5650'; ctx.beginPath(); ctx.ellipse(x, rimY, rx, ry, 0, 0, 7); ctx.fill();
+    ctx.strokeStyle = 'rgba(235,245,240,.4)'; ctx.lineWidth = Math.max(1, s * .02); ctx.beginPath(); ctx.ellipse(x, rimY, rx, ry, 0, Math.PI * 1.05, Math.PI * 1.7); ctx.stroke();
+    const irx = rx * .84, iry = ry * .78;
+    const lvl = wet ? .25 + .75 * bloom : 0;
+    ctx.fillStyle = '#0e1413'; ctx.beginPath(); ctx.ellipse(x, rimY + ry * .06, irx, iry, 0, 0, 7); ctx.fill();
+    ctx.save(); ctx.beginPath(); ctx.ellipse(x, rimY + ry * .06, irx, iry, 0, 0, 7); ctx.clip();
+    const wg = ctx.createLinearGradient(0, rimY - iry, 0, rimY + iry);
+    wg.addColorStop(0, rgba(st.water, .2 + lvl * .5)); wg.addColorStop(1, rgba([24, 44, 44], .95));
+    ctx.fillStyle = wg; ctx.beginPath(); ctx.ellipse(x, rimY + ry * .06 + (1 - lvl) * iry * .5, irx, iry, 0, 0, 7); ctx.fill();
+    if (!reduceMotion) for (let k = 0; k < 3; k++) {
+      const per = 1.1, tt = t + k * .37 + j, age = (tt % per) / per, cyc = Math.floor(tt / per);
+      const px = x + (h2(cyc, k) - .5) * irx * 1.2, py = rimY + (h2(k, cyc + 3) - .5) * iry;
+      ctx.strokeStyle = 'rgba(220,238,236,' + ((1 - age) * (.2 + lvl * .3)) + ')'; ctx.lineWidth = 1;
+      ctx.beginPath(); ctx.ellipse(px, py, 1 + age * irx * .4, (1 + age * irx * .4) * .36, 0, 0, 7); ctx.stroke();
+    }
+    if (season === 3 && !wet) {
+      ctx.fillStyle = 'rgba(226,238,242,.4)'; ctx.fillRect(x - irx, rimY - iry, irx * 2, iry * 2.2);
+      ctx.strokeStyle = 'rgba(255,255,255,.5)'; ctx.lineWidth = 1; ctx.beginPath(); ctx.moveTo(x - irx * .5, rimY - iry * .1); ctx.lineTo(x + irx * .05, rimY + iry * .3); ctx.lineTo(x + irx * .45, rimY - iry * .3); ctx.stroke();
+    } else if (season !== 1) {
+      const n = Math.round(bloom * 6);
+      for (let k = 0; k < n; k++) {
+        const a = h2(j, k) * 7 + t * .05 * (k % 2 ? 1 : -1), d = h2(k, j + 4) * .7;
+        ctx.save(); ctx.translate(x + Math.cos(a) * d * irx, rimY + Math.sin(a) * d * iry); ctx.scale(1, .45);
+        flower(0, 0, s * .075 * ease(bloom * 2 - k / Math.max(1, n)), st, a, season === 2 ? 'osm' : season === 3 ? 'plum' : 'peach');
+        ctx.restore();
+      }
+    }
+    if (season === 1) drawLotusLeaves(x, rimY, irx, iry);
+    ctx.restore();
+    if (season === 1) drawLotusFlower(x + irx * .1, rimY + iry * .05, bloom, st);
+    if (season === 3) { ctx.fillStyle = 'rgba(248,250,250,.9)'; ctx.beginPath(); ctx.ellipse(x, rimY - ry * .05, rx * 1.01, ry * 1.02, 0, Math.PI * 1.08, Math.PI * 1.92); ctx.ellipse(x, rimY + ry * .1, rx * .86, ry * .8, 0, Math.PI * 1.9, Math.PI * 1.1, true); ctx.fill(); }
+  } else {
+    // 花圃：青石围边，湿土，花枝
+    const bx = x - w / 2, by = y0 + h * .08, bw = w, bh = h * .86;
+    ctx.fillStyle = 'rgba(0,0,0,.4)'; rr(ctx, bx + s * .04, by + s * .08, bw, bh, s * .1); ctx.fill();
+    const cg = ctx.createLinearGradient(bx, by, bx + bw, by + bh); cg.addColorStop(0, '#9aa5a1'); cg.addColorStop(1, '#55605d');
+    ctx.fillStyle = cg; rr(ctx, bx, by, bw, bh, s * .1); ctx.fill();
+    const ins = s * .09;
+    const sg = ctx.createLinearGradient(0, by, 0, by + bh);
+    const dk = wet ? .7 + .3 * (1 - bloom) : 1;
+    sg.addColorStop(0, shade('#4a3f35', wet ? -.25 : 0)); sg.addColorStop(1, shade('#30291f', wet ? -.25 : 0));
+    ctx.fillStyle = sg; rr(ctx, bx + ins, by + ins, bw - ins * 2, bh - ins * 2, s * .06); ctx.fill();
+    ctx.fillStyle = 'rgba(0,0,0,.3)'; ctx.fillRect(bx + ins, by + ins, bw - ins * 2, s * .04);
+    if (wet) { const pg = ctx.createRadialGradient(x, by + bh * .55, 0, x, by + bh * .55, bw * .4); pg.addColorStop(0, rgba(st.water, .25 * bloom)); pg.addColorStop(1, rgba(st.water, 0)); ctx.fillStyle = pg; ctx.fillRect(bx, by, bw, bh); }
+    if (season === 3 && !wet) { ctx.fillStyle = 'rgba(244,247,247,.6)'; rr(ctx, bx + ins, by + ins, bw - ins * 2, bh * .35, s * .05); ctx.fill(); }
+    drawPlant(x, by + bh - ins * 1.3, bw - ins * 2, (bh - ins * 2) * 1.2, j, bloom, t, st, wet, dk);
+  }
+  ctx.restore();
+}
+function drawPlant(x, baseY, w, h, j, bloom, t, st, wet, dk) {
+  const s = B.s; const sway = reduceMotion ? 0 : Math.sin(t * 1.4 + j) * s * .01;
+  const kind = season === 0 ? 'peach' : season === 1 ? 'hollyhock' : season === 2 ? 'osm' : 'plum';
+  ctx.lineCap = 'round';
+  if (kind === 'plum' || kind === 'peach') {
+    // 一枝斜出的枝条
+    const br = [[0, 0, -.1, -.85], [-.05, -.4, -.38, -.62], [-.07, -.6, .28, -.78], [.0, -.2, .3, -.42]];
+    br.forEach((b, k) => {
+      const lw = Math.max(1.4, s * (k === 0 ? .055 : .034));
+      const seg = () => { ctx.beginPath(); ctx.moveTo(x + b[0] * w, baseY + b[1] * h); ctx.quadraticCurveTo(x + (b[0] + b[2]) * w * .5 + s * .03, baseY + (b[1] + b[3]) * h * .5, x + b[2] * w + sway, baseY + b[3] * h); };
+      ctx.strokeStyle = 'rgba(0,0,0,.35)'; ctx.lineWidth = lw + 1.5; seg(); ctx.stroke();
+      ctx.strokeStyle = kind === 'plum' ? '#3a302a' : '#5a4636'; ctx.lineWidth = lw; seg(); ctx.stroke();
+      ctx.strokeStyle = 'rgba(220,200,180,.25)'; ctx.lineWidth = lw * .35; ctx.save(); ctx.translate(-lw * .25, -lw * .2); seg(); ctx.stroke(); ctx.restore();
+    });
+    const pts = [[-.1, -.85], [-.38, -.62], [.28, -.78], [.3, -.42], [-.2, -.5], [.12, -.6], [-.06, -.3]];
+    pts.forEach((pp, k) => {
+      const lb = clamp(bloom * 1.6 - k * .09, 0, 1);
+      const px = x + pp[0] * w + sway, py = baseY + pp[1] * h;
+      if (lb <= 0) { ctx.fillStyle = kind === 'plum' ? '#9c6a5e' : '#b8606f'; ctx.beginPath(); ctx.ellipse(px, py, s * .026, s * .034, k, 0, 7); ctx.fill(); }
+      else flower(px, py, s * (.06 + .065 * easeOutBack(lb)), st, k * 1.3, kind);
+    });
+  } else if (kind === 'osm') {
+    // 桂：深绿叶丛 + 金黄小花簇
+    for (let k = 0; k < 9; k++) {
+      const a = -Math.PI / 2 + (h2(j, k) - .5) * 2.2, len = h * (.35 + h2(k, j) * .45);
+      const lx = x + Math.cos(a) * len * .6 + sway, ly = baseY + Math.sin(a) * len;
+      ctx.save(); ctx.translate(lx, ly); ctx.rotate(a + Math.PI / 2);
+      ctx.fillStyle = k % 2 ? '#3f5a3c' : '#4f6e48'; ctx.beginPath(); ctx.ellipse(0, 0, s * .045, s * .11, 0, 0, 7); ctx.fill();
+      ctx.strokeStyle = 'rgba(200,220,190,.25)'; ctx.lineWidth = 1; ctx.beginPath(); ctx.moveTo(0, -s * .1); ctx.lineTo(0, s * .1); ctx.stroke();
+      ctx.restore();
+    }
+    for (let k = 0; k < 12; k++) {
+      const lb = clamp(bloom * 1.5 - k * .05, 0, 1); if (lb <= 0) continue;
+      const px = x + (h2(k + 5, j) - .5) * w * .8 + sway, py = baseY - h * (.25 + h2(j, k + 5) * .6);
+      flower(px, py, s * .042 * easeOutBack(lb), st, k, 'osm');
+    }
+  } else {
+    // 夏：蜀葵般挺直的花茎
+    for (let k = 0; k < 3; k++) {
+      const sx = x + (k - 1) * w * .26, top = baseY - h * (.7 + k % 2 * .15);
+      ctx.strokeStyle = '#3e6a3c'; ctx.lineWidth = Math.max(1.2, s * .03);
+      ctx.beginPath(); ctx.moveTo(sx, baseY); ctx.quadraticCurveTo(sx + sway, (baseY + top) / 2, sx + sway * 1.5, top); ctx.stroke();
+      for (let q = 0; q < 3; q++) {
+        const ly = baseY - (q + .6) * h * .2; ctx.fillStyle = q % 2 ? '#4f8048' : '#5d8f52';
+        ctx.beginPath(); ctx.ellipse(sx + (q % 2 ? 1 : -1) * s * .06, ly, s * .06, s * .035, (q % 2 ? -.5 : .5), 0, 7); ctx.fill();
+      }
+      const lb = clamp(bloom * 1.5 - k * .15, 0, 1);
+      if (lb > 0) flower(sx + sway * 1.5, top, s * (.06 + .065 * easeOutBack(lb)), st, k, 'hollyhock');
+      else { ctx.fillStyle = '#6f9a5c'; ctx.beginPath(); ctx.ellipse(sx + sway * 1.5, top, s * .025, s * .04, 0, 0, 7); ctx.fill(); }
+    }
+  }
+}
+function flower(x, y, r, st, rot, kind) {
+  if (r <= .3) return;
+  ctx.save(); ctx.translate(x, y); ctx.rotate(rot);
+  if (kind === 'osm') {
+    ctx.fillStyle = st.petal;
+    for (let q = 0; q < 4; q++) { const a = q * Math.PI / 2; ctx.beginPath(); ctx.ellipse(Math.cos(a) * r * .55, Math.sin(a) * r * .55, r * .55, r * .4, a, 0, 7); ctx.fill(); }
+    ctx.fillStyle = st.deep; ctx.beginPath(); ctx.arc(0, 0, r * .3, 0, 7); ctx.fill();
+  } else {
+    const n = 5; const pr = r * (kind === 'hollyhock' ? .62 : .55);
+    for (let q = 0; q < n; q++) {
+      const a = q * Math.PI * 2 / n;
+      const pg = ctx.createRadialGradient(0, 0, r * .1, Math.cos(a) * r * .5, Math.sin(a) * r * .5, pr);
+      pg.addColorStop(0, st.deep); pg.addColorStop(1, st.petal);
+      ctx.fillStyle = pg; ctx.beginPath(); ctx.arc(Math.cos(a) * r * .52, Math.sin(a) * r * .52, pr, 0, 7); ctx.fill();
+    }
+    ctx.strokeStyle = 'rgba(80,40,40,.18)'; ctx.lineWidth = .8;
+    for (let q = 0; q < n; q++) { const a = q * Math.PI * 2 / n + Math.PI / n; ctx.beginPath(); ctx.moveTo(0, 0); ctx.lineTo(Math.cos(a) * r * .8, Math.sin(a) * r * .8); ctx.stroke(); }
+    ctx.fillStyle = st.heart;
+    for (let q = 0; q < 7; q++) { const a = q * .9; ctx.beginPath(); ctx.arc(Math.cos(a) * r * .22, Math.sin(a) * r * .22, Math.max(.6, r * .07), 0, 7); ctx.fill(); }
+    ctx.fillStyle = kind === 'plum' ? '#8a4b3c' : '#b5566b'; ctx.beginPath(); ctx.arc(0, 0, r * .12, 0, 7); ctx.fill();
+  }
+  ctx.restore();
+}
+function drawLotusLeaves(x, cy, irx, iry) {
+  const s = B.s;
+  [[-.45, .2, .42], [.5, -.1, .36], [.05, .55, .3]].forEach(([dx, dy, r2], k) => {
+    const lx = x + dx * irx, ly = cy + dy * iry, R = r2 * irx;
+    ctx.save(); ctx.translate(lx, ly); ctx.scale(1, .5);
+    ctx.fillStyle = k === 1 ? '#4c7c48' : '#5b8d53';
+    ctx.beginPath(); ctx.moveTo(0, 0); ctx.arc(0, 0, R, k + .3, k + .3 + Math.PI * 1.85); ctx.closePath(); ctx.fill();
+    ctx.strokeStyle = 'rgba(205,232,190,.3)'; ctx.lineWidth = .9;
+    for (let q = 0; q < 6; q++) { const a = k + .3 + q * Math.PI * 1.85 / 5; ctx.beginPath(); ctx.moveTo(0, 0); ctx.lineTo(Math.cos(a) * R * .9, Math.sin(a) * R * .9); ctx.stroke(); }
+    ctx.restore();
+    if (k === 0) bead(ctx, lx + R * .2, ly - R * .1, s * .018);
+  });
+}
+function drawLotusFlower(px, py, b, st) {
+  const s = B.s;
+  ctx.strokeStyle = '#3f6a3c'; ctx.lineWidth = Math.max(1, s * .025);
+  const top = py - s * (.08 + .14 * ease(b));
+  ctx.beginPath(); ctx.moveTo(px, py); ctx.lineTo(px, top); ctx.stroke();
+  if (b <= 0) { ctx.fillStyle = '#c98a9c'; ctx.beginPath(); ctx.ellipse(px, top, s * .035, s * .06, 0, 0, 7); ctx.fill(); return; }
+  const r = s * (.07 + .12 * easeOutBack(b));
+  const open = .25 + .75 * ease(b);
+  for (let layer = 0; layer < 2; layer++) {
+    const n = layer ? 3 : 5, rr3 = r * (layer ? .8 : 1);
+    for (let q = 0; q < n; q++) {
+      const a = (q - (n - 1) / 2) * (layer ? .42 : .5) * open;
+      ctx.save(); ctx.translate(px, top + r * .25); ctx.rotate(a);
+      const pg = ctx.createLinearGradient(0, 0, 0, -rr3); pg.addColorStop(0, '#fbeef0'); pg.addColorStop(1, st.deep);
+      ctx.fillStyle = pg; ctx.beginPath(); ctx.moveTo(0, 0); ctx.quadraticCurveTo(rr3 * .5, -rr3 * .45, 0, -rr3); ctx.quadraticCurveTo(-rr3 * .5, -rr3 * .45, 0, 0); ctx.fill();
+      ctx.strokeStyle = 'rgba(160,70,95,.25)'; ctx.lineWidth = .8; ctx.stroke();
+      ctx.restore();
+    }
+  }
+  ctx.fillStyle = '#e8cf6a'; ctx.beginPath(); ctx.ellipse(px, top + r * .05, r * .2, r * .1, 0, 0, 7); ctx.fill();
+}
+// 槽中的水：给定若干线段点
+function waterStroke(pts, s, wMul, t, alpha, falling) {
+  const st = STY[season]; const w = s * GW * .66 * wMul;
+  ctx.save(); ctx.lineCap = 'round'; ctx.lineJoin = 'round';
+  ctx.beginPath(); ctx.moveTo(pts[0][0], pts[0][1]); for (let i = 1; i < pts.length; i++) ctx.lineTo(pts[i][0], pts[i][1]);
+  ctx.strokeStyle = rgba(st.water, .82 * alpha); ctx.lineWidth = w; ctx.stroke();
+  ctx.strokeStyle = 'rgba(60,110,112,' + (.35 * alpha) + ')'; ctx.lineWidth = w * .35; ctx.save(); ctx.translate(w * .2, w * .2); ctx.stroke(); ctx.restore();
+  if (!reduceMotion) { ctx.setLineDash([s * .1, s * .2]); ctx.lineDashOffset = -t * s * (falling ? 4 : 1.6); }
+  ctx.strokeStyle = 'rgba(245,252,250,' + (.6 * alpha) + ')'; ctx.lineWidth = w * .2; ctx.save(); ctx.translate(-w * .14, -w * .14); ctx.stroke(); ctx.restore();
+  ctx.restore();
+}
+function drawWaterCell(x, y, s, mask, entry, f, alpha, t, leak) {
+  const st = STY[season]; const h = s / 2; const w = s * GW * .66;
+  const E2 = { 1: [x + h, y], 2: [x + s, y + h], 4: [x + h, y + s], 8: [x, y + h] };
+  const C = [x + h, y + h];
+  ctx.save(); ctx.lineCap = 'round'; ctx.lineJoin = 'round';
+  const segs = []; // 每段：{type:'line'|'arc', ...} 按水流方向
+  const deg = L.degree(mask);
+  if (!entry || !(mask & entry)) {
+    // 整格满水（渐隐用）
+    if (deg === 2 && mask !== 5 && mask !== 10) segs.push(arcSeg(x, y, s, mask, DIRS.find(d => mask & d), 1));
+    else for (const d of DIRS) if (mask & d) segs.push({ a: C, b: E2[d], f: 1 });
+  } else if (deg === 2 && mask !== 5 && mask !== 10) {
+    segs.push(arcSeg(x, y, s, mask, entry, f));
+  } else {
+    const f1 = clamp(f * 2, 0, 1), f2 = leak ? 0 : clamp(f * 2 - 1, 0, 1);
+    segs.push({ a: E2[entry], b: C, f: f1 });
+    if (f2 > 0) for (const d of DIRS) if ((mask & d) && d !== entry) segs.push({ a: C, b: E2[d], f: f2 });
+  }
+  const pass = (style, lw, ox, oy, dash) => {
+    ctx.strokeStyle = style; ctx.lineWidth = lw;
+    if (dash && !reduceMotion) { ctx.setLineDash([s * .1, s * .2]); ctx.lineDashOffset = -t * s * 1.6; } else ctx.setLineDash([]);
+    ctx.save(); ctx.translate(ox, oy);
+    for (const sg of segs) {
+      if (sg.f <= 0) continue;
+      ctx.beginPath();
+      if (sg.arc) ctx.arc(sg.cx, sg.cy, h, sg.a0, sg.a0 + (sg.a1 - sg.a0) * sg.f, sg.a1 < sg.a0);
+      else { ctx.moveTo(sg.a[0], sg.a[1]); ctx.lineTo(sg.a[0] + (sg.b[0] - sg.a[0]) * sg.f, sg.a[1] + (sg.b[1] - sg.a[1]) * sg.f); }
+      ctx.stroke();
+    }
+    ctx.restore();
+  };
+  pass(rgba(st.water, .85 * alpha), w, 0, 0);
+  pass('rgba(50,98,100,' + (.32 * alpha) + ')', w * .35, w * .2, w * .2);
+  pass('rgba(245,252,250,' + (.55 * alpha) + ')', w * .2, -w * .14, -w * .14, true);
+  ctx.restore();
+}
+function arcSeg(x, y, s, mask, entry, f) {
+  const C = { 3: [x + s, y], 6: [x + s, y + s], 12: [x, y + s], 9: [x, y] }[mask];
+  // 每个边中点相对于角心的角度
+  const ang = (d) => {
+    const ex = { 1: [x + s / 2, y], 2: [x + s, y + s / 2], 4: [x + s / 2, y + s], 8: [x, y + s / 2] }[d];
+    return Math.atan2(ex[1] - C[1], ex[0] - C[0]);
+  };
+  const other = mask & ~entry;
+  let a0 = ang(entry), a1 = ang(other);
+  // 取劣弧
+  let dA = a1 - a0; while (dA > Math.PI) dA -= Math.PI * 2; while (dA < -Math.PI) dA += Math.PI * 2;
+  return { arc: true, cx: C[0], cy: C[1], a0, a1: a0 + dA, f };
+}
+function splash(x, y, t, seed, s, k) {
+  if (reduceMotion) return;
+  for (let q = 0; q < 2; q++) {
+    const per = .5 + h1(seed + q) * .3, age = ((t + q * .27 + h1(seed) * 2) % per) / per;
+    ctx.strokeStyle = 'rgba(225,240,238,' + ((1 - age) * .5 * k) + ')'; ctx.lineWidth = 1;
+    ctx.beginPath(); ctx.ellipse(x, y, 2 + age * s * .16, (2 + age * s * .16) * .5, 0, 0, 7); ctx.stroke();
+    if (age < .35) { ctx.fillStyle = 'rgba(235,246,244,' + ((1 - age / .35) * .7 * k) + ')'; for (let p = 0; p < 4; p++) { const a = -Math.PI / 2 + (p - 1.5) * .6; const d = age * s * .35; ctx.fillRect(x + Math.cos(a) * d, y + Math.sin(a) * d * .6 + age * age * s * .6, 1.4, 1.4); } }
+  }
+}
+
+/* =====================================================================
+ * 主循环
+ * ===================================================================== */
+function render(now) {
+  const t = (now - T0) / 1000;
+  ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+  if (screen === 'title') { drawTitle(t); return; }
+  if (!bgCanvas) renderBackground();
+  ctx.drawImage(bgCanvas, 0, 0, VW, VH);
+  drawMist(t, VH * .34, VH * .3, .5, 10);
+  if (screen === 'play' && game.lv) {
+    drawBoard(now);
+    drawMist(t, VH * .72, VH * .3, .28, -14);
+  }
+  drawRain(t, season, screen === 'select' ? .7 : 1);
+  if (screen === 'select') { ctx.fillStyle = 'rgba(16,22,21,.42)'; ctx.fillRect(0, 0, VW, VH); }
+  if (screen === 'play' && game.won && !game.shownWin && now >= game.winAt) { game.shownWin = true; showWin(); }
+}
+function frame() { render(performance.now()); requestAnimationFrame(frame); }
+
+/* =====================================================================
+ * 交互
+ * ===================================================================== */
+function cellAt(px, py) {
+  if (!game.lv) return -1;
+  const c = Math.floor((px - B.x) / B.s), r = Math.floor((py - B.y) / B.s);
+  if (c < 0 || r < 0 || c >= game.lv.cols || r >= game.lv.rows) return -1;
+  return r * game.lv.cols + c;
+}
+cv.addEventListener('pointerdown', (e) => {
+  if (screen !== 'play' || !game.lv) return;
+  Snd.init();
+  const c = cellAt(e.clientX, e.clientY); if (c < 0) return;
+  e.preventDefault();
+  if (game.won) return;
+  const cl = game.lv.cells[c];
+  const now = performance.now();
+  if (cl.k !== 'pipe' || cl.fixed) {
+    Snd.thud();
+    if (cl.fixed && cl.k === 'pipe' && !game.fixTold) { game.fixTold = true; toast('这块瓦钉了铜钉，转不动。顺着它铺。', 2800); }
+    return;
+  }
+  const ccw = e.button === 2;
+  cl.rot = (cl.rot + (ccw ? 3 : 1)) % 4;
+  game.rotAnim[c] = ccw ? -1e9 : now;
+  game.moves++;
+  Snd.click();
+  const x = B.x + (c % game.lv.cols + .5) * B.s, y = B.y + (((c / game.lv.cols) | 0) + .5) * B.s;
+  if (!reduceMotion) for (let k = 0; k < 5; k++) { const a = h1(game.moves * 13 + k) * 7; game.parts.push({ x, y, vx: Math.cos(a) * B.s * .55, vy: Math.sin(a) * B.s * .45, g: B.s * .2, r: 1.2 + h1(k + game.moves) * 1.4, b: now, life: 380 }); }
+  updateFlow(now, false);
+  updateHUD();
+});
+cv.addEventListener('contextmenu', (e) => e.preventDefault());
+cv.addEventListener('pointermove', (e) => { if (e.pointerType === 'mouse') game.hover = cellAt(e.clientX, e.clientY); });
+cv.addEventListener('pointerleave', () => { game.hover = -1; });
+
+/* =====================================================================
+ * 界面
+ * ===================================================================== */
+const $ = (id) => document.getElementById(id);
+let toastTimer = 0;
+function toast(msg, ms) {
+  const el = $('toast'); el.textContent = msg;
+  el.style.bottom = (safeB + 78) + 'px';
+  el.classList.add('show'); clearTimeout(toastTimer); toastTimer = setTimeout(() => el.classList.remove('show'), ms || 3000);
+}
+function show(name) {
+  screen = name;
+  $('title').classList.toggle('hidden', name !== 'title');
+  $('select').classList.toggle('hidden', name !== 'select');
+  $('hud').classList.toggle('hidden', name !== 'play');
+  if (name !== 'play') { $('side').classList.add('hidden'); $('sideR').classList.add('hidden'); }
+  $('win').classList.add('hidden'); $('win').classList.remove('show');
+  Snd.setSeason(season, name);
+}
+let selSeason = 0;
+function buildSelect() {
+  const total = Object.keys(save.stars).filter(k => save.stars[k] > 0).length;
+  $('prog').textContent = '已引雨 ' + total + ' / 72';
+  const tabs = $('tabs'); tabs.innerHTML = '';
+  L.SEASONS.forEach((se, i) => {
+    const b = document.createElement('button'); b.className = 'tab' + (i === selSeason ? ' on' : ''); b.style.setProperty('--c', STY[i].petal === '#f8f4ea' ? '#eef0ea' : STY[i].petal);
+    b.innerHTML = '<span class="tz">' + se.name + '</span><span class="tw">' + se.word + '</span>';
+    b.addEventListener('click', () => { Snd.init(); selSeason = i; season = i; bgCanvas = null; Snd.setSeason(i, 'select'); buildSelect(); });
+    tabs.appendChild(b);
+  });
+  const box = $('terms'); box.innerHTML = '';
+  const cur = firstOpen();
+  for (let ti = selSeason * 6; ti < selSeason * 6 + 6; ti++) {
+    const T = L.TERMS[ti];
+    const card = document.createElement('div'); card.className = 'term'; card.style.setProperty('--c', STY[selSeason].petal);
+    card.innerHTML = '<div class="tn">' + T.name + '</div><div class="td">' + T.date + '</div>';
+    for (let h = 0; h < 3; h++) {
+      const i = ti * 3 + h, st = starsOf(i), op = unlocked(i);
+      const b = document.createElement('button'); b.className = 'lv' + (i === cur ? ' cur' : ''); b.disabled = !op;
+      b.innerHTML = '<span class="lk">' + L.HOU_NAME[h] + '</span><span class="lh">' + (op ? T.hou[h] : '雨未至') + '</span><span class="ls">' + [0, 1, 2].map(k => '<i class="' + (k < st ? 'f' : '') + '"></i>').join('') + '</span>';
+      b.addEventListener('click', () => startLevel(i));
+      card.appendChild(b);
+    }
+    box.appendChild(card);
+  }
+  const W2 = WeatherProvider.getToday(new Date());
+  const DT = L.TERMS[W2.term];
+  $('dailyK').textContent = DT.name;
+  $('dailyT').textContent = '今日 · ' + DT.name + L.HOU_NAME[W2.hou];
+  $('dailyS').textContent = DT.hou[W2.hou] + (save.daily[W2.key] ? '　· 今天已经浇过了' : '　· ' + DT.note);
+  $('dailyGo').textContent = save.daily[W2.key] ? '再听一局' : '今日一局';
+}
+function startLevel(i) {
+  Snd.init();
+  game.daily = null; game.idx = i;
+  save.last = i; persist();
+  show('play');
+  loadLevel(L.generate(i));
+  setHUDText();
+  updateHUD();
+  const tips = { 0: '点一块瓦，它就转九十度。把承雨口落下的雨，接到檐下的花圃。', 3: '雨也可以先落进水缸里存着。', 12: '两个承雨口，两处花圃。各走各的路，别挤在一起。', 18: '钉了铜钉的瓦是固定瓦，转不动，顺着它铺。', 36: '有裂纹的是漏瓦。水一进去就漏光了，要绕开它。', 54: '三通可以分流：一口雨水，浇两处花。' };
+  if (tips[i]) setTimeout(() => toast(tips[i], 4200), 500);
+}
+function startDaily() {
+  Snd.init();
+  const W2 = WeatherProvider.getToday(new Date());
+  const lv = L.dailyLevel(W2.y, W2.m, W2.d);
+  game.daily = W2; game.idx = -1;
+  show('play');
+  loadLevel(lv);
+  setHUDText(); updateHUD();
+  setTimeout(() => toast('今日一局 · ' + L.TERMS[W2.term].name + '。同一天，大家接的是同一场雨。', 3600), 500);
+}
+function curTerm() { return game.daily ? { ti: game.daily.term, h: game.daily.hou } : { ti: Math.floor(game.idx / 3), h: game.idx % 3 }; }
+function setHUDText() {
+  const { ti, h } = curTerm(); const T = L.TERMS[ti];
+  $('hudT').textContent = T.name + ' · ' + L.HOU_NAME[h];
+  $('hudS').textContent = T.hou[h] + '　' + (game.daily ? '今日一局' : '第 ' + (game.idx + 1) + ' 关');
+  $('sideA').textContent = T.name; $('sideB').textContent = T.hou[h];
+  $('sideR').textContent = T.note;
+  layoutBoard();
+}
+function updateHUD() {
+  const par = game.lv.par;
+  $('mv').innerHTML = '转瓦<em>' + game.moves + '</em>次 · 宜 ' + (par + Math.max(4, Math.ceil(par * .5))) + ' 次内';
+  $('nextBtn').classList.toggle('hidden', !game.shownWin);
+}
+function flowerSVG(on, col) {
+  const pet = [0, 1, 2, 3, 4].map(k => { const a = k * 72 * Math.PI / 180 - Math.PI / 2; return '<circle cx="' + (17 + Math.cos(a) * 7.5).toFixed(2) + '" cy="' + (17 + Math.sin(a) * 7.5).toFixed(2) + '" r="6.4"/>'; }).join('');
+  return '<svg viewBox="0 0 34 34"><g fill="' + (on ? col : 'none') + '" stroke="' + (on ? col : 'rgba(230,236,232,.4)') + '" stroke-width="1.2">' + pet + '</g><circle cx="17" cy="17" r="3" fill="' + (on ? '#f6df9c' : 'rgba(230,236,232,.3)') + '"/></svg>';
+}
+function showWin() {
+  const stars = L.starsFor(game.moves, game.lv.par);
+  const { ti, h } = curTerm(); const T = L.TERMS[ti];
+  if (game.daily) { save.daily[game.daily.key] = Math.max(save.daily[game.daily.key] || 0, stars); }
+  else save.stars[game.idx] = Math.max(starsOf(game.idx), stars);
+  persist();
+  Snd.win();
+  $('winK').textContent = game.daily ? '今日一局 · ' + T.name : '第 ' + (game.idx + 1) + ' 关 · ' + T.name + ' · ' + L.HOU_NAME[h];
+  $('winH').textContent = T.hou[h];
+  const col = STY[season].petal === '#f8f4ea' ? '#f2efe6' : STY[season].petal;
+  $('winS').innerHTML = [0, 1, 2].map(k => flowerSVG(k < stars, col)).join('');
+  $('winM').textContent = '转瓦 ' + game.moves + ' 次 · 雨水都到了该去的地方';
+  $('winN').textContent = T.note;
+  const last = !game.daily && game.idx >= 71;
+  $('winNext').textContent = game.daily ? '回节气册' : last ? '回节气册' : '下一关';
+  const w = $('win'); w.classList.remove('hidden'); requestAnimationFrame(() => requestAnimationFrame(() => w.classList.add('show')));
+  updateHUD();
+}
+function hideWin() { const w = $('win'); w.classList.remove('show'); setTimeout(() => w.classList.add('hidden'), 350); }
+function goNext() {
+  hideWin();
+  if (game.daily || game.idx >= 71) { openSelect(); return; }
+  startLevel(game.idx + 1);
+}
+function openSelect() {
+  Snd.init();
+  if (game.lv && !game.daily && game.idx >= 0) selSeason = Math.floor(game.idx / 18);
+  else selSeason = Math.floor(firstOpen() / 18);
+  season = selSeason; bgCanvas = null;
+  show('select'); buildSelect();
+  Snd.stream(0);
+}
+
+$('btnListen').addEventListener('click', () => { Snd.init(); startLevel(firstOpen()); });
+$('btnBook').addEventListener('click', () => openSelect());
+$('selBack').addEventListener('click', () => { show('title'); Snd.stream(0); });
+$('hudBack').addEventListener('click', () => openSelect());
+$('daily').addEventListener('click', () => startDaily());
+$('resetBtn').addEventListener('click', () => {
+  if (!game.lv) return; Snd.init(); hideWin();
+  game.lv.cells.forEach((c, i) => { c.rot = game.startRots[i]; });
+  const lv = game.lv; const keep = { daily: game.daily, idx: game.idx };
+  loadLevel(lv); game.daily = keep.daily; game.idx = keep.idx; updateHUD(); Snd.click();
+});
+$('nextBtn').addEventListener('click', () => goNext());
+$('winNext').addEventListener('click', () => goNext());
+$('winStay').addEventListener('click', () => hideWin());
+const muteBtn = $('mute');
+function syncMute() { muteBtn.classList.toggle('muted', Snd.muted); muteBtn.setAttribute('aria-label', Snd.muted ? '打开声音' : '静音'); }
+muteBtn.addEventListener('click', () => { Snd.init(); Snd.setMuted(!Snd.muted); save.muted = Snd.muted; persist(); syncMute(); });
+syncMute();
+window.addEventListener('resize', resize);
+window.addEventListener('orientationchange', () => setTimeout(resize, 200));
+document.addEventListener('keydown', (e) => { if (e.key === 'Escape' && screen === 'play') openSelect(); });
+
+// 调试 / 截图用钩子（不影响游戏）
+window.__rainTiles = { startLevel, startDaily, openSelect, solve() { if (!game.lv) return; game.lv.cells.forEach(c => { if (c.k === 'pipe' && !c.fixed) c.rot = 0; }); updateFlow(performance.now(), false); }, bloomAll() { game.sinkT = game.sinkT.map(v => v >= 0 ? 1 : v); game.sinkOn = game.sinkT.map(v => v >= 0); game.bloomT = game.sinkT.map(() => -1e6); }, dbg() { const f = game.flow; return { solved: f && f.solved, order: f && f.order.length, wet: f && f.sinkWet, now: performance.now(), t: Array.from(game.wetT).slice(0, 12).map(Math.round), won: game.won, bloomT: game.bloomT, sinkT: game.sinkT, sinkOn: game.sinkOn }; } };
+
+resize();
+requestAnimationFrame(frame);
+})();
+</script>
+</body>
+</html>

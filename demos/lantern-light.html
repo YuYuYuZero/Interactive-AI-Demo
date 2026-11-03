@@ -1,0 +1,2156 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="color-scheme" content="dark">
+<meta name="theme-color" content="#16060d">
+<title>灯会 · 光路</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Long+Cang&family=Noto+Serif+SC:wght@400;600;700&family=ZCOOL+XiaoWei&display=swap">
+<style>
+:root{
+  --bg:#16060d; --wine:#3b0d1f; --plum:#2a0f2e; --lac:#24080f;
+  --gold:#f0c26a; --gold-hi:#ffe4a6; --gold-lo:#a8772f;
+  --text:#f2e2c2; --muted:rgba(242,226,194,.62); --faint:rgba(242,226,194,.32);
+  --f-title:"ZCOOL XiaoWei","Long Cang","STKaiti","KaiTi","Kaiti SC","Songti SC",serif;
+  --f-hand:"Long Cang","ZCOOL XiaoWei","STKaiti","KaiTi","Kaiti SC",cursive;
+  --f-body:"Noto Serif SC","Songti SC","STSong","SimSun","Source Han Serif SC",serif;
+  --sat:env(safe-area-inset-top,0px); --sab:env(safe-area-inset-bottom,0px);
+  --sal:env(safe-area-inset-left,0px); --sar:env(safe-area-inset-right,0px);
+}
+*{box-sizing:border-box}
+html,body{height:100%;margin:0;overflow:hidden;background:var(--bg);color:var(--text);color-scheme:dark;
+  font-family:var(--f-body);-webkit-tap-highlight-color:transparent;overscroll-behavior:none;-webkit-user-select:none;user-select:none}
+#cv{position:fixed;inset:0;width:100%;height:100%;display:block;touch-action:none}
+#ui{position:fixed;inset:0;pointer-events:none;overflow:hidden}
+button{font-family:inherit;color:inherit;cursor:pointer;-webkit-tap-highlight-color:transparent}
+.screen{position:absolute;inset:0;pointer-events:none;transition:opacity .5s ease}
+.screen.hidden{display:none}
+.screen.fade{opacity:0}
+.pe{pointer-events:auto}
+
+/* 静音 */
+#mute{position:fixed;top:calc(8px + var(--sat));right:calc(8px + var(--sar));width:44px;height:44px;border-radius:50%;
+  border:1px solid rgba(240,194,106,.35);background:rgba(30,8,16,.55);display:grid;place-items:center;pointer-events:auto;z-index:20;
+  backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px)}
+#mute svg{width:22px;height:22px;stroke:var(--gold);fill:none;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round}
+#mute .off{display:none}
+#mute.muted .on{display:none}
+#mute.muted .off{display:inline}
+
+/* 开始页 */
+#scrTitle .wrap{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);text-align:center;width:min(92vw,640px);pointer-events:none;padding:28px 0 30px;
+  background:radial-gradient(closest-side,rgba(18,3,9,.72),rgba(18,3,9,.45) 55%,rgba(18,3,9,0));}
+.kicker{text-shadow:0 0 8px #1a0409,0 0 3px #1a0409;font-family:var(--f-body);font-size:13px;letter-spacing:.6em;color:var(--muted);margin:0 0 10px;padding-left:.6em}
+h1.logo{margin:0;line-height:1;font-weight:400;display:flex;align-items:flex-end;justify-content:center;gap:.08em}
+h1.logo .t1{font-family:var(--f-title);font-size:clamp(76px,15vw,148px);letter-spacing:.06em;
+  background:linear-gradient(180deg,#fff3cf 0%,#ffd47e 45%,#e59a3c 100%);-webkit-background-clip:text;background-clip:text;color:transparent;
+  filter:drop-shadow(0 0 18px rgba(255,170,70,.45)) drop-shadow(0 2px 0 rgba(60,10,10,.6))}
+h1.logo .dot{font-family:var(--f-title);font-size:clamp(30px,5vw,48px);color:var(--gold);opacity:.8;padding-bottom:.55em}
+h1.logo .t2{font-family:var(--f-hand);font-size:clamp(54px,10vw,100px);color:#ffcf86;padding-bottom:.06em;
+  text-shadow:0 0 22px rgba(255,140,60,.55),0 0 2px rgba(255,230,180,.8)}
+.sub{font-size:clamp(15px,2.2vw,18px);color:var(--text);opacity:.86;margin:18px 0 28px;letter-spacing:.18em}
+.btn-main{pointer-events:auto;position:relative;min-width:168px;height:58px;padding:0 34px;border-radius:30px;font-family:var(--f-title);font-size:26px;letter-spacing:.4em;text-indent:.4em;
+  color:#fff3d6;border:1px solid rgba(255,214,140,.75);
+  background:radial-gradient(120% 140% at 50% 30%,#d8432c 0%,#9c1c1e 55%,#5c0c14 100%);
+  box-shadow:0 0 0 4px rgba(120,20,20,.35),0 0 30px rgba(255,120,60,.45),inset 0 1px 0 rgba(255,220,170,.5),inset 0 -6px 14px rgba(40,0,0,.5);
+  transition:transform .15s ease, box-shadow .3s ease}
+.btn-main:active{transform:scale(.97)}
+.btn-main:hover{box-shadow:0 0 0 4px rgba(150,30,20,.45),0 0 44px rgba(255,150,70,.6),inset 0 1px 0 rgba(255,220,170,.5),inset 0 -6px 14px rgba(40,0,0,.5)}
+.title-foot{position:absolute;left:0;right:0;bottom:calc(18px + var(--sab));text-align:center;font-size:12px;letter-spacing:.3em;color:var(--faint)}
+
+/* 面板通用 */
+.panel{pointer-events:auto;background:linear-gradient(180deg,rgba(40,10,20,.86),rgba(22,6,12,.9));border:1px solid rgba(240,194,106,.28);
+  border-radius:18px;box-shadow:0 20px 60px rgba(0,0,0,.55),inset 0 1px 0 rgba(255,220,160,.12);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px)}
+.ghost-btn{pointer-events:auto;min-height:44px;padding:0 18px;border-radius:22px;border:1px solid rgba(240,194,106,.4);background:rgba(50,14,22,.6);
+  font-size:15px;letter-spacing:.12em;color:var(--text)}
+.ghost-btn:active{transform:scale(.97)}
+.gold-btn{pointer-events:auto;min-height:46px;padding:0 24px;border-radius:23px;border:1px solid rgba(255,220,150,.8);
+  background:linear-gradient(180deg,#f6cf7a,#c98b34);color:#3a0e0a;font-size:16px;font-weight:700;letter-spacing:.2em;box-shadow:0 0 20px rgba(255,180,80,.35)}
+.gold-btn:active{transform:scale(.97)}
+
+/* 关卡选择 */
+#scrSelect .panel{position:absolute;left:50%;top:calc(50% + var(--sat)/2);transform:translate(-50%,-50%);width:min(94vw,720px);max-height:calc(100% - 76px - var(--sat) - var(--sab));
+  overflow:auto;padding:20px 20px 18px;scrollbar-width:none}
+#scrSelect .panel::-webkit-scrollbar{display:none}
+.sel-head{display:flex;align-items:center;gap:10px;margin-bottom:12px}
+.sel-head h2{margin:0;font-family:var(--f-title);font-weight:400;font-size:30px;letter-spacing:.12em;color:var(--gold-hi);flex:1}
+.sel-head h2 small{font-family:var(--f-body);font-size:13px;color:var(--muted);letter-spacing:.2em;margin-left:10px}
+.tabs{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:12px}
+.tab{min-height:56px;border-radius:12px;border:1px solid rgba(240,194,106,.22);background:rgba(255,220,160,.04);text-align:center;padding:6px 4px}
+.tab b{display:block;font-family:var(--f-title);font-weight:400;font-size:22px;letter-spacing:.2em;color:var(--text)}
+.tab span{display:block;font-size:11px;color:var(--faint);letter-spacing:.1em;margin-top:2px}
+.tab.on{border-color:rgba(255,206,120,.8);background:linear-gradient(180deg,rgba(200,60,40,.35),rgba(120,20,30,.25));box-shadow:inset 0 0 18px rgba(255,150,70,.18)}
+.tab.on b{color:var(--gold-hi)}
+.ch-line{font-size:14px;color:var(--muted);letter-spacing:.12em;margin:2px 2px 14px;line-height:1.7}
+.grid{display:grid;grid-template-columns:repeat(6,1fr);gap:8px}
+.lv{position:relative;aspect-ratio:1/1.08;min-height:48px;border-radius:12px;border:1px solid rgba(240,194,106,.22);background:rgba(20,5,10,.55);
+  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;padding:2px}
+.lv .n{font-family:var(--f-title);font-size:22px;line-height:1;color:var(--text)}
+.lv .nm{font-size:10.5px;color:var(--faint);letter-spacing:.05em;white-space:nowrap;overflow:hidden;max-width:100%}
+.lv .st{display:flex;gap:1px;height:10px}
+.lv .st i{width:9px;height:9px;display:block;background:rgba(242,226,194,.16);clip-path:polygon(50% 0,61% 35%,98% 35%,68% 57%,79% 91%,50% 70%,21% 91%,32% 57%,2% 35%,39% 35%)}
+.lv .st i.on{background:var(--gold)}
+.lv.done{border-color:rgba(255,206,120,.55);background:radial-gradient(90% 90% at 50% 40%,rgba(255,160,70,.28),rgba(60,12,18,.6))}
+.lv.done .n{color:var(--gold-hi);text-shadow:0 0 10px rgba(255,170,70,.6)}
+.lv.next{border-color:rgba(255,206,120,.9);animation:pulse 2.4s ease-in-out infinite}
+.lv.lock{opacity:.38}
+@keyframes pulse{0%,100%{box-shadow:0 0 0 0 rgba(255,180,90,0)}50%{box-shadow:0 0 16px 2px rgba(255,170,80,.35)}}
+.sel-foot{display:flex;gap:10px;justify-content:center;margin-top:16px;flex-wrap:wrap}
+@media (max-width:520px){ .hud-title b{font-size:18px;letter-spacing:.06em}  .lv .nm{display:none} .grid{gap:6px} #scrSelect .panel{padding:16px 12px 14px} .sel-head h2{font-size:26px} }
+
+/* 游戏 HUD */
+#hud{position:absolute;left:0;right:0;top:0;padding:calc(8px + var(--sat)) calc(60px + var(--sar)) 0 calc(8px + var(--sal));display:flex;align-items:center;gap:8px;pointer-events:none}
+.icon-btn{pointer-events:auto;width:44px;height:44px;flex:none;border-radius:50%;border:1px solid rgba(240,194,106,.35);background:rgba(30,8,16,.6);display:grid;place-items:center;
+  backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px)}
+.icon-btn svg{width:22px;height:22px;stroke:var(--gold);fill:none;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round}
+.icon-btn:active{transform:scale(.94)}
+.hud-title{flex:1;min-width:0;text-align:center;line-height:1.25}
+.hud-title b{display:block;font-family:var(--f-title);font-weight:400;font-size:21px;letter-spacing:.14em;color:var(--gold-hi);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.hud-title span{display:block;font-size:12.5px;color:var(--muted);letter-spacing:.12em;white-space:nowrap}
+.hud-title span em{font-style:normal;color:var(--gold)}
+#tip{position:absolute;left:50%;transform:translateX(-50%);top:calc(60px + var(--sat));width:min(92vw,620px);text-align:center;font-size:14px;line-height:1.6;letter-spacing:.06em;
+  color:#f6dcae;padding:6px 14px;border-radius:12px;background:linear-gradient(90deg,transparent,rgba(60,14,22,.78) 14%,rgba(60,14,22,.78) 86%,transparent);transition:opacity .4s}
+#tip:empty{display:none}
+#tray{position:absolute;left:0;right:0;bottom:0;padding:8px 10px calc(10px + var(--sab));display:flex;flex-direction:column;align-items:center;gap:6px;pointer-events:none;transition:opacity .4s, transform .4s}
+#tray.away{opacity:0;transform:translateY(20px)}
+#tray.away *{pointer-events:none!important}
+.tools{display:flex;gap:10px;align-items:center;justify-content:center;pointer-events:auto;min-height:62px;padding:6px 12px;border-radius:20px;
+  background:linear-gradient(180deg,rgba(46,12,20,.82),rgba(24,6,12,.9));border:1px solid rgba(240,194,106,.25);box-shadow:0 10px 30px rgba(0,0,0,.4)}
+.tool{position:relative;width:54px;height:54px;border-radius:14px;border:1px solid rgba(240,194,106,.25);background:rgba(255,220,160,.05);padding:0;touch-action:none}
+.tool canvas{width:100%;height:100%;display:block;pointer-events:none}
+.tool .c{position:absolute;right:-4px;top:-4px;min-width:20px;height:20px;border-radius:10px;background:#b8301f;color:#fff0d0;font-size:12px;line-height:20px;text-align:center;border:1px solid rgba(255,210,150,.7);padding:0 4px}
+.tool.sel{border-color:#ffd480;background:rgba(255,190,90,.18);box-shadow:0 0 16px rgba(255,170,70,.45)}
+.tool.empty{opacity:.32}
+.tools .none{font-size:13px;color:var(--faint);letter-spacing:.14em;padding:0 8px}
+.ops{font-size:12.5px;color:var(--muted);letter-spacing:.16em}
+.after{display:none;gap:10px;pointer-events:auto}
+#tray.won .tools,#tray.won .ops{display:none}
+#tray.won .after{display:flex}
+
+/* 弹窗 */
+.modal{position:absolute;inset:0;display:grid;place-items:center;pointer-events:auto;background:rgba(10,2,6,.55);transition:opacity .45s;padding:16px}
+.modal.hidden{display:none}
+.modal.fade{opacity:0}
+.card{position:relative;width:min(92vw,400px);max-height:calc(100% - 20px);overflow:auto;padding:18px 20px 18px;border-radius:20px;text-align:center;scrollbar-width:none;
+  background:radial-gradient(120% 70% at 50% 0%,rgba(150,40,30,.5),transparent 60%),linear-gradient(180deg,#2e0b16,#1a050c);
+  border:1px solid rgba(240,194,106,.45);box-shadow:0 30px 80px rgba(0,0,0,.6),inset 0 0 0 6px rgba(20,4,8,.5),inset 0 0 0 7px rgba(240,194,106,.22)}
+.card::-webkit-scrollbar{display:none}
+.card .lbl{font-size:12px;letter-spacing:.5em;color:var(--muted);padding-left:.5em}
+.card canvas{display:block;width:100%;height:210px;margin:6px 0 2px}
+.card h3{margin:0;font-family:var(--f-title);font-weight:400;font-size:40px;letter-spacing:.18em;color:var(--gold-hi);text-shadow:0 0 18px rgba(255,160,70,.45)}
+.card p.desc{margin:10px 4px 6px;font-size:15px;line-height:1.85;color:var(--text);text-align:justify;letter-spacing:.04em}
+.card .where{font-size:12.5px;color:var(--muted);letter-spacing:.14em;margin-top:2px}
+.card .mine{font-size:13px;color:#ffd79a;margin:8px 0 0;letter-spacing:.06em}
+.stars{display:flex;justify-content:center;gap:8px;margin:12px 0 4px}
+.stars i{width:26px;height:26px;display:block;background:rgba(242,226,194,.15);clip-path:polygon(50% 0,61% 35%,98% 35%,68% 57%,79% 91%,50% 70%,21% 91%,32% 57%,2% 35%,39% 35%)}
+.stars i.on{background:linear-gradient(180deg,#fff0c0,#f0b44e);filter:drop-shadow(0 0 6px rgba(255,190,90,.8))}
+.card .btns{display:flex;gap:10px;justify-content:center;margin-top:14px;flex-wrap:wrap}
+.album-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(88px,1fr));gap:10px;margin-top:12px}
+.alb{border-radius:12px;border:1px solid rgba(240,194,106,.2);background:rgba(20,5,10,.5);padding:4px 2px 6px;min-height:44px}
+.alb canvas{width:100%;height:86px;display:block}
+.alb span{font-size:13px;letter-spacing:.1em;color:var(--text)}
+.alb.lock span{color:var(--faint)}
+.designer input{width:100%;height:48px;border-radius:12px;border:1px solid rgba(240,194,106,.45);background:rgba(10,2,6,.6);color:var(--text);
+  font-family:var(--f-body);font-size:16px;padding:0 14px;outline:none;margin-top:10px;-webkit-user-select:text;user-select:text}
+.designer input:focus{border-color:#ffd480;box-shadow:0 0 0 3px rgba(255,190,90,.18)}
+.designer .hint{font-size:12.5px;color:var(--muted);margin-top:8px;line-height:1.7;letter-spacing:.04em}
+</style>
+</head>
+<body>
+<canvas id="cv" aria-label="灯会古街"></canvas>
+<div id="ui">
+  <button id="mute" aria-label="静音开关" title="声音">
+    <svg viewBox="0 0 24 24"><path d="M4 9.5h3.5L12 6v12l-4.5-3.5H4z"/><g class="on"><path d="M15.5 9a4 4 0 0 1 0 6"/><path d="M18 6.5a7.5 7.5 0 0 1 0 11"/></g><g class="off"><path d="M16 9.5l5 5M21 9.5l-5 5"/></g></svg>
+  </button>
+
+  <section id="scrTitle" class="screen">
+    <div class="wrap">
+      <p class="kicker">元宵 · 七夕 · 中秋</p>
+      <h1 class="logo"><span class="t1">灯会</span><span class="dot">·</span><span class="t2">光路</span></h1>
+      <p class="sub">一束光，点亮一整条街。</p>
+      <button id="btnStart" class="btn-main">点灯</button>
+    </div>
+    <div class="title-foot">铜镜折光 · 窗棂分光 · 琉璃染光</div>
+  </section>
+
+  <section id="scrSelect" class="screen hidden">
+    <div class="panel">
+      <div class="sel-head">
+        <button class="icon-btn" id="selBack" aria-label="回到开始"><svg viewBox="0 0 24 24"><path d="M14.5 5.5L8 12l6.5 6.5"/></svg></button>
+        <h2>灯会<small id="selCount"></small></h2>
+      </div>
+      <div class="tabs" id="tabs"></div>
+      <div class="ch-line" id="chLine"></div>
+      <div class="grid" id="lvGrid"></div>
+      <div class="sel-foot">
+        <button class="ghost-btn" id="btnAlbum">翻灯谱</button>
+        <button class="ghost-btn" id="btnDesign">扎一盏你的灯</button>
+      </div>
+    </div>
+  </section>
+
+  <section id="scrGame" class="screen hidden">
+    <div id="hud">
+      <button class="icon-btn" id="gBack" aria-label="回到街口"><svg viewBox="0 0 24 24"><path d="M14.5 5.5L8 12l6.5 6.5"/></svg></button>
+      <div class="hud-title"><b id="gTitle"></b><span id="gSub"></span></div>
+      <button class="icon-btn" id="gHint" aria-label="提示" title="提示"><svg viewBox="0 0 24 24"><path d="M9 18h6M10 21h4"/><path d="M12 3a6 6 0 0 0-3.6 10.8c.7.6 1.1 1.4 1.1 2.2h5c0-.8.4-1.6 1.1-2.2A6 6 0 0 0 12 3z"/></svg></button>
+      <button class="icon-btn" id="gReset" aria-label="重来" title="重来"><svg viewBox="0 0 24 24"><path d="M4.5 12a7.5 7.5 0 1 0 2.2-5.3"/><path d="M4.5 4.5v4h4"/></svg></button>
+    </div>
+    <div id="tip"></div>
+    <div id="tray">
+      <div class="tools" id="tools"></div>
+      <div class="ops" id="ops"></div>
+      <div class="after">
+        <button class="ghost-btn" id="aCard">看灯谱</button>
+        <button class="gold-btn" id="aNext">下一盏</button>
+      </div>
+    </div>
+  </section>
+
+  <div id="mCard" class="modal hidden">
+    <div class="card">
+      <div class="lbl" id="cLbl">灯谱</div>
+      <canvas id="cCanvas"></canvas>
+      <h3 id="cName"></h3>
+      <div class="where" id="cWhere"></div>
+      <div class="stars" id="cStars"><i></i><i></i><i></i></div>
+      <p class="desc" id="cDesc"></p>
+      <p class="mine" id="cMine"></p>
+      <div class="btns">
+        <button class="ghost-btn" id="cLook">再看一眼</button>
+        <button class="ghost-btn" id="cList">回街口</button>
+        <button class="gold-btn" id="cNext">下一盏</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="mAlbum" class="modal hidden">
+    <div class="card" style="width:min(94vw,560px)">
+      <div class="lbl">灯谱</div>
+      <h3 style="font-size:30px;margin-top:6px">满街的灯</h3>
+      <div class="where" id="albCount"></div>
+      <div class="album-grid" id="albGrid"></div>
+      <div class="btns"><button class="ghost-btn" id="albClose">合上</button></div>
+    </div>
+  </div>
+
+  <div id="mDesign" class="modal hidden">
+    <div class="card designer">
+      <div class="lbl">扎灯</div>
+      <canvas id="dCanvas"></canvas>
+      <h3 id="dName" style="font-size:30px">你的灯</h3>
+      <input id="dInput" maxlength="30" placeholder="比如：一只金色的兔子，身上有云纹" autocomplete="off">
+      <div class="hint">用一句话说说你想要的灯。认得这些字：兔、荷、莲、鱼、蝶、星、柚、球、宫、马、篮、纱、天；红、金、黄、绿、蓝、紫、白、粉；云、花、梅、鳞、月、格。扎好的灯会挂在街口，过关时一起亮。</div>
+      <div class="btns">
+        <button class="ghost-btn" id="dRemove">取下</button>
+        <button class="ghost-btn" id="dClose">合上</button>
+        <button class="gold-btn" id="dMake">扎灯</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+'use strict';
+/* ==LOGIC-START== 纯逻辑：光路追踪、关卡生成（node 测试会抽出这一段单独运行） */
+const DX = [0, 1, 0, -1], DY = [-1, 0, 1, 0];          // 0上 1右 2下 3左
+const REFL = [[1, 0, 3, 2], [3, 2, 1, 0]];              // o=0 「/」 o=1 「\」
+const CI = { g: 0, r: 1, j: 2, b: 3 };                  // 光色：金(素) 朱 翠 蓝
+const MAX_STEPS = 40000;                                // 光束总步数上限（防镜间死循环）
+
+function mulberry32(a) {
+  return function () {
+    a |= 0; a = a + 0x6D2B79F5 | 0;
+    let t = Math.imul(a ^ a >>> 15, 1 | a);
+    t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t;
+    return ((t ^ t >>> 14) >>> 0) / 4294967296;
+  };
+}
+
+/* 光路追踪：从所有灯芯出发，广度优先；花灯被同色(或素灯被任意色)光照到即亮，并向自己的方向再发光。
+   seen 以 (格, 方向, 颜色) 去重，保证有限；另有 MAX_STEPS 兜底。 */
+function trace(W, H, pieces) {
+  const grid = new Array(W * H).fill(null);
+  for (const p of pieces) grid[p.y * W + p.x] = p;
+  const rays = [], seen = new Set(), lit = [], litSet = new Set();
+  let steps = 0, capped = false;
+  function emit(x, y, d, c, parent, kind, depth) {
+    const k = ((y * W + x) * 4 + d) * 4 + CI[c];
+    if (seen.has(k)) return;
+    seen.add(k);
+    rays.push({ i: rays.length, x0: x, y0: y, d, c, parent, kind, depth, len: 0, end: 'edge', hit: null });
+  }
+  for (const p of pieces) if (p.t === 'src') emit(p.x, p.y, p.d, 'g', -1, 'src', 0);
+  for (let qi = 0; qi < rays.length && !capped; qi++) {
+    const r = rays[qi];
+    let x = r.x0, y = r.y0;
+    for (;;) {
+      if (++steps > MAX_STEPS) { capped = true; break; }
+      x += DX[r.d]; y += DY[r.d];
+      if (x < 0 || y < 0 || x >= W || y >= H) { r.end = 'edge'; break; }
+      r.len++;
+      const p = grid[y * W + x];
+      if (!p) continue;
+      r.end = 'piece'; r.hit = p;
+      if (p.t === 'mir') emit(x, y, REFL[p.o][r.d], r.c, r.i, 'mir', r.depth);
+      else if (p.t === 'spl') { emit(x, y, r.d, r.c, r.i, 'spl', r.depth); emit(x, y, REFL[p.o][r.d], r.c, r.i, 'spl', r.depth); }
+      else if (p.t === 'gls') emit(x, y, r.d, p.c, r.i, 'gls', r.depth);
+      else if (p.t === 'lan') {
+        if ((p.c === 'g' || p.c === r.c) && !litSet.has(p)) {
+          litSet.add(p); lit.push({ p, ray: r.i, depth: r.depth + 1 });
+          for (const dd of p.dirs) emit(x, y, dd, p.c, r.i, 'lan', r.depth + 1);
+        }
+      }
+      break; // 屏风、灯芯、花灯都会挡住光
+    }
+  }
+  let total = 0; for (const p of pieces) if (p.t === 'lan') total++;
+  return { rays, lit, litSet, total, allLit: total > 0 && lit.length === total, capped, steps };
+}
+
+function rayCells(r) { // 光束经过的格子（不含起点；含命中的元件格）
+  const out = [];
+  for (let k = 1; k <= r.len; k++) out.push([r.x0 + DX[r.d] * k, r.y0 + DY[r.d] * k]);
+  return out;
+}
+
+const LAMP_POOL = [
+  ['round', 'gong', 'zouma', 'rabbit', 'carp', 'ball'],
+  ['lotus', 'sha', 'butterfly', 'basket', 'gong', 'ball'],
+  ['star', 'pomelo', 'kongming', 'yutu', 'zouma', 'carp']
+];
+const PLACE_NAMES = [
+  ['街口', '灯笼铺', '糖画摊', '茶肆', '戏台下', '石牌坊', '书坊', '汤圆铺', '酒旗下', '当铺檐', '鼓楼前', '绸缎庄', '猜谜台', '药铺', '面人摊', '古井旁', '庙会', '长街尽头'],
+  ['柳岸', '石桥', '乞巧楼', '绣坊', '河埠头', '花市', '葡萄架', '小码头', '丝线铺', '扇子铺', '渡口', '水亭', '回廊', '香粉铺', '画舫', '月洞门', '芦苇荡', '鹊桥边'],
+  ['月台', '桂树下', '饼铺', '茶楼', '拜月亭', '城楼', '酒肆', '戏楼', '竹林', '塔下', '灯市', '桥洞', '河灯渡', '院门', '楼台', '老广场', '长堤', '团圆巷']
+];
+const TIPS = {
+  '0-0': '灯芯的光只会直走。轻点铜镜，转一个角度，把光折向花灯。',
+  '0-1': '亮起的花灯，会朝它身边金色小角所指的方向，再送出一束光。',
+  '0-3': '街上缺一面铜镜：点选下方的铜镜，再点一块空青石放下。拖动可挪位，拖出街外即收回。',
+  '0-7': '窗棂：光一半穿格而过，一半被折向一侧。一束光，分成两束。',
+  '0-12': '屏风：光走到这里就停了。得绕过去。',
+  '1-0': '琉璃：光穿过它，便染上它的颜色。彩色花灯只认同色的光。',
+  '1-4': '琉璃也能自己摆。先想好光该是什么颜色，再让它从琉璃里过。',
+  '1-6': '两种琉璃，两种颜色。别让光走错了路。',
+  '2-0': '中秋。街更长，灯更多，光要分得更细。',
+  '2-5': '有的花灯三面开口：一盏亮起，三路都亮。'
+};
+
+function levelParams(ch, i) {
+  const P = { W: 6, H: 7, lan: [2, 3], mir: [1, 2], spl: [0, 0], gls: [0, 0], cols: [], dirs: 1, dir2p: 0, tray: 0, trayGls: false, flip: 0.65, scr: [0, 0] };
+  if (ch === 0) {
+    P.W = i < 5 ? 6 : 7; P.H = i < 3 ? 7 : (i < 9 ? 8 : 9);
+    P.lan = i === 0 ? [2, 2] : i < 3 ? [2, 3] : i < 5 ? [3, 4] : i < 8 ? [3, 5] : i < 12 ? [4, 5] : [5, 6];
+    P.mir = i === 0 ? [1, 1] : [Math.min(1 + (i / 3 | 0), 4), Math.min(3 + (i / 3 | 0), 6)];
+    if (i >= 7) P.spl = [i === 7 || i >= 11 ? 1 : 0, i >= 12 ? 2 : 1];
+    if (i >= 12) P.scr = [3, 5];
+    P.dirs = i < 9 ? 1 : 2; P.dir2p = 0.3;
+    P.tray = i < 3 ? 0 : i < 8 ? 1 : i < 13 ? 2 : 3;
+  } else if (ch === 1) {
+    P.W = 7; P.H = i < 8 ? 8 : 9;
+    P.lan = i < 4 ? [3, 5] : i < 10 ? [4, 6] : [5, 7];
+    P.mir = [2 + (i / 6 | 0), 5 + (i / 6 | 0)];
+    P.spl = i < 3 ? [0, 1] : [1, 2];
+    P.cols = i < 6 ? [['r', 'j', 'b'][i % 3]] : (i % 3 === 0 ? ['r', 'j'] : i % 3 === 1 ? ['j', 'b'] : ['r', 'b']);
+    P.gls = i < 6 ? [1, 1] : [2, 3];
+    P.scr = [2, 4]; P.dirs = 2; P.dir2p = 0.35;
+    P.tray = i < 4 ? 2 : i < 12 ? 3 : 4; P.trayGls = i >= 4;
+  } else {
+    P.W = 8; P.H = i < 6 ? 9 : 10;
+    P.lan = i < 5 ? [5, 7] : i < 12 ? [6, 8] : [7, 9];
+    P.mir = [3 + (i / 6 | 0), 6 + (i / 6 | 0)];
+    P.spl = [1, i < 9 ? 2 : 3];
+    P.cols = i < 6 ? ['r', 'j'] : ['r', 'j', 'b'];
+    P.gls = i < 6 ? [1, 2] : [2, 3];
+    P.scr = [3, 6]; P.dirs = i < 5 ? 2 : 3; P.dir2p = 0.4;
+    P.tray = i < 6 ? 3 : i < 12 ? 4 : 5; P.trayGls = true;
+  }
+  P.minDepth = ch === 0 ? (i < 1 ? 2 : i < 6 ? 2 : 3) : ch === 1 ? 3 : 4;
+  P.minCols = P.cols.length ? Math.min(P.cols.length, ch === 1 && i < 6 ? 1 : 2) : 0;
+  P.need3 = ch === 2 && i === 5;
+  return P;
+}
+
+function ri(rng, a, b) { return a + Math.floor(rng() * (b - a + 1)); }
+function pick(rng, arr) { return arr[Math.floor(rng() * arr.length)]; }
+function shuffle(rng, arr) { for (let i = arr.length - 1; i > 0; i--) { const j = Math.floor(rng() * (i + 1)); [arr[i], arr[j]] = [arr[j], arr[i]]; } return arr; }
+function clonePieces(ps) { return ps.map(p => Object.assign({}, p, p.dirs ? { dirs: p.dirs.slice() } : {})); }
+
+// 先构造解：沿着当前光束的“尾巴”（射出街外、且没有别的光经过的格子）放元件，只增不减，保证已亮的灯不会熄灭。
+function buildSolution(rng, P) {
+  const W = P.W, H = P.H, pieces = [];
+  const side = ri(rng, 0, 3);
+  let sx, sy, sd;
+  if (side === 0) { sx = ri(rng, 1, W - 2); sy = 0; sd = 2; }
+  else if (side === 1) { sx = W - 1; sy = ri(rng, 1, H - 2); sd = 3; }
+  else if (side === 2) { sx = ri(rng, 1, W - 2); sy = H - 1; sd = 0; }
+  else { sx = 0; sy = ri(rng, 1, H - 2); sd = 1; }
+  pieces.push({ t: 'src', x: sx, y: sy, d: sd });
+  const occ = new Map(); occ.set(sy * W + sx, pieces[0]);
+  const need = { lan: ri(rng, P.lan[0], P.lan[1]), mir: P.mir[0], spl: P.spl[0], gls: P.gls[0] };
+  const cnt = { lan: 0, mir: 0, spl: 0, gls: 0 };
+  const inG = (x, y) => x >= 0 && y >= 0 && x < W && y < H;
+  const room = (x, y, d) => { let n = 0; x += DX[d]; y += DY[d]; while (inG(x, y) && !occ.has(y * W + x)) { n++; x += DX[d]; y += DY[d]; } return n; };
+  const usedCols = new Set();
+  for (let iter = 0; iter < 120; iter++) {
+    const done = cnt.lan >= need.lan && cnt.mir >= need.mir && cnt.spl >= need.spl && cnt.gls >= need.gls;
+    if (done && (cnt.lan >= P.lan[1] || rng() < 0.55)) break;
+    const T = trace(W, H, pieces);
+    const cov = new Int16Array(W * H);
+    for (const r of T.rays) for (const [x, y] of rayCells(r)) cov[y * W + x]++;
+    const cands = [];
+    for (const r of T.rays) {
+      if (!(r.end === 'edge' || (r.hit && r.hit.t === 'scr'))) continue;
+      const cells = rayCells(r); if (r.end === 'piece') cells.pop();
+      for (let k = 0; k < cells.length; k++) {
+        const [x, y] = cells[k], id = y * W + x;
+        if (occ.has(id) || cov[id] !== 1) continue;
+        const w = k === 0 ? 0.25 : k === 1 ? 0.8 : 1.2;
+        cands.push({ r, x, y, w });
+      }
+    }
+    if (!cands.length) break;
+    let tw = 0; for (const c of cands) tw += c.w;
+    let u = rng() * tw, cand = cands[0];
+    for (const c of cands) { u -= c.w; if (u <= 0) { cand = c; break; } }
+    const { r, x, y } = cand, d = r.d;
+    const opts = [];
+    if (cnt.lan < P.lan[1]) opts.push(['lan', cnt.lan < need.lan ? 3 : 0.6]);
+    if (cnt.mir < P.mir[1]) opts.push(['mir', cnt.mir < need.mir ? 3 : 1.2]);
+    if (cnt.spl < P.spl[1]) opts.push(['spl', cnt.spl < need.spl ? 3 : 0.8]);
+    if (cnt.gls < P.gls[1] && P.cols.length) opts.push(['gls', cnt.gls < need.gls ? (cnt.lan >= 1 ? 4 : 1) : 0.7]);
+    if (!opts.length) break;
+    let ow = 0; for (const o of opts) ow += o[1];
+    let v = rng() * ow, act = opts[0][0];
+    for (const o of opts) { v -= o[1]; if (v <= 0) { act = o[0]; break; } }
+    const id = y * W + x;
+    let piece = null;
+    if (act === 'mir' || act === 'spl') {
+      const os = [0, 1].filter(o => room(x, y, REFL[o][d]) >= 2);
+      if (!os.length) continue;
+      piece = { t: act, x, y, o: pick(rng, os) };
+    } else if (act === 'gls') {
+      const cs = P.cols.filter(c => c !== r.c);
+      if (!cs.length || room(x, y, d) < 1) continue;
+      // 优先用还没出现过的颜色
+      const fresh = cs.filter(c => !usedCols.has(c));
+      const c = pick(rng, fresh.length ? fresh : cs); usedCols.add(c);
+      piece = { t: 'gls', x, y, c };
+    } else {
+      const ds = [d, (d + 1) % 4, (d + 3) % 4].filter(dd => room(x, y, dd) >= 2);
+      shuffle(rng, ds);
+      let n = 1; if (P.dirs >= 2 && rng() < P.dir2p) n = 2; if (P.dirs >= 3 && rng() < P.dir2p * 0.5) n = 3;
+      const dirs = ds.slice(0, n);
+      if (!dirs.length && cnt.lan + 1 < need.lan) continue;
+      const c = r.c !== 'g' && rng() < 0.85 ? r.c : 'g';
+      piece = { t: 'lan', x, y, c, dirs };
+    }
+    pieces.push(piece); occ.set(id, piece); cnt[piece.t]++;
+  }
+  if (cnt.lan < need.lan || cnt.mir < need.mir || cnt.spl < need.spl || cnt.gls < need.gls) return null;
+  // 主灯：链条最深的一盏，设为素灯（任何光都能点亮），方便画出它本来的样子
+  let T = trace(W, H, pieces);
+  if (!T.allLit) return null;
+  let best = T.lit[0];
+  for (const L of T.lit) if (L.depth >= best.depth) best = L;
+  best.p.main = true; best.p.c = 'g';
+  T = trace(W, H, pieces);
+  if (!T.allLit) return null;
+  // 每个元件都必须被光照到（否则就是摆设）
+  const hitSet = new Set(); for (const r2 of T.rays) if (r2.hit) hitSet.add(r2.hit);
+  for (const p of pieces) if (p.t !== 'src' && !hitSet.has(p)) return null;
+  // 链条深度：至少有一盏灯是被别的灯点亮的
+  if (best.depth < P.minDepth) return null;
+  // 彩色关卡：彩灯的颜色种数达标
+  const lanCols = new Set(pieces.filter(p => p.t === 'lan' && p.c !== 'g').map(p => p.c));
+  if (lanCols.size < P.minCols) return null;
+  if (P.need3 && !pieces.some(p => p.t === 'lan' && p.dirs.length >= 3)) return null;
+  // 屏风：放在没有光经过的格子上，挨着光路，挡住走错的光
+  const nScr = P.scr[1] ? ri(rng, P.scr[0], P.scr[1]) : 0;
+  if (nScr) {
+    const cov = new Int16Array(W * H);
+    for (const r2 of T.rays) for (const [cx, cy] of rayCells(r2)) cov[cy * W + cx]++;
+    const free = [];
+    for (let yy = 0; yy < H; yy++) for (let xx = 0; xx < W; xx++) {
+      const k = yy * W + xx; if (cov[k] || occ.has(k)) continue;
+      let adj = 0; for (let dd = 0; dd < 4; dd++) { const ax = xx + DX[dd], ay = yy + DY[dd]; if (inG(ax, ay) && cov[ay * W + ax]) adj++; }
+      if (adj) free.push(k);
+    }
+    shuffle(rng, free);
+    for (let k = 0; k < Math.min(nScr, free.length); k++) {
+      const p = { t: 'scr', x: free[k] % W, y: free[k] / W | 0 }; pieces.push(p); occ.set(free[k], p);
+    }
+    if (!trace(W, H, pieces).allLit) return null;
+  }
+  return pieces;
+}
+
+// 再打乱：部分元件收回工具栏，其余在原地转错方向
+function scramble(rng, P, sol) {
+  const W = P.W, H = P.H;
+  const init = clonePieces(sol);
+  const movable = init.filter(p => p.t === 'mir' || p.t === 'spl' || (p.t === 'gls' && P.trayGls));
+  shuffle(rng, movable);
+  // 优先把镜子和窗棂收进工具栏
+  movable.sort((a, b) => (a.t === 'gls') - (b.t === 'gls'));
+  let k = Math.min(P.tray, movable.length);
+  if (P.trayGls && k > 1 && movable.some(p => p.t === 'gls') && !movable.slice(0, k).some(p => p.t === 'gls')) {
+    const gi = movable.findIndex(p => p.t === 'gls'); const g = movable.splice(gi, 1)[0]; movable.splice(k - 1, 0, g);
+  }
+  const trayP = movable.slice(0, k);
+  const traySet = new Set(trayP);
+  const board = init.filter(p => !traySet.has(p));
+  let flips = 0;
+  const rots = shuffle(rng, board.filter(p => p.t === 'mir' || p.t === 'spl'));
+  for (const p of rots) if (rng() < P.flip) { p.o ^= 1; flips++; }
+  if (!flips && rots.length && (k === 0 || rng() < 0.5)) { rots[0].o ^= 1; flips++; }
+  for (const p of board) if (p.t === 'mir' || p.t === 'spl' || p.t === 'gls') p.fixed = true;
+  const tray = trayP.map(p => p.t === 'gls' ? { t: 'gls', c: p.c } : { t: p.t });
+  if (trace(W, H, board).allLit) return null;
+  let par = flips;
+  for (const p of trayP) par += 1 + ((p.t === 'mir' || p.t === 'spl') && p.o === 1 ? 1 : 0);
+  if (par < 1) return null;
+  return { init: board, tray, par };
+}
+
+function hashSeed(ch, i) { let h = 2166136261 ^ (ch * 7919 + i * 104729 + 17); h = Math.imul(h ^ h >>> 13, 1597334677); return (h ^ h >>> 16) >>> 0; }
+
+function genLevel(ch, i) {
+  const P = levelParams(ch, i);
+  const seed = hashSeed(ch, i);
+  for (let a = 0; a < 600; a++) {
+    const rng = mulberry32(seed + a * 7919);
+    const sol = buildSolution(rng, P);
+    if (!sol) continue;
+    const sc = scramble(rng, P, sol);
+    if (!sc) continue;
+    const main = sol.find(p => p.main);
+    return {
+      ch, i, id: ch * 18 + i, W: P.W, H: P.H, attempt: a,
+      name: PLACE_NAMES[ch][i], tip: TIPS[ch + '-' + i] || '',
+      lamp: LAMP_POOL[ch][i % 6],
+      sol, init: sc.init, tray: sc.tray, par: sc.par,
+      mainXY: [main.x, main.y]
+    };
+  }
+  return null;
+}
+
+function starsFor(ops, par) { return ops <= par + 2 ? 3 : ops <= par * 2 + 5 ? 2 : 1; }
+
+// 用记录的解在“开局”上复现：转正固定元件、把工具栏元件摆回解的位置
+function applySolution(L) {
+  const board = clonePieces(L.init);
+  const key = p => p.x + ',' + p.y;
+  const solMap = new Map(L.sol.map(p => [key(p), p]));
+  let ops = 0;
+  for (const p of board) { const s = solMap.get(key(p)); if (s && s.o !== undefined && s.o !== p.o) { p.o = s.o; ops++; } }
+  const tray = L.tray.map(t => Object.assign({}, t));
+  const onBoard = new Set(board.map(key));
+  for (const s of L.sol) {
+    if (onBoard.has(key(s))) continue;
+    const ti = tray.findIndex(t => t.t === s.t && (s.t !== 'gls' || t.c === s.c));
+    if (ti < 0) return null;
+    tray.splice(ti, 1);
+    const np = { t: s.t, x: s.x, y: s.y };
+    if (s.t === 'gls') np.c = s.c; else { np.o = 0; }
+    ops++;
+    if (s.o !== undefined && s.o !== 0) { np.o = s.o; ops++; }
+    board.push(np);
+  }
+  return { board, ops, trayLeft: tray.length };
+}
+/* ==LOGIC-END== */
+
+
+/* ================= 工具 ================= */
+const $ = s => document.querySelector(s);
+const clamp = (v, a, b) => v < a ? a : v > b ? b : v;
+const lerp = (a, b, t) => a + (b - a) * t;
+const easeOut = t => 1 - Math.pow(1 - t, 3);
+const easeInOut = t => t < .5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
+const now = () => performance.now();
+function hexA(hex, a) {
+  const n = parseInt(hex.slice(1), 16);
+  return 'rgba(' + (n >> 16 & 255) + ',' + (n >> 8 & 255) + ',' + (n & 255) + ',' + a + ')';
+}
+function hash1(n) { n = Math.imul(n ^ 0x9e3779b9, 0x85ebca6b); n ^= n >>> 13; n = Math.imul(n, 0xc2b2ae35); n ^= n >>> 16; return (n >>> 0) / 4294967296; }
+const RM = (() => { try { return matchMedia('(prefers-reduced-motion: reduce)').matches; } catch (e) { return false; } })();
+
+/* ================= 存档 ================= */
+const SAVE_KEY = 'lanternLight.v1';
+const Save = { stars: {}, seen: {}, mute: false, custom: null, tips: {} };
+(function load() {
+  try {
+    const raw = localStorage.getItem(SAVE_KEY);
+    if (raw) {
+      const o = JSON.parse(raw);
+      if (o && typeof o === 'object') {
+        if (o.stars && typeof o.stars === 'object') Save.stars = o.stars;
+        if (o.seen && typeof o.seen === 'object') Save.seen = o.seen;
+        Save.mute = o.mute === true;
+        if (o.custom && typeof o.custom === 'object' && typeof o.custom.text === 'string') Save.custom = o.custom;
+      }
+    }
+  } catch (e) { /* 读不到就从头开始 */ }
+})();
+function persist() { try { localStorage.setItem(SAVE_KEY, JSON.stringify(Save)); } catch (e) { /* 私密模式等：忽略 */ } }
+function starsOf(id) { const v = Save.stars[id]; return typeof v === 'number' ? v : 0; }
+
+/* ================= 声音 ================= */
+const AU = { ctx: null, master: null, rev: null, noise: null, brown: null, muted: Save.mute };
+function auInit() {
+  if (AU.ctx) { if (AU.ctx.state === 'suspended') AU.ctx.resume(); return; }
+  const AC = window.AudioContext || window.webkitAudioContext;
+  if (!AC) return;
+  let c;
+  try { c = new AC(); } catch (e) { return; }
+  AU.ctx = c;
+  const comp = c.createDynamicsCompressor();
+  comp.threshold.value = -16; comp.ratio.value = 3; comp.connect(c.destination);
+  AU.master = c.createGain(); AU.master.gain.value = AU.muted ? 0 : 0.9; AU.master.connect(comp);
+  // 混响：程序生成的衰减噪声脉冲
+  const len = c.sampleRate * 2.6 | 0, ir = c.createBuffer(2, len, c.sampleRate);
+  for (let ch = 0; ch < 2; ch++) { const d = ir.getChannelData(ch); for (let i = 0; i < len; i++) d[i] = (Math.random() * 2 - 1) * Math.pow(1 - i / len, 2.4); }
+  const conv = c.createConvolver(); conv.buffer = ir;
+  AU.rev = c.createGain(); AU.rev.gain.value = 0.34; AU.rev.connect(conv); conv.connect(AU.master);
+  const nl = c.sampleRate * 3 | 0;
+  AU.noise = c.createBuffer(1, nl, c.sampleRate);
+  AU.brown = c.createBuffer(1, nl, c.sampleRate);
+  const wd = AU.noise.getChannelData(0), bd = AU.brown.getChannelData(0); let last = 0;
+  for (let i = 0; i < nl; i++) { const w = Math.random() * 2 - 1; wd[i] = w; last = (last + 0.02 * w) / 1.02; bd[i] = last * 3.5; }
+  startAmbience();
+}
+function setMute(m) {
+  AU.muted = m; Save.mute = m; persist();
+  $('#mute').classList.toggle('muted', m);
+  if (AU.ctx) AU.master.gain.setTargetAtTime(m ? 0 : 0.9, AU.ctx.currentTime, 0.08);
+}
+function noiseSrc(buf) { const s = AU.ctx.createBufferSource(); s.buffer = buf; s.loop = true; return s; }
+function startAmbience() {
+  const c = AU.ctx, t = c.currentTime;
+  const amb = c.createGain(); amb.gain.value = 0; amb.connect(AU.master); amb.gain.setTargetAtTime(1, t, 2.5);
+  // 远处的低频人声底噪
+  const b = noiseSrc(AU.brown), lp = c.createBiquadFilter(); lp.type = 'lowpass'; lp.frequency.value = 260;
+  const bg = c.createGain(); bg.gain.value = 0.09; b.connect(lp); lp.connect(bg); bg.connect(amb); b.start();
+  const w = noiseSrc(AU.noise), bp = c.createBiquadFilter(); bp.type = 'bandpass'; bp.frequency.value = 520; bp.Q.value = 0.9;
+  const wg = c.createGain(); wg.gain.value = 0.018; w.connect(bp); bp.connect(wg); wg.connect(amb); w.start();
+  const lfo = c.createOscillator(), lg = c.createGain(); lfo.frequency.value = 0.11; lg.gain.value = 0.008; lfo.connect(lg); lg.connect(wg.gain); lfo.start();
+  // 熙攘的“说话声”：窄带噪声随机起伏
+  const v = noiseSrc(AU.noise), vb = c.createBiquadFilter(); vb.type = 'bandpass'; vb.frequency.value = 1050; vb.Q.value = 3.5;
+  const vg = c.createGain(); vg.gain.value = 0.004; v.connect(vb); vb.connect(vg); vg.connect(amb); v.start();
+  setInterval(() => {
+    if (!AU.ctx) return; const tt = AU.ctx.currentTime;
+    vg.gain.setTargetAtTime(0.002 + Math.random() * 0.011, tt, 0.12);
+    vb.frequency.setTargetAtTime(800 + Math.random() * 700, tt, 0.3);
+  }, 280);
+  // 偶尔的鼓点
+  const drumLoop = () => {
+    setTimeout(() => {
+      if (AU.ctx && AU.ctx.state === 'running') {
+        const pats = [[0], [0, .3], [0, .24, .48], [0, .3, .45, .75], [0, .5]];
+        const p = pats[Math.random() * pats.length | 0], t0 = AU.ctx.currentTime + 0.05;
+        p.forEach((o, k) => drum(t0 + o, k === 0 ? 0.2 : 0.13));
+      }
+      drumLoop();
+    }, 3200 + Math.random() * 6000);
+  };
+  drumLoop();
+}
+function drum(t, vol) {
+  const c = AU.ctx;
+  const o = c.createOscillator(), g = c.createGain(), f = c.createBiquadFilter();
+  f.type = 'lowpass'; f.frequency.value = 700;
+  o.frequency.setValueAtTime(120, t); o.frequency.exponentialRampToValueAtTime(46, t + 0.32);
+  g.gain.setValueAtTime(0.0001, t); g.gain.exponentialRampToValueAtTime(vol, t + 0.01); g.gain.exponentialRampToValueAtTime(0.0005, t + 0.55);
+  o.connect(g); g.connect(f); f.connect(AU.master); f.connect(AU.rev); o.start(t); o.stop(t + 0.6);
+  const n = c.createBufferSource(); n.buffer = AU.noise; const nb = c.createBiquadFilter(); nb.type = 'bandpass'; nb.frequency.value = 220; nb.Q.value = 1.2;
+  const ng = c.createGain(); ng.gain.setValueAtTime(vol * 0.6, t); ng.gain.exponentialRampToValueAtTime(0.0005, t + 0.14);
+  n.connect(nb); nb.connect(ng); ng.connect(f); n.start(t, Math.random() * 2); n.stop(t + 0.2);
+}
+const PENTA = [0, 2, 4, 7, 9];
+const MELODY = [0, 2, 1, 3, 2, 4, 3, 5, 4, 6, 5, 7, 6, 8, 7, 9];
+function pentaFreq(step) { return 392 * Math.pow(2, (PENTA[((step % 5) + 5) % 5] + 12 * Math.floor(step / 5)) / 12); }
+function pluck(freq, vol, delay) {
+  if (!AU.ctx) return;
+  const c = AU.ctx, t = c.currentTime + (delay || 0);
+  vol = vol || 0.2;
+  const out = c.createGain(); out.gain.value = 1;
+  const f = c.createBiquadFilter(); f.type = 'lowpass'; f.frequency.value = 4200;
+  out.connect(f); f.connect(AU.master); f.connect(AU.rev);
+  const parts = [[1, 'triangle', vol, 1.7], [2.003, 'sine', vol * 0.32, 0.7], [3.96, 'sine', vol * 0.1, 0.35]];
+  for (const [m, type, v, dec] of parts) {
+    const o = c.createOscillator(), g = c.createGain();
+    o.type = type; o.frequency.value = freq * m;
+    g.gain.setValueAtTime(0.0001, t); g.gain.exponentialRampToValueAtTime(v, t + 0.006); g.gain.exponentialRampToValueAtTime(0.0004, t + dec);
+    o.connect(g); g.connect(out); o.start(t); o.stop(t + dec + 0.05);
+  }
+}
+function tick(kind) {
+  if (!AU.ctx) return;
+  const c = AU.ctx, t = c.currentTime;
+  const o = c.createOscillator(), g = c.createGain();
+  const hi = kind === 'rot' ? 1500 : kind === 'place' ? 420 : kind === 'back' ? 700 : 900;
+  o.type = 'sine'; o.frequency.setValueAtTime(hi, t); o.frequency.exponentialRampToValueAtTime(hi * 0.55, t + 0.05);
+  g.gain.setValueAtTime(0.0001, t); g.gain.exponentialRampToValueAtTime(kind === 'place' ? 0.22 : 0.12, t + 0.004); g.gain.exponentialRampToValueAtTime(0.0004, t + 0.09);
+  o.connect(g); g.connect(AU.master); o.start(t); o.stop(t + 0.12);
+  const n = c.createBufferSource(); n.buffer = AU.noise; const hp = c.createBiquadFilter(); hp.type = kind === 'place' ? 'lowpass' : 'highpass'; hp.frequency.value = kind === 'place' ? 600 : 2500;
+  const ng = c.createGain(); ng.gain.setValueAtTime(0.08, t); ng.gain.exponentialRampToValueAtTime(0.0004, t + 0.04);
+  n.connect(hp); hp.connect(ng); ng.connect(AU.master); n.start(t, Math.random() * 2); n.stop(t + 0.06);
+}
+function whistle(delay, dur) {
+  if (!AU.ctx) return;
+  const c = AU.ctx, t = c.currentTime + delay;
+  const o = c.createOscillator(), g = c.createGain();
+  o.frequency.setValueAtTime(700, t); o.frequency.exponentialRampToValueAtTime(1900, t + dur);
+  g.gain.setValueAtTime(0.0001, t); g.gain.exponentialRampToValueAtTime(0.018, t + 0.1); g.gain.exponentialRampToValueAtTime(0.0005, t + dur);
+  o.connect(g); g.connect(AU.master); g.connect(AU.rev); o.start(t); o.stop(t + dur + 0.05);
+}
+function boom(size) {
+  if (!AU.ctx) return;
+  const c = AU.ctx, t = c.currentTime;
+  const n = c.createBufferSource(); n.buffer = AU.noise;
+  const lp = c.createBiquadFilter(); lp.type = 'lowpass'; lp.frequency.setValueAtTime(1600, t); lp.frequency.exponentialRampToValueAtTime(160, t + 0.9);
+  const g = c.createGain(); g.gain.setValueAtTime(0.0001, t); g.gain.exponentialRampToValueAtTime(0.32 * size, t + 0.01); g.gain.exponentialRampToValueAtTime(0.0005, t + 1.3);
+  n.connect(lp); lp.connect(g); g.connect(AU.master); g.connect(AU.rev); n.start(t, Math.random() * 2); n.stop(t + 1.4);
+  const o = c.createOscillator(), og = c.createGain();
+  o.frequency.setValueAtTime(80, t); o.frequency.exponentialRampToValueAtTime(34, t + 0.4);
+  og.gain.setValueAtTime(0.25 * size, t); og.gain.exponentialRampToValueAtTime(0.0005, t + 0.5);
+  o.connect(og); og.connect(AU.master); o.start(t); o.stop(t + 0.55);
+  for (let i = 0; i < 10; i++) { // 噼啪
+    const tt = t + 0.25 + Math.random() * 0.9;
+    const s = c.createBufferSource(); s.buffer = AU.noise; const hp = c.createBiquadFilter(); hp.type = 'highpass'; hp.frequency.value = 3000;
+    const sg = c.createGain(); sg.gain.setValueAtTime(0.035 * size, tt); sg.gain.exponentialRampToValueAtTime(0.0003, tt + 0.03);
+    s.connect(hp); hp.connect(sg); sg.connect(AU.master); s.start(tt, Math.random() * 2); s.stop(tt + 0.04);
+  }
+}
+
+/* ================= 画布 ================= */
+const cv = $('#cv'), ctx = cv.getContext('2d');
+let VW = 0, VH = 0, DPR = 1;
+const COL = { g: '#ffc965', r: '#ff5a48', j: '#45e0a2', b: '#5ab4ff', o: '#ff8a3a', p: '#ff8fb5', w: '#fff1d6' };
+const BEAM_CORE = { g: '#fff2c8', r: '#ffd2c8', j: '#d8ffee', b: '#d8eeff' };
+function mkCanvas(w, h) { const c = document.createElement('canvas'); c.width = Math.max(1, w | 0); c.height = Math.max(1, h | 0); return c; }
+const GLOW = {};
+function glowSprite(key) {
+  if (GLOW[key]) return GLOW[key];
+  const c = mkCanvas(128, 128), g = c.getContext('2d');
+  const gr = g.createRadialGradient(64, 64, 0, 64, 64, 64);
+  const col = COL[key] || key;
+  gr.addColorStop(0, hexA(col, 1)); gr.addColorStop(0.18, hexA(col, 0.55)); gr.addColorStop(0.45, hexA(col, 0.16)); gr.addColorStop(1, hexA(col, 0));
+  g.fillStyle = gr; g.fillRect(0, 0, 128, 128);
+  return GLOW[key] = c;
+}
+function glow(c, x, y, r, key, a) {
+  if (a <= 0.003) return;
+  const prev = c.globalCompositeOperation, pa = c.globalAlpha;
+  c.globalCompositeOperation = 'lighter'; c.globalAlpha = Math.min(1, a);
+  c.drawImage(glowSprite(key), x - r, y - r, r * 2, r * 2);
+  c.globalCompositeOperation = prev; c.globalAlpha = pa;
+}
+
+/* ================= 花灯画法 ================= */
+const PAL = {
+  g: { dark: '#5e4430', edge: '#c06a22', mid: '#ffbd55', core: '#fff5d8', glow: 'g' },
+  r: { dark: '#4c1818', edge: '#a3201a', mid: '#ff5a3a', core: '#ffe2cc', glow: 'r' },
+  j: { dark: '#173b31', edge: '#127252', mid: '#46dfa0', core: '#e8fff3', glow: 'j' },
+  b: { dark: '#1a2d4b', edge: '#1d4f9c', mid: '#5ab0ff', core: '#e8f4ff', glow: 'b' },
+  red: { dark: '#4f1515', edge: '#9a1a14', mid: '#ff5a2e', core: '#ffe9bc', glow: 'o' },
+  white: { dark: '#423838', edge: '#c88a5a', mid: '#ffe6bf', core: '#fffaf0', glow: 'g' },
+  pink: { dark: '#4a1c2e', edge: '#c23f6c', mid: '#ff8fb0', core: '#fff0f4', glow: 'p' },
+  amber: { dark: '#46301c', edge: '#b4621c', mid: '#ffb042', core: '#fff3cc', glow: 'g' },
+  cream: { dark: '#463a2a', edge: '#c08a3c', mid: '#ffd98a', core: '#fffaea', glow: 'g' },
+  carp: { dark: '#4a1a10', edge: '#b8361a', mid: '#ff7a2e', core: '#fff0c8', glow: 'o' },
+  green: { dark: '#33391a', edge: '#8a8a1e', mid: '#f0dc48', core: '#fffbe0', glow: 'g' },
+  purple: { dark: '#2f1a46', edge: '#6a32a8', mid: '#c48aff', core: '#f6ecff', glow: 'p' },
+  gold: { dark: '#4a3a1c', edge: '#b8861c', mid: '#ffd24a', core: '#fffbe0', glow: 'g' }
+};
+const LAMPS = {
+  round: { name: '红灯笼', pal: 'red', desc: '竹篾扎成圆鼓鼓的身子，糊上红纸，上下两道木圈。年节里挂在门楣下，是街上最寻常、也最长久的一盏光。' },
+  gong: { name: '宫灯', pal: 'red', desc: '本是宫廷里用的灯。木框多作六角、八角，镶上绢纱或玻璃，绘山水花鸟，底下垂着长长的流苏。以北京宫灯最为人熟知。' },
+  zouma: { name: '走马灯', pal: 'amber', desc: '灯里点上蜡烛，热气往上走，推动顶上的叶轮，带着剪纸的人马一圈圈地转。烛光把影子投在灯罩上，像有人马在跑。' },
+  rabbit: { name: '兔子灯', pal: 'white', desc: '江南孩子的元宵灯。竹篾扎身，糊上白纸，点两只红眼睛，肚子底下装四个小轮子，牵根绳就能满街跑。' },
+  carp: { name: '鲤鱼灯', pal: 'carp', desc: '“鱼”与“余”同音，图个年年有余。鱼身弯起，鳞片一片片描上金，挑在竿头，像在夜里游。' },
+  ball: { name: '绣球灯', pal: 'pink', desc: '用彩纸或绸缎扎出一瓣瓣花纹，团成一只圆球，像抛出去的绣球。圆圆满满，图个吉祥。' },
+  lotus: { name: '荷花灯', pal: 'pink', desc: '纸折的花瓣一层层张开，托着一截小蜡烛。放进水里，顺着河慢慢漂远，心愿也就跟着去了。' },
+  sha: { name: '纱灯', pal: 'cream', desc: '以细纱蒙面，光透出来格外柔和。纱上常题字作画，一枝梅、两句诗，要等灯亮了才看得清。' },
+  butterfly: { name: '蝴蝶灯', pal: 'amber', desc: '竹丝弯出两对翅膀，彩纸糊面，翅上描着斑纹。挂在檐下，风一过，翅膀就轻轻地颤。' },
+  basket: { name: '花篮灯', pal: 'amber', desc: '灯做成花篮的样子：有提梁，有篮身，满满一篮纸扎的花。提在手里，像提着一篮会发光的花。' },
+  star: { name: '杨桃灯', pal: 'green', desc: '岭南中秋的老样子。灯身五道棱，形如杨桃，旧时多用竹篾扎骨、玻璃纸糊面，透出黄澄澄的光。' },
+  pomelo: { name: '柚子灯', pal: 'green', desc: '两广一带的中秋玩意。把柚子皮整个掏空，刻上花纹，里头点一支小蜡烛，光从刻痕里漏出来，带着一点清苦的果香。' },
+  kongming: { name: '孔明灯', pal: 'cream', desc: '又叫天灯。竹篾扎框，糊上薄纸，底下燃起火，热气把灯身鼓满，慢慢升上夜空。相传与诸葛亮有关。' },
+  yutu: { name: '玉兔灯', pal: 'white', desc: '中秋常见的兔形灯，取月宫玉兔的意思。白纸身子，红眼睛，提在手里，像把月亮上的兔子请下了凡间。' }
+};
+const LAMP_ORDER = ['round', 'gong', 'zouma', 'rabbit', 'carp', 'ball', 'lotus', 'sha', 'butterfly', 'basket', 'star', 'pomelo', 'kongming', 'yutu'];
+
+// 在当前路径（已 beginPath）上填“纸”：暗纸色打底，点亮后由内向外透出暖光
+function paper(c, pal, p, cx, cy, R, o) {
+  c.fillStyle = pal.dark; c.fill();
+  if (p < 0.9) { c.strokeStyle = hexA(pal.mid, 0.32 * (1 - p)); c.lineWidth = Math.max(1, R * 0.05); c.stroke(); }
+  c.save(); c.clip();
+  const sh = c.createLinearGradient(cx - R, cy - R, cx + R, cy + R);
+  sh.addColorStop(0, 'rgba(255,230,200,.10)'); sh.addColorStop(1, 'rgba(0,0,0,.28)');
+  c.fillStyle = sh; c.fillRect(cx - R * 2, cy - R * 2, R * 4, R * 4);
+  if (p > 0.002) {
+    const rr = R * (0.2 + 1.15 * easeOut(p));
+    const g = c.createRadialGradient(cx, cy + R * 0.08, 0, cx, cy, rr);
+    g.addColorStop(0, pal.core); g.addColorStop(0.4, pal.mid); g.addColorStop(0.78, pal.edge); g.addColorStop(1, hexA(pal.edge, 0));
+    c.globalAlpha = Math.min(1, p * 1.4); c.fillStyle = g; c.fillRect(cx - R * 2, cy - R * 2, R * 4, R * 4);
+    c.globalAlpha = 1;
+  }
+  if (o && o.pattern) drawPattern(c, o.pattern, cx, cy, R, p);
+  c.restore();
+}
+function drawPattern(c, pat, cx, cy, R, p) {
+  c.save();
+  c.strokeStyle = p > 0.1 ? 'rgba(110,24,8,' + (0.2 + 0.35 * p) + ')' : 'rgba(240,194,106,.22)';
+  c.fillStyle = c.strokeStyle; c.lineWidth = Math.max(1, R * 0.05); c.lineCap = 'round';
+  if (pat === 'cloud') {
+    for (const [ox, oy, s] of [[-0.45, -0.25, 0.32], [0.35, 0.05, 0.36], [-0.2, 0.45, 0.28]]) {
+      const x = cx + ox * R, y = cy + oy * R, r = s * R;
+      c.beginPath(); c.arc(x, y, r * 0.5, Math.PI * 0.9, Math.PI * 2.3); c.arc(x + r * 0.55, y + r * 0.1, r * 0.32, Math.PI * 1.2, Math.PI * 2.6); c.stroke();
+      c.beginPath(); c.moveTo(x - r * 0.9, y + r * 0.45); c.quadraticCurveTo(x, y + r * 0.7, x + r * 1.1, y + r * 0.42); c.stroke();
+    }
+  } else if (pat === 'flower') {
+    for (const [ox, oy, s] of [[-0.35, -0.2, 0.22], [0.3, 0.25, 0.26], [0.15, -0.45, 0.16], [-0.3, 0.5, 0.15]]) {
+      const x = cx + ox * R, y = cy + oy * R, r = s * R;
+      for (let k = 0; k < 5; k++) { const a = k / 5 * Math.PI * 2; c.beginPath(); c.arc(x + Math.cos(a) * r * 0.55, y + Math.sin(a) * r * 0.55, r * 0.42, 0, 7); c.fill(); }
+    }
+  } else if (pat === 'scale') {
+    const s = R * 0.28;
+    for (let yy = -R; yy < R; yy += s * 0.7) for (let xx = -R + ((yy / (s * 0.7)) & 1) * s * 0.5; xx < R; xx += s) { c.beginPath(); c.arc(cx + xx, cy + yy, s * 0.5, 0.15 * Math.PI, 0.85 * Math.PI); c.stroke(); }
+  } else if (pat === 'moon') {
+    c.beginPath(); c.arc(cx, cy - R * 0.05, R * 0.36, 0, 7); c.lineWidth = Math.max(1, R * 0.06); c.stroke();
+    c.beginPath(); c.arc(cx + R * 0.12, cy - R * 0.1, R * 0.3, 0, 7); c.globalAlpha = 0.5; c.fill();
+  } else if (pat === 'star') {
+    for (let k = 0; k < 14; k++) { const a = hash1(k * 7 + 3) * 6.28, d = hash1(k * 13 + 1) * R * 0.85; c.beginPath(); c.arc(cx + Math.cos(a) * d, cy + Math.sin(a) * d, R * 0.045, 0, 7); c.fill(); }
+  } else if (pat === 'lattice') {
+    const s = R * 0.3;
+    for (let k = -4; k <= 4; k++) { c.beginPath(); c.moveTo(cx + k * s, cy - R); c.lineTo(cx + k * s, cy + R); c.stroke(); c.beginPath(); c.moveTo(cx - R, cy + k * s); c.lineTo(cx + R, cy + k * s); c.stroke(); }
+  } else if (pat === 'plum') {
+    c.lineWidth = Math.max(1, R * 0.06);
+    c.beginPath(); c.moveTo(cx - R * 0.8, cy + R * 0.5); c.quadraticCurveTo(cx - R * 0.2, cy + R * 0.2, cx + R * 0.1, cy - R * 0.35); c.quadraticCurveTo(cx + R * 0.3, cy - R * 0.6, cx + R * 0.6, cy - R * 0.55); c.stroke();
+    c.beginPath(); c.moveTo(cx - R * 0.25, cy + R * 0.25); c.quadraticCurveTo(cx + R * 0.2, cy + R * 0.3, cx + R * 0.45, cy + R * 0.1); c.stroke();
+    c.fillStyle = p > 0.1 ? 'rgba(200,40,50,' + (0.4 + 0.4 * p) + ')' : 'rgba(240,160,150,.25)';
+    for (const [ox, oy] of [[0.1, -0.35], [0.55, -0.55], [0.45, 0.1], [-0.3, 0.28], [-0.05, 0.05]]) {
+      for (let k = 0; k < 5; k++) { const a = k / 5 * 6.28; c.beginPath(); c.arc(cx + ox * R + Math.cos(a) * R * 0.06, cy + oy * R + Math.sin(a) * R * 0.06, R * 0.055, 0, 7); c.fill(); }
+    }
+  }
+  c.restore();
+}
+function cap(c, x, y, w, h) {
+  c.beginPath(); c.roundRect ? c.roundRect(x, y, w, h, h * 0.35) : c.rect(x, y, w, h);
+  const g = c.createLinearGradient(x, y, x, y + h); g.addColorStop(0, '#e3b45a'); g.addColorStop(0.35, '#7a4a1c'); g.addColorStop(1, '#2a1208');
+  c.fillStyle = g; c.fill();
+}
+function tassel(c, x, y, len, t, col, sway) {
+  c.save();
+  c.fillStyle = '#d9a441'; c.beginPath(); c.arc(x, y + len * 0.08, len * 0.07, 0, 7); c.fill();
+  c.strokeStyle = col; c.lineWidth = Math.max(0.8, len * 0.035); c.lineCap = 'round';
+  const sw = sway || 0;
+  for (let k = -3; k <= 3; k++) {
+    c.beginPath(); c.moveTo(x + k * len * 0.025, y + len * 0.14);
+    c.quadraticCurveTo(x + k * len * 0.04 + sw * len * 0.3, y + len * 0.55, x + k * len * 0.06 + sw * len * 0.6, y + len);
+    c.stroke();
+  }
+  c.restore();
+}
+function hangString(c, x, y0, y1) { c.strokeStyle = 'rgba(30,10,8,.9)'; c.lineWidth = 1.2; c.beginPath(); c.moveTo(x, y0); c.lineTo(x, y1); c.stroke(); }
+
+// type 形制；(x,y) 灯身中心；s 尺寸；p 亮度 0..1；pal 配色；t 毫秒；o 选项
+function drawLamp(c, type, x, y, s, p, pal, t, o) {
+  o = o || {};
+  const sway = o.sway || 0;
+  c.save();
+  if (sway) { c.translate(x, y - s * 0.9); c.rotate(sway); c.translate(-x, -(y - s * 0.9)); }
+  if (o.glow !== false && p > 0.01) glow(c, x, y, s * (o.glowR || 1.5), pal.glow, p * (o.glowA || 0.9));
+  if (o.string) hangString(c, x, y - s * (o.stringLen || 1.2), y - s * 0.4);
+  const rib = p > 0.05 ? 'rgba(70,18,6,' + (0.22 + 0.25 * p) + ')' : 'rgba(255,220,180,.10)';
+  const lw = Math.max(0.8, s * 0.025);
+  c.lineWidth = lw; c.lineCap = 'round'; c.lineJoin = 'round';
+  const fn = LAMP_DRAW[type] || LAMP_DRAW.round;
+  fn(c, x, y, s, p, pal, t, o, rib);
+  c.restore();
+}
+const LAMP_DRAW = {
+  round(c, x, y, s, p, pal, t, o, rib) {
+    const rx = s * 0.5, ry = s * 0.4;
+    c.beginPath(); c.ellipse(x, y, rx, ry, 0, 0, 7); paper(c, pal, p, x, y, rx, o);
+    c.strokeStyle = rib;
+    for (const k of [-0.72, -0.38, 0.38, 0.72]) { c.beginPath(); c.ellipse(x, y, rx * Math.abs(k), ry, 0, -Math.PI / 2, Math.PI / 2, k < 0); c.stroke(); }
+    c.beginPath(); c.moveTo(x, y - ry); c.lineTo(x, y + ry); c.stroke();
+    if (o.motif) { c.strokeStyle = p > .1 ? 'rgba(255,220,140,' + (0.35 + 0.4 * p) + ')' : 'rgba(240,194,106,.3)'; c.lineWidth = s * 0.03; c.beginPath(); c.arc(x, y, s * 0.16, 0, 7); c.stroke(); c.beginPath(); c.arc(x, y, s * 0.1, 0.4, 5.6); c.stroke(); }
+    cap(c, x - rx * 0.42, y - ry - s * 0.07, rx * 0.84, s * 0.1);
+    cap(c, x - rx * 0.42, y + ry - s * 0.03, rx * 0.84, s * 0.1);
+    if (o.tassel !== false) tassel(c, x, y + ry + s * 0.06, s * 0.42 * (o.tlen || 1), t, o.tasselCol || '#c8322a', o.tsway);
+  },
+  gong(c, x, y, s, p, pal, t, o, rib) {
+    const w = s * 0.74, h = s * 0.6, top = y - h / 2, bot = y + h / 2;
+    c.beginPath(); c.rect(x - w / 2, top, w, h); paper(c, pal, p, x, y, w * 0.6, o);
+    // 面板上的画：远山一抹
+    c.strokeStyle = p > .1 ? 'rgba(90,20,10,' + (0.25 + 0.3 * p) + ')' : 'rgba(255,220,180,.08)'; c.lineWidth = s * 0.02;
+    c.beginPath(); c.moveTo(x - w * 0.26, y + h * 0.18); c.quadraticCurveTo(x - w * 0.12, y - h * 0.12, x, y + h * 0.08); c.quadraticCurveTo(x + w * 0.1, y - h * 0.2, x + w * 0.26, y + h * 0.16); c.stroke();
+    c.beginPath(); c.arc(x + w * 0.12, y - h * 0.22, s * 0.04, 0, 7); c.stroke();
+    // 木框
+    c.strokeStyle = '#2a0e08'; c.lineWidth = s * 0.045;
+    for (const k of [-0.5, -0.3, 0.3, 0.5]) { c.beginPath(); c.moveTo(x + w * k, top); c.lineTo(x + w * k, bot); c.stroke(); }
+    c.strokeStyle = 'rgba(217,164,65,.8)'; c.lineWidth = s * 0.012;
+    for (const k of [-0.3, 0.3]) { c.beginPath(); c.moveTo(x + w * k, top); c.lineTo(x + w * k, bot); c.stroke(); }
+    // 顶冠与飞角
+    const g = c.createLinearGradient(0, top - s * 0.16, 0, top); g.addColorStop(0, '#e0b058'); g.addColorStop(1, '#3a160a');
+    c.fillStyle = g;
+    c.beginPath(); c.moveTo(x - w / 2 - s * 0.08, top); c.lineTo(x - w * 0.36, top - s * 0.13); c.lineTo(x + w * 0.36, top - s * 0.13); c.lineTo(x + w / 2 + s * 0.08, top); c.closePath(); c.fill();
+    c.strokeStyle = '#e0b058'; c.lineWidth = s * 0.03;
+    for (const sd of [-1, 1]) { c.beginPath(); c.moveTo(x + sd * (w / 2 + s * 0.06), top); c.quadraticCurveTo(x + sd * (w / 2 + s * 0.16), top - s * 0.02, x + sd * (w / 2 + s * 0.15), top - s * 0.12); c.stroke(); }
+    c.fillStyle = '#d9a441'; c.beginPath(); c.arc(x, top - s * 0.17, s * 0.04, 0, 7); c.fill();
+    // 底座
+    const g2 = c.createLinearGradient(0, bot, 0, bot + s * 0.1); g2.addColorStop(0, '#3a160a'); g2.addColorStop(1, '#c99a48');
+    c.fillStyle = g2; c.beginPath(); c.moveTo(x - w / 2 - s * 0.04, bot); c.lineTo(x + w / 2 + s * 0.04, bot); c.lineTo(x + w * 0.3, bot + s * 0.1); c.lineTo(x - w * 0.3, bot + s * 0.1); c.closePath(); c.fill();
+    if (o.tassel !== false) {
+      tassel(c, x - w / 2 - s * 0.12, top - s * 0.04, s * 0.55, t, '#c8322a', o.tsway);
+      tassel(c, x + w / 2 + s * 0.12, top - s * 0.04, s * 0.55, t, '#c8322a', o.tsway);
+      tassel(c, x, bot + s * 0.08, s * 0.38, t, '#c8322a', o.tsway);
+    }
+  },
+  zouma(c, x, y, s, p, pal, t, o, rib) {
+    const w = s * 0.66, h = s * 0.66, top = y - h / 2, bot = y + h / 2;
+    c.beginPath(); c.moveTo(x - w / 2, top); c.lineTo(x - w / 2, bot); c.ellipse(x, bot, w / 2, s * 0.06, 0, Math.PI, 0, true); c.lineTo(x + w / 2, top); c.ellipse(x, top, w / 2, s * 0.06, 0, 0, Math.PI, true); c.closePath();
+    c.save(); paper(c, pal, p, x, y, w * 0.7, o); c.restore();
+    // 剪纸人马的影子在灯罩上跑
+    c.save(); c.beginPath(); c.rect(x - w / 2, top, w, h); c.clip();
+    c.fillStyle = p > .05 ? 'rgba(60,16,4,' + (0.3 + 0.45 * p) + ')' : 'rgba(255,220,180,.07)';
+    c.strokeStyle = c.fillStyle;
+    const span = w * 1.5, sp = RM ? 0 : t * 0.00003 * s * p;
+    for (let k = 0; k < 3; k++) {
+      const hx = x - w * 0.75 + ((k * span / 3 + sp * 60) % span), hy = y + h * 0.12, u = s * 0.085;
+      c.lineWidth = u * 0.22;
+      c.beginPath(); c.ellipse(hx, hy, u * 1.05, u * 0.42, 0, 0, 7); c.fill();
+      c.beginPath(); c.moveTo(hx + u * 0.7, hy - u * 0.2); c.lineTo(hx + u * 1.3, hy - u * 0.95); c.lineTo(hx + u * 1.62, hy - u * 0.72); c.lineTo(hx + u * 1.05, hy + u * 0.05); c.fill();
+      const ph = (t * 0.008 + k) % 6.28;
+      for (const [lx, a] of [[-0.7, 0.5], [-0.45, -0.4], [0.5, -0.5], [0.75, 0.45]]) { c.beginPath(); c.moveTo(hx + lx * u, hy + u * 0.2); c.lineTo(hx + lx * u + Math.sin(ph + a * 3) * u * 0.35, hy + u * 1.05); c.stroke(); }
+      c.beginPath(); c.moveTo(hx - u, hy - u * 0.1); c.quadraticCurveTo(hx - u * 1.5, hy, hx - u * 1.45, hy + u * 0.5); c.stroke();
+      c.beginPath(); c.rect(hx - u * 0.2, hy - u * 1.3, u * 0.45, u * 0.9); c.fill();
+      c.beginPath(); c.arc(hx + u * 0.02, hy - u * 1.55, u * 0.26, 0, 7); c.fill();
+      c.beginPath(); c.moveTo(hx - u * 0.6, hy - u * 2.1); c.lineTo(hx + u * 0.9, hy - u * 0.6); c.stroke();
+    }
+    c.restore();
+    c.strokeStyle = rib;
+    for (const k of [-0.25, 0.25]) { c.beginPath(); c.moveTo(x + w * k, top); c.lineTo(x + w * k, bot); c.stroke(); }
+    c.fillStyle = '#3a1a0c'; c.beginPath(); c.ellipse(x, top, w / 2 + s * 0.02, s * 0.07, 0, 0, 7); c.fill();
+    c.strokeStyle = '#d9a441'; c.lineWidth = s * 0.015; c.stroke();
+    c.fillStyle = '#3a1a0c'; c.beginPath(); c.ellipse(x, bot, w / 2 + s * 0.02, s * 0.07, 0, 0, 7); c.fill(); c.stroke();
+    // 叶轮
+    c.strokeStyle = '#d9a441'; c.lineWidth = s * 0.02;
+    const va = RM ? 0 : t * 0.004 * p;
+    for (let k = 0; k < 4; k++) { const a = va + k * Math.PI / 2; c.beginPath(); c.moveTo(x, top - s * 0.06); c.lineTo(x + Math.cos(a) * w * 0.3, top - s * 0.06 + Math.sin(a) * s * 0.03); c.stroke(); }
+    if (o.tassel !== false) tassel(c, x, bot + s * 0.05, s * 0.36, t, '#c8322a', o.tsway);
+  },
+  rabbit(c, x, y, s, p, pal, t, o, rib) {
+    const sit = o.sit;
+    c.beginPath();
+    if (sit) {
+      c.ellipse(x - s * 0.04, y + s * 0.1, s * 0.3, s * 0.33, 0, 0, 7);
+      c.moveTo(x + s * 0.34, y - s * 0.2); c.arc(x + s * 0.14, y - s * 0.2, s * 0.2, 0, 7);
+      c.moveTo(x + s * 0.12, y - s * 0.62); c.ellipse(x + s * 0.06, y - s * 0.55, s * 0.06, s * 0.2, -0.15, 0, 7);
+      c.moveTo(x + s * 0.28, y - s * 0.6); c.ellipse(x + s * 0.22, y - s * 0.55, s * 0.055, s * 0.19, 0.2, 0, 7);
+    } else {
+      c.ellipse(x - s * 0.06, y + s * 0.05, s * 0.42, s * 0.27, 0, 0, 7);
+      c.moveTo(x + s * 0.49, y - s * 0.12); c.arc(x + s * 0.3, y - s * 0.12, s * 0.19, 0, 7);
+      c.moveTo(x + s * 0.3, y - s * 0.4); c.ellipse(x + s * 0.24, y - s * 0.42, s * 0.06, s * 0.2, -0.25, 0, 7);
+      c.moveTo(x + s * 0.42, y - s * 0.42); c.ellipse(x + s * 0.37, y - s * 0.44, s * 0.055, s * 0.19, 0.15, 0, 7);
+    }
+    c.moveTo(x - s * 0.4, y + (sit ? s * 0.25 : 0)); c.arc(x - s * (sit ? 0.33 : 0.47), y + (sit ? s * 0.25 : 0), s * 0.07, 0, 7);
+    paper(c, pal, p, x, y, s * 0.5, o);
+    // 竹骨与红纹
+    c.strokeStyle = rib;
+    if (!sit) for (const k of [-0.3, -0.06, 0.18]) { c.beginPath(); c.ellipse(x - s * 0.06 + k * s, y + s * 0.05, s * 0.05, s * 0.26, 0, -Math.PI / 2, Math.PI / 2); c.stroke(); }
+    c.strokeStyle = 'rgba(210,50,50,' + (0.35 + 0.4 * p) + ')'; c.lineWidth = s * 0.025;
+    c.beginPath(); c.moveTo(x - s * (sit ? 0.25 : 0.38), y + s * (sit ? 0.22 : 0.12)); c.quadraticCurveTo(x - s * 0.05, y + s * (sit ? 0.36 : 0.26), x + s * (sit ? 0.18 : 0.22), y + s * (sit ? 0.2 : 0.1)); c.stroke();
+    const ex = sit ? x + s * 0.2 : x + s * 0.36, ey = sit ? y - s * 0.23 : y - s * 0.15;
+    c.fillStyle = '#e8302a'; c.beginPath(); c.arc(ex, ey, s * 0.038, 0, 7); c.fill();
+    glow(c, ex, ey, s * 0.08, 'r', 0.5 * p);
+    if (!sit) {
+      for (const wx of [-0.28, 0.18]) {
+        const cx2 = x + s * wx, cy2 = y + s * 0.36, r = s * 0.085;
+        c.fillStyle = '#2a120a'; c.beginPath(); c.arc(cx2, cy2, r, 0, 7); c.fill();
+        c.strokeStyle = '#c99a48'; c.lineWidth = s * 0.014; c.stroke();
+        const a0 = RM ? 0 : t * 0.002;
+        for (let k = 0; k < 3; k++) { const a = a0 + k * 2.09; c.beginPath(); c.moveTo(cx2 - Math.cos(a) * r, cy2 - Math.sin(a) * r); c.lineTo(cx2 + Math.cos(a) * r, cy2 + Math.sin(a) * r); c.stroke(); }
+      }
+    }
+  },
+  yutu(c, x, y, s, p, pal, t, o, rib) {
+    // 身后一轮小月
+    c.save(); c.globalAlpha = 0.5 + 0.4 * p; c.fillStyle = p > .1 ? 'rgba(255,236,180,.35)' : 'rgba(255,236,180,.1)';
+    c.beginPath(); c.arc(x - s * 0.12, y - s * 0.08, s * 0.46, 0, 7); c.fill(); c.restore();
+    LAMP_DRAW.rabbit(c, x, y, s, p, pal, t, Object.assign({}, o, { sit: true }), rib);
+    c.fillStyle = 'rgba(255,200,80,' + (0.3 + 0.6 * p) + ')';
+    for (const [ox, oy] of [[-0.42, -0.42], [-0.5, -0.3], [-0.36, -0.52]]) { c.beginPath(); c.arc(x + ox * s, y + oy * s, s * 0.025, 0, 7); c.fill(); }
+  },
+  carp(c, x, y, s, p, pal, t, o, rib) {
+    const L = s * 1.0, bend = RM ? 0 : Math.sin(t * 0.0025) * 0.06;
+    c.save(); c.translate(x, y); c.rotate(bend);
+    // 背鳍
+    c.fillStyle = p > .1 ? hexA(pal.edge, 0.9) : '#3a120a';
+    c.beginPath(); c.moveTo(-L * 0.15, -L * 0.22); c.quadraticCurveTo(L * 0.02, -L * 0.42, L * 0.16, -L * 0.18); c.closePath(); c.fill();
+    c.beginPath();
+    c.moveTo(-L * 0.5, 0);
+    c.bezierCurveTo(-L * 0.42, -L * 0.27, L * 0.08, -L * 0.29, L * 0.28, -L * 0.05);
+    c.lineTo(L * 0.52, -L * 0.27); c.quadraticCurveTo(L * 0.42, 0, L * 0.52, L * 0.27); c.lineTo(L * 0.28, L * 0.05);
+    c.bezierCurveTo(L * 0.08, L * 0.25, -L * 0.42, L * 0.24, -L * 0.5, 0);
+    c.closePath();
+    paper(c, pal, p, -L * 0.08, 0, L * 0.5, Object.assign({}, o, { pattern: o.pattern || null }));
+    c.save(); c.clip();
+    c.strokeStyle = p > .1 ? 'rgba(255,214,120,' + (0.3 + 0.4 * p) + ')' : 'rgba(255,214,120,.12)'; c.lineWidth = Math.max(0.8, L * 0.018);
+    const sc = L * 0.11;
+    for (let yy = -L * 0.25; yy < L * 0.25; yy += sc * 0.75) for (let xx = -L * 0.3 + ((Math.round(yy / (sc * 0.75)) & 1) * sc * 0.5); xx < L * 0.26; xx += sc) { c.beginPath(); c.arc(xx, yy, sc * 0.5, 0.2 * Math.PI, 0.8 * Math.PI); c.stroke(); }
+    c.restore();
+    c.strokeStyle = rib; c.beginPath(); c.moveTo(L * 0.34, -L * 0.12); c.lineTo(L * 0.48, -L * 0.04); c.moveTo(L * 0.34, L * 0.12); c.lineTo(L * 0.48, L * 0.04); c.stroke();
+    c.fillStyle = '#1a0804'; c.beginPath(); c.arc(-L * 0.36, -L * 0.05, L * 0.035, 0, 7); c.fill();
+    c.fillStyle = '#ffe9a0'; c.beginPath(); c.arc(-L * 0.365, -L * 0.06, L * 0.012, 0, 7); c.fill();
+    c.strokeStyle = 'rgba(255,214,120,.6)'; c.lineWidth = L * 0.012; c.beginPath(); c.moveTo(-L * 0.48, L * 0.03); c.quadraticCurveTo(-L * 0.56, L * 0.12, -L * 0.52, L * 0.2); c.stroke();
+    c.restore();
+    if (o.tassel !== false) tassel(c, x, y + s * 0.24, s * 0.3, t, '#d9a441', o.tsway);
+  },
+  ball(c, x, y, s, p, pal, t, o, rib) {
+    const R = s * 0.42;
+    c.beginPath(); c.arc(x, y, R, 0, 7); paper(c, pal, p, x, y, R, o);
+    c.save(); c.beginPath(); c.arc(x, y, R, 0, 7); c.clip();
+    c.strokeStyle = p > .1 ? 'rgba(255,240,200,' + (0.25 + 0.35 * p) + ')' : 'rgba(255,220,180,.12)'; c.lineWidth = s * 0.022;
+    for (let k = 0; k < 8; k++) { const a = k / 8 * Math.PI * 2; c.beginPath(); c.ellipse(x + Math.cos(a) * R * 0.5, y + Math.sin(a) * R * 0.5, R * 0.42, R * 0.2, a, 0, 7); c.stroke(); }
+    c.fillStyle = p > .1 ? 'rgba(255,230,150,' + (0.4 + 0.4 * p) + ')' : 'rgba(240,194,106,.25)';
+    c.beginPath(); c.arc(x, y, R * 0.16, 0, 7); c.fill();
+    c.restore();
+    c.strokeStyle = '#c8322a'; c.lineWidth = s * 0.04;
+    c.beginPath(); c.ellipse(x - s * 0.08, y - R - s * 0.04, s * 0.08, s * 0.045, -0.4, 0, 7); c.stroke();
+    c.beginPath(); c.ellipse(x + s * 0.08, y - R - s * 0.04, s * 0.08, s * 0.045, 0.4, 0, 7); c.stroke();
+    if (o.tassel !== false) tassel(c, x, y + R - s * 0.02, s * 0.4, t, '#c8322a', o.tsway);
+  },
+  lotus(c, x, y, s, p, pal, t, o, rib) {
+    const base = y + s * 0.26;
+    // 荷叶
+    c.fillStyle = p > .1 ? '#2f6a3a' : '#16301c';
+    c.beginPath(); c.ellipse(x, base + s * 0.05, s * 0.55, s * 0.12, 0, 0, 7); c.fill();
+    c.strokeStyle = 'rgba(160,220,140,' + (0.15 + 0.3 * p) + ')'; c.lineWidth = s * 0.012;
+    for (let k = -3; k <= 3; k++) { c.beginPath(); c.moveTo(x, base + s * 0.05); c.lineTo(x + k * s * 0.15, base + s * 0.05 + (Math.abs(k) < 3 ? s * 0.1 : 0)); c.stroke(); }
+    const petal = (ang, len, wid) => {
+      const tx = x + Math.sin(ang) * len, ty = base - Math.cos(ang) * len;
+      const nx = Math.cos(ang) * wid, ny = Math.sin(ang) * wid;
+      c.beginPath(); c.moveTo(x, base);
+      c.bezierCurveTo(x - nx * 1.1 + (tx - x) * 0.3, base - ny * 1.1 + (ty - base) * 0.3, tx - nx * 0.6, ty - ny * 0.6, tx, ty);
+      c.bezierCurveTo(tx + nx * 0.6, ty + ny * 0.6, x + nx * 1.1 + (tx - x) * 0.3, base + ny * 1.1 + (ty - base) * 0.3, x, base);
+      c.closePath();
+      paper(c, pal, p, x, base - s * 0.25, s * 0.55, null);
+      c.strokeStyle = p > .1 ? hexA(pal.edge, 0.7) : 'rgba(255,200,210,.15)'; c.lineWidth = s * 0.015; c.stroke();
+    };
+    for (const a of [-1.15, -0.6, 0, 0.6, 1.15]) petal(a, s * 0.56, s * 0.16);
+    for (const a of [-0.75, -0.25, 0.25, 0.75]) petal(a, s * 0.44, s * 0.15);
+    for (const a of [-0.35, 0.35]) petal(a, s * 0.32, s * 0.13);
+    glow(c, x, base - s * 0.12, s * 0.35, 'g', 0.8 * p);
+  },
+  sha(c, x, y, s, p, pal, t, o, rib) {
+    const w = s * 0.5, h = s * 0.76;
+    c.beginPath(); c.roundRect ? c.roundRect(x - w / 2, y - h / 2, w, h, w * 0.3) : c.rect(x - w / 2, y - h / 2, w, h);
+    paper(c, pal, p, x, y, h * 0.55, Object.assign({}, o, { pattern: o.pattern || 'plum' }));
+    c.strokeStyle = p > .1 ? 'rgba(120,70,20,.12)' : 'rgba(255,230,190,.05)'; c.lineWidth = 0.8;
+    for (let yy = y - h / 2 + 3; yy < y + h / 2; yy += 3) { c.beginPath(); c.moveTo(x - w / 2 + 2, yy); c.lineTo(x + w / 2 - 2, yy); c.stroke(); }
+    cap(c, x - w * 0.56, y - h / 2 - s * 0.06, w * 1.12, s * 0.09);
+    cap(c, x - w * 0.56, y + h / 2 - s * 0.03, w * 1.12, s * 0.09);
+    if (o.tassel !== false) tassel(c, x, y + h / 2 + s * 0.05, s * 0.36, t, '#c8322a', o.tsway);
+  },
+  butterfly(c, x, y, s, p, pal, t, o, rib) {
+    const fl = RM ? 1 : 0.86 + 0.14 * Math.sin(t * 0.005);
+    c.save(); c.translate(x, y);
+    for (const sd of [-1, 1]) {
+      c.save(); c.scale(sd * fl, 1);
+      c.beginPath(); c.ellipse(s * 0.25, -s * 0.13, s * 0.25, s * 0.17, -0.5, 0, 7); c.moveTo(s * 0.36, s * 0.14); c.ellipse(s * 0.19, s * 0.15, s * 0.17, s * 0.12, 0.55, 0, 7);
+      paper(c, pal, p, s * 0.1, 0, s * 0.45, o);
+      c.fillStyle = p > .1 ? 'rgba(120,30,60,' + (0.35 + 0.3 * p) + ')' : 'rgba(255,200,200,.1)';
+      c.beginPath(); c.arc(s * 0.3, -s * 0.16, s * 0.06, 0, 7); c.fill();
+      c.beginPath(); c.arc(s * 0.2, s * 0.17, s * 0.04, 0, 7); c.fill();
+      c.strokeStyle = rib; c.beginPath(); c.moveTo(s * 0.02, 0); c.lineTo(s * 0.44, -s * 0.26); c.moveTo(s * 0.02, s * 0.02); c.lineTo(s * 0.32, s * 0.22); c.stroke();
+      c.restore();
+    }
+    c.fillStyle = '#2a0e08'; c.beginPath(); c.ellipse(0, 0, s * 0.04, s * 0.22, 0, 0, 7); c.fill();
+    c.strokeStyle = '#2a0e08'; c.lineWidth = s * 0.018;
+    for (const sd of [-1, 1]) { c.beginPath(); c.moveTo(0, -s * 0.2); c.quadraticCurveTo(sd * s * 0.06, -s * 0.36, sd * s * 0.14, -s * 0.4); c.stroke(); c.fillStyle = '#d9a441'; c.beginPath(); c.arc(sd * s * 0.14, -s * 0.4, s * 0.025, 0, 7); c.fill(); }
+    c.restore();
+    if (o.tassel !== false) tassel(c, x, y + s * 0.2, s * 0.32, t, '#c8322a', o.tsway);
+  },
+  basket(c, x, y, s, p, pal, t, o, rib) {
+    const top = y - s * 0.02;
+    // 提梁
+    c.strokeStyle = '#3a1a0a'; c.lineWidth = s * 0.05;
+    c.beginPath(); c.moveTo(x - s * 0.34, top); c.bezierCurveTo(x - s * 0.36, y - s * 0.62, x + s * 0.36, y - s * 0.62, x + s * 0.34, top); c.stroke();
+    c.strokeStyle = 'rgba(217,164,65,.85)'; c.lineWidth = s * 0.015; c.stroke();
+    // 花
+    const fl = [[-0.2, -0.12, 'pink', 0.13], [0.04, -0.2, 'red', 0.15], [0.24, -0.1, 'gold', 0.12], [-0.06, -0.05, 'white', 0.1], [0.16, -0.02, 'pink', 0.09]];
+    for (const [fx, fy, pk, fr] of fl) {
+      const cx2 = x + fx * s, cy2 = y + fy * s, r = fr * s;
+      c.beginPath(); for (let k = 0; k < 6; k++) { const a = k / 6 * 6.28; c.moveTo(cx2 + Math.cos(a) * r * 0.55 + r * 0.45, cy2 + Math.sin(a) * r * 0.55); c.arc(cx2 + Math.cos(a) * r * 0.55, cy2 + Math.sin(a) * r * 0.55, r * 0.45, 0, 7); }
+      paper(c, PAL[pk], p, cx2, cy2, r * 1.1, null);
+      c.fillStyle = 'rgba(255,220,120,' + (0.4 + 0.5 * p) + ')'; c.beginPath(); c.arc(cx2, cy2, r * 0.22, 0, 7); c.fill();
+    }
+    // 篮身
+    c.beginPath(); c.moveTo(x - s * 0.4, top); c.lineTo(x + s * 0.4, top); c.quadraticCurveTo(x + s * 0.36, y + s * 0.36, x, y + s * 0.36); c.quadraticCurveTo(x - s * 0.36, y + s * 0.36, x - s * 0.4, top); c.closePath();
+    paper(c, pal, p, x, y + s * 0.12, s * 0.42, o);
+    c.save(); c.clip(); c.strokeStyle = rib;
+    for (let k = -6; k <= 6; k++) { c.beginPath(); c.moveTo(x + k * s * 0.08, top); c.lineTo(x + k * s * 0.08 + s * 0.2, y + s * 0.4); c.moveTo(x + k * s * 0.08, top); c.lineTo(x + k * s * 0.08 - s * 0.2, y + s * 0.4); c.stroke(); }
+    c.restore();
+    cap(c, x - s * 0.43, top - s * 0.03, s * 0.86, s * 0.06);
+    if (o.tassel !== false) tassel(c, x, y + s * 0.35, s * 0.3, t, '#c8322a', o.tsway);
+  },
+  star(c, x, y, s, p, pal, t, o, rib) {
+    const L = s * 1.0, hh = s * 0.3;
+    c.beginPath(); c.moveTo(x - L / 2, y); c.quadraticCurveTo(x, y - hh * 1.6, x + L / 2, y); c.quadraticCurveTo(x, y + hh * 1.6, x - L / 2, y); c.closePath();
+    paper(c, pal, p, x, y, L * 0.5, o);
+    c.strokeStyle = '#c8322a'; c.lineWidth = s * 0.024;
+    c.beginPath(); c.moveTo(x - L / 2, y); c.quadraticCurveTo(x, y - hh * 1.6, x + L / 2, y); c.quadraticCurveTo(x, y + hh * 1.6, x - L / 2, y); c.stroke();
+    c.strokeStyle = p > .1 ? 'rgba(200,60,30,' + (0.4 + 0.3 * p) + ')' : 'rgba(255,180,140,.2)'; c.lineWidth = s * 0.018;
+    for (const k of [-0.75, 0, 0.75]) { c.beginPath(); c.moveTo(x - L / 2, y); c.quadraticCurveTo(x, y + hh * 1.6 * k * 0.55, x + L / 2, y); c.stroke(); }
+    c.fillStyle = '#c8322a'; c.beginPath(); c.arc(x - L / 2, y, s * 0.035, 0, 7); c.arc(x + L / 2, y, s * 0.035, 0, 7); c.fill();
+    if (o.tassel !== false) { tassel(c, x - L / 2, y, s * 0.28, t, '#c8322a', o.tsway); tassel(c, x + L / 2, y, s * 0.28, t, '#c8322a', o.tsway); }
+  },
+  pomelo(c, x, y, s, p, pal, t, o, rib) {
+    const R = s * 0.42;
+    c.strokeStyle = '#3a2a0c'; c.lineWidth = s * 0.03; c.beginPath(); c.moveTo(x, y - R); c.lineTo(x, y - R - s * 0.1); c.stroke();
+    c.fillStyle = '#2f5a24'; c.beginPath(); c.ellipse(x + s * 0.1, y - R - s * 0.06, s * 0.1, s * 0.04, -0.4, 0, 7); c.fill();
+    c.beginPath(); c.ellipse(x, y, R, R * 0.9, 0, 0, 7);
+    const peel = { dark: '#2e3614', edge: '#5a6a1c', mid: '#b8c050', core: '#fff3b0', glow: 'g' };
+    paper(c, peel, p * 0.55, x, y, R, null);
+    // 刻花：光从刻痕里漏出来
+    c.save(); c.beginPath(); c.ellipse(x, y, R, R * 0.9, 0, 0, 7); c.clip();
+    c.fillStyle = p > .05 ? 'rgba(255,236,160,' + (0.4 + 0.6 * p) + ')' : 'rgba(20,20,6,.65)';
+    for (let k = 0; k < 8; k++) { const a = k / 8 * 6.28 + 0.2; c.beginPath(); c.ellipse(x + Math.cos(a) * R * 0.62, y + Math.sin(a) * R * 0.55, R * 0.13, R * 0.06, a, 0, 7); c.fill(); }
+    for (let k = 0; k < 6; k++) { const a = k / 6 * 6.28; c.beginPath(); c.ellipse(x + Math.cos(a) * R * 0.2, y + Math.sin(a) * R * 0.2, R * 0.1, R * 0.05, a, 0, 7); c.fill(); }
+    c.beginPath(); c.arc(x, y, R * 0.07, 0, 7); c.fill();
+    c.restore();
+    if (p > .05) glow(c, x, y, R * 0.9, 'g', 0.5 * p);
+  },
+  kongming(c, x, y, s, p, pal, t, o, rib) {
+    c.beginPath(); c.moveTo(x - s * 0.22, y + s * 0.4); c.lineTo(x - s * 0.33, y - s * 0.22); c.quadraticCurveTo(x, y - s * 0.55, x + s * 0.33, y - s * 0.22); c.lineTo(x + s * 0.22, y + s * 0.4); c.closePath();
+    paper(c, pal, p, x, y + s * 0.1, s * 0.5, o);
+    c.strokeStyle = rib;
+    for (const k of [-0.6, -0.2, 0.2, 0.6]) { c.beginPath(); c.moveTo(x + k * s * 0.22, y + s * 0.4); c.quadraticCurveTo(x + k * s * 0.36, y - s * 0.1, x + k * s * 0.25, y - s * 0.38); c.stroke(); }
+    c.strokeStyle = '#3a1a0a'; c.lineWidth = s * 0.03; c.beginPath(); c.moveTo(x - s * 0.22, y + s * 0.4); c.lineTo(x + s * 0.22, y + s * 0.4); c.stroke();
+    const fy = y + s * 0.36;
+    c.fillStyle = p > .05 ? '#fff0b0' : '#5a3a20'; c.beginPath(); c.ellipse(x, fy, s * 0.04, s * 0.07, 0, 0, 7); c.fill();
+    glow(c, x, fy, s * 0.2, 'o', 0.8 * p);
+  }
+};
+
+/* ================= LanternDesigner 桩 =================
+ * 参赛版设想：玩家用一句话描述一盏灯（“一只抱着月亮的蓝色兔子”），
+ *   LanternDesigner.design(text) 调用 AI，返回一份 LanternSpec：
+ *     { type: 形制（可扩展为 AI 生成的轮廓路径）, pal: {dark, edge, mid, core, glow},
+ *       pattern: 纹样（可扩展为 AI 生成的 SVG path 列表）, name: 灯名, note: 一句介绍 }
+ *   这盏灯会被挂进关卡，成为“你的灯”：街口最近的那盏，以及过关灯谱里的一行字。
+ * demo 版：不联网，按关键词组合出一盏程序化花灯；接口形状与参赛版一致（返回 Promise）。
+ */
+const LanternDesigner = {
+  SHAPES: [['兔', 'rabbit'], ['荷', 'lotus'], ['莲', 'lotus'], ['鲤', 'carp'], ['鱼', 'carp'], ['蝶', 'butterfly'], ['杨桃', 'star'], ['星', 'star'], ['柚', 'pomelo'],
+    ['绣球', 'ball'], ['球', 'ball'], ['宫', 'gong'], ['马', 'zouma'], ['篮', 'basket'], ['纱', 'sha'], ['孔明', 'kongming'], ['天灯', 'kongming']],
+  COLORS: [['朱', 'red'], ['红', 'red'], ['赤', 'red'], ['金', 'gold'], ['黄', 'gold'], ['绿', 'j'], ['翠', 'j'], ['碧', 'j'], ['蓝', 'b'], ['青', 'b'], ['紫', 'purple'],
+    ['白', 'white'], ['素', 'white'], ['银', 'white'], ['粉', 'pink']],
+  PATTERNS: [['云', 'cloud'], ['梅', 'plum'], ['花', 'flower'], ['鳞', 'scale'], ['月', 'moon'], ['星', 'star'], ['格', 'lattice'], ['窗', 'lattice']],
+  CNAME: { red: '朱红', gold: '金', j: '翠', b: '青蓝', purple: '紫', white: '素白', pink: '粉', amber: '暖黄', green: '黄绿', cream: '米白', carp: '橙红' },
+  PNAME: { cloud: '云纹', plum: '梅枝', flower: '碎花', scale: '鱼鳞纹', moon: '月纹', star: '星点', lattice: '窗格纹' },
+  findIn(text, list) { for (const [k, v] of list) if (text.indexOf(k) >= 0) return v; return null; },
+  design(text) { // → Promise<LanternSpec>
+    const t = String(text || '').trim();
+    const type = this.findIn(t, this.SHAPES) || 'round';
+    const col = this.findIn(t, this.COLORS) || LAMPS[type].pal;
+    let pattern = this.findIn(t.replace(/杨桃/g, ''), this.PATTERNS);
+    if (pattern === 'star' && type === 'star') pattern = null;
+    const name = (this.CNAME[col] || '') + (pattern ? this.PNAME[pattern] : '') + LAMPS[type].name.replace('红灯笼', '灯笼');
+    return Promise.resolve({ type, col, pattern, name, text: t });
+  }
+};
+function specPal(spec) { return PAL[spec.col] || PAL.red; }
+
+/* ================= 古街背景（透视） ================= */
+const SCENE = { ch: 0, cvs: null, lamps: [], f: 1, hy: 0, cx: 0, mode: 'title' };
+const THEME = [
+  { sky: ['#14040b', '#2c0a1a', '#5a1626'], haze: '#ff7a3a', moon: 'full-small', lampCols: ['red', 'red', 'red', 'amber'] },
+  { sky: ['#100518', '#261038', '#4a1a46'], haze: '#ff6a8a', moon: 'half', lampCols: ['red', 'pink', 'amber', 'j', 'b'] },
+  { sky: ['#0c0618', '#1e1036', '#3c1838'], haze: '#ffb04a', moon: 'full-big', lampCols: ['red', 'amber', 'green', 'red', 'b'] }
+];
+function proj(X, Y, z) { return [SCENE.cx + X * SCENE.f / z, SCENE.hy + Y * SCENE.f / z, SCENE.f / z]; }
+function renderScene(ch) {
+  SCENE.ch = ch;
+  const w = VW, h = VH, th = THEME[ch];
+  const c = SCENE.cvs || (SCENE.cvs = mkCanvas(1, 1));
+  c.width = Math.round(w * DPR); c.height = Math.round(h * DPR);
+  const g = c.getContext('2d'); g.setTransform(DPR, 0, 0, DPR, 0, 0);
+  SCENE.f = Math.min(w * 0.6, h * 0.62); SCENE.hy = h * (w > h ? 0.47 : 0.42); SCENE.cx = w / 2;
+  const rng = mulberry32(1234 + ch * 99);
+  // 天
+  const sk = g.createLinearGradient(0, 0, 0, SCENE.hy);
+  sk.addColorStop(0, th.sky[0]); sk.addColorStop(0.6, th.sky[1]); sk.addColorStop(1, th.sky[2]);
+  g.fillStyle = sk; g.fillRect(0, 0, w, h);
+  // 星
+  for (let i = 0; i < 140; i++) { const x = rng() * w, y = rng() * SCENE.hy * 0.8, a = rng() * 0.5 + 0.1; g.fillStyle = 'rgba(255,236,210,' + a + ')'; g.fillRect(x, y, rng() < 0.1 ? 1.6 : 1, rng() < 0.1 ? 1.6 : 1); }
+  if (ch === 1) { // 银河
+    g.save(); g.translate(w * 0.5, SCENE.hy * 0.3); g.rotate(-0.5);
+    for (let i = 0; i < 900; i++) { const u = (rng() - 0.5) * w * 1.6, v = (rng() + rng() + rng() - 1.5) * h * 0.06; g.fillStyle = 'rgba(230,210,255,' + (rng() * 0.35) + ')'; g.fillRect(u, v, 1, 1); }
+    const mg = g.createLinearGradient(0, -h * 0.1, 0, h * 0.1); mg.addColorStop(0, 'rgba(200,170,255,0)'); mg.addColorStop(0.5, 'rgba(200,170,255,.08)'); mg.addColorStop(1, 'rgba(200,170,255,0)');
+    g.fillStyle = mg; g.fillRect(-w, -h * 0.1, w * 2, h * 0.2); g.restore();
+  }
+  // 月
+  const mx = w * (w > h ? 0.8 : 0.78), my = SCENE.hy * (w > h ? 0.26 : 0.2), mr = th.moon === 'full-big' ? Math.min(w, h) * 0.085 : Math.min(w, h) * 0.05;
+  const halo = g.createRadialGradient(mx, my, mr * 0.8, mx, my, mr * 5);
+  halo.addColorStop(0, 'rgba(255,230,180,.28)'); halo.addColorStop(1, 'rgba(255,230,180,0)'); g.fillStyle = halo; g.fillRect(0, 0, w, h);
+  const mg = g.createRadialGradient(mx - mr * 0.3, my - mr * 0.3, 0, mx, my, mr);
+  mg.addColorStop(0, '#fff8e4'); mg.addColorStop(1, '#f0d49a');
+  g.fillStyle = mg; g.beginPath(); g.arc(mx, my, mr, 0, 7); g.fill();
+  if (th.moon === 'half') { g.fillStyle = th.sky[1]; g.globalAlpha = 0.94; g.beginPath(); g.ellipse(mx - mr * 0.05, my, mr * 0.06 + 0.5, mr * 1.02, 0, Math.PI / 2, Math.PI * 1.5); g.rect(mx - mr * 1.1, my - mr * 1.1, mr * 1.05, mr * 2.2); g.fill(); g.globalAlpha = 1; }
+  g.fillStyle = 'rgba(200,160,110,.18)'; for (const [ox, oy, rr] of [[-0.3, 0.1, 0.22], [0.25, -0.2, 0.14], [0.1, 0.35, 0.12]]) { if (th.moon === 'half' && ox < 0) continue; g.beginPath(); g.arc(mx + ox * mr, my + oy * mr, rr * mr, 0, 7); g.fill(); }
+  // 远处城楼
+  const far = 30;
+  {
+    const [gx, gy] = proj(0, 1.7, far), s = SCENE.f / far;
+    const hz = g.createRadialGradient(gx, gy - s * 3, 0, gx, gy - s * 3, s * 18);
+    hz.addColorStop(0, hexA(th.haze, 0.45)); hz.addColorStop(1, hexA(th.haze, 0)); g.fillStyle = hz; g.fillRect(0, 0, w, h);
+    g.fillStyle = '#12040a';
+    g.fillRect(gx - s * 6, gy - s * 5.2, s * 12, s * 5.2);
+    g.beginPath(); g.moveTo(gx - s * 7.5, gy - s * 5.2); g.quadraticCurveTo(gx - s * 4, gy - s * 6.2, gx, gy - s * 7.4); g.quadraticCurveTo(gx + s * 4, gy - s * 6.2, gx + s * 7.5, gy - s * 5.2);
+    g.quadraticCurveTo(gx + s * 8.2, gy - s * 5.4, gx + s * 8.4, gy - s * 6); g.lineTo(gx + s * 7, gy - s * 4.6); g.lineTo(gx - s * 7, gy - s * 4.6); g.lineTo(gx - s * 8.4, gy - s * 6); g.quadraticCurveTo(gx - s * 8.2, gy - s * 5.4, gx - s * 7.5, gy - s * 5.2); g.fill();
+    g.fillStyle = hexA(th.haze, 0.5);
+    for (let k = -2; k <= 2; k++) g.fillRect(gx + k * s * 2 - s * 0.4, gy - s * 3.8, s * 0.8, s * 1.1);
+    g.fillStyle = '#12040a'; g.beginPath(); g.ellipse(gx, gy, s * 1.6, s * 2.4, 0, Math.PI, 0); g.fill();
+  }
+  // 地面青石
+  {
+    const [, gy0] = proj(0, 1.7, far);
+    const gg = g.createLinearGradient(0, gy0, 0, h);
+    gg.addColorStop(0, '#2a1420'); gg.addColorStop(0.35, '#1e1018'); gg.addColorStop(1, '#100810');
+    g.fillStyle = gg; g.fillRect(0, gy0, w, h - gy0);
+    g.strokeStyle = 'rgba(255,200,160,.05)'; g.lineWidth = 1;
+    for (let X = -3; X <= 3; X += 0.75) { const [x1, y1] = proj(X, 1.7, far), [x2, y2] = proj(X, 1.7, 0.6); g.beginPath(); g.moveTo(x1, y1); g.lineTo(x2, y2); g.stroke(); }
+    for (let z = 0.8; z < far; z *= 1.16) { const [x1, y1] = proj(-3, 1.7, z), [x2] = proj(3, 1.7, z); g.beginPath(); g.moveTo(x1, y1); g.lineTo(x2, y1); g.stroke(); }
+    const sheen = g.createRadialGradient(SCENE.cx, gy0 + (h - gy0) * 0.25, 0, SCENE.cx, gy0 + (h - gy0) * 0.25, w * 0.5);
+    sheen.addColorStop(0, hexA(th.haze, 0.12)); sheen.addColorStop(1, hexA(th.haze, 0)); g.fillStyle = sheen; g.fillRect(0, gy0, w, h - gy0);
+  }
+  // 两侧楼宇：从远到近
+  const S = 3.0, houses = [];
+  for (const side of [-1, 1]) { let z = 1.0; while (z < far) { const len = 2.2 + rng() * 1.6; houses.push({ side, z0: z, z1: z + len, two: rng() < 0.55, shop: rng() < 0.5, seed: rng() }); z += len + 0.05; } }
+  houses.sort((a, b) => b.z0 - a.z0);
+  const lamps = [];
+  for (const hs of houses) drawHouse(g, hs, S, th, lamps, rng);
+  // 横跨街面的灯串
+  const strings = [2.4, 3.6, 5.2, 7.4, 10.5, 15, 21];
+  for (const z of strings) {
+    const n = z < 4 ? 5 : z < 8 ? 6 : 7, sag = 0.5, X0 = -S + 0.4, X1 = S - 0.4, Yb = -1.35;
+    g.strokeStyle = 'rgba(20,6,8,.85)'; g.lineWidth = Math.max(0.6, 1.6 / z * 2);
+    g.beginPath();
+    for (let k = 0; k <= 24; k++) { const u = k / 24, X = lerp(X0, X1, u), Y = Yb - 0.2 + sag * 4 * u * (1 - u) - sag * 0.2; const [px, py] = proj(X, Y, z); k ? g.lineTo(px, py) : g.moveTo(px, py); }
+    g.stroke();
+    for (let k = 1; k < n; k++) {
+      const u = k / n, X = lerp(X0, X1, u), Y = Yb - 0.2 + sag * 4 * u * (1 - u) - sag * 0.2;
+      const [px, py, sc] = proj(X, Y + 0.32, z);
+      lamps.push({ x: px, y: py, s: sc * 0.36, z, kind: 'str', pal: th.lampCols[(k + Math.round(z)) % th.lampCols.length], ph: rng() * 6.28, center: Math.abs(u - 0.5) < 0.01 });
+    }
+  }
+  // 只留画面里看得见的灯；最近的一盏（rank 0）留给“你的灯”
+  for (let i = lamps.length - 1; i >= 0; i--) { const l = lamps[i]; if (l.x < -l.s || l.x > w + l.s || l.y < -l.s || l.y > h) lamps.splice(i, 1); }
+  lamps.sort((a, b) => a.z - b.z || Math.abs(a.x - SCENE.cx) - Math.abs(b.x - SCENE.cx));
+  lamps.forEach((l, i) => { l.rank = i; l.on = false; l.tc = -1e9; });
+  SCENE.lamps = lamps;
+  // 雾气与暗角
+  const vg = g.createRadialGradient(w / 2, h * 0.45, Math.min(w, h) * 0.3, w / 2, h * 0.5, Math.max(w, h) * 0.8);
+  vg.addColorStop(0, 'rgba(0,0,0,0)'); vg.addColorStop(1, 'rgba(8,0,4,.6)');
+  g.fillStyle = vg; g.fillRect(0, 0, w, h);
+}
+function quad(g, pts) { g.beginPath(); g.moveTo(pts[0][0], pts[0][1]); for (let i = 1; i < pts.length; i++) g.lineTo(pts[i][0], pts[i][1]); g.closePath(); }
+function drawHouse(g, hs, S, th, lamps, rng) {
+  const sd = hs.side, X = sd * S, z0 = hs.z0, z1 = hs.z1;
+  const ground = 1.7, eave1 = -1.9, top = hs.two ? -4.6 : -2.6;
+  const P = (Y, z, dx) => proj(X + (dx || 0) * sd, Y, z);
+  // 立面
+  const face = [P(ground, z0), P(ground, z1), P(top, z1), P(top, z0)];
+  const fg = g.createLinearGradient(face[0][0], 0, face[1][0], 0);
+  fg.addColorStop(0, '#2a0a12'); fg.addColorStop(1, '#16050a');
+  quad(g, face); g.fillStyle = fg; g.fill();
+  // 柱
+  for (const z of [z0 + 0.08, z1 - 0.08]) { const a = P(ground, z), b = P(top, z), w2 = Math.max(1, 0.16 * SCENE.f / z); g.fillStyle = '#3a0e16'; g.fillRect(a[0] - w2 / 2, b[1], w2, a[1] - b[1]); }
+  // 窗与门：木格窗透出暖光
+  const win = (Ya, Yb, za, zb, warm) => {
+    const q = [P(Ya, za), P(Ya, zb), P(Yb, zb), P(Yb, za)];
+    quad(g, q);
+    const wg = g.createLinearGradient(0, q[0][1], 0, q[2][1]);
+    wg.addColorStop(0, hexA('#ffb04a', 0.55 * warm)); wg.addColorStop(1, hexA('#ff7a2a', 0.85 * warm));
+    g.fillStyle = wg; g.fill();
+    g.strokeStyle = 'rgba(30,6,8,.9)'; g.lineWidth = Math.max(0.6, 0.05 * SCENE.f / ((za + zb) / 2));
+    const nU = Math.max(2, Math.round((zb - za) * 3)), nV = 4;
+    for (let k = 1; k < nU; k++) { const z = lerp(za, zb, k / nU), a = P(Ya, z), b = P(Yb, z); g.beginPath(); g.moveTo(a[0], a[1]); g.lineTo(b[0], b[1]); g.stroke(); }
+    for (let k = 1; k < nV; k++) { const Y = lerp(Ya, Yb, k / nV), a = P(Y, za), b = P(Y, zb); g.beginPath(); g.moveTo(a[0], a[1]); g.lineTo(b[0], b[1]); g.stroke(); }
+    quad(g, q); g.lineWidth *= 1.8; g.stroke();
+  };
+  const L = z1 - z0;
+  if (hs.shop) win(-0.9, 1.5, z0 + L * 0.2, z1 - L * 0.2, 0.75 + hs.seed * 0.25);
+  else { win(-0.6, 0.6, z0 + L * 0.15, z0 + L * 0.42, 0.6 + hs.seed * 0.3); win(-0.6, 0.6, z1 - L * 0.42, z1 - L * 0.15, 0.5 + hs.seed * 0.4); }
+  if (hs.two) win(-3.9, -2.9, z0 + L * 0.25, z1 - L * 0.25, 0.4 + hs.seed * 0.4);
+  // 檐：挑出街面，角上翘（飞檐）
+  const roofAt = (Yr, over, upper) => {
+    // 直檐：檐口一条直线，两端只微微起翘；屋面向后收，透视不乱
+    const za = Math.max(2.0, z0 + 0.05), zb = z1 - 0.05;
+    const a = P(Yr, za, -over), b = P(Yr, zb, -over), c2 = P(Yr - 0.8, zb, 0.6), d = P(Yr - 0.8, za, 0.6);
+    const ua = P(Yr - 0.22, za, -over - 0.12), ub = P(Yr - 0.22, zb, -over - 0.12);
+    if (upper && (ua[1] < 2 || ub[1] < 2 || c2[1] < 2 || d[1] < 2)) return; // 上层檐被画面顶边裁断时不画，免得留下孤线
+    g.beginPath(); g.moveTo(ua[0], ua[1]); g.lineTo(a[0], a[1]); g.lineTo(b[0], b[1]); g.lineTo(ub[0], ub[1]); g.lineTo(c2[0], c2[1]); g.lineTo(d[0], d[1]); g.closePath();
+    g.fillStyle = '#0e0306'; g.fill();
+    g.strokeStyle = 'rgba(255,170,90,.26)'; g.lineWidth = Math.max(0.7, 0.05 * SCENE.f / za);
+    g.beginPath(); g.moveTo(ua[0], ua[1]); g.lineTo(a[0], a[1]); g.lineTo(b[0], b[1]); g.lineTo(ub[0], ub[1]); g.stroke();
+  };
+  if (z1 > 2.6) { roofAt(eave1, 0.9); if (hs.two) roofAt(top + 0.1, 0.7, true); }
+  // 檐下挂灯
+  const [lx, ly, sc] = P(eave1 + 0.75, (z0 + z1) / 2, -0.55);
+  lamps.push({ x: lx, y: ly, s: sc * 0.42, z: (z0 + z1) / 2, kind: 'eave', pal: th.lampCols[Math.floor(hs.seed * 10) % th.lampCols.length], ph: hs.seed * 6.28 });
+}
+// 背景灯笼贴图（预渲染，每帧缩放绘制）
+const SPR = {};
+function lampSprite(palKey, lit) {
+  const k = palKey + (lit ? '1' : '0');
+  if (SPR[k]) return SPR[k];
+  const c = mkCanvas(96, 128), g = c.getContext('2d');
+  drawLamp(g, 'round', 48, 50, 64, lit ? 1 : 0, PAL[palKey] || PAL.red, 0, { glow: false, tasselCol: '#c8322a' });
+  return SPR[k] = c;
+}
+function lampP(l, t) { const D = 520; return l.on ? clamp((t - l.tc) / D, 0, 1) : 1 - clamp((t - l.tc) / 380, 0, 1); }
+function setLampOn(l, on, t, delay) {
+  if (l.on === on) return;
+  const D = 520, p0 = lampP(l, t);
+  l.on = on; l.tc = on ? t + (delay || 0) - p0 * D : t - (1 - p0) * 380;
+}
+function drawSceneLamps(c, t, mine) {
+  const ls = SCENE.lamps;
+  // 地面倒影
+  c.save(); c.globalCompositeOperation = 'lighter';
+  for (const l of ls) {
+    const p = lampP(l, t); if (p < 0.02) continue;
+    const ry = SCENE.hy + (SCENE.hy - l.y) * 0 + (3.4 * SCENE.f / l.z) - (l.y - SCENE.hy);
+    const col = COL[(PAL[l.pal] || PAL.red).glow];
+    c.globalAlpha = 0.22 * p;
+    c.drawImage(glowSprite(col), l.x - l.s * 0.9, ry - l.s * 2.2, l.s * 1.8, l.s * 4.4);
+  }
+  c.restore();
+  for (let i = ls.length - 1; i >= 0; i--) {
+    const l = ls[i], p = lampP(l, t);
+    const sw = RM ? 0 : Math.sin(t * 0.0012 + l.ph) * 0.05;
+    if (mine && l.rank === 0) {
+      drawLamp(c, mine.type, l.x, l.y, l.s * 1.5, p, specPal(mine), t, { pattern: mine.pattern, sway: sw * 0.6, string: true, stringLen: 1.6, glowR: 1.8, tsway: sw });
+      continue;
+    }
+    c.save();
+    if (sw) { c.translate(l.x, l.y - l.s * 0.8); c.rotate(sw); c.translate(-l.x, -(l.y - l.s * 0.8)); }
+    const w = l.s * 1.5, h = l.s * 2.0, x = l.x - w / 2, y = l.y - l.s * 0.78;
+    if (p < 0.999) c.drawImage(lampSprite(l.pal, false), x, y, w, h);
+    if (p > 0.001) { c.globalAlpha = p; c.drawImage(lampSprite(l.pal, true), x, y, w, h); c.globalAlpha = 1; }
+    c.restore();
+    if (p > 0.01) glow(c, l.x, l.y, l.s * 2.2, (PAL[l.pal] || PAL.red).glow, p * 0.75);
+  }
+}
+
+/* ================= 行人、烟花、孔明灯、光尘 ================= */
+const FX = { walkers: [], rockets: [], skyLamps: [], sparks: [], nextWalker: 0 };
+function spawnWalker(t, dir, opt) {
+  opt = opt || {};
+  const kinds = ['man', 'woman', 'child', 'elder', 'woman', 'man'];
+  const kind = opt.kind || kinds[Math.random() * kinds.length | 0];
+  const h = Math.min(VH * 0.17, 150) * (kind === 'child' ? 0.62 : kind === 'elder' ? 0.92 : 0.95 + Math.random() * 0.1);
+  const sp = (kind === 'child' ? 70 : kind === 'elder' ? 38 : 52) * (0.85 + Math.random() * 0.3) * (VW < 600 ? 0.7 : 1);
+  FX.walkers.push({ t0: t + (opt.delay || 0), dir, x0: dir > 0 ? -80 : VW + 80, kind, h, sp, ph: Math.random() * 6, lamp: kind === 'child' ? 'rabbit' : Math.random() < 0.55 ? 'stick' : null, pal: ['red', 'amber', 'pink'][Math.random() * 3 | 0] });
+}
+function drawWalkers(c, t) {
+  const base = VH - 4;
+  FX.walkers = FX.walkers.filter(w => t < w.t0 || (w.dir > 0 ? w.x0 + w.sp * (t - w.t0) / 1000 < VW + 120 : w.x0 - w.sp * (t - w.t0) / 1000 > -120));
+  for (const w of FX.walkers) {
+    if (t < w.t0) continue;
+    const el = (t - w.t0) / 1000, x = w.x0 + w.dir * w.sp * el, h = w.h;
+    const ph = el * w.sp / (h * 0.32) + w.ph, bob = Math.abs(Math.sin(ph)) * h * 0.012;
+    const y = base - bob;
+    c.save(); c.translate(x, y); c.scale(w.dir, 1);
+    const ink = '#0c0306';
+    // 腿
+    c.strokeStyle = ink; c.lineCap = 'round'; c.lineWidth = h * 0.055;
+    const hip = -h * 0.36;
+    for (const s of [1, -1]) { const a = Math.sin(ph) * 0.42 * s; c.beginPath(); c.moveTo(0, hip); c.lineTo(Math.sin(a) * h * 0.36, hip + Math.cos(a) * h * 0.36); c.stroke(); }
+    // 袍
+    c.fillStyle = ink; c.beginPath();
+    if (w.kind === 'woman') { c.moveTo(-h * 0.09, -h * 0.78); c.lineTo(h * 0.09, -h * 0.78); c.lineTo(h * 0.19, -h * 0.14); c.lineTo(-h * 0.17, -h * 0.14); }
+    else if (w.kind === 'child') { c.moveTo(-h * 0.11, -h * 0.74); c.lineTo(h * 0.11, -h * 0.74); c.lineTo(h * 0.16, -h * 0.3); c.lineTo(-h * 0.15, -h * 0.3); }
+    else { c.moveTo(-h * 0.1, -h * 0.8); c.lineTo(h * 0.1, -h * 0.8); c.lineTo(h * 0.15, -h * 0.22); c.lineTo(-h * 0.14, -h * 0.22); }
+    c.closePath(); c.fill();
+    // 头与发髻/帽
+    const hy = -h * (w.kind === 'child' ? 0.83 : 0.88);
+    c.beginPath(); c.arc(0, hy, h * (w.kind === 'child' ? 0.085 : 0.07), 0, 7); c.fill();
+    if (w.kind === 'woman') { c.beginPath(); c.arc(-h * 0.05, hy - h * 0.06, h * 0.045, 0, 7); c.fill(); }
+    if (w.kind === 'man') { c.fillRect(-h * 0.08, hy - h * 0.09, h * 0.16, h * 0.04); }
+    if (w.kind === 'child') { c.beginPath(); c.arc(-h * 0.06, hy - h * 0.06, h * 0.035, 0, 7); c.arc(h * 0.06, hy - h * 0.06, h * 0.035, 0, 7); c.fill(); }
+    if (w.kind === 'elder') { c.strokeStyle = ink; c.lineWidth = h * 0.025; c.beginPath(); c.moveTo(h * 0.12, -h * 0.5); c.lineTo(h * 0.2, 0); c.stroke(); }
+    // 轮廓光
+    c.strokeStyle = 'rgba(255,170,90,.35)'; c.lineWidth = 1.2; c.beginPath(); c.arc(0, hy, h * 0.07, -1.4, 0.4); c.stroke();
+    c.restore();
+    // 手里的灯
+    if (w.lamp === 'stick') {
+      const hx = x + w.dir * h * 0.16, hy2 = y - h * 0.55;
+      c.strokeStyle = ink; c.lineWidth = h * 0.02; c.beginPath(); c.moveTo(x + w.dir * h * 0.06, y - h * 0.5); c.lineTo(hx + w.dir * h * 0.12, hy2 - h * 0.12); c.stroke();
+      const sw = Math.sin(ph * 0.5) * 0.15;
+      drawLamp(c, 'round', hx + w.dir * h * 0.12 + sw * h * 0.05, hy2 + h * 0.03, h * 0.12, 1, PAL[w.pal], t, { tassel: false, glowR: 2.4 });
+    } else if (w.lamp === 'rabbit') {
+      const rx = x + w.dir * h * 0.75, ry = y - h * 0.12;
+      c.strokeStyle = 'rgba(20,6,8,.9)'; c.lineWidth = 1; c.beginPath(); c.moveTo(x + w.dir * h * 0.1, y - h * 0.48); c.lineTo(rx + w.dir * h * 0.08, ry - h * 0.05); c.stroke();
+      c.save(); c.translate(rx, ry); c.scale(w.dir, 1); drawLamp(c, 'rabbit', 0, 0, h * 0.34, 1, PAL.white, t, { glowR: 1.8 }); c.restore();
+    }
+  }
+}
+function launchFirework(t, delay) {
+  const x = VW * (0.12 + Math.random() * 0.76), y1 = VH * (0.08 + Math.random() * 0.22), dur = 0.9 + Math.random() * 0.35;
+  const palette = [['g', 'o'], ['r', 'g'], ['j', 'g'], ['b', 'w'], ['p', 'g']][Math.random() * 5 | 0];
+  const n = RM ? 0 : 54 + (Math.random() * 30 | 0);
+  const parts = [];
+  for (let i = 0; i < n; i++) { const a = i / n * 6.283 + Math.random() * 0.1, v = (0.75 + Math.random() * 0.25) * Math.min(VW, VH) * 0.42; parts.push([Math.cos(a) * v, Math.sin(a) * v, palette[i % 2], 1.3 + Math.random() * 0.8]); }
+  FX.rockets.push({ t0: t + delay, x, y0: VH * 0.62, y1, dur, parts, boomed: false, whist: false });
+}
+function drawFireworks(c, t) {
+  FX.rockets = FX.rockets.filter(r => t < r.t0 + (r.dur + 2.4) * 1000);
+  c.save(); c.globalCompositeOperation = 'lighter';
+  for (const r of FX.rockets) {
+    const el = (t - r.t0) / 1000; if (el < 0) continue;
+    if (!r.whist) { r.whist = true; whistle(0, r.dur); }
+    if (el < r.dur) {
+      const k = easeOut(el / r.dur), y = lerp(r.y0, r.y1, k);
+      c.fillStyle = 'rgba(255,220,160,.9)'; c.beginPath(); c.arc(r.x, y, 2, 0, 7); c.fill();
+      glow(c, r.x, y + 10, 14, 'g', 0.5);
+      continue;
+    }
+    if (!r.boomed) { r.boomed = true; boom(0.7 + Math.random() * 0.4); }
+    const te = el - r.dur, kd = 1.6;
+    for (const [vx, vy, col, life] of r.parts) {
+      if (te > life) continue;
+      const pos = tt => { const e = (1 - Math.exp(-kd * tt)) / kd; return [r.x + vx * e, r.y1 + vy * e + 60 * tt * tt]; };
+      const [x1, y1] = pos(te), [x0, y0] = pos(Math.max(0, te - 0.08));
+      const a = (1 - te / life);
+      c.strokeStyle = hexA(COL[col], a * (0.6 + 0.4 * Math.sin(te * 40 + vx)));
+      c.lineWidth = 2; c.beginPath(); c.moveTo(x0, y0); c.lineTo(x1, y1); c.stroke();
+    }
+    if (te < 0.4) glow(c, r.x, r.y1, Math.min(VW, VH) * 0.25, 'g', (0.4 - te) * 1.2);
+  }
+  c.restore();
+}
+function launchSkyLamps(t, n) {
+  for (let i = 0; i < n; i++) FX.skyLamps.push({ t0: t + i * (RM ? 300 : 260) + Math.random() * 200, x: VW * (0.08 + Math.random() * 0.84), s: 14 + Math.random() * 14, v: 28 + Math.random() * 30, ph: Math.random() * 6 });
+}
+function drawSkyLamps(c, t) {
+  FX.skyLamps = FX.skyLamps.filter(l => t < l.t0 + 26000);
+  for (const l of FX.skyLamps) {
+    const el = (t - l.t0) / 1000; if (el < 0) continue;
+    const y = VH + 30 - el * l.v, x = l.x + (RM ? 0 : Math.sin(el * 0.7 + l.ph) * 14);
+    if (y < -40) continue;
+    const a = clamp(el * 1.5, 0, 1) * clamp((y + 40) / (VH * 0.3), 0, 1);
+    c.globalAlpha = a; drawLamp(c, 'kongming', x, y, l.s, 1, PAL.cream, t, { glowR: 2.2, glowA: 0.8 }); c.globalAlpha = 1;
+  }
+}
+function addSparks(x, y, col, n, size) {
+  const t = now();
+  for (let i = 0; i < (RM ? 0 : n); i++) { const a = Math.random() * 6.28, v = (0.4 + Math.random()) * size; FX.sparks.push({ t0: t, x, y, vx: Math.cos(a) * v, vy: Math.sin(a) * v - size * 0.3, col, life: 500 + Math.random() * 500 }); }
+}
+function drawSparks(c, t) {
+  FX.sparks = FX.sparks.filter(s => t < s.t0 + s.life);
+  c.save(); c.globalCompositeOperation = 'lighter';
+  for (const s of FX.sparks) {
+    const el = (t - s.t0) / 1000, k = (1 - Math.exp(-3 * el)) / 3;
+    const x = s.x + s.vx * k, y = s.y + s.vy * k + 40 * el * el, a = 1 - (t - s.t0) / s.life;
+    c.fillStyle = hexA(COL[s.col] || COL.g, a); c.beginPath(); c.arc(x, y, 1.6, 0, 7); c.fill();
+  }
+  c.restore();
+}
+
+/* ================= 棋盘：街面、元件、光束 ================= */
+const CELL_MS = RM ? 14 : 34, LANT_DELAY = RM ? 90 : 230;
+const G = { L: null, pieces: [], tray: [], ops: 0, hints: 0, sel: -1, T: null, rayVis: new Map(), burst: 0, lastLight: 0,
+  won: false, celT: 0, cardShown: false, drag: null, bx: 0, by: 0, cs: 40, boardCvs: null, flash: null, winReadyAt: 0, entered: 0 };
+function computeBoard() {
+  const L = G.L; if (!L) return;
+  const hud = $('#hud').getBoundingClientRect(), tip = $('#tip'), tray = $('#tray').getBoundingClientRect();
+  let top = hud.bottom + 8;
+  if (tip.textContent) top = Math.max(top, tip.getBoundingClientRect().bottom + 8);
+  const trayTop = Math.min(tray.top, VH - 70);
+  const bottom = trayTop - 26;
+  const availW = VW - 20, availH = bottom - top;
+  const cs = Math.floor(Math.min(availW / (L.W + 0.5), availH / (L.H + 0.5), 74));
+  G.cs = Math.max(26, cs);
+  G.bx = Math.round((VW - G.cs * L.W) / 2);
+  G.by = Math.round(top + (availH - G.cs * L.H) / 2);
+  renderBoard();
+}
+function renderBoard() {
+  const L = G.L, cs = G.cs, pad = Math.max(9, cs * 0.24), bw = cs * L.W, bh = cs * L.H;
+  const c = G.boardCvs || (G.boardCvs = mkCanvas(1, 1));
+  c.width = Math.round((bw + pad * 2) * DPR); c.height = Math.round((bh + pad * 2) * DPR);
+  const g = c.getContext('2d'); g.setTransform(DPR, 0, 0, DPR, 0, 0);
+  G.pad = pad;
+  // 木框：深漆 + 金线
+  g.beginPath(); g.roundRect ? g.roundRect(0, 0, bw + pad * 2, bh + pad * 2, pad * 0.8) : g.rect(0, 0, bw + pad * 2, bh + pad * 2);
+  const fr = g.createLinearGradient(0, 0, 0, bh + pad * 2); fr.addColorStop(0, '#45121a'); fr.addColorStop(1, '#22070d');
+  g.fillStyle = fr; g.fill();
+  g.strokeStyle = 'rgba(240,194,106,.55)'; g.lineWidth = 1; g.strokeRect(pad * 0.45, pad * 0.45, bw + pad * 1.1, bh + pad * 1.1);
+  g.strokeStyle = 'rgba(240,194,106,.85)'; g.lineWidth = 1.4;
+  const corner = (x, y, sx, sy) => { const u = pad * 0.7; g.beginPath(); g.moveTo(x, y + sy * u * 1.6); g.lineTo(x, y); g.lineTo(x + sx * u * 1.6, y); g.moveTo(x + sx * u * 0.5, y + sy * u * 1.1); g.lineTo(x + sx * u * 0.5, y + sy * u * 0.5); g.lineTo(x + sx * u * 1.1, y + sy * u * 0.5); g.stroke(); };
+  corner(pad * 0.2, pad * 0.2, 1, 1); corner(bw + pad * 1.8, pad * 0.2, -1, 1); corner(pad * 0.2, bh + pad * 1.8, 1, -1); corner(bw + pad * 1.8, bh + pad * 1.8, -1, -1);
+  // 青石
+  g.fillStyle = '#0e0508'; g.fillRect(pad, pad, bw, bh);
+  const rng = mulberry32(L.id * 31 + 7);
+  for (let y = 0; y < L.H; y++) for (let x = 0; x < L.W; x++) {
+    const px = pad + x * cs, py = pad + y * cs, v = rng();
+    const r0 = 40 + v * 10, g0 = 38 + v * 9, b0 = 48 + v * 10;
+    const sg = g.createLinearGradient(px, py, px + cs, py + cs);
+    sg.addColorStop(0, 'rgb(' + (r0 + 8 | 0) + ',' + (g0 + 6 | 0) + ',' + (b0 + 8 | 0) + ')'); sg.addColorStop(1, 'rgb(' + (r0 - 8 | 0) + ',' + (g0 - 8 | 0) + ',' + (b0 - 6 | 0) + ')');
+    g.fillStyle = sg; g.beginPath(); g.roundRect ? g.roundRect(px + 1.2, py + 1.2, cs - 2.4, cs - 2.4, cs * 0.08) : g.rect(px + 1.2, py + 1.2, cs - 2.4, cs - 2.4); g.fill();
+    g.strokeStyle = 'rgba(255,230,210,.07)'; g.lineWidth = 1; g.beginPath(); g.moveTo(px + 3, py + cs - 3); g.lineTo(px + 3, py + 3); g.lineTo(px + cs - 3, py + 3); g.stroke();
+    for (let k = 0; k < 4; k++) { g.fillStyle = 'rgba(255,255,255,' + (rng() * 0.05) + ')'; g.fillRect(px + rng() * cs, py + rng() * cs, 1.2, 1.2); }
+    if (rng() < 0.18) { g.strokeStyle = 'rgba(0,0,0,.25)'; g.beginPath(); const sx = px + rng() * cs, sy = py + rng() * cs; g.moveTo(sx, sy); g.lineTo(sx + (rng() - 0.5) * cs * 0.5, sy + (rng() - 0.5) * cs * 0.5); g.stroke(); }
+  }
+  // 湿润的反光
+  const sh = g.createRadialGradient(pad + bw * 0.5, pad + bh * 0.3, 0, pad + bw * 0.5, pad + bh * 0.5, Math.max(bw, bh) * 0.75);
+  sh.addColorStop(0, 'rgba(255,170,110,.07)'); sh.addColorStop(1, 'rgba(0,0,0,.35)');
+  g.fillStyle = sh; g.fillRect(pad, pad, bw, bh);
+}
+const cellC = (x, y) => [G.bx + (x + 0.5) * G.cs, G.by + (y + 0.5) * G.cs];
+function pieceAt(x, y) { for (const p of G.pieces) if (p.x === x && p.y === y) return p; return null; }
+
+function retrace(silent) {
+  const L = G.L, T = trace(L.W, L.H, G.pieces), t = now();
+  const vis = new Map(), rayEnd = [];
+  const litRay = new Map(); for (const e of T.lit) litRay.set(e.ray, e.p);
+  for (const r of T.rays) {
+    const key = r.x0 + ',' + r.y0 + ',' + r.d + ',' + r.c;
+    let base = t;
+    if (r.parent >= 0) {
+      if (r.kind === 'lan') { const lp = pieceAt(r.x0, r.y0); base = (lp && lp._litAt ? lp._litAt : t) + LANT_DELAY; }
+      else base = rayEnd[r.parent];
+    }
+    const old = G.rayVis.get(key);
+    const start = old !== undefined ? old : Math.max(t, base);
+    const dur = (r.len + (r.end === 'edge' ? 0.5 : 0)) * CELL_MS;
+    r.t0 = start; r.t1 = start + dur; rayEnd[r.i] = r.t1;
+    vis.set(key, start);
+    const lp = litRay.get(r.i);
+    if (lp && !lp._lit) { lp._lit = true; lp._litAt = r.t1 + 40; lp._sounded = !!silent; }
+  }
+  for (const p of G.pieces) if (p.t === 'lan' && p._lit && !T.litSet.has(p)) { p._lit = false; p._unlitAt = t; }
+  G.rayVis = vis; G.T = T;
+  let mx = 0; for (const p of G.pieces) if (p.t === 'lan' && p._lit) mx = Math.max(mx, p._litAt);
+  G.winReadyAt = mx + (RM ? 300 : 700);
+  updateHud();
+}
+function lampVis(p, t) {
+  if (p._lit) return clamp((t - p._litAt) / (RM ? 200 : 520), 0, 1);
+  if (p._unlitAt) return 1 - clamp((t - p._unlitAt) / 300, 0, 1);
+  return 0;
+}
+
+function drawPiece(c, p, x, y, cs, t, opt) {
+  opt = opt || {};
+  const hitCol = opt.hitCol;
+  if (p.t === 'src') {
+    // 灯芯：铜灯座 + 朝光路开口的灯罩
+    const ang = [-Math.PI / 2, 0, Math.PI / 2, Math.PI][p.d];
+    glow(c, x, y, cs * 1.1, 'g', 0.55);
+    c.save(); c.translate(x, y);
+    c.fillStyle = '#2a1408'; c.beginPath(); c.arc(0, 0, cs * 0.34, 0, 7); c.fill();
+    c.strokeStyle = '#c99a48'; c.lineWidth = Math.max(1, cs * 0.03); c.stroke();
+    c.rotate(ang);
+    const bg = c.createLinearGradient(-cs * 0.3, 0, cs * 0.1, 0); bg.addColorStop(0, '#6a3a14'); bg.addColorStop(1, '#f0c470');
+    c.fillStyle = bg; c.beginPath(); c.arc(0, 0, cs * 0.27, Math.PI * 0.55, Math.PI * 1.45); c.lineTo(-cs * 0.06, -cs * 0.1); c.lineTo(-cs * 0.06, cs * 0.1); c.closePath(); c.fill();
+    c.restore();
+    const fl = RM ? 1 : 0.85 + 0.15 * Math.sin(t * 0.017) * Math.sin(t * 0.0071);
+    c.fillStyle = '#f4e6c8'; c.fillRect(x - cs * 0.05, y - cs * 0.02, cs * 0.1, cs * 0.16);
+    const fg = c.createRadialGradient(x, y - cs * 0.07, 0, x, y - cs * 0.07, cs * 0.14 * fl);
+    fg.addColorStop(0, '#ffffff'); fg.addColorStop(0.4, '#ffe08a'); fg.addColorStop(1, 'rgba(255,120,40,0)');
+    c.fillStyle = fg; c.beginPath(); c.ellipse(x, y - cs * 0.08, cs * 0.07 * fl, cs * 0.14 * fl, 0, 0, 7); c.fill();
+    glow(c, x, y - cs * 0.06, cs * 0.5, 'g', 0.9 * fl);
+    return;
+  }
+  if (p.t === 'mir' || p.t === 'spl') {
+    if (p.fixed && !opt.ghost) { // 铜钉底座：位置固定，只能转
+      c.fillStyle = 'rgba(16,4,6,.55)'; c.beginPath(); c.arc(x, y, cs * 0.3, 0, 7); c.fill();
+      c.strokeStyle = 'rgba(201,154,72,.5)'; c.lineWidth = 1; c.stroke();
+      c.fillStyle = '#c99a48';
+      for (let k = 0; k < 4; k++) { const a = k * Math.PI / 2 + Math.PI / 4; c.beginPath(); c.arc(x + Math.cos(a) * cs * 0.3, y + Math.sin(a) * cs * 0.3, Math.max(1.2, cs * 0.03), 0, 7); c.fill(); }
+    } else if (!opt.icon) {
+      c.fillStyle = 'rgba(0,0,0,.35)'; c.beginPath(); c.ellipse(x + cs * 0.04, y + cs * 0.06, cs * 0.3, cs * 0.12, p.o ? 0.785 : -0.785, 0, 7); c.fill();
+    }
+    let rot = p.o ? Math.PI / 4 : -Math.PI / 4;
+    if (p._rotAt && !RM) { const k = clamp((t - p._rotAt) / 180, 0, 1); rot += (1 - easeOut(k)) * (p.o ? -Math.PI / 2 : Math.PI / 2); }
+    if (p._wig && t - p._wig < 360) rot += Math.sin((t - p._wig) / 360 * Math.PI * 4) * 0.12 * (1 - (t - p._wig) / 360);
+    c.save(); c.translate(x, y); c.rotate(rot);
+    const Lh = cs * 0.4, th = cs * (p.t === 'mir' ? 0.075 : 0.1);
+    if (p.t === 'mir') {
+      const mg = c.createLinearGradient(0, -th, 0, th);
+      mg.addColorStop(0, '#5a3010'); mg.addColorStop(0.35, '#f6d488'); mg.addColorStop(0.5, '#fff6d8'); mg.addColorStop(0.7, '#c08a3c'); mg.addColorStop(1, '#4a260c');
+      c.fillStyle = mg; c.beginPath(); c.roundRect ? c.roundRect(-Lh, -th, Lh * 2, th * 2, th) : c.rect(-Lh, -th, Lh * 2, th * 2); c.fill();
+      c.strokeStyle = '#3a1a08'; c.lineWidth = Math.max(0.8, cs * 0.015); c.stroke();
+      c.fillStyle = '#7a4a1c'; c.beginPath(); c.arc(0, 0, th * 1.05, 0, 7); c.fill();
+      c.fillStyle = '#f0c470'; c.beginPath(); c.arc(0, 0, th * 0.5, 0, 7); c.fill();
+      c.strokeStyle = 'rgba(255,255,255,.75)'; c.lineWidth = Math.max(0.8, cs * 0.012); c.beginPath(); c.moveTo(-Lh * 0.85, -th * 0.4); c.lineTo(-Lh * 0.25, -th * 0.4); c.moveTo(Lh * 0.3, -th * 0.4); c.lineTo(Lh * 0.8, -th * 0.4); c.stroke();
+    } else {
+      c.fillStyle = '#4a160c'; c.fillRect(-Lh, -th, Lh * 2, th * 2);
+      c.fillStyle = 'rgba(240,214,160,.32)'; c.fillRect(-Lh + th * 0.4, -th * 0.6, Lh * 2 - th * 0.8, th * 1.2);
+      c.strokeStyle = '#2a0a06'; c.lineWidth = Math.max(0.8, cs * 0.016);
+      const n = 6; for (let k = 1; k < n; k++) { const xx = -Lh + Lh * 2 * k / n; c.beginPath(); c.moveTo(xx, -th); c.lineTo(xx, th); c.stroke(); }
+      c.beginPath(); c.moveTo(-Lh, 0); c.lineTo(Lh, 0); c.stroke();
+      c.strokeStyle = 'rgba(240,194,106,.85)'; c.lineWidth = Math.max(0.8, cs * 0.012); c.strokeRect(-Lh, -th, Lh * 2, th * 2);
+    }
+    c.restore();
+    if (hitCol) glow(c, x, y, cs * 0.55, hitCol, 0.55);
+    return;
+  }
+  if (p.t === 'gls') {
+    const r = cs * 0.27, col = COL[p.c];
+    if (!p.fixed && !opt.icon && !opt.ghost) { c.fillStyle = 'rgba(0,0,0,.3)'; c.beginPath(); c.ellipse(x + cs * 0.03, y + cs * 0.06, r, r * 0.5, 0, 0, 7); c.fill(); }
+    if (p.fixed && !opt.ghost) { c.strokeStyle = 'rgba(201,154,72,.55)'; c.lineWidth = 1; c.beginPath(); c.arc(x, y, r * 1.25, 0, 7); c.stroke(); }
+    if (hitCol) glow(c, x, y, cs * 0.75, p.c, 0.7);
+    c.beginPath(); for (let k = 0; k < 6; k++) { const a = k / 6 * 6.283 + Math.PI / 6; k ? c.lineTo(x + Math.cos(a) * r, y + Math.sin(a) * r) : c.moveTo(x + Math.cos(a) * r, y + Math.sin(a) * r); } c.closePath();
+    const gg = c.createRadialGradient(x - r * 0.3, y - r * 0.4, 0, x, y, r * 1.1);
+    gg.addColorStop(0, 'rgba(255,255,255,.85)'); gg.addColorStop(0.3, hexA(col, 0.85)); gg.addColorStop(1, hexA(col, 0.45));
+    c.fillStyle = gg; c.fill(); c.strokeStyle = hexA(col, 1); c.lineWidth = Math.max(1, cs * 0.025); c.stroke();
+    c.strokeStyle = 'rgba(255,255,255,.35)'; c.lineWidth = 1;
+    c.beginPath(); c.moveTo(x - r * 0.5, y - r * 0.1); c.lineTo(x, y - r * 0.55); c.lineTo(x + r * 0.5, y - r * 0.1); c.stroke();
+    return;
+  }
+  if (p.t === 'scr') {
+    const w = cs * 0.8, h = cs * 0.62, x0 = x - w / 2, y0 = y - h / 2 - cs * 0.02;
+    c.fillStyle = 'rgba(0,0,0,.35)'; c.fillRect(x0 + 2, y0 + h - 2, w, cs * 0.08);
+    const pw = w / 3;
+    for (let k = 0; k < 3; k++) {
+      const px = x0 + k * pw, skew = k === 1 ? 0 : cs * 0.03;
+      c.beginPath(); c.moveTo(px, y0 + skew); c.lineTo(px + pw, y0 + (k === 0 ? 0 : skew) + (k === 2 ? -skew : 0)); c.lineTo(px + pw, y0 + h); c.lineTo(px, y0 + h); c.closePath();
+      const sg = c.createLinearGradient(px, y0, px + pw, y0 + h); sg.addColorStop(0, k === 1 ? '#3e1018' : '#2a0910'); sg.addColorStop(1, '#16040a');
+      c.fillStyle = sg; c.fill();
+      c.strokeStyle = 'rgba(217,164,65,.75)'; c.lineWidth = Math.max(0.8, cs * 0.018); c.stroke();
+    }
+    c.strokeStyle = 'rgba(217,164,65,.35)'; c.lineWidth = Math.max(0.6, cs * 0.012);
+    c.beginPath(); c.moveTo(x0 + pw * 0.2, y0 + h * 0.7); c.quadraticCurveTo(x0 + pw * 0.9, y0 + h * 0.25, x0 + pw * 1.6, y0 + h * 0.6); c.quadraticCurveTo(x0 + pw * 2.2, y0 + h * 0.3, x0 + pw * 2.8, y0 + h * 0.65); c.stroke();
+    c.fillStyle = 'rgba(217,164,65,.4)'; c.beginPath(); c.arc(x0 + pw * 2.3, y0 + h * 0.28, cs * 0.04, 0, 7); c.fill();
+    c.fillStyle = '#c99a48'; c.fillRect(x0 + cs * 0.02, y0 + h, cs * 0.06, cs * 0.05); c.fillRect(x0 + w - cs * 0.08, y0 + h, cs * 0.06, cs * 0.05);
+    return;
+  }
+}
+function drawBoardLamp(c, p, t) {
+  const [x, y] = cellC(p.x, p.y), cs = G.cs, v = lampVis(p, t);
+  // 出光方向的小金角
+  for (const d of p.dirs) {
+    const ex = x + DX[d] * cs * 0.43, ey = y + DY[d] * cs * 0.43, a = [-Math.PI / 2, 0, Math.PI / 2, Math.PI][d];
+    c.save(); c.translate(ex, ey); c.rotate(a);
+    c.fillStyle = v > 0.5 ? '#fff0c0' : '#e8b85a'; c.strokeStyle = 'rgba(30,6,8,.85)'; c.lineWidth = 1;
+    c.beginPath(); c.moveTo(cs * 0.06, 0); c.lineTo(-cs * 0.045, -cs * 0.075); c.lineTo(-cs * 0.045, cs * 0.075); c.closePath(); c.stroke(); c.fill();
+    c.restore();
+  }
+  const sw = RM ? 0 : Math.sin(t * 0.0014 + p.x * 1.7 + p.y) * 0.05;
+  if (p.main) {
+    const mine = null;
+    const type = mine ? mine.type : G.L.lamp, pal = mine ? specPal(mine) : PAL[LAMPS[type].pal];
+    c.strokeStyle = v > 0.5 ? 'rgba(255,214,128,.9)' : 'rgba(240,194,106,.45)'; c.lineWidth = 1.2;
+    c.beginPath(); c.arc(x, y, cs * 0.47, 0, 7); c.stroke();
+    if (v > 0.01) { c.save(); c.globalCompositeOperation = 'lighter'; c.strokeStyle = 'rgba(255,190,90,' + (0.4 * v) + ')'; c.lineWidth = 3; c.beginPath(); c.arc(x, y, cs * 0.47, 0, 7); c.stroke(); c.restore(); }
+    drawLamp(c, type, x, y - cs * 0.02, cs * 0.6, v, pal, t, { sway: sw * 0.5, tsway: sw, glowR: 1.9, pattern: mine ? mine.pattern : null, motif: true });
+  } else {
+    const pal = PAL[p.c];
+    drawLamp(c, 'round', x, y - cs * 0.08, cs * 0.52, v, pal, t, { sway: sw, tsway: sw, glowR: 1.7, tlen: 0.6, tasselCol: p.c === 'g' ? '#c8322a' : COL[p.c] });
+    if (p.c !== 'g') { c.fillStyle = COL[p.c]; c.beginPath(); c.arc(x, y - cs * 0.08, cs * 0.06, 0, 7); c.fill(); c.strokeStyle = 'rgba(255,255,255,.6)'; c.lineWidth = 1; c.stroke(); }
+  }
+}
+function drawBeams(c, t) {
+  const T = G.T; if (!T) return;
+  const cs = G.cs;
+  const segs = [];
+  for (const r of T.rays) {
+    if (t < r.t0) continue;
+    const full = r.len + (r.end === 'edge' ? 0.5 : 0) - (r.end === 'piece' && r.hit && r.hit.t === 'scr' ? 0.32 : 0) - (r.end === 'piece' && r.hit && r.hit.t === 'lan' ? 0.2 : 0);
+    const f = r.t1 > r.t0 ? clamp((t - r.t0) / (r.t1 - r.t0), 0, 1) : 1;
+    const [x0, y0] = cellC(r.x0, r.y0), len = full * f * cs;
+    segs.push([r, x0, y0, x0 + DX[r.d] * len, y0 + DY[r.d] * len, f]);
+  }
+  c.save(); c.globalCompositeOperation = 'lighter'; c.lineCap = 'round';
+  const flick = RM ? 1 : 0.92 + 0.08 * Math.sin(t * 0.006);
+  const passes = [[0.5, 0.06], [0.24, 0.16], [0.1, 0.42], [0.035, 1]];
+  for (const [wk, a] of passes) {
+    for (const [r, x0, y0, x1, y1] of segs) {
+      c.strokeStyle = hexA(wk < 0.05 ? BEAM_CORE[r.c] : COL[r.c], a * flick);
+      c.lineWidth = Math.max(1, cs * wk);
+      c.beginPath(); c.moveTo(x0, y0); c.lineTo(x1, y1); c.stroke();
+    }
+  }
+  // 光尘
+  if (!RM) {
+    for (const [r, x0, y0, x1, y1] of segs) {
+      const L2 = Math.hypot(x1 - x0, y1 - y0); if (L2 < 4) continue;
+      const n = Math.ceil(L2 / cs * 1.6), px = -DY[r.d], py = DX[r.d];
+      for (let m = 0; m < n; m++) {
+        const h = hash1(r.x0 * 131 + r.y0 * 17 + r.d * 7 + m * 1013), h2 = hash1(m * 77 + r.d * 3 + r.x0);
+        const u = (h + t * 0.00006 * (0.5 + h2)) % 1;
+        const off = Math.sin(t * 0.0012 + h * 40) * cs * 0.14;
+        const tw = 0.35 + 0.65 * Math.max(0, Math.sin(t * 0.004 + h2 * 50));
+        c.fillStyle = hexA(BEAM_CORE[r.c], 0.55 * tw);
+        c.beginPath(); c.arc(x0 + (x1 - x0) * u + px * off, y0 + (y1 - y0) * u + py * off, Math.max(0.8, cs * 0.022), 0, 7); c.fill();
+      }
+    }
+  }
+  c.restore();
+  // 光照到的元件
+  G.hitCol = new Map();
+  for (const [r, , , , , f] of segs) if (f >= 1 && r.hit) G.hitCol.set(r.hit, r.c);
+}
+function drawBoard(c, t) {
+  const L = G.L, cs = G.cs;
+  c.drawImage(G.boardCvs, G.bx - G.pad, G.by - G.pad, cs * L.W + G.pad * 2, cs * L.H + G.pad * 2);
+  // 地上的灯影
+  for (const p of G.pieces) if (p.t === 'lan') { const v = lampVis(p, t); if (v > 0.01) { const [x, y] = cellC(p.x, p.y); glow(c, x, y + cs * 0.3, cs * 1.5, PAL[p.main ? 'g' : p.c].glow, 0.32 * v); } }
+  // 选中工具时，空格提示
+  if (G.sel >= 0 && !G.won) {
+    c.strokeStyle = 'rgba(255,214,128,.22)'; c.setLineDash([3, 4]); c.lineWidth = 1;
+    for (let y = 0; y < L.H; y++) for (let x = 0; x < L.W; x++) if (!pieceAt(x, y)) { c.strokeRect(G.bx + x * cs + cs * 0.16, G.by + y * cs + cs * 0.16, cs * 0.68, cs * 0.68); }
+    c.setLineDash([]);
+  }
+  drawBeams(c, t);
+  for (const p of G.pieces) {
+    if (p.t === 'lan' || (G.drag && G.drag.piece === p && G.drag.moved)) continue;
+    const [x, y] = cellC(p.x, p.y);
+    drawPiece(c, p, x, y, cs, t, { hitCol: G.hitCol && G.hitCol.get(p) });
+  }
+  for (const p of G.pieces) if (p.t === 'lan') drawBoardLamp(c, p, t);
+  // 提示闪光
+  if (G.flash && t - G.flash.t < 1200) {
+    const k = (t - G.flash.t) / 1200, [x, y] = cellC(G.flash.x, G.flash.y);
+    c.strokeStyle = 'rgba(255,224,150,' + (1 - k) + ')'; c.lineWidth = 2; c.beginPath(); c.arc(x, y, cs * (0.4 + k * 0.4), 0, 7); c.stroke();
+  }
+  // 拖动中的元件
+  if (G.drag && G.drag.moved) {
+    const d = G.drag, cell = cellFromPt(d.px, d.py);
+    if (cell && !pieceAt(cell[0], cell[1])) { c.strokeStyle = 'rgba(255,214,128,.8)'; c.lineWidth = 1.5; c.strokeRect(G.bx + cell[0] * cs + 3, G.by + cell[1] * cs + 3, cs - 6, cs - 6); }
+    c.globalAlpha = 0.85; drawPiece(c, d.piece, d.px, d.py - cs * 0.3, cs * 1.1, t, { ghost: true }); c.globalAlpha = 1;
+  }
+}
+function cellFromPt(px, py) {
+  const L = G.L; if (!L) return null;
+  const x = Math.floor((px - G.bx) / G.cs), y = Math.floor((py - G.by) / G.cs);
+  if (x < 0 || y < 0 || x >= L.W || y >= L.H) return null;
+  return [x, y];
+}
+
+/* ================= 游戏流程 ================= */
+const LEVELS = [];
+for (let ch = 0; ch < 3; ch++) for (let i = 0; i < 18; i++) LEVELS.push(genLevel(ch, i));
+const CH_NAME = ['元宵', '七夕', '中秋'];
+const CH_LINE = ['正月十五，满街花灯。从街口一盏素纸灯开始，把光引进每一条巷子。', '七月初七，河边放灯。琉璃把光染成朱、翠、青，彩灯只认同色的光。', '八月十五，提灯赏月。街更长，灯更多，一束光要分给整条街。'];
+const NUM = ['一', '二', '三', '四', '五', '六', '七', '八', '九', '十', '十一', '十二', '十三', '十四', '十五', '十六', '十七', '十八'];
+
+function startLevel(id) {
+  const L = LEVELS[id]; if (!L) return;
+  G.L = L; G.ops = 0; G.hints = 0; G.sel = -1; G.won = false; G.cardShown = false; G.drag = null; G.flash = null; G.entered = now();
+  G.useMine = !!Save.custom;
+  G.pieces = clonePieces(L.init);
+  G.tray = L.tray.map(t => Object.assign({}, t));
+  G.rayVis = new Map(); G.burst = 0;
+  FX.walkers = []; FX.rockets = []; FX.skyLamps = [];
+  if (SCENE.ch !== L.ch || !SCENE.cvs) renderScene(L.ch);
+  for (const l of SCENE.lamps) { l.on = false; l.tc = -1e9; }
+  $('#gTitle').textContent = CH_NAME[L.ch] + ' · 第' + NUM[L.i] + '盏';
+  $('#tip').textContent = L.tip;
+  $('#tray').classList.remove('won', 'away');
+  showScreen('game');
+  buildTools();
+  computeBoard();
+  retrace(true);
+  // 开局：已被照亮的灯悄悄亮起，不算旋律
+  G.burst = 0;
+}
+function updateHud() {
+  if (!G.L || !G.T) return;
+  const T = G.T;
+  $('#gSub').innerHTML = G.L.name + ' · 花灯 <em>' + T.lit.length + '</em> / ' + T.total;
+  $('#ops').textContent = '已动 ' + G.ops + ' 手';
+  // 背景街灯随进度亮起
+  const t = now(), N = SCENE.lamps.length;
+  if (!G.won) {
+    const n = Math.floor(N * 0.12 + N * 0.55 * (T.lit.length / Math.max(1, T.total)));
+    let k = 0;
+    for (const l of SCENE.lamps) { if (l.rank < n) { if (!l.on) setLampOn(l, true, t, (k++) * 50 + 300); } else setLampOn(l, false, t); }
+  }
+}
+const TOOL_NAME = { mir: '铜镜', spl: '窗棂', gls: '琉璃' };
+function trayGroups() {
+  const groups = [];
+  for (const t of G.tray) { const k = t.t + (t.c || ''); let g = groups.find(x => x.k === k); if (!g) groups.push(g = { k, t: t.t, c: t.c, n: 0 }); g.n++; }
+  return groups;
+}
+function buildTools() {
+  const box = $('#tools'); box.innerHTML = '';
+  const groups = trayGroups(), L = G.L;
+  // 这一关原本有哪些工具（用完也保留占位）
+  const all = []; for (const t of L.tray) { const k = t.t + (t.c || ''); if (!all.find(x => x.k === k)) all.push({ k, t: t.t, c: t.c }); }
+  if (!all.length) { const s = document.createElement('span'); s.className = 'none'; s.textContent = '这一程不缺元件，转一转就好'; box.appendChild(s); }
+  all.forEach(a => {
+    const g = groups.find(x => x.k === a.k), n = g ? g.n : 0;
+    const b = document.createElement('button');
+    b.className = 'tool' + (n ? '' : ' empty') + (G.sel >= 0 && G.selKey === a.k ? ' sel' : '');
+    b.setAttribute('aria-label', TOOL_NAME[a.t] + (a.c ? '（' + ({ r: '朱', j: '翠', b: '青' })[a.c] + '）' : '') + ' ×' + n);
+    const cvs = document.createElement('canvas'); cvs.width = 54 * DPR; cvs.height = 54 * DPR; b.appendChild(cvs);
+    const g2 = cvs.getContext('2d'); g2.setTransform(DPR, 0, 0, DPR, 0, 0);
+    drawPiece(g2, { t: a.t, c: a.c, o: 0 }, 27, 27, 50, 0, { icon: true });
+    if (n) { const cnt = document.createElement('span'); cnt.className = 'c'; cnt.textContent = n; b.appendChild(cnt); }
+    b.addEventListener('pointerdown', e => trayDown(e, a.k, n));
+    box.appendChild(b);
+  });
+}
+function takeFromTray(k) { const i = G.tray.findIndex(t => t.t + (t.c || '') === k); if (i < 0) return null; return G.tray.splice(i, 1)[0]; }
+function placeFromTray(k, x, y) {
+  const it = takeFromTray(k); if (!it) return false;
+  const p = { t: it.t, x, y }; if (it.t === 'gls') p.c = it.c; else p.o = 0;
+  G.pieces.push(p); G.ops++; tick('place');
+  addSparks(...cellC(x, y), 'g', 8, G.cs * 0.8);
+  if (!G.tray.find(t => t.t + (t.c || '') === k)) G.sel = -1;
+  buildTools(); retrace();
+  return true;
+}
+function returnToTray(p) {
+  G.pieces = G.pieces.filter(q => q !== p);
+  G.tray.push(p.t === 'gls' ? { t: 'gls', c: p.c } : { t: p.t });
+  G.ops++; tick('back'); buildTools(); retrace();
+}
+function trayDown(e, k, n) {
+  auInit();
+  if (G.won || !n) return;
+  e.preventDefault();
+  G.drag = { fromTray: k, piece: Object.assign({ x: -1, y: -1, o: 0 }, (() => { const it = G.tray.find(t => t.t + (t.c || '') === k); return { t: it.t, c: it.c }; })()), sx: e.clientX, sy: e.clientY, px: e.clientX, py: e.clientY, moved: false, id: e.pointerId };
+}
+function onDown(e) {
+  auInit();
+  if (curScreen !== 'game' || !G.L || G.won) return;
+  const cell = cellFromPt(e.clientX, e.clientY);
+  if (!cell) { if (G.sel >= 0) { G.sel = -1; buildTools(); } return; }
+  const p = pieceAt(cell[0], cell[1]);
+  if (!p) {
+    if (G.sel >= 0) placeFromTray(G.selKey, cell[0], cell[1]);
+    return;
+  }
+  G.drag = { piece: p, sx: e.clientX, sy: e.clientY, px: e.clientX, py: e.clientY, moved: false, id: e.pointerId };
+}
+function onMove(e) {
+  const d = G.drag; if (!d || e.pointerId !== d.id) return;
+  d.px = e.clientX; d.py = e.clientY;
+  if (!d.moved && Math.hypot(d.px - d.sx, d.py - d.sy) > 9) {
+    if (d.fromTray || !d.piece.fixed && (d.piece.t === 'mir' || d.piece.t === 'spl' || d.piece.t === 'gls')) d.moved = true;
+    else if (d.piece.fixed) { d.piece._wig = now(); G.drag = null; }
+    else G.drag = null;
+  }
+}
+function onUp(e) {
+  const d = G.drag; if (!d || e.pointerId !== d.id) return;
+  G.drag = null;
+  if (G.won) return;
+  const cell = cellFromPt(e.clientX, e.clientY);
+  if (d.fromTray) {
+    if (d.moved) { if (cell && !pieceAt(cell[0], cell[1])) placeFromTray(d.fromTray, cell[0], cell[1]); }
+    else { // 轻点：选中/取消
+      if (G.sel >= 0 && G.selKey === d.fromTray) G.sel = -1; else { G.sel = 1; G.selKey = d.fromTray; }
+      tick('sel'); buildTools();
+    }
+    return;
+  }
+  const p = d.piece;
+  if (d.moved) {
+    if (!cell) { returnToTray(p); return; }
+    const q = pieceAt(cell[0], cell[1]);
+    if (!q && (cell[0] !== p.x || cell[1] !== p.y)) { p.x = cell[0]; p.y = cell[1]; G.ops++; tick('place'); retrace(); }
+    return;
+  }
+  // 轻点
+  if (p.t === 'mir' || p.t === 'spl') { p.o ^= 1; p._rotAt = now(); G.ops++; tick('rot'); retrace(); }
+  else if (p.t === 'gls') { p._wig = now(); if (!p.fixed) toast('琉璃不用转，拖动可挪位，拖出街外即收回。'); }
+  else if (p.t === 'lan' && p._lit) { pluck(pentaFreq(3 + (p.x + p.y) % 6), 0.16); addSparks(...cellC(p.x, p.y), p.main ? 'g' : p.c, 10, G.cs); }
+  else if (p.t === 'src') { pluck(pentaFreq(0), 0.14); addSparks(...cellC(p.x, p.y), 'g', 8, G.cs * 0.6); }
+}
+let toastTimer = 0;
+function toast(msg) {
+  const tip = $('#tip'); const prev = G.L ? G.L.tip : '';
+  tip.textContent = msg; clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => { tip.textContent = prev; }, 2600);
+}
+function doHint() {
+  if (G.won || !G.L) return;
+  auInit();
+  const L = G.L, key = p => p.x + ',' + p.y;
+  const sol = new Map(L.sol.map(p => [key(p), p]));
+  const same = (a, b) => a.t === b.t && (a.t !== 'gls' || a.c === b.c);
+  const fl = (p) => { G.flash = { x: p.x, y: p.y, t: now() }; G.ops++; G.hints++; };
+  // 1. 固定元件转错了
+  for (const p of G.pieces) if (p.fixed && (p.t === 'mir' || p.t === 'spl')) { const s = sol.get(key(p)); if (s && s.o !== p.o) { p.o = s.o; p._rotAt = now(); fl(p); tick('rot'); retrace(); return; } }
+  // 2. 该摆的元件
+  const initKeys = new Set(L.init.map(key));
+  for (const s of L.sol) {
+    if (initKeys.has(key(s))) continue;
+    const cur = pieceAt(s.x, s.y);
+    if (cur && same(cur, s)) { if (s.o !== undefined && cur.o !== s.o) { cur.o = s.o; cur._rotAt = now(); fl(cur); tick('rot'); retrace(); return; } continue; }
+    if (cur && !cur.fixed && cur.t !== 'lan' && cur.t !== 'src' && cur.t !== 'scr') { returnToTray(cur); G.flash = { x: s.x, y: s.y, t: now() }; G.hints++; return; }
+    if (cur) continue;
+    const k = s.t + (s.c || '');
+    if (!G.tray.find(t => t.t + (t.c || '') === k)) {
+      const stray = G.pieces.find(q => !q.fixed && same(q, s) && !(sol.get(key(q)) && same(sol.get(key(q)), q)));
+      if (!stray) continue;
+      G.pieces = G.pieces.filter(q => q !== stray); G.tray.push(stray.t === 'gls' ? { t: 'gls', c: stray.c } : { t: stray.t });
+    }
+    G.hints++;
+    placeFromTray(k, s.x, s.y);
+    const np = pieceAt(s.x, s.y); if (np && s.o !== undefined) np.o = s.o;
+    G.flash = { x: s.x, y: s.y, t: now() }; retrace(); return;
+  }
+  // 3. 多余的元件收回
+  for (const p of G.pieces.slice()) if (!p.fixed && (p.t === 'mir' || p.t === 'spl' || p.t === 'gls')) { const s = sol.get(key(p)); if (!s || !same(s, p)) { G.hints++; returnToTray(p); return; } }
+}
+function resetLevel() { if (G.L) { tick('back'); startLevel(G.L.id); } }
+
+function celebrate() {
+  const t = now(), L = G.L;
+  G.won = true; G.celT = t; G.sel = -1;
+  const st = starsFor(G.ops, L.par);
+  G.stars = st;
+  const prevStars = starsOf(L.id);
+  Save.stars[L.id] = Math.max(prevStars, st);
+  G.newLamp = !Save.seen[L.lamp]; Save.seen[L.lamp] = true;
+  persist();
+  $('#tray').classList.add('won');
+  for (const l of SCENE.lamps) setLampOn(l, true, t, 200 + l.rank * (RM ? 8 : 45));
+  // 收尾的一串旋律
+  [0, 2, 4, 5, 7].forEach((s, k) => pluck(pentaFreq(s + 5), 0.12, 0.3 + k * 0.14));
+  for (let k = 0; k < 6; k++) spawnWalker(t, k % 2 ? -1 : 1, { delay: 300 + k * 650 + Math.random() * 300 });
+  if (!RM) for (let k = 0; k < 7; k++) launchFirework(t, 600 + k * 520 + Math.random() * 200);
+  launchSkyLamps(t + 400, RM ? 4 : L.ch === 2 ? 14 : 8);
+  addSparks(...cellC(L.mainXY[0], L.mainXY[1]), 'g', 30, G.cs * 2);
+}
+function showCard(mode, type) {
+  const m = $('#mCard'); m.classList.remove('hidden', 'fade');
+  const L = G.L, lt = type || L.lamp, info = LAMPS[lt];
+  $('#cName').textContent = info.name;
+  $('#cDesc').textContent = info.desc;
+  const inGame = mode === 'win';
+  $('#cLbl').textContent = inGame ? (G.newLamp ? '灯谱 · 新收一盏' : '灯谱') : '灯谱';
+  $('#cWhere').textContent = inGame ? CH_NAME[L.ch] + ' · 第' + NUM[L.i] + '盏 · ' + L.name : '';
+  $('#cStars').style.display = inGame ? '' : 'none';
+  [...$('#cStars').children].forEach((el, i) => el.classList.toggle('on', i < (G.stars || 0)));
+  $('#cMine').textContent = inGame && Save.custom ? '街口还挂着你的灯：「' + Save.custom.name + '」，也一起亮了。' : '';
+  $('#cLook').style.display = inGame ? '' : 'none';
+  $('#cList').style.display = inGame ? '' : 'none';
+  $('#cNext').textContent = inGame ? (L.id + 1 < LEVELS.length ? '下一盏' : '回街口') : '合上';
+  CARD.type = lt; CARD.mode = mode; CARD.t0 = now();
+  sizeCardCanvas();
+}
+const CARD = { type: null, mode: null, t0: 0 };
+function sizeCardCanvas() {
+  const c = $('#cCanvas'), r = c.getBoundingClientRect();
+  c.width = Math.max(1, r.width * DPR | 0); c.height = Math.max(1, r.height * DPR | 0);
+}
+function drawCard(t) {
+  if ($('#mCard').classList.contains('hidden')) return;
+  const c = $('#cCanvas'), g = c.getContext('2d'), w = c.width / DPR, h = c.height / DPR;
+  g.setTransform(DPR, 0, 0, DPR, 0, 0); g.clearRect(0, 0, w, h);
+  const p = clamp((t - CARD.t0) / 900, 0, 1), info = LAMPS[CARD.type];
+  const rg = g.createRadialGradient(w / 2, h * 0.5, 0, w / 2, h * 0.5, Math.min(w, h) * 0.5); rg.addColorStop(0, 'rgba(255,160,80,' + 0.18 * p + ')'); rg.addColorStop(1, 'rgba(255,160,80,0)');
+  g.fillStyle = rg; g.fillRect(0, 0, w, h);
+  const sw = RM ? 0 : Math.sin(t * 0.0012) * 0.04;
+  const s = h * 0.56;
+  const big = ['round', 'ball', 'gong', 'zouma', 'sha', 'kongming', 'pomelo'].indexOf(CARD.type) >= 0;
+  drawLamp(g, CARD.type, w / 2, h * (big ? 0.44 : 0.5), s, easeOut(p), PAL[info.pal], t, { sway: sw, tsway: sw, string: big, stringLen: 1.3, glowR: 1.7, motif: true });
+}
+
+/* ================= 屏幕切换 ================= */
+let curScreen = 'title';
+const TITLE = { t0: 0 };
+function showScreen(name) {
+  curScreen = name;
+  for (const [n, id] of [['title', '#scrTitle'], ['select', '#scrSelect'], ['game', '#scrGame']]) $(id).classList.toggle('hidden', n !== name);
+  if (name !== 'game') { G.L = null; }
+  if (name === 'title') { TITLE.t0 = now(); if (SCENE.ch !== 0 || !SCENE.cvs) renderScene(0); for (const l of SCENE.lamps) { l.on = false; l.tc = -1e9; } }
+  if (name === 'select') { buildSelect(); }
+}
+let selCh = 0;
+function nextOpenLevel() { for (let i = 0; i < LEVELS.length; i++) if (!starsOf(i)) return i; return 0; }
+function isOpen(id) { const i = id % 18; return i === 0 || starsOf(id) > 0 || starsOf(id - 1) > 0; }
+function buildSelect() {
+  if (SCENE.ch !== selCh || !SCENE.cvs) renderScene(selCh);
+  const t = now();
+  for (const l of SCENE.lamps) { if (!l.on) setLampOn(l, true, t, l.rank * (RM ? 5 : 25)); }
+  let total = 0; for (let i = 0; i < LEVELS.length; i++) if (starsOf(i)) total++;
+  $('#selCount').textContent = '已点亮 ' + total + ' / ' + LEVELS.length;
+  const tabs = $('#tabs'); tabs.innerHTML = '';
+  CH_NAME.forEach((n, ch) => {
+    let done = 0; for (let i = 0; i < 18; i++) if (starsOf(ch * 18 + i)) done++;
+    const b = document.createElement('button'); b.className = 'tab' + (ch === selCh ? ' on' : '');
+    b.innerHTML = '<b>' + n + '</b><span>' + done + ' / 18</span>';
+    b.addEventListener('click', () => { auInit(); tick('sel'); selCh = ch; buildSelect(); });
+    tabs.appendChild(b);
+  });
+  $('#chLine').textContent = CH_LINE[selCh];
+  const grid = $('#lvGrid'); grid.innerHTML = '';
+  let nextMarked = false;
+  for (let i = 0; i < 18; i++) {
+    const id = selCh * 18 + i, st = starsOf(id), open = isOpen(id);
+    const b = document.createElement('button');
+    let cls = 'lv' + (st ? ' done' : '') + (open ? '' : ' lock');
+    if (open && !st && !nextMarked) { cls += ' next'; nextMarked = true; }
+    b.className = cls;
+    b.setAttribute('aria-label', CH_NAME[selCh] + '第' + (i + 1) + '盏 ' + LEVELS[id].name);
+    b.innerHTML = '<span class="n">' + (i + 1) + '</span><span class="nm">' + LEVELS[id].name + '</span><span class="st">' + [0, 1, 2].map(k => '<i class="' + (k < st ? 'on' : '') + '"></i>').join('') + '</span>';
+    b.addEventListener('click', () => { auInit(); if (!open) { tick('back'); b.animate && b.animate([{ transform: 'translateX(0)' }, { transform: 'translateX(-4px)' }, { transform: 'translateX(4px)' }, { transform: 'translateX(0)' }], { duration: 260 }); return; } tick('sel'); startLevel(id); });
+    grid.appendChild(b);
+  }
+}
+function buildAlbum() {
+  const grid = $('#albGrid'); grid.innerHTML = '';
+  let n = 0;
+  LAMP_ORDER.forEach(type => {
+    const got = !!Save.seen[type]; if (got) n++;
+    const d = document.createElement('button'); d.className = 'alb' + (got ? '' : ' lock');
+    const c = document.createElement('canvas'); d.appendChild(c);
+    const s = document.createElement('span'); s.textContent = got ? LAMPS[type].name : '未收'; d.appendChild(s);
+    grid.appendChild(d);
+    requestAnimationFrame(() => {
+      const r = c.getBoundingClientRect(); c.width = Math.max(1, r.width * DPR | 0); c.height = Math.max(1, r.height * DPR | 0);
+      const g = c.getContext('2d'); g.setTransform(DPR, 0, 0, DPR, 0, 0);
+      if (!got) g.globalAlpha = 0.35;
+      drawLamp(g, type, r.width / 2, r.height * 0.5, r.height * 0.55, got ? 1 : 0, PAL[LAMPS[type].pal], 0, { glowR: 1.3, motif: true });
+    });
+    d.addEventListener('click', () => { if (!got) return; tick('sel'); $('#mAlbum').classList.add('hidden'); showCard('view', type); CARD.back = 'album'; });
+  });
+  $('#albCount').textContent = '已收 ' + n + ' / ' + LAMP_ORDER.length + ' 种';
+}
+const DES = { spec: null, t0: 0 };
+function openDesigner() {
+  $('#mDesign').classList.remove('hidden');
+  DES.spec = Save.custom ? Object.assign({}, Save.custom) : null;
+  $('#dInput').value = Save.custom ? Save.custom.text : '';
+  $('#dName').textContent = Save.custom ? Save.custom.name : '你的灯';
+  $('#dRemove').style.display = Save.custom ? '' : 'none';
+  DES.t0 = now();
+  const c = $('#dCanvas'), r = c.getBoundingClientRect(); c.width = Math.max(1, r.width * DPR | 0); c.height = Math.max(1, r.height * DPR | 0);
+}
+function drawDesigner(t) {
+  if ($('#mDesign').classList.contains('hidden')) return;
+  const c = $('#dCanvas'), g = c.getContext('2d'), w = c.width / DPR, h = c.height / DPR;
+  g.setTransform(DPR, 0, 0, DPR, 0, 0); g.clearRect(0, 0, w, h);
+  const sp = DES.spec, p = sp ? easeOut(clamp((t - DES.t0) / 800, 0, 1)) : 0;
+  const sw = RM ? 0 : Math.sin(t * 0.0012) * 0.04;
+  if (sp) drawLamp(g, sp.type, w / 2, h * 0.47, h * 0.52, p, specPal(sp), t, { pattern: sp.pattern, sway: sw, tsway: sw, string: true, glowR: 1.7, motif: true });
+  else { g.globalAlpha = 0.5; drawLamp(g, 'round', w / 2, h * 0.47, h * 0.52, 0, PAL.cream, t, { string: true }); g.globalAlpha = 1; }
+}
+
+/* ================= 主循环 ================= */
+function resize() {
+  VW = innerWidth; VH = innerHeight; DPR = Math.min(window.devicePixelRatio || 1, 2.5);
+  cv.width = Math.round(VW * DPR); cv.height = Math.round(VH * DPR);
+  const keep = SCENE.lamps.map(l => [l.on, l.tc]);
+  renderScene(curScreen === 'select' ? selCh : G.L ? G.L.ch : SCENE.ch);
+  SCENE.lamps.forEach((l, i) => { if (keep[i]) { l.on = keep[i][0]; l.tc = keep[i][1]; } });
+  if (G.L) { buildTools(); computeBoard(); }
+  if (!$('#mCard').classList.contains('hidden')) sizeCardCanvas();
+}
+function frame() {
+  const t = now();
+  ctx.setTransform(DPR, 0, 0, DPR, 0, 0);
+  ctx.drawImage(SCENE.cvs, 0, 0, VW, VH);
+  if (curScreen === 'title') {
+    // 一盏灯被点亮，光沿街一盏盏传开
+    const el = t - TITLE.t0;
+    for (const l of SCENE.lamps) { const at = (RM ? 200 : 700) + l.rank * (RM ? 10 : 95); if (el >= at && !l.on) setLampOn(l, true, t); }
+    if (t > FX.nextWalker && !RM) { spawnWalker(t, Math.random() < 0.5 ? 1 : -1); FX.nextWalker = t + 3500 + Math.random() * 3000; }
+  }
+  drawSceneLamps(ctx, t, Save.custom);
+  if (curScreen === 'title' && !RM) { // 传光的火星
+    const el = t - TITLE.t0, ls = SCENE.lamps;
+    for (let i = 1; i < ls.length; i++) {
+      const at = 700 + i * 95, k = (el - (at - 95)) / 95;
+      if (k > 0 && k < 1) { const a = ls[i - 1], b = ls[i]; glow(ctx, lerp(a.x, b.x, k), lerp(a.y, b.y, k) - Math.sin(k * Math.PI) * 20, 12, 'g', 0.9); }
+    }
+  }
+  if (curScreen === 'game' && G.L) {
+    ctx.fillStyle = 'rgba(14,3,8,.38)'; ctx.fillRect(0, 0, VW, VH);
+    drawBoard(ctx, t);
+    // 一盏一盏亮起时的音
+    if (!G.won) {
+      for (const p of G.pieces) if (p.t === 'lan' && p._lit && !p._sounded && t >= p._litAt) {
+        p._sounded = true;
+        if (t - G.lastLight > 1600) G.burst = 0;
+        pluck(pentaFreq(MELODY[G.burst % MELODY.length] + (G.burst >= MELODY.length ? 2 : 0)), 0.2);
+        G.burst++; G.lastLight = t;
+        addSparks(...cellC(p.x, p.y), p.main ? 'g' : p.c, 14, G.cs * 0.9);
+      }
+      if (G.T && G.T.allLit && t >= G.winReadyAt && !G.drag) celebrate();
+    } else if (!G.cardShown && t - G.celT > (RM ? 1500 : 3600)) { G.cardShown = true; showCard('win'); }
+  }
+  drawSparks(ctx, t);
+  drawSkyLamps(ctx, t);
+  drawFireworks(ctx, t);
+  drawWalkers(ctx, t);
+  drawCard(t);
+  drawDesigner(t);
+  requestAnimationFrame(frame);
+}
+
+/* ================= 事件 ================= */
+cv.addEventListener('pointerdown', onDown);
+window.addEventListener('pointermove', onMove, { passive: true });
+window.addEventListener('pointerup', onUp);
+window.addEventListener('pointercancel', () => { G.drag = null; });
+document.addEventListener('pointerdown', () => auInit(), { once: false, capture: true });
+document.addEventListener('keydown', e => { if (e.key === 'Escape') { for (const id of ['#mAlbum', '#mDesign']) $(id).classList.add('hidden'); } });
+document.addEventListener('visibilitychange', () => { if (!AU.ctx) return; if (document.hidden) AU.ctx.suspend(); else AU.ctx.resume(); });
+$('#mute').addEventListener('click', () => { auInit(); setMute(!AU.muted); });
+$('#btnStart').addEventListener('click', () => {
+  auInit(); pluck(pentaFreq(0), 0.2); pluck(pentaFreq(2), 0.16, 0.12); pluck(pentaFreq(4), 0.14, 0.24);
+  selCh = Math.floor(nextOpenLevel() / 18); showScreen('select');
+});
+$('#selBack').addEventListener('click', () => { tick('back'); showScreen('title'); });
+$('#gBack').addEventListener('click', () => { tick('back'); const ch = G.L ? G.L.ch : 0; selCh = ch; showScreen('select'); });
+$('#gHint').addEventListener('click', doHint);
+$('#gReset').addEventListener('click', resetLevel);
+$('#aCard').addEventListener('click', () => { tick('sel'); showCard('win'); });
+const goNext = () => { const id = G.L ? G.L.id + 1 : 0; $('#mCard').classList.add('hidden'); if (id < LEVELS.length) startLevel(id); else { selCh = 2; showScreen('select'); } };
+$('#aNext').addEventListener('click', () => { tick('sel'); goNext(); });
+$('#cNext').addEventListener('click', () => {
+  tick('sel');
+  if (CARD.mode === 'win') goNext();
+  else { $('#mCard').classList.add('hidden'); if (CARD.back === 'album') { CARD.back = null; $('#mAlbum').classList.remove('hidden'); } }
+});
+$('#cLook').addEventListener('click', () => { tick('sel'); $('#mCard').classList.add('hidden'); });
+$('#cList').addEventListener('click', () => { tick('back'); $('#mCard').classList.add('hidden'); selCh = G.L ? G.L.ch : 0; showScreen('select'); });
+$('#btnAlbum').addEventListener('click', () => { tick('sel'); $('#mAlbum').classList.remove('hidden'); buildAlbum(); });
+$('#albClose').addEventListener('click', () => { tick('back'); $('#mAlbum').classList.add('hidden'); });
+$('#mAlbum').addEventListener('click', e => { if (e.target.id === 'mAlbum') $('#mAlbum').classList.add('hidden'); });
+$('#btnDesign').addEventListener('click', () => { tick('sel'); openDesigner(); });
+$('#dClose').addEventListener('click', () => { tick('back'); $('#mDesign').classList.add('hidden'); });
+$('#dMake').addEventListener('click', () => {
+  const text = $('#dInput').value.trim();
+  if (!text) { $('#dInput').focus(); $('#dInput').placeholder = '先写一句话，比如：粉色的荷花，带梅枝'; return; }
+  LanternDesigner.design(text).then(spec => {
+    DES.spec = spec; DES.t0 = now();
+    Save.custom = spec; persist();
+    $('#dName').textContent = spec.name; $('#dRemove').style.display = '';
+    [0, 2, 4, 7].forEach((s, k) => pluck(pentaFreq(s + 2), 0.14, k * 0.1));
+  });
+});
+$('#dInput').addEventListener('keydown', e => { if (e.key === 'Enter') $('#dMake').click(); });
+$('#dRemove').addEventListener('click', () => { Save.custom = null; persist(); DES.spec = null; $('#dName').textContent = '你的灯'; $('#dInput').value = ''; $('#dRemove').style.display = 'none'; tick('back'); });
+window.addEventListener('resize', resize);
+
+$('#mute').classList.toggle('muted', AU.muted);
+resize();
+showScreen('title');
+requestAnimationFrame(frame);
+</script>
+</body>
+</html>

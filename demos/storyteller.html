@@ -1,0 +1,1885 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>无限说书人</title>
+<meta name="description" content="茶馆戏台上的 AI 说书人，台下每位观众都能用手机喊“且慢”改写剧情。">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Ma+Shan+Zheng&family=Zhi+Mang+Xing&family=Noto+Serif+SC:wght@600;700;900&family=Noto+Sans+SC:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --ink:#17110c; --ink2:#2b2119; --ink3:#43352a;
+  --red:#b5321e; --red2:#87220f; --redHi:#d24a2c;
+  --paper:#eee0c0; --paper2:#d8c49a; --paperHi:#f8efd9;
+  --ui:#f4ead4; --uiCard:#fbf5e7; --uiLine:rgba(29,22,17,.13); --uiText:#1d1611; --uiSub:#6d5c4b;
+  --f-brush:"Ma Shan Zheng","Zhi Mang Xing","STKaiti","KaiTi","Kaiti SC",serif;
+  --f-cursive:"Zhi Mang Xing","Ma Shan Zheng","STXingkai","STKaiti","KaiTi",cursive;
+  --f-serif:"Noto Serif SC","Source Han Serif SC","Songti SC","STSong","SimSun",serif;
+  --f-sans:"Noto Sans SC","PingFang SC","Hiragino Sans GB","Microsoft YaHei",system-ui,sans-serif;
+  color-scheme: dark;
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{height:100%;margin:0;overflow:hidden;background:var(--ink);color:var(--paper);font-family:var(--f-sans)}
+button{font:inherit;color:inherit;touch-action:manipulation;cursor:pointer}
+#app{position:fixed;inset:0;display:flex;background:var(--ink)}
+#app.shake{animation:shake .38s cubic-bezier(.3,.7,.4,1)}
+#app.shake-s{animation:shake-s .26s ease-out}
+@keyframes shake{0%{transform:translate(0,0)}15%{transform:translate(-7px,5px)}30%{transform:translate(6px,-4px)}48%{transform:translate(-4px,3px)}66%{transform:translate(3px,-2px)}100%{transform:translate(0,0)}}
+@keyframes shake-s{0%{transform:translate(0,0)}30%{transform:translate(0,3px)}60%{transform:translate(0,-1px)}100%{transform:translate(0,0)}}
+
+/* ---------- 戏台 ---------- */
+#stageCol{flex:1;min-width:0;display:flex;flex-direction:column;position:relative}
+#stageWrap{flex:1;position:relative;min-height:0;overflow:hidden;background:#241a13;cursor:pointer}
+#stage{position:absolute;inset:0;width:100%;height:100%;display:block}
+#lyric{flex:0 0 auto;min-height:150px;position:relative;background:var(--ink);border-top:3px solid var(--red);padding:16px 30px 18px;display:flex;flex-direction:column;justify-content:center;cursor:pointer;
+  background-image:repeating-linear-gradient(-28deg,rgba(238,224,192,.035) 0 1px,transparent 1px 7px)}
+#lyric::before{content:"";position:absolute;left:0;right:0;top:4px;height:1px;background:rgba(238,224,192,.18)}
+#lyLabel{font:500 13px/1 var(--f-sans);letter-spacing:.18em;color:var(--redHi);display:flex;gap:12px;align-items:center;margin-bottom:10px}
+#lyLabel .act{color:var(--paper2);letter-spacing:.1em}
+#lyText{font:700 clamp(19px,2.15vw,27px)/1.6 var(--f-serif);color:var(--paperHi);min-height:3.2em;text-wrap:pretty;letter-spacing:.02em}
+#lyText .cur{display:inline-block;width:.55em;height:1em;vertical-align:-.12em;border-bottom:3px solid var(--red);margin-left:2px;animation:blink 1s steps(2) infinite}
+@keyframes blink{50%{opacity:0}}
+#lyHint{position:absolute;right:20px;bottom:10px;font:400 12px var(--f-sans);color:rgba(238,224,192,.38);letter-spacing:.1em}
+.overlayStamp{position:absolute;pointer-events:none;font-family:var(--f-cursive);color:var(--red);opacity:0;
+  text-shadow:-2px -2px 0 var(--ink),2px -2px 0 var(--ink),-2px 2px 0 var(--ink),2px 2px 0 var(--ink),0 3px 0 var(--ink)}
+#stamp{left:6%;top:10%;font-size:clamp(46px,8vw,112px);transform:rotate(-9deg) scale(1.6)}
+#stamp.on{animation:stampIn .45s cubic-bezier(.2,1.6,.4,1) forwards}
+@keyframes stampIn{0%{opacity:0;transform:rotate(-9deg) scale(1.9)}60%{opacity:1}100%{opacity:1;transform:rotate(-9deg) scale(1)}}
+#stamp.off{opacity:0;transition:opacity .4s}
+#pa{left:50%;top:38%;font-size:clamp(60px,10vw,150px);transform:translate(-50%,-50%) rotate(6deg)}
+#pa.on{animation:paIn .9s ease-out forwards}
+@keyframes paIn{0%{opacity:0;transform:translate(-50%,-50%) rotate(6deg) scale(.4)}12%{opacity:1;transform:translate(-50%,-50%) rotate(6deg) scale(1.15)}70%{opacity:1}100%{opacity:0;transform:translate(-50%,-50%) rotate(6deg) scale(1)}}
+
+/* ---------- 观众手机 ---------- */
+#phoneCol{flex:0 0 430px;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:60px 28px 26px;position:relative;
+  background:#1d1510;background-image:repeating-linear-gradient(90deg,rgba(0,0,0,.22) 0 2px,transparent 2px 46px),repeating-linear-gradient(-35deg,rgba(238,224,192,.03) 0 1px,transparent 1px 6px);
+  border-left:1px solid rgba(238,224,192,.08)}
+#phoneCap{position:absolute;top:22px;left:28px;font:500 12px var(--f-sans);letter-spacing:.22em;color:rgba(238,224,192,.55)}
+#phoneCap b{color:var(--redHi);font-weight:700}
+#phone{width:374px;height:min(760px,100%);border-radius:42px;background:var(--ui);color:var(--uiText);overflow:hidden;position:relative;display:flex;flex-direction:column;color-scheme:light;
+  box-shadow:0 0 0 9px #0c0806,0 0 0 10px #4a392b,0 28px 60px rgba(0,0,0,.65)}
+.ph-status{flex:0 0 auto;height:36px;display:flex;justify-content:space-between;align-items:flex-end;padding:0 28px 4px;font:600 13px var(--f-sans);color:var(--uiText)}
+.ph-status i{display:inline-block;width:18px;height:9px;border:1.5px solid var(--uiText);border-radius:3px;position:relative;vertical-align:-1px;margin-left:6px}
+.ph-status i::after{content:"";position:absolute;left:1px;top:1px;bottom:1px;width:65%;background:var(--uiText);border-radius:1px}
+.ph-head{flex:0 0 auto;padding:10px 16px 10px;border-bottom:1px solid var(--uiLine);background:var(--ui)}
+.ph-row{display:flex;align-items:center;justify-content:space-between;gap:8px}
+.ph-venue{font:700 11px var(--f-sans);letter-spacing:.2em;color:var(--red)}
+.ph-live{font:500 12px var(--f-sans);color:var(--uiSub);display:flex;align-items:center;gap:6px;white-space:nowrap}
+.ph-live::before{content:"";width:7px;height:7px;border-radius:50%;background:var(--red);box-shadow:0 0 0 3px rgba(181,50,30,.18);animation:pulse 1.6s ease-in-out infinite}
+@keyframes pulse{50%{box-shadow:0 0 0 6px rgba(181,50,30,.0)}}
+.ph-book{font:900 21px/1.2 var(--f-serif);letter-spacing:.06em;margin-top:6px}
+.ph-book small{display:block;font:500 12px var(--f-sans);color:var(--uiSub);letter-spacing:.08em;margin-top:2px}
+.ph-btns{display:flex;gap:6px}
+.pbtn{min-width:52px;height:44px;padding:0 12px;border-radius:22px;border:1.5px solid var(--uiLine);background:var(--uiCard);font:600 13px var(--f-sans);color:var(--uiText);display:flex;align-items:center;justify-content:center;gap:5px}
+.pbtn[aria-pressed="true"]{background:var(--uiText);color:var(--ui);border-color:var(--uiText)}
+.pbtn:disabled{opacity:.4;cursor:default}
+.ph-prog{flex:0 0 auto;display:flex;align-items:center;gap:6px;padding:8px 16px;border-bottom:1px solid var(--uiLine);font:500 11px var(--f-sans);color:var(--uiSub);letter-spacing:.06em}
+.ph-prog .st{display:flex;align-items:center;gap:4px;flex:1}
+.ph-prog .st::before{content:"";width:9px;height:9px;border-radius:50%;border:1.5px solid var(--uiSub);flex:0 0 auto}
+.ph-prog .st.now{color:var(--red);font-weight:700}.ph-prog .st.now::before{border-color:var(--red);background:rgba(181,50,30,.2)}
+.ph-prog .st.done{color:var(--uiText)}.ph-prog .st.done::before{background:var(--uiText);border-color:var(--uiText)}
+.ph-log{flex:1;min-height:0;overflow-y:auto;padding:12px 16px 24px;scroll-behavior:smooth;overscroll-behavior:contain}
+.ph-log p{margin:0 0 10px;font:600 15px/1.75 var(--f-serif);color:var(--uiText)}
+.ph-log p .tag{display:inline-block;font:700 10px/1 var(--f-sans);color:var(--red);border:1px solid rgba(181,50,30,.45);border-radius:3px;padding:3px 4px;margin-right:6px;vertical-align:2px;letter-spacing:.1em}
+.ph-log .chap{display:flex;align-items:center;gap:10px;margin:8px 0 12px;font:700 12px var(--f-sans);letter-spacing:.3em;color:var(--red)}
+.ph-log .chap::before,.ph-log .chap::after{content:"";flex:1;height:1px;background:rgba(181,50,30,.35)}
+.ph-log .dec{margin:4px 0 14px;padding:10px 12px;border-radius:12px;background:var(--uiText);color:var(--ui);font:500 13px/1.5 var(--f-sans)}
+.ph-log .dec b{color:#f3a48c;font-weight:700}
+.ph-log .dec small{display:block;opacity:.7;font-size:11.5px;margin-top:2px}
+.ph-log .wait{font:500 13px var(--f-sans);color:var(--uiSub)}
+
+/* 且慢面板 */
+.sheet{position:absolute;left:0;right:0;bottom:0;top:0;background:var(--ui);display:flex;flex-direction:column;transform:translateY(102%);transition:transform .42s cubic-bezier(.2,.9,.25,1);z-index:5}
+.sheet.on{transform:none}
+.sh-head{flex:0 0 auto;background:var(--red);color:var(--paperHi);padding:16px 16px 14px;position:relative;overflow:hidden;
+  background-image:repeating-linear-gradient(-35deg,rgba(0,0,0,.09) 0 2px,transparent 2px 7px)}
+.sh-title{font:400 44px/1 var(--f-cursive);letter-spacing:.04em;text-shadow:0 2px 0 rgba(0,0,0,.25)}
+.sh-sub{font:500 12px/1.4 var(--f-sans);letter-spacing:.12em;opacity:.9;margin-top:6px;padding-right:76px}
+.sh-ring{position:absolute;right:14px;top:14px;width:62px;height:62px}
+.sh-ring svg{width:100%;height:100%;transform:rotate(-90deg)}
+.sh-ring .bg{stroke:rgba(248,239,217,.25)}.sh-ring .fg{stroke:var(--paperHi);transition:stroke-dashoffset .12s linear}
+.sh-ring b{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font:700 24px var(--f-sans)}
+.sh-prompt{flex:0 0 auto;padding:14px 16px 6px;font:700 17px/1.5 var(--f-serif);color:var(--uiText)}
+.sh-opts{flex:0 1 auto;min-height:0;overflow-y:auto;padding:6px 14px 6px;display:flex;flex-direction:column;gap:10px}
+.opt{position:relative;width:100%;min-height:68px;border-radius:14px;border:1.5px solid var(--uiLine);background:var(--uiCard);text-align:left;padding:10px 14px;display:flex;align-items:center;gap:10px;overflow:hidden;transition:border-color .2s, transform .12s}
+.opt:active{transform:scale(.985)}
+.opt .bar{position:absolute;left:0;top:0;bottom:0;width:0;background:rgba(181,50,30,.13);transition:width .25s ease-out}
+.opt .mn{position:relative;flex:1;min-width:0}
+.opt .mn b{display:block;font:700 16px/1.35 var(--f-serif);color:var(--uiText)}
+.opt .mn small{display:block;font:400 12.5px/1.4 var(--f-sans);color:var(--uiSub);margin-top:2px}
+.opt .num{position:relative;text-align:right;font:500 11px var(--f-sans);color:var(--uiSub);white-space:nowrap}
+.opt .num em{display:block;font:700 19px/1.1 var(--f-sans);font-style:normal;color:var(--uiText)}
+.opt .me{position:absolute;right:64px;top:-1px;font:700 10px var(--f-sans);background:var(--red);color:var(--paperHi);padding:3px 7px;border-radius:0 0 6px 6px;letter-spacing:.08em;display:none}
+.opt.mine{border-color:var(--red);box-shadow:0 0 0 2px rgba(181,50,30,.18) inset}
+.opt.mine .me{display:block}
+.opt.mine .bar{background:rgba(181,50,30,.22)}
+.opt.win{border-color:var(--uiText);background:var(--uiText)}
+.opt.win .mn b,.opt.win .num em{color:var(--paperHi)}.opt.win .mn small,.opt.win .num{color:rgba(248,239,217,.7)}
+.opt.win .bar{background:rgba(210,74,44,.55)}
+.opt.lose{opacity:.45}
+.sh-feed{flex:1;min-height:0;overflow:hidden;margin:4px 14px 0;padding:8px 2px 0;border-top:1px dashed var(--uiLine);display:flex;flex-direction:column;gap:5px;
+  -webkit-mask-image:linear-gradient(#000 55%,transparent);mask-image:linear-gradient(#000 55%,transparent)}
+.sh-feed div{font:400 12px/1.45 var(--f-sans);color:var(--uiSub);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;animation:feedIn .3s ease-out}
+.sh-feed div b{color:var(--uiText);font-weight:600}.sh-feed div.me b{color:var(--red)}
+@keyframes feedIn{from{opacity:0;transform:translateY(-6px)}}
+.sh-foot{flex:0 0 auto;padding:8px 16px 14px;font:500 12px/1.5 var(--f-sans);color:var(--uiSub);display:flex;justify-content:space-between;gap:10px}
+.sh-foot b{color:var(--red)}
+.toast{position:absolute;left:14px;right:14px;bottom:14px;z-index:6;background:var(--uiText);color:var(--ui);border-radius:14px;padding:12px 14px;font:500 13px/1.5 var(--f-sans);transform:translateY(calc(100% + 40px));visibility:hidden;transition:transform .35s cubic-bezier(.2,.9,.25,1),visibility .35s;box-shadow:0 10px 30px rgba(0,0,0,.25)}
+.toast.on{transform:none;visibility:visible}
+.toast b{color:#f3a48c}
+
+/* ---------- 开场海报 ---------- */
+#intro{position:fixed;inset:0;z-index:20;display:flex;align-items:center;justify-content:center;background:#120d09;transition:opacity .7s ease, visibility .7s;
+  background-image:repeating-linear-gradient(-32deg,rgba(238,224,192,.035) 0 1px,transparent 1px 6px)}
+#intro.gone{opacity:0;visibility:hidden}
+.poster{position:relative;height:min(94vh,860px);aspect-ratio:3/4.1;max-width:94vw;background:var(--paper);color:var(--ink);overflow:hidden;box-shadow:0 30px 80px rgba(0,0,0,.6)}
+#posterCv{position:absolute;inset:0;width:100%;height:100%;display:block}
+.pz{position:absolute;left:0;right:0;text-align:center}
+.pz-top{top:5.2%;display:flex;justify-content:center;align-items:center;gap:14px;font:700 clamp(11px,1.5vh,14px) var(--f-sans);letter-spacing:.4em;color:var(--ink)}
+.pz-top .seal{font:400 clamp(20px,3.2vh,30px)/1 var(--f-brush);letter-spacing:.18em;color:var(--paperHi);background:var(--red);padding:7px 6px 7px 14px;border:2px solid var(--ink);box-shadow:3px 3px 0 var(--ink)}
+.pz-title{top:11%;font:400 clamp(46px,min(11.5vh,16.5vw),108px)/1.05 var(--f-brush);letter-spacing:.04em;color:var(--ink);margin:0}
+.pz-sub{top:24.6%;font:700 clamp(13px,1.9vh,17px)/1.5 var(--f-serif);letter-spacing:.28em;color:var(--red2)}
+.pz-bot{bottom:4.5%;display:flex;flex-direction:column;align-items:center;gap:12px;padding:0 7%}
+.pz-tag{font:700 clamp(13px,1.8vh,16px)/1.6 var(--f-serif);color:var(--ink);letter-spacing:.08em}
+.pz-enter{display:flex;align-items:center;gap:14px}
+#qr{width:64px;height:64px;background:var(--paperHi);padding:4px;border:2px solid var(--ink);display:block}
+#btnEnter{height:60px;padding:0 30px;border-radius:2px;border:2.5px solid var(--ink);background:var(--red);color:var(--paperHi);font:400 30px/1 var(--f-brush);letter-spacing:.18em;box-shadow:4px 4px 0 var(--ink);transition:transform .1s, box-shadow .1s}
+#btnEnter:active{transform:translate(3px,3px);box-shadow:1px 1px 0 var(--ink)}
+.pz-foot{font:500 11px var(--f-sans);color:var(--ink3);letter-spacing:.14em}
+
+/* ---------- 散场回目 ---------- */
+#finale{position:fixed;inset:0;z-index:15;display:flex;justify-content:center;align-items:flex-start;overflow-y:auto;padding:26px 14px 30px;background:rgba(14,10,7,.88);opacity:0;visibility:hidden;transition:opacity .6s, visibility .6s}
+#finale.on{opacity:1;visibility:visible}
+.fin{position:relative;width:min(600px,100%);background:var(--paper);color:var(--ink);padding:30px 28px 26px;margin:auto 0;box-shadow:0 30px 80px rgba(0,0,0,.6);
+  background-image:repeating-linear-gradient(-30deg,rgba(23,17,12,.05) 0 1px,transparent 1px 5px)}
+.fin::before{content:"";position:absolute;inset:9px;border:2.5px solid var(--ink);pointer-events:none}
+.fin::after{content:"";position:absolute;inset:15px;border:1px solid var(--ink);pointer-events:none}
+.fin-top{display:flex;align-items:center;justify-content:center;gap:12px;font:700 13px var(--f-sans);letter-spacing:.42em}
+.fin-top .seal{font:400 20px/1 var(--f-brush);color:var(--paperHi);background:var(--red);padding:6px 4px 6px 10px;border:2px solid var(--ink);letter-spacing:.2em}
+.fin h2{margin:12px 0 4px;text-align:center;font:400 46px/1.1 var(--f-brush);letter-spacing:.08em}
+.fin-hui{display:flex;flex-direction:row-reverse;justify-content:center;align-items:flex-start;margin:16px auto 8px;gap:0}
+.fin-hui .col{writing-mode:vertical-rl;-webkit-writing-mode:vertical-rl;text-orientation:upright;margin:0 5px;font:900 27px/1.2 var(--f-serif);letter-spacing:.14em;color:var(--ink);white-space:nowrap}
+.fin-hui .col.n{font:700 15px/1 var(--f-sans);letter-spacing:.4em;color:var(--red);margin:0 6px;padding-top:4px}
+.fin-hui .gap{align-self:stretch;width:1.5px;background:rgba(23,17,12,.3);margin:0 16px}
+.fin-flat{text-align:center;font:600 13px/1.7 var(--f-serif);color:var(--ink3)}
+.fin-end{display:flex;align-items:center;justify-content:center;gap:14px;margin:16px 0 18px}
+.fin-end .seal{font:400 30px/1 var(--f-brush);color:var(--paperHi);background:var(--red);padding:10px 8px 10px 14px;border:2.5px solid var(--ink);box-shadow:3px 3px 0 var(--ink);letter-spacing:.14em}
+.fin-end div{font:700 15px/1.6 var(--f-serif)}
+.fin-end small{display:block;font:500 12px var(--f-sans);color:var(--ink3);letter-spacing:.14em}
+.fin-votes{border-top:1.5px solid var(--ink);border-bottom:1.5px solid var(--ink);padding:10px 0 4px}
+.fv{padding:8px 0 10px;border-bottom:1px dashed rgba(23,17,12,.28)}
+.fv:last-child{border-bottom:0}
+.fv-h{font:700 13px/1.5 var(--f-sans);margin-bottom:6px;display:flex;gap:8px}
+.fv-h span{color:var(--red);white-space:nowrap}
+.fv-r{display:grid;grid-template-columns:minmax(0,11em) 1fr 3.2em;align-items:center;gap:8px;font:500 12.5px/1.3 var(--f-sans);margin:3px 0}
+.fv-r .lb{display:flex;align-items:center;min-width:0;white-space:nowrap}.fv-r .lb span.t{overflow:hidden;text-overflow:ellipsis}.fv-r .you{flex:0 0 auto}
+.fv-r .tr{height:10px;background:rgba(23,17,12,.1);position:relative}
+.fv-r .tr i{position:absolute;left:0;top:0;bottom:0;background:var(--ink3)}
+.fv-r.w .tr i{background:var(--red)}
+.fv-r.w .lb{font-weight:700}
+.fv-r .pc{text-align:right;font-weight:700}
+.fv-r .you{font:700 10px var(--f-sans);color:var(--paperHi);background:var(--ink);padding:1px 4px;margin-left:4px;border-radius:2px}
+.fin-stats{margin:12px 0 6px;text-align:center;font:500 12.5px/1.7 var(--f-sans);color:var(--ink2)}
+.fin-export{margin:8px 0 14px;font:500 12.5px/1.75 var(--f-sans);color:var(--ink3);text-align:center;padding:0 6px}
+.fin-export b{color:var(--red2)}
+.fin-btns{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;position:relative;z-index:1}
+.fbtn{min-height:48px;padding:0 22px;border:2px solid var(--ink);background:var(--paperHi);color:var(--ink);font:700 15px var(--f-sans);letter-spacing:.12em;box-shadow:3px 3px 0 var(--ink)}
+.fbtn.pri{background:var(--red);color:var(--paperHi)}
+.fbtn:active{transform:translate(2px,2px);box-shadow:1px 1px 0 var(--ink)}
+
+#mute{position:fixed;top:10px;right:10px;z-index:30;width:44px;height:44px;border-radius:50%;border:1.5px solid rgba(238,224,192,.35);background:rgba(23,17,12,.78);color:var(--paper);display:flex;align-items:center;justify-content:center;padding:0}
+#mute svg{width:22px;height:22px}
+#mute .x{display:none}#mute.muted .x{display:inline}#mute.muted .w{display:none}
+
+/* ---------- 手机竖屏：手机面板即主界面 ---------- */
+@media (max-width:820px), (max-aspect-ratio:1/1){
+  #app{flex-direction:column}
+  #stageCol{flex:0 0 auto;height:calc(min(36vh,330px) + 92px)}
+  #stageWrap{flex:1}
+  #lyric{min-height:0;height:92px;padding:10px 16px 10px;border-top-width:2px}
+  #lyLabel{font-size:11px;margin-bottom:5px}
+  #lyText{font-size:16px;line-height:1.55;min-height:3.1em;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+  #lyHint{display:none}
+  #phoneCol{flex:1;min-height:0;padding:0;background:var(--ui);border:0}
+  #phoneCap{display:none}
+  #phone{width:100%;height:100%;border-radius:0;box-shadow:none}
+  .ph-status{display:none}
+  .ph-head{padding:8px 14px 8px}
+  .ph-book{font-size:18px;margin-top:3px}
+  .ph-book small{font-size:11px}
+  .ph-prog{padding:6px 14px}
+  .sh-head{padding:12px 14px 12px}
+  .sh-title{font-size:38px}
+  .sh-ring{width:54px;height:54px;top:11px}
+  .sh-prompt{font-size:16px;padding:10px 14px 4px}
+  .opt{min-height:62px;padding:8px 12px}
+  .poster{height:100%;width:100%;max-width:none;aspect-ratio:auto}
+  .fin{padding:26px 18px 22px}
+  .fin h2{font-size:38px}
+  .fin-hui .col{font-size:23px;margin:0 3px}
+  .fin-hui .gap{margin:0 10px}
+}
+@media (prefers-reduced-motion: reduce){
+  #app.shake,#app.shake-s{animation:none}
+  #stamp.on{animation:none;opacity:1;transform:rotate(-9deg)}
+  #pa.on{animation:paFade 1s linear forwards}
+  @keyframes paFade{0%,70%{opacity:1}100%{opacity:0}}
+  .sheet,.toast{transition:none}
+  #lyText .cur{animation:none}
+  .ph-live::before{animation:none}
+}
+</style>
+</head>
+<body>
+<div id="app">
+  <section id="stageCol" aria-label="茶馆戏台">
+    <div id="stageWrap">
+      <canvas id="stage" aria-hidden="true"></canvas>
+      <div id="stamp" class="overlayStamp">且慢！</div>
+      <div id="pa" class="overlayStamp">啪</div>
+    </div>
+    <div id="lyric" role="status" aria-live="polite">
+      <div id="lyLabel"><span id="lyChap">第一回</span><span class="act" id="lyAct">说书人</span></div>
+      <div id="lyText"></div>
+      <div id="lyHint">轻点戏台或字幕 · 跳过这一句</div>
+    </div>
+  </section>
+  <section id="phoneCol" aria-label="观众手机">
+    <div id="phoneCap">你的手机 · 台下第 <b>23</b> 座</div>
+    <div id="phone">
+      <div class="ph-status"><span>21:47</span><span>5G<i></i></span></div>
+      <div class="ph-head">
+        <div class="ph-row"><span class="ph-venue">听雪楼茶社 · 扫码观众</span><span class="ph-live" id="phLive">在场 48 人</span></div>
+        <div class="ph-row">
+          <div class="ph-book">《雪夜追镖》<small>第 23 座 · 你一票顶三票</small></div>
+          <div class="ph-btns">
+            <button class="pbtn" id="btnVoice" aria-pressed="false" title="用浏览器朗读说书词">开声</button>
+            <button class="pbtn" id="btnSpeed" aria-pressed="false" title="说书快慢">1×</button>
+          </div>
+        </div>
+      </div>
+      <div class="ph-prog" id="phProg">
+        <span class="st">且慢一</span><span class="st">且慢二</span><span class="st">且慢三</span><span class="st">且慢四</span>
+      </div>
+      <div class="ph-log" id="phLog"><p class="wait">说书人正在上台……</p></div>
+      <div class="sheet" id="sheet" aria-live="polite">
+        <div class="sh-head">
+          <div class="sh-title" id="shTitle">且慢！</div>
+          <div class="sh-sub" id="shSub">且慢一 · 台下说了算</div>
+          <div class="sh-ring"><svg viewBox="0 0 64 64"><circle class="bg" cx="32" cy="32" r="28" fill="none" stroke-width="5"/><circle class="fg" id="ringFg" cx="32" cy="32" r="28" fill="none" stroke-width="5" stroke-linecap="round" stroke-dasharray="175.93" stroke-dashoffset="0"/></svg><b id="shSec">8</b></div>
+        </div>
+        <div class="sh-prompt" id="shPrompt"></div>
+        <div class="sh-opts" id="shOpts"></div>
+        <div class="sh-feed" id="shFeed" aria-hidden="true"></div>
+        <div class="sh-foot"><span id="shFootL">台下已喊 0 声</span><span id="shFootR">喊得早，跟的人多</span></div>
+      </div>
+      <div class="toast" id="toast"></div>
+    </div>
+  </section>
+</div>
+
+<div id="intro">
+  <div class="poster">
+    <canvas id="posterCv" aria-hidden="true"></canvas>
+    <div class="pz pz-top"><span>听雪楼茶社</span><span class="seal">今晚开书</span><span>腊月廿二</span></div>
+    <h1 class="pz pz-title">无限说书人</h1>
+    <div class="pz pz-sub">书目 · 雪夜追镖</div>
+    <div class="pz pz-bot">
+      <div class="pz-tag">故事是说书人和听众一起说完的。<br>台下每一位，都能喊一声“且慢”。</div>
+      <div class="pz-enter"><canvas id="qr" width="64" height="64" aria-hidden="true"></canvas><button id="btnEnter">扫码入场</button></div>
+      <div class="pz-foot">点火时刻 · 说书人由本地开源模型即兴接续</div>
+    </div>
+  </div>
+</div>
+
+<div id="finale" aria-live="polite"><div class="fin" id="finBox"></div></div>
+
+<button id="mute" aria-label="静音" title="静音">
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 9h4l5-4v14l-5-4H4z" fill="currentColor" stroke="none"/><path class="w" d="M16.5 8.5a5 5 0 0 1 0 7M19 6a8.5 8.5 0 0 1 0 12"/><path class="x" d="M16 9l6 6M22 9l-6 6"/></svg>
+</button>
+
+<script>
+(function () {
+'use strict';
+/*<LOGIC>*/
+// ===================== 纯逻辑区（不碰 DOM，可在 node 里单测） =====================
+
+// ---- 可复现随机数 ----
+function mulberry32(seed) {
+  let a = seed >>> 0;
+  return function () {
+    a = (a + 0x6D2B79F5) >>> 0;
+    let t = a;
+    t = Math.imul(t ^ (t >>> 15), t | 1);
+    t ^= t + Math.imul(t ^ (t >>> 7), t | 61);
+    return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+  };
+}
+
+// ---- 剧本树 ----
+// 行文标记：开头 "@slam/@fan/@bow/@point" = 说书人动作；"?q1=A|B" = 仅当该且慢点选了 A 或 B 才说这句；"#第二回" = 回目分隔。
+const SCRIPT = {
+  title: '雪夜追镖',
+  start: 'n0',
+  nodes: {
+    n0: { lines: [
+      '#第一回',
+      '@bow 列位看官，今儿个天冷，诸位赏脸，热茶都给您沏上了。',
+      '@fan 咱先来四句定场诗——',
+      '@slam 北风卷雪夜无灯，朱漆小匣一骑行。',
+      '莫道镖师心似铁，三更犹记旧师恩。',
+      '@fan 上回书说到，长风镖局的镖头沈三更，接了一趟怪镖。',
+      '为什么叫沈三更？这人走镖二十年，三更天从来不睡——镖在怀里，眼就不合。',
+      '腊月二十那天，镖局来了个斗笠压眉的客人，放下一只巴掌大的朱漆木匣，又放下三倍的镖银。',
+      '@point 客人只说了三句话：送到落雁关，交给关下卖馄饨的老哑巴；腊月二十三之前；路上，不许开。',
+      '沈三更掂了掂，匣子轻得像空的。问走哪条道，客人说：黑松岭。',
+      '列位，黑松岭这三个字，沈三更十年没提过。',
+      '十年前他还是个毛头趟子手，跟着师父葛老镖头，在黑松岭丢过一趟镖。镖没了，师父也再没回来。',
+      '@fan 可镖银收了，规矩就是规矩。第二天一早，他带上小徒弟阿豆，两匹马，一只匣子，进了山。',
+      '雪是晌午下起来的。到了天擦黑，雪片子有铜钱那么大，马蹄子一踩一个窟窿。',
+      '前头山坳里亮着一点灯，昏黄昏黄的——那是孤灯客栈，岭上唯一一处落脚的地方。',
+      '@point 眼看着就要到了，就在这时候——'
+    ], q: 'q1' },
+
+    n1a: { lines: [
+      '@slam 说时迟那时快，沈三更一勒缰绳，猛地回头！',
+      '身后白茫茫一片，雪地上只有他们自己的两行蹄印，正被新雪一点一点抹平。',
+      '阿豆问：「师父，看见什么了？」沈三更不吭声。',
+      '@point 他看见了——松林深处，一盏红灯笼，就那么一晃，灭了。',
+      '这荒山雪夜，谁提着灯跟在后头，又为什么不肯露面？',
+      '沈三更把木匣往怀里按了按，打马进了客栈的院门。'
+    ], next: 'n2' },
+
+    n1b: { lines: [
+      '@point 阿豆眼尖，拿马鞭往地上一指：「师父，您看。」',
+      '雪地上一行脚印，从岔路口拐出来，一直通到客栈门口。',
+      '脚印一深一浅——走路的人，有一条腿使不上劲。',
+      '怪就怪在，这么大的雪，脚印还没被盖住。那人前脚刚到，最多一炷香的工夫。',
+      '@fan 沈三更蹲下来看了看，心里咯噔一下：这步子，他好像在哪儿见过。',
+      '他没多说，把木匣往怀里按了按，牵马进了客栈的院门。'
+    ], next: 'n2' },
+
+    n1c: { lines: [
+      '@slam 说时迟那时快，马忽然打了个响鼻，四只蹄子钉在雪里，打死也不肯往前。',
+      '老马识途，更识险。沈三更翻身下马，拿刀鞘往雪里一拨——',
+      '@point 雪底下横着一根细麻绳，绳上拴着三只铜铃。',
+      '不是绊马索，是报信的。有人在前头等着，等他一脚踩响这根绳。',
+      '沈三更从棉袄里扯出两团棉花，塞住了铃舌，牵着马，一步一步跨了过去。',
+      '然后他把木匣往怀里按了按，进了客栈的院门。'
+    ], next: 'n2' },
+
+    n2: { lines: [
+      '@fan 列位，这孤灯客栈，三间土房，一盆炭火，屋檐底下挂一盏油灯，十年来夜夜不灭，所以叫孤灯。',
+      '屋里已经有两位客人。',
+      '靠门一个卖炭的老汉，满脸烟灰，帽檐压得低低的，守着一副空炭筐打盹。',
+      '墙角一个背书箱的书生，二十出头，脸白得像纸，捧着一本书，半天不翻一页。',
+      '掌柜的是个女人，四十上下，姓柳，人称柳十娘。左手少了一根小指，端起酒壶来却稳得很。',
+      '沈三更要了一壶烫酒，两碗面。柳十娘把酒端到桌前，抬眼看了他一下——',
+      '@point 那酒壶，就停在了半空，不往下放了。'
+    ], q: 'q2' },
+
+    n3a: { lines: [
+      '柳十娘的手停在半空，眼睛却没离开沈三更的脸。',
+      '半晌，她把酒放下，压低了声音：「你是葛老镖头带的那个孩子。」',
+      '沈三更心里一震。十年了，他从毛头小子熬成了镖头，脸上多了一道疤，她竟一眼认了出来。',
+      '@fan 柳十娘说：「十年前那一夜，你也是坐的这张桌子，也是要的一壶烫酒。」',
+      '「那一夜你睡着了。醒来的时候，镖没了，你师父也没了。」',
+      '她转身回了柜台，背对着他，又补了一句：「今夜，别睡。」'
+    ], next: 'n4' },
+
+    n3b: { lines: [
+      '沈三更没急着接，鼻子先动了一动。',
+      '走镖的人，鼻子比狗灵。酒香底下压着一丝苦味，像晒干的曼陀罗花——蒙汗药。',
+      '他抬眼看柳十娘，柳十娘脸上什么也看不出来。',
+      '再看屋里：方才书生起身添炭，书箱的角刚好擦过酒壶；卖炭的老汉，也在柜台边站过一站。',
+      '@fan 沈三更笑了：「好酒。」端起来一仰脖——全倒进了袖口里。',
+      '他冲阿豆使了个眼色，师徒俩一前一后伏在桌上，打起了呼噜。'
+    ], next: 'n4' },
+
+    n3c: { lines: [
+      '没等柳十娘开口，阿豆先憋不住了。',
+      '@point 小家伙冻得直搓手，嘴比脑子快：「师父，那匣子您揣怀里一路了，到底装的啥宝贝？」',
+      '这一嗓子不要紧——屋里一下子静了。',
+      '卖炭的老汉睁开了眼，书生的书翻过了一页，柳十娘的酒壶「当」的一声落在桌上。',
+      '@bow 沈三更瞪了徒弟一眼，转头冲众人一抱拳：「小孩子胡说，一只空匣子，装的是镖局的规矩。」',
+      '话是这么说，可满屋子的人都知道了：这个镖师怀里，揣着东西。'
+    ], next: 'n4' },
+
+    n4: { lines: [
+      '@fan 列位，欲知后事如何？茶润一润嗓子，咱们接着往下说。',
+      '#第二回',
+      '@slam 上回书说到，孤灯客栈一盆炭火，屋里四个人，各怀各的心事。',
+      '一更天，雪没停；二更天，炭盆里的火暗了下去。',
+      '店里只有这一间大屋烧着炭，几位客人都在屋里将就，各占一个角。',
+      '?q2=B 沈三更伏在桌上装睡，呼噜打得匀匀的，一只手却始终压着怀里的匣子。',
+      '?q2=A|C 沈三更靠墙坐着，刀横在膝上，眼睛半睁半闭。',
+      '三更天到了。这是他一辈子最不肯睡的时辰。',
+      '@point 忽然一阵风，把屋檐下那盏孤灯，吹灭了。',
+      '屋里黑得伸手不见五指。黑暗里，有一只手，轻轻地，摸到了他怀里的木匣上——'
+    ], q: 'q3' },
+
+    // —— 书生：白狐 ——
+    n5a: { lines: [
+      '@slam 说时迟那时快！沈三更反手一扣，五根手指像铁箍一样，攥住了那只手腕。',
+      '手腕细，冰凉，指头上有墨——是那个书生。',
+      '@point 火折子一亮，书生的书箱翻倒在地。里头一本书也没有：一张白狐皮的面具，一把薄得透光的刀。',
+      '书生也不装了，冲他一笑：「小娃娃，十年不见，你还是这么爱抱着东西睡觉。」',
+      '这声音沈三更认得。十年前那一夜，他就是被这一声笑惊醒的，追出去，只看见雪地里一张白狐脸。',
+      '江湖上管这人叫白狐。十年前他杀了葛老镖头，却没拿到镖——老镖头临死前，把镖埋进了雪里。',
+      '如今江湖上都在传：长风镖局这只朱漆匣子里，装的就是那趟镖的下落。',
+      '?q1=A 松林里那盏红灯笼，就是白狐挂的：雪夜里的人见了灯，就会往这客栈奔。',
+      '?q1=B 雪地上那一深一浅的脚印，也是白狐故意拖着腿走的——他要你以为，先到的只是个瘸子。',
+      '?q1=C 岭下那串铜铃，也是白狐拴的；只是铃舌叫你塞了棉花，他没听见动静，这才没能在路上截你。',
+      '?q2=A 难怪柳十娘叫你别睡——十年前那一夜，她也见过这张白脸。',
+      '?q2=B 酒里的蒙汗药，就是他起身添炭的时候，借着书箱一擦，下进去的。',
+      '?q2=C 阿豆那一嗓子，正中他的下怀。他本来还拿不准，匣子到底在不在你身上。',
+      '@point 话音没落，白狐手腕一翻挣了出去，一把将阿豆拽到身前，薄刀横在了孩子脖子上。',
+      '他说：「沈镖头，匣子换人。」'
+    ], q: 'q4a' },
+
+    e1: { lines: [
+      '@slam 好个沈三更！他把木匣往地上一扔，扭头就往门外跑。',
+      '白狐一愣：镖不要了？就这一愣的工夫——',
+      '@point 沈三更人在半空，拧腰回身，一刀从下往上撩了回来。这一招叫回马刀，是葛老镖头的看家本事。',
+      '刀背正磕在白狐手腕上，薄刀飞出去，钉在了房梁上。阿豆一骨碌，滚到了柜台底下。',
+      '白狐撞破窗户跳进雪地。十年前他踏雪无痕，可今夜手腕上挨了一下，血滴在雪上，一路红进了松林。',
+      '@fan 沈三更没追。他捡起木匣，拍了拍上头的灰：镖还在，人还在，够了。',
+      '腊月二十三，落雁关。卖馄饨的老哑巴接过匣子，当着他的面打开——',
+      '@point 里头没有宝贝，只有一包石灰，和一张字条：开匣者，即白狐。',
+      '老哑巴张开嘴，嘴里没有舌头。他是十年前追白狐、丢了舌头的老捕快；这只匣子，是他下的饵。',
+      '沈三更把雪地上那串血印子画给他看。老哑巴背上刀，往黑松岭去了。',
+      '@bow 列位，这便是：回马一刀，替师父还了半笔账；剩下那半笔，留给追了十年的人。'
+    ], end: { id: 'E1', name: '回马刀', line: '镖在人在，血印入林' } },
+
+    e2: { lines: [
+      '@fan 沈三更看了看阿豆，又看了看怀里的匣子。',
+      '走镖二十年，他的规矩是镖在人在。可今夜，他把匣子轻轻放在了桌上：「人给我。」',
+      '白狐一把抄起匣子，把阿豆往前一推，撞破窗户，跳进了雪地。',
+      '他跑出去二里地，实在忍不住，站在松林边上，借着雪光，掀开了匣盖——',
+      '@slam 噗的一声，一大团白烟扑了他满脸！',
+      '匣子里装的是石灰。底下还压着一张字条，可惜他是看不见了：开匣者，即白狐。',
+      '白狐捂着眼睛在雪里乱撞，踏雪无痕的功夫全没了，一脚一个深坑，一直走到了结冰的河上。',
+      '天亮的时候，沈三更顺着那行深深的脚印找过去，人已经被一个没舌头的老哑巴，捆在了河边。',
+      '老哑巴是落雁关的老捕快，十年前追白狐丢了舌头。这只匣子，是他托人送的饵；他不放心，自己也上了岭。',
+      '@point 他比划着问：匣子是谁开的？沈三更说：「不是我。」老哑巴竖起了大拇指。',
+      '@bow 列位，这便是：镖丢了，规矩没丢；匣子开了，开匣的人，自己认了账。'
+    ], end: { id: 'E2', name: '石灰匣', line: '舍镖救人，饵钓白狐' } },
+
+    // —— 卖炭老汉：师父 ——
+    n5b: { lines: [
+      '@slam 说时迟那时快！沈三更反手一扣，攥住了那只手腕。',
+      '手腕粗得像树根，满是炭灰。他手指一摸，摸到手背上一道疤——横着走，七八寸长，像一条蜈蚣。',
+      '@point 沈三更的手，一下子松了劲。',
+      '那年他十四岁，头一回跟镖，山匪一刀劈下来，是师父拿手背替他挡的。这道疤，他认得。',
+      '火折子一亮。老汉的帽子落了，满脸烟灰底下，是一张老了十岁的脸。',
+      '老汉没抢匣子。他只是把一块烤热的炭饼，塞进了沈三更怀里：「三更天，凉。」',
+      '?q1=A 松林里那盏一闪就灭的红灯笼，是他提着，跟了一路。',
+      '?q1=B 雪地上那一深一浅的脚印，是他的。十年前那一夜，他瘸了一条腿。',
+      '?q1=C 岭下那串铜铃，是他拴的。铃没响，他还当你绕了道，在门口站了半宿。',
+      '?q2=A 柳十娘认得你，自然也认得他。这十年，是她每天给这老汉留一碗热汤。',
+      '?q2=B 酒里那点苦味不是蒙汗药，是老汉托掌柜放的夜交藤，安神的——他怕你一夜不睡，熬坏了身子。',
+      '?q2=C 阿豆那一嗓子，老汉在炭筐边听得清清楚楚。他低着头笑了一下：这孩子，跟你当年一个样。',
+      '沈三更嘴唇哆嗦着，那两个字，到了嘴边——'
+    ], q: 'q4b' },
+
+    e3: { lines: [
+      '@slam 扑通一声，沈三更跪在了炭盆边：「师父！」',
+      '阿豆吓了一跳，也跟着跪下了。',
+      '老汉没扶他，自己先背过身去，肩膀一抽一抽的。',
+      '@fan 半晌，葛老镖头才开口：「十年前那趟镖丢了，我没脸回镖局。腿瘸了，就在这岭上烧炭，看着过往的镖车，一年又一年。」',
+      '「那个斗笠客，是我托的。我知道你怕黑松岭，怕了十年。我也怕了十年。」',
+      '@point 他把木匣接过去，打开——里头是半截镖旗，红底黑字，一个「长」字，一个「风」字。',
+      '那是十年前，从镖车上撕下来的。他揣了十年，今天交还给徒弟。',
+      '天亮雪停。一匹马驮着老的，一匹马驮着小的，沈三更牵着缰绳，走在前头。',
+      '腊月二十三，落雁关。卖馄饨的老哑巴是葛老镖头当年的趟子手，三碗馄饨端上来，谁也没说话。',
+      '@bow 列位，这便是：这趟镖走了十年，今夜，才算到了。'
+    ], end: { id: 'E3', name: '师徒归', line: '一声师父，十年到镖' } },
+
+    e4: { lines: [
+      '@fan 沈三更把那两个字，生生咽了回去。',
+      '@bow 他松开手，站起身，冲老汉一抱拳：「老人家，夜里冷，往炭盆边坐坐。」',
+      '走镖的规矩：镖在路上，不认亲，不认故，不认恩。认了，心就软了；心软了，镖就丢了。',
+      '老汉看了他好一会儿，点点头，回到墙角，把帽檐又压低了。',
+      '@slam 天亮的时候，墙角只剩一副空炭筐。',
+      '腊月二十三，落雁关。老哑巴接过匣子，打开——里头是半截镖旗，红底黑字，一个「长」字，一个「风」字。',
+      '底下压着一张字条，是师父的笔迹：旗交还长风镖局。镖，你送到了。不必寻我。',
+      '沈三更打马回了黑松岭。炭窑还是温的，雪地上一行一深一浅的脚印，往山里去了。',
+      '@point 他没追。他把一坛酒放在炭窑口，回了镖局。',
+      '从那以后，每年腊月，他都走一趟黑松岭，放一坛酒。第二年再去，坛子总是空的。',
+      '@bow 列位，这便是：嘴上没叫出的那一声，他拿一辈子去叫。'
+    ], end: { id: 'E4', name: '半截旗', line: '不认师门，年年一坛' } },
+
+    // —— 柳十娘：旧账 ——
+    n5c: { lines: [
+      '@slam 说时迟那时快！沈三更反手一扣，攥住了那只手。',
+      '手指纤细，冰凉——只有四根。',
+      '火折子一亮。柳十娘没挣，也没喊，就那么让他攥着，脸白得像外头的雪。',
+      '@fan 她说：「沈镖头，这匣子，是我托人送的。」那个斗笠压眉的客人，就是她。',
+      '@point 十年前那一夜，白狐找上她，要她半夜开后门。她不肯，白狐就剁了她一根小指。',
+      '她开了门。葛老镖头死在了雪地里，白狐也挨了老镖头一刀，从此再没在江湖上露面。',
+      '那趟镖，白狐没来得及带走，就藏在这客栈的地窖里。十年了，她一两也没敢动。',
+      '屋檐下那盏孤灯，她点了十年，是给死在雪里的老镖头照路的。',
+      '匣子里是地窖的钥匙，和她亲笔写的一封认罪书。落雁关那个卖馄饨的老哑巴，是当年关上管冬衣的老兵。',
+      '她本想让镖送到关上，把这桩旧账了了。可你真来了，她又怕了——怕你打开匣子，知道当年开门的是她。',
+      '?q1=A 松林里那盏红灯笼，是她提着上岭去看的——看你到底来没来。',
+      '?q1=B 列位，雪地上那一深一浅的脚印，是卖炭老汉的，他腿脚不好，跟这档子事没关系——说书的也不能处处埋扣子。',
+      '?q1=C 岭下那串铜铃，是她拴的。她想听见你来，又盼着你别来。',
+      '?q2=A 所以她叫你今夜别睡。她心里有一半，是盼着被你抓住的。',
+      '?q2=B 酒里的药，是她下的。她只想拿回匣子，不想伤人。',
+      '?q2=C 阿豆那一嗓子，听得她心里一哆嗦：匣子，真就在你怀里。',
+      '屋里静得能听见雪落。沈三更攥着那只四根指头的手，半天没动。'
+    ], q: 'q4c' },
+
+    e5: { lines: [
+      '@slam 沈三更把匣子往桌上一放：「诸位都在，咱今夜就把这匣子打开。」',
+      '他掀开匣盖——一把铜钥匙，一封信，纸都黄了。',
+      '老汉把灯重新点上，书生把信一字一字念了出来。念到开门那一句，柳十娘自己跪下了。',
+      '@point 地窖打开，十只镖箱整整齐齐码着，封条上还是长风镖局的印，十年没人碰过。',
+      '那是落雁关守军的冬衣银。十年前那个冬天，关上的兵，是穿着单衣过的年。',
+      '@fan 天一亮，沈三更套了车。柳十娘把客栈的钥匙交给老汉，自己坐上了镖车。',
+      '腊月二十三，落雁关。老哑巴看着十只镖箱，又看着柳十娘那只四根指头的手，半天，比划了一个字：冷。',
+      '他把自己的棉袄脱下来，披在了她身上。',
+      '@bow 列位，这便是：一把钥匙，开了十年的锁；开锁的人，自己走到了亮处。'
+    ], end: { id: 'E5', name: '开匣钥', line: '旧账见光，冬衣到关' } },
+
+    e6: { lines: [
+      '@fan 沈三更松开了手。',
+      '他把匣子放进她手心里：「镖是你托的。你说不送，那就不送了。」',
+      '柳十娘愣住了：「你不怕坏了镖局的名声？」',
+      '沈三更说：「镖局的名声，是镖师一步一步走出来的，不是匣子装出来的。」',
+      '@slam 天一亮，他带着阿豆下了山。走镖二十年，头一回空着手回去，镖银一文不少，退还了斗笠客。',
+      '开春的时候，落雁关来了一辆车，车上十只箱子，封条上是长风镖局的印。没人知道是谁送的。',
+      '又过了些日子，过路的客商说，黑松岭上那盏灯，灭了。孤灯客栈关了门，掌柜的不知去向。',
+      '@point 有人说，落雁关的伙房里多了一个女人，左手只有四根指头，包的馄饨，皮薄馅大。',
+      '@bow 列位，这便是：有的镖，不送，才算送到了。'
+    ], end: { id: 'E6', name: '孤灯灭', line: '还匣不问，灯灭人安' } }
+  },
+
+  // 且慢点。slot = 第几个且慢（0 起），决定回目里的位置。tags 用于模拟观众偏好。
+  choices: {
+    q1: { slot: 0, prompt: '离客栈还有一箭之地，下一句怎么说？', options: [
+      { id: 'A', label: '镖师回头', desc: '沈三更勒住马，猛一回头', hui: '回头一望见红灯', tags: { thrill: .6, mystery: .4 }, to: 'n1a' },
+      { id: 'B', label: '雪地里有第二行脚印', desc: '有人比他们先到一步', hui: '雪中先有瘸足痕', tags: { mystery: 1 }, to: 'n1b' },
+      { id: 'C', label: '马不肯走', desc: '四蹄钉在雪里，打着响鼻', hui: '马停蹄下响铜铃', tags: { thrill: .6, warm: .4 }, to: 'n1c' }
+    ] },
+    q2: { slot: 1, prompt: '柳十娘这一停，停出什么来？', options: [
+      { id: 'A', label: '掌柜其实认得他', desc: '十年前，她见过这张脸', hui: '孤灯掌柜识旧人', tags: { warm: .7, mystery: .3 }, to: 'n3a' },
+      { id: 'B', label: '酒里有药', desc: '酒香底下，压着一丝苦味', hui: '半壶烫酒藏迷药', tags: { thrill: .8, mystery: .2 }, to: 'n3b' },
+      { id: 'C', label: '阿豆说漏了嘴', desc: '一嗓子，满屋人都听见了', hui: '小徒失口惊四座', tags: { humor: .8, thrill: .2 }, to: 'n3c' }
+    ] },
+    q3: { slot: 2, prompt: '黑地里伸过来的，是谁的手？', options: [
+      { id: 'A', label: '背书箱的书生', desc: '那只手细、冷，指头上有墨', hui: '三更书箱藏狐面', tags: { thrill: .6, justice: .4 }, to: 'n5a' },
+      { id: 'B', label: '卖炭的老汉', desc: '那只手粗，满是炭灰', hui: '炭翁手上旧刀痕', tags: { warm: .8, mystery: .2 }, to: 'n5b' },
+      { id: 'C', label: '掌柜柳十娘', desc: '那只手，只有四根指头', hui: '四指纤手探朱匣', tags: { mystery: .7, warm: .3 }, to: 'n5c' }
+    ] },
+    q4a: { slot: 3, prompt: '刀在阿豆脖子上，沈三更怎么办？', options: [
+      { id: 'A', label: '拔刀抢人', desc: '拼一个快字', hui: '回马一刀救徒还', tags: { thrill: .7, justice: .3 }, to: 'e1' },
+      { id: 'B', label: '匣子换人', desc: '镖可以丢，人不能丢', hui: '舍匣换徒困白狐', tags: { warm: .6, mystery: .4 }, to: 'e2' }
+    ] },
+    q4b: { slot: 3, prompt: '那两个字，叫不叫出口？', options: [
+      { id: 'A', label: '跪认师父', desc: '十年了，先叫一声', hui: '风雪跪认旧师门', tags: { warm: 1 }, to: 'e3' },
+      { id: 'B', label: '镖在路上，不认人', desc: '镖没到，不认亲', hui: '半截镖旗雪中归', tags: { justice: .6, mystery: .4 }, to: 'e4' }
+    ] },
+    q4c: { slot: 3, prompt: '匣子，还不还给她？', options: [
+      { id: 'A', label: '当众开匣', desc: '是非曲直，摆到明处', hui: '开匣一钥启旧账', tags: { justice: .8, thrill: .2 }, to: 'e5' },
+      { id: 'B', label: '把匣子还她', desc: '镖是她托的，她说不送就不送', hui: '一镖不送护孤灯', tags: { warm: .7, mystery: .3 }, to: 'e6' }
+    ] }
+  },
+  closing: '@slam 列位，这场书就说到这儿。欲知后事如何——且听下回分解！'
+};
+
+const ACT_NAMES = { slam: '醒木', fan: '摇扇', bow: '抱拳', point: '指点' };
+
+// 解析一行：返回 { text, act, cond, chapter }
+function parseLine(raw) {
+  let s = String(raw), act = null, cond = null, chapter = null;
+  if (s.charAt(0) === '#') return { text: '', act: null, cond: null, chapter: s.slice(1).trim() };
+  let m;
+  for (;;) {
+    if ((m = /^\?(q\w+)=([A-Z|]+)\s*/.exec(s))) { cond = { q: m[1], any: m[2].split('|') }; s = s.slice(m[0].length); continue; }
+    if ((m = /^@(slam|fan|bow|point)\s*/.exec(s))) { act = m[1]; s = s.slice(m[0].length); continue; }
+    break;
+  }
+  return { text: s, act: act, cond: cond, chapter: chapter };
+}
+function condOk(cond, picks) {
+  if (!cond) return true;
+  const v = picks[cond.q];
+  return v !== undefined && cond.any.indexOf(v) >= 0;
+}
+
+// ---- StoryEngine 抽象 ----
+// Segment = { lines:[{text,act,chapter}], choice: {id,slot,prompt,options}|null, ending: {...}|null }
+// Decision = { choiceId, optionId, label, tally:{A:n,...}, share, playerPick }
+class StoryEngine {
+  begin() { throw new Error('StoryEngine.begin 未实现'); }        // -> Promise<Segment>
+  continue(decision) { throw new Error('StoryEngine.continue 未实现'); } // -> Promise<Segment>
+}
+
+// 默认引擎：读剧本树
+class TreeEngine extends StoryEngine {
+  constructor(script) { super(); this.s = script; this.picks = {}; this.trail = []; }
+  begin() { this.picks = {}; this.trail = []; return Promise.resolve(this.segmentFrom(this.s.start)); }
+  continue(decision) {
+    const ch = this.s.choices[decision.choiceId];
+    if (!ch) return Promise.reject(new Error('未知且慢点 ' + decision.choiceId));
+    const opt = ch.options.find(o => o.id === decision.optionId);
+    if (!opt) return Promise.reject(new Error('未知选项 ' + decision.optionId));
+    this.picks[decision.choiceId] = opt.id;
+    return Promise.resolve(this.segmentFrom(opt.to));
+  }
+  segmentFrom(id) {
+    const lines = [];
+    let node = null, guard = 0;
+    for (;;) {
+      node = this.s.nodes[id];
+      if (!node) throw new Error('悬空节点 ' + id);
+      this.trail.push(id);
+      for (const raw of node.lines) {
+        const L = parseLine(raw);
+        if (condOk(L.cond, this.picks)) lines.push({ text: L.text, act: L.act, chapter: L.chapter });
+      }
+      if (node.next && ++guard < 50) { id = node.next; continue; }
+      break;
+    }
+    let choice = null, ending = null;
+    if (node.q) {
+      const c = this.s.choices[node.q];
+      choice = { id: node.q, slot: c.slot, prompt: c.prompt, options: c.options.map(o => ({ id: o.id, label: o.label, desc: o.desc, hui: o.hui, tags: o.tags })) };
+    } else if (node.end) {
+      const L = parseLine(this.s.closing);
+      lines.push({ text: L.text, act: L.act, chapter: null });
+      ending = Object.assign({}, node.end);
+    }
+    return { lines: lines, choice: choice, ending: ending };
+  }
+}
+
+/* ---------------------------------------------------------------------------
+ * LocalLLMEngine —— 参赛版接口桩（本 demo 默认不启用，走 TreeEngine）
+ *
+ * 部署：在 NVIDIA DGX Spark（GB10，128GB 统一内存）上本地起一个 OpenAI 兼容服务，例如
+ *     vllm serve Qwen/Qwen3-32B --max-model-len 16384 --enable-prefix-caching
+ *   或 llama.cpp：
+ *     llama-server -m qwen2.5-14b-instruct-q5_k_m.gguf -c 16384 --parallel 8 --port 8000
+ *   页面加 ?engine=llm&endpoint=http://spark.local:8000 即切到本引擎。
+ *
+ * 为什么非得本地：
+ *   1) 低延迟：醒木一落，说书人得马上开口。局域网 + 前缀缓存（定场诗、人物表、风格约束都是固定前缀），
+ *      首 token 约 200ms，流式出字，比云端往返稳。
+ *   2) 多人并发：一场五十部手机同时投票、展台上几场书同时开，vLLM 的 continuous batching 一台机器扛得住。
+ *   3) 展台离线：会场网络靠不住，故事不能断在半句上；模型、语音、剧本都在一台机器里。
+ *
+ * 提示词结构：
+ *   system：评书风格约束——每句不超过 40 字；口头禅「列位看官」「说时迟那时快」「欲知后事如何」；
+ *           每句可带动作标记 @slam/@fan/@bow/@point；人物表（沈三更、阿豆、柳十娘、书生、卖炭老汉）；
+ *           禁止出现任何现有作品的人物和情节；节奏有张有弛，关键处停在悬念上。
+ *   user：  已发生剧情摘要（每段一句）+ 最近两段原文 + 本次「且慢」的观众投票合并结果：
+ *           「得票最高：X（52%）」作为本段必须执行的走向；「次高：Y（31%）」作为可选伏笔。
+ *   输出：  JSON { lines:[{text,act}], choice:{prompt, options:[{id,label,desc,hui}]} | null, ending:{name,line}|null }
+ *           hui 是七字回目短语，散场时拼成章回体标题。
+ *
+ * 安全阀：返回不合 schema、超时（2.5s）或断网，就回落到 TreeEngine 的对应节点，台上不冷场。
+ * ------------------------------------------------------------------------- */
+class LocalLLMEngine extends StoryEngine {
+  constructor(opts) {
+    super();
+    this.endpoint = (opts && opts.endpoint) || 'http://localhost:8000';
+    this.model = (opts && opts.model) || 'Qwen/Qwen3-32B';
+    this.fallback = new TreeEngine(SCRIPT);   // 兜底：与剧本树保持同一套 Segment 结构
+    this.history = [];                         // 已说过的段落原文
+    this.summary = [];                         // 每段一句的剧情摘要（参赛版由模型自己产出）
+  }
+  systemPrompt() {
+    return [
+      '你是茶馆里的评书艺人，正在现场说一部原创短篇评书《雪夜追镖》。',
+      '口吻：评书腔，节奏有张有弛；常用「列位看官」「说时迟那时快」「欲知后事如何」。',
+      '每句不超过40字，可在句首加动作标记 @slam(拍醒木) @fan(摇扇) @bow(抱拳) @point(指点)。',
+      '人物：镖头沈三更、徒弟阿豆、掌柜柳十娘、背书箱的书生、卖炭老汉；不得出现任何现有作品的人物与情节。',
+      '只输出 JSON：{"lines":[{"text":"","act":""}],"choice":{"prompt":"","options":[{"id":"A","label":"","desc":"","hui":"七字回目"}]}|null,"ending":{"name":"","line":""}|null}'
+    ].join('\n');
+  }
+  userPrompt(decision) {
+    const t = decision && decision.tally ? decision.tally : {};
+    const ranked = Object.keys(t).sort((a, b) => t[b] - t[a]);
+    return [
+      '【前情】' + this.summary.join(' / '),
+      '【最近原文】' + this.history.slice(-2).join('\n'),
+      decision ? '【台下且慢】得票最高：' + decision.label + '（' + Math.round((decision.share || 0) * 100) + '%），本段必须顺着它说；' +
+        (ranked[1] ? '次高的选项可以埋成伏笔。' : '') : '【开书】从定场诗开始。',
+      '续写下一段 6–10 句，停在下一个悬念上，给出 2–3 个且慢选项。'
+    ].join('\n');
+  }
+  async ask(decision) {
+    const ctrl = typeof AbortController !== 'undefined' ? new AbortController() : null;
+    const timer = setTimeout(() => ctrl && ctrl.abort(), 2500);
+    try {
+      const res = await fetch(this.endpoint + '/v1/chat/completions', {
+        method: 'POST', headers: { 'Content-Type': 'application/json' }, signal: ctrl ? ctrl.signal : undefined,
+        body: JSON.stringify({ model: this.model, temperature: 0.85, response_format: { type: 'json_object' },
+          messages: [{ role: 'system', content: this.systemPrompt() }, { role: 'user', content: this.userPrompt(decision) }] })
+      });
+      const data = await res.json();
+      const seg = JSON.parse(data.choices[0].message.content);
+      if (!seg || !Array.isArray(seg.lines) || !seg.lines.length) throw new Error('schema');
+      this.history.push(seg.lines.map(l => l.text).join(''));
+      return { lines: seg.lines.map(l => ({ text: String(l.text || ''), act: ACT_NAMES[l.act] ? l.act : null, chapter: null })),
+        choice: seg.choice ? Object.assign({ id: 'llm' + this.history.length, slot: Math.min(3, this.history.length - 1) }, seg.choice) : null,
+        ending: seg.ending || null };
+    } finally { clearTimeout(timer); }
+  }
+  async begin() {
+    try { return await this.ask(null); } catch (e) { this.useFallback = true; return this.fallback.begin(); }
+  }
+  async continue(decision) {
+    if (this.useFallback) return this.fallback.continue(decision);
+    try { return await this.ask(decision); } catch (e) { this.useFallback = true; return this.fallback.continue(decision); }
+  }
+}
+
+// ---- 模拟现场观众与投票 ----
+const TAGS = ['thrill', 'mystery', 'warm', 'humor', 'justice'];
+const TAG_CN = { thrill: '爱看打', mystery: '爱猜谜', warm: '爱听情', humor: '爱逗乐', justice: '爱讲理' };
+function makeCrowd(rng, n) {
+  const crowd = [];
+  for (let i = 0; i < n; i++) {
+    const pref = {};
+    TAGS.forEach(t => { pref[t] = rng() * 0.45; });
+    pref[TAGS[Math.floor(rng() * TAGS.length)]] += 0.75;
+    crowd.push({ id: i, pref: pref, conform: 0.15 + rng() * 0.85, lazy: rng() < 0.1 });
+  }
+  return crowd;
+}
+const PLAYER_WEIGHT = 3;
+function gumbel(rng) { return -Math.log(-Math.log(Math.max(1e-9, rng()))); }
+
+class VoteSim {
+  constructor(choice, crowd, rng, duration) {
+    this.rng = rng; this.dur = duration || 8000;
+    this.opts = choice.options.map(o => ({ id: o.id, tags: o.tags || {}, n: 0 }));
+    this.player = -1; this.playerAt = -1;
+    this.queue = [];
+    crowd.forEach(c => {
+      if (c.lazy && rng() < 0.7) return;
+      // 越往后喊的人越多：先少后多，最后两秒最热闹
+      const at = 500 + Math.pow(rng(), 0.75) * (this.dur - 900);
+      this.queue.push({ c: c, at: at });
+    });
+    this.queue.sort((a, b) => a.at - b.at);
+    this.voted = 0; this.events = [];
+  }
+  setPlayer(optId, t) {
+    const i = this.opts.findIndex(o => o.id === optId);
+    if (i < 0) return;
+    if (this.player < 0) this.playerAt = t;
+    this.player = i;
+  }
+  totals() { return this.opts.map((o, i) => o.n + (this.player === i ? PLAYER_WEIGHT : 0)); }
+  cast(c) {
+    const tot = this.totals(), sum = tot.reduce((a, b) => a + b, 0);
+    let best = -1, bestS = -1e9;
+    for (let i = 0; i < this.opts.length; i++) {
+      const o = this.opts[i];
+      let base = 0;
+      for (const k in o.tags) base += (c.pref[k] || 0) * o.tags[k];
+      const share = sum ? tot[i] / sum : 1 / this.opts.length;
+      const pull = this.player === i ? 0.22 * c.conform : 0;       // 有人带头喊，旁边的人容易跟
+      const s = 1.6 * base + 0.8 * c.conform * share + pull + gumbel(this.rng) * 0.5;
+      if (s > bestS) { bestS = s; best = i; }
+    }
+    this.opts[best].n++; this.voted++;
+    return best;
+  }
+  advance(t) {            // 推进到第 t 毫秒，返回这期间新投的票（选项下标数组）
+    const out = [];
+    while (this.queue.length && this.queue[0].at <= t) { const c = this.queue.shift().c, i = this.cast(c); out.push(i); this.events.push({ c: c, i: i }); }
+    return out;
+  }
+  finish() { this.advance(Infinity); return this.result(); }
+  result() {
+    const tot = this.totals(), sum = tot.reduce((a, b) => a + b, 0) || 1;
+    let w = 0;
+    for (let i = 1; i < tot.length; i++) {
+      if (tot[i] > tot[w] || (tot[i] === tot[w] && i === this.player)) w = i;
+    }
+    const tally = {};
+    this.opts.forEach((o, i) => { tally[o.id] = tot[i]; });
+    return { winner: this.opts[w].id, tally: tally, share: tot[w] / sum, total: sum, playerPick: this.player >= 0 ? this.opts[this.player].id : null };
+  }
+}
+
+// ---- 回目 ----
+const HUI_NUM = ['第一回', '第二回'];
+function buildHuimu(script, decisions, ending) {
+  const bySlot = [];
+  decisions.forEach(d => {
+    const ch = script.choices[d.choiceId];
+    const opt = ch && ch.options.find(o => o.id === d.optionId);
+    const slot = ch ? ch.slot : bySlot.length;
+    bySlot[slot] = opt ? opt.hui : (d.hui || d.label || '');
+  });
+  const hui = [];
+  for (let k = 0; k < 2; k++) {
+    const a = bySlot[k * 2], b = bySlot[k * 2 + 1];
+    hui.push({ num: HUI_NUM[k], a: a || '', b: b || '' });
+  }
+  return { book: script.title, hui: hui, ending: ending ? ending.name : '', endingLine: ending ? ending.line : '' };
+}
+/*</LOGIC>*/
+
+
+// ===================== 以下是界面、美术、声音 =====================
+const $ = id => document.getElementById(id);
+const RM = (() => { try { return window.matchMedia('(prefers-reduced-motion: reduce)').matches; } catch (e) { return false; } })();
+const COL = { ink: '#17110c', ink2: '#2b2119', ink3: '#43352a', red: '#b5321e', red2: '#87220f', redHi: '#d24a2c', paper: '#eee0c0', paper2: '#d8c49a', paperHi: '#f8efd9' };
+const FONT_BRUSH = '"Ma Shan Zheng","Zhi Mang Xing","STKaiti","KaiTi","Kaiti SC",serif';
+const clamp = (v, a, b) => v < a ? a : v > b ? b : v;
+const lerp = (a, b, t) => a + (b - a) * t;
+const easeOut = t => 1 - Math.pow(1 - t, 3);
+const easeIn = t => t * t * t;
+const nowMs = () => performance.now();
+
+// ---- 本地存档（全部 try/catch）----
+const STORE_KEY = 'wuxian-shuoshu-v1';
+function loadStore() { try { const s = JSON.parse(localStorage.getItem(STORE_KEY) || '{}'); return { shows: s.shows | 0, endings: Array.isArray(s.endings) ? s.endings : [] }; } catch (e) { return { shows: 0, endings: [] }; } }
+function saveStore(s) { try { localStorage.setItem(STORE_KEY, JSON.stringify(s)); } catch (e) { /* 存不了就算了 */ } }
+
+// ===================== 声音（WebAudio 合成） =====================
+const Snd = {
+  ctx: null, master: null, amb: null, muted: false, noiseBuf: null, lastBlip: 0,
+  init() {
+    if (this.ctx) { try { this.ctx.resume(); } catch (e) {} return; }
+    try {
+      const AC = window.AudioContext || window.webkitAudioContext; if (!AC) return;
+      const c = this.ctx = new AC();
+      this.master = c.createGain(); this.master.gain.value = this.muted ? 0 : 0.9; this.master.connect(c.destination);
+      const len = c.sampleRate * 2, buf = c.createBuffer(1, len, c.sampleRate), d = buf.getChannelData(0);
+      for (let i = 0; i < len; i++) d[i] = Math.random() * 2 - 1;
+      this.noiseBuf = buf;
+      this.startAmbience();
+    } catch (e) { this.ctx = null; }
+  },
+  setMuted(m) {
+    this.muted = m;
+    if (this.master) this.master.gain.setTargetAtTime(m ? 0 : 0.9, this.ctx.currentTime, 0.05);
+  },
+  noise(t, dur) { const s = this.ctx.createBufferSource(); s.buffer = this.noiseBuf; s.loop = true; s.loopStart = Math.random(); s.start(t, Math.random() * 1.5); s.stop(t + dur); return s; },
+  startAmbience() {
+    // 人声嘈嘈：几路带通噪声，各自按“说话的节奏”起伏
+    const c = this.ctx, out = c.createGain(); out.gain.value = 0.0; out.connect(this.master); this.amb = out;
+    out.gain.setTargetAtTime(0.11, c.currentTime, 1.5);
+    [340, 560, 820, 1250].forEach((f, i) => {
+      const s = c.createBufferSource(); s.buffer = this.noiseBuf; s.loop = true;
+      const bp = c.createBiquadFilter(); bp.type = 'bandpass'; bp.frequency.value = f; bp.Q.value = 1.4;
+      const g = c.createGain(); g.gain.value = 0.25;
+      const l1 = c.createOscillator(), l1g = c.createGain(); l1.frequency.value = 2.6 + i * 1.1; l1g.gain.value = 0.16;
+      const l2 = c.createOscillator(), l2g = c.createGain(); l2.frequency.value = 0.09 + i * 0.05; l2g.gain.value = 0.12;
+      l1.connect(l1g).connect(g.gain); l2.connect(l2g).connect(g.gain);
+      s.connect(bp).connect(g).connect(out);
+      s.start(c.currentTime, i * 0.37); l1.start(); l2.start();
+    });
+    const loop = () => {
+      if (!this.ctx) return;
+      const r = Math.random();
+      if (r < 0.75) this.clink(0.5 + Math.random() * 0.5); else this.clink(0.4), setTimeout(() => this.clink(0.3), 120);
+      setTimeout(loop, 2600 + Math.random() * 6000);
+    };
+    setTimeout(loop, 1800);
+    const hao = () => { if (!this.ctx) return; if (Math.random() < 0.6) this.hao(1 + (Math.random() * 2 | 0), 0.6); setTimeout(hao, 22000 + Math.random() * 26000); };
+    setTimeout(hao, 16000);
+  },
+  ambLevel(v) { if (this.amb) this.amb.gain.setTargetAtTime(v, this.ctx.currentTime, 0.6); },
+  clink(v) {   // 茶碗盖碰碗沿
+    if (!this.ctx) return; const c = this.ctx, t = c.currentTime;
+    const f = 2600 + Math.random() * 1400;
+    [1, 1.47, 2.09].forEach((m, i) => {
+      const o = c.createOscillator(), g = c.createGain(); o.type = 'sine'; o.frequency.value = f * m;
+      g.gain.setValueAtTime(0.0001, t); g.gain.exponentialRampToValueAtTime(0.03 * v / (i + 1), t + 0.004); g.gain.exponentialRampToValueAtTime(0.0001, t + 0.28 - i * 0.06);
+      o.connect(g).connect(this.master); o.start(t); o.stop(t + 0.3);
+    });
+  },
+  hao(n, v) {  // 台下叫好：锯齿波过两路共振峰，从“哈”滑到“噢”
+    if (!this.ctx) return; const c = this.ctx;
+    for (let k = 0; k < n; k++) {
+      const t = c.currentTime + k * 0.06 + Math.random() * 0.12, dur = 0.42 + Math.random() * 0.2;
+      const o = c.createOscillator(); o.type = 'sawtooth';
+      const f0 = 150 + Math.random() * 120; o.frequency.setValueAtTime(f0 * 1.12, t); o.frequency.linearRampToValueAtTime(f0, t + dur);
+      const g = c.createGain(); g.gain.setValueAtTime(0.0001, t); g.gain.exponentialRampToValueAtTime(0.05 * v, t + 0.05); g.gain.exponentialRampToValueAtTime(0.0001, t + dur);
+      const mix = c.createGain(); mix.gain.value = 1;
+      [[820, 560], [1250, 880]].forEach(([a, b]) => {
+        const f = c.createBiquadFilter(); f.type = 'bandpass'; f.Q.value = 6; f.frequency.setValueAtTime(a, t); f.frequency.linearRampToValueAtTime(b, t + dur);
+        o.connect(f).connect(mix);
+      });
+      mix.connect(g).connect(this.master); o.start(t); o.stop(t + dur + 0.05);
+    }
+  },
+  slam(v) {    // 醒木：短促噪声 + 低频
+    if (!this.ctx) return; const c = this.ctx, t = c.currentTime; v = v || 1;
+    const n = this.noise(t, 0.12), hp = c.createBiquadFilter(); hp.type = 'highpass'; hp.frequency.value = 900;
+    const ng = c.createGain(); ng.gain.setValueAtTime(0.9 * v, t); ng.gain.exponentialRampToValueAtTime(0.001, t + 0.07);
+    n.connect(hp).connect(ng).connect(this.master);
+    const n2 = this.noise(t, 0.2), bp = c.createBiquadFilter(); bp.type = 'bandpass'; bp.frequency.value = 620; bp.Q.value = 7;
+    const ng2 = c.createGain(); ng2.gain.setValueAtTime(0.7 * v, t); ng2.gain.exponentialRampToValueAtTime(0.001, t + 0.16);
+    n2.connect(bp).connect(ng2).connect(this.master);
+    const o = c.createOscillator(), og = c.createGain(); o.type = 'sine'; o.frequency.setValueAtTime(150, t); o.frequency.exponentialRampToValueAtTime(45, t + 0.16);
+    og.gain.setValueAtTime(0.9 * v, t); og.gain.exponentialRampToValueAtTime(0.001, t + 0.2);
+    o.connect(og).connect(this.master); o.start(t); o.stop(t + 0.22);
+  },
+  drum() {     // 且慢开窗：板鼓三击
+    if (!this.ctx) return; const c = this.ctx;
+    [0, 0.11, 0.2].forEach((d, i) => {
+      const t = c.currentTime + d;
+      const o = c.createOscillator(), g = c.createGain(); o.type = 'triangle'; o.frequency.setValueAtTime(420 - i * 30, t); o.frequency.exponentialRampToValueAtTime(180, t + 0.08);
+      g.gain.setValueAtTime(0.32, t); g.gain.exponentialRampToValueAtTime(0.001, t + 0.1);
+      o.connect(g).connect(this.master); o.start(t); o.stop(t + 0.12);
+      const n = this.noise(t, 0.05), bp = c.createBiquadFilter(); bp.type = 'bandpass'; bp.frequency.value = 2400; bp.Q.value = 2;
+      const ng = c.createGain(); ng.gain.setValueAtTime(0.25, t); ng.gain.exponentialRampToValueAtTime(0.001, t + 0.04);
+      n.connect(bp).connect(ng).connect(this.master);
+    });
+  },
+  tick(hi) {
+    if (!this.ctx) return; const c = this.ctx, t = c.currentTime;
+    const o = c.createOscillator(), g = c.createGain(); o.type = 'square'; o.frequency.value = hi ? 1560 : 1040;
+    g.gain.setValueAtTime(0.0001, t); g.gain.exponentialRampToValueAtTime(hi ? 0.07 : 0.045, t + 0.003); g.gain.exponentialRampToValueAtTime(0.0001, t + 0.04);
+    const lp = c.createBiquadFilter(); lp.type = 'lowpass'; lp.frequency.value = 3000;
+    o.connect(lp).connect(g).connect(this.master); o.start(t); o.stop(t + 0.05);
+  },
+  blip(strong) {
+    if (!this.ctx) return; const c = this.ctx, t = c.currentTime;
+    if (!strong && t - this.lastBlip < 0.07) return; this.lastBlip = t;
+    const o = c.createOscillator(), g = c.createGain(); o.type = 'sine'; o.frequency.value = strong ? 880 : 1700 + Math.random() * 800;
+    if (strong) o.frequency.exponentialRampToValueAtTime(1320, t + 0.08);
+    g.gain.setValueAtTime(0.0001, t); g.gain.exponentialRampToValueAtTime(strong ? 0.12 : 0.022, t + 0.005); g.gain.exponentialRampToValueAtTime(0.0001, t + (strong ? 0.18 : 0.06));
+    o.connect(g).connect(this.master); o.start(t); o.stop(t + 0.2);
+  }
+};
+
+// ===================== 开声：speechSynthesis（可选，默认关） =====================
+const Voice = {
+  ok: (() => { try { return 'speechSynthesis' in window && typeof SpeechSynthesisUtterance !== 'undefined'; } catch (e) { return false; } })(),
+  on: false, voice: null,
+  pick() {
+    if (!this.ok) return;
+    try {
+      const vs = window.speechSynthesis.getVoices() || [];
+      this.voice = vs.find(v => /zh[-_]CN/i.test(v.lang) && /male|男|Yunxi|Kangkang|Li-mu/i.test(v.name)) || vs.find(v => /zh[-_]CN/i.test(v.lang)) || vs.find(v => /^zh/i.test(v.lang)) || null;
+    } catch (e) { this.voice = null; }
+  },
+  speak(text, done) {
+    if (!this.ok || !this.on || Snd.muted) { done(); return; }
+    try {
+      window.speechSynthesis.cancel();
+      const u = new SpeechSynthesisUtterance(text.replace(/[「」]/g, ''));
+      u.lang = 'zh-CN'; if (this.voice) u.voice = this.voice; u.rate = 1.02; u.pitch = 0.82; u.volume = 1;
+      let fired = false; const fin = () => { if (!fired) { fired = true; done(); } };
+      u.onend = fin; u.onerror = fin;
+      window.speechSynthesis.speak(u);
+    } catch (e) { done(); }
+  },
+  stop() { if (this.ok) { try { window.speechSynthesis.cancel(); } catch (e) {} } }
+};
+if (Voice.ok) { try { Voice.pick(); window.speechSynthesis.onvoiceschanged = () => Voice.pick(); } catch (e) {} }
+
+// ===================== 木刻笔触工具 =====================
+function wob(g, x1, y1, x2, y2, rng, amp) {
+  const n = Math.max(2, Math.round(Math.hypot(x2 - x1, y2 - y1) / 26));
+  g.moveTo(x1, y1);
+  for (let i = 1; i <= n; i++) { const t = i / n, j = i < n ? 1 : 0; g.lineTo(x1 + (x2 - x1) * t + (rng() - .5) * amp * j, y1 + (y2 - y1) * t + (rng() - .5) * amp * j); }
+}
+// 排线：在当前裁剪区内画平行刻线
+function hatch(g, rng, bx, by, bw, bh, ang, gap, lw, col, amp) {
+  g.save(); g.strokeStyle = col; g.lineWidth = lw; g.lineCap = 'round';
+  const cx = bx + bw / 2, cy = by + bh / 2, R = Math.hypot(bw, bh) / 2 + 4;
+  g.translate(cx, cy); g.rotate(ang); g.beginPath();
+  for (let y = -R; y <= R; y += gap) { const j = (rng() - .5) * gap * .35; wob(g, -R, y + j, R, y + j + (rng() - .5) * gap * .4, rng, amp == null ? .9 : amp); }
+  g.stroke(); g.restore();
+}
+// 刀痕：两头尖、中间鼓的一刀
+function knife(g, x1, y1, x2, y2, w, bend) {
+  const dx = x2 - x1, dy = y2 - y1, L = Math.hypot(dx, dy) || 1, nx = -dy / L, ny = dx / L, b = bend || 0;
+  const mx = (x1 + x2) / 2 + nx * b, my = (y1 + y2) / 2 + ny * b;
+  g.beginPath(); g.moveTo(x1, y1);
+  g.quadraticCurveTo(mx + nx * w, my + ny * w, x2, y2);
+  g.quadraticCurveTo(mx - nx * w * .25, my - ny * w * .25, x1, y1); g.fill();
+}
+// 刀口碎屑：黑地上随机挑掉的小块
+function chips(g, rng, bx, by, bw, bh, n, len, col) {
+  g.fillStyle = col;
+  for (let i = 0; i < n; i++) { const x = bx + rng() * bw, y = by + rng() * bh, a = rng() * Math.PI, l = len * (.4 + rng()); knife(g, x, y, x + Math.cos(a) * l, y + Math.sin(a) * l, l * .18, 0); }
+}
+function meander(g, x0, y0, x1, h, lw, col) { // 回纹
+  g.strokeStyle = col; g.lineWidth = lw; g.lineCap = 'square'; g.beginPath();
+  const u = h; for (let x = x0; x < x1 - u * .5; x += u * 1.15) {
+    const a = x, b = y0, s = u;
+    g.moveTo(a, b + s); g.lineTo(a, b); g.lineTo(a + s, b); g.lineTo(a + s, b + s * .78); g.lineTo(a + s * .25, b + s * .78); g.lineTo(a + s * .25, b + s * .25); g.lineTo(a + s * .72, b + s * .25); g.lineTo(a + s * .72, b + s * .52);
+  }
+  g.stroke();
+}
+
+// ===================== 说书人姿态 =====================
+const ACT_DUR = { slam: 900, fan: 2700, bow: 1750, point: 1900 };
+const IDLE = { L: { x: -60, y: -14 }, R: { x: 66, y: -58 }, fanOpen: 0, fanAng: -1.0, bow: 0, tilt: 0 };
+function makeTeller(onImpact) {
+  return {
+    act: null, last: 0, onImpact: onImpact,
+    P: { L: { x: -60, y: -14 }, R: { x: 66, y: -58 }, fanOpen: 0, fanAng: -1.0, bow: 0, mouth: 0, sway: 0, tilt: 0 },
+    start(type, now, big) { this.act = { type: type, t0: now, big: !!big, hit: false }; },
+    update(now, talking) {
+      const dt = this.last ? Math.min(0.1, (now - this.last) / 1000) : 0.016; this.last = now;
+      const t = now / 1000, P = this.P, a = this.act;
+      const T = { L: { x: IDLE.L.x, y: IDLE.L.y }, R: { x: IDLE.R.x + Math.sin(t * 1.3) * 5, y: IDLE.R.y + Math.sin(t * 2.1) * 3 }, fanOpen: 0, fanAng: IDLE.fanAng, bow: 0, tilt: Math.sin(t * .7) * .03 };
+      let directL = null;
+      if (a) {
+        const e = now - a.t0;
+        if (e > ACT_DUR[a.type]) this.act = null;
+        else if (a.type === 'slam') {
+          const up = { x: -96, y: -248 }, down = { x: -60, y: -9 };
+          let p;
+          if (e < 380) { const k = easeOut(e / 380); p = { x: lerp(P.L.x, up.x, k), y: lerp(P.L.y, up.y, k) }; }
+          else if (e < 470) p = { x: up.x, y: up.y + Math.sin((e - 380) / 90 * Math.PI) * -4 };
+          else if (e < 550) { const k = easeIn((e - 470) / 80); p = { x: lerp(up.x, down.x, k), y: lerp(up.y, down.y, k) }; }
+          else { const k = (e - 550) / 350; p = { x: down.x, y: down.y - Math.sin(Math.min(1, k * 2) * Math.PI) * 5 * (1 - k) }; }
+          directL = p;
+          T.bow = e > 540 && e < 760 ? 0.28 : 0;
+          if (!a.hit && e >= 550) { a.hit = true; if (this.onImpact) this.onImpact(a.big); }
+        } else if (a.type === 'fan') {
+          const w = t * (RM ? 3 : 7);
+          T.R = { x: 86 + Math.sin(w) * 12, y: -108 + Math.cos(w) * 7 }; T.fanOpen = 1; T.fanAng = -1.2 + Math.sin(w) * .34;
+          if (e > ACT_DUR.fan - 350) T.fanOpen = 0;
+        } else if (a.type === 'bow') {
+          T.L = { x: -12, y: -104 }; T.R = { x: 12, y: -102 }; T.bow = e < ACT_DUR.bow - 300 ? 1 : 0; T.fanAng = -1.57;
+        } else if (a.type === 'point') {
+          T.R = { x: 168, y: -164 }; T.fanAng = -0.48; T.tilt = 0.1;
+        }
+      }
+      const k = 1 - Math.exp(-dt * 11);
+      if (directL) { P.L.x = directL.x; P.L.y = directL.y; } else { P.L.x += (T.L.x - P.L.x) * k; P.L.y += (T.L.y - P.L.y) * k; }
+      P.R.x += (T.R.x - P.R.x) * k; P.R.y += (T.R.y - P.R.y) * k;
+      P.fanOpen += (T.fanOpen - P.fanOpen) * (1 - Math.exp(-dt * 9));
+      P.fanAng += (T.fanAng - P.fanAng) * k;
+      P.bow += (T.bow - P.bow) * (1 - Math.exp(-dt * 8));
+      P.tilt += (T.tilt - P.tilt) * k;
+      P.sway = RM ? 0 : Math.sin(t * .9) * 1.2;
+      P.mouth = talking ? (0.5 + 0.5 * Math.sin(t * 27)) * (0.6 + 0.4 * Math.sin(t * 7.3)) : P.mouth * 0.8;
+    }
+  };
+}
+
+function ik(S, T, l1, l2, side) {
+  const dx = T.x - S.x, dy = T.y - S.y, d = Math.hypot(dx, dy);
+  const dm = Math.max(Math.abs(l1 - l2) + 1, Math.min(l1 + l2 - .5, d));
+  const a = Math.atan2(dy, dx), A = Math.acos(clamp((l1 * l1 + dm * dm - l2 * l2) / (2 * l1 * dm), -1, 1));
+  const e1 = { x: S.x + l1 * Math.cos(a + A), y: S.y + l1 * Math.sin(a + A) }, e2 = { x: S.x + l1 * Math.cos(a - A), y: S.y + l1 * Math.sin(a - A) };
+  const sc = e => side * e.x + 0.35 * e.y;
+  return [sc(e1) > sc(e2) ? e1 : e2, { x: S.x + dm * Math.cos(a), y: S.y + dm * Math.sin(a) }];
+}
+
+// 说书人：躯干与头（在桌案之前画）
+function drawTellerBody(g, P) {
+  const sw = P.sway, b = P.bow;
+  const neckY = -172 + b * 12, shY = -140 + b * 9, headY = -206 + b * 17;
+  g.fillStyle = COL.ink;
+  g.beginPath(); g.moveTo(-20 + sw, neckY); g.quadraticCurveTo(-62 + sw, shY - 8, -84 + sw, shY + 10);
+  g.quadraticCurveTo(-95, shY + 60, -98, 14); g.lineTo(98, 14); g.quadraticCurveTo(95, shY + 60, 84 + sw, shY + 10);
+  g.quadraticCurveTo(62 + sw, shY - 8, 20 + sw, neckY); g.closePath(); g.fill();
+  // 刻线：大襟、盘扣、衣褶、肩头受光
+  g.strokeStyle = COL.paper; g.fillStyle = COL.paper; g.lineCap = 'round';
+  g.lineWidth = 2.6; g.beginPath(); g.moveTo(-6 + sw, neckY + 5); g.quadraticCurveTo(30 + sw, shY + 6, 50 + sw, shY + 34); g.quadraticCurveTo(57, shY + 70, 56, 6); g.stroke();
+  g.lineWidth = 1.8;
+  [[8, shY - 5], [28, shY + 9], [45, shY + 27], [54, shY + 64]].forEach(p => { g.beginPath(); g.moveTo(p[0] - 7 + sw, p[1]); g.lineTo(p[0] + 4 + sw, p[1]); g.stroke(); g.beginPath(); g.arc(p[0] + 7 + sw, p[1], 2.2, 0, 7); g.fill(); });
+  knife(g, -50 + sw, shY + 34, -64, -4, 3.2, 5); knife(g, -26 + sw, shY + 62, -30, -2, 2.4, -3); knife(g, 76 + sw, shY + 54, 82, -4, 2.2, 3); knife(g, -74, shY + 70, -86, 4, 2, 2);
+  g.lineWidth = 2.2; g.beginPath(); g.moveTo(-22 + sw, neckY + 3); g.quadraticCurveTo(-60 + sw, shY - 3, -81 + sw, shY + 13); g.stroke();
+  // 立领
+  g.fillStyle = COL.ink; g.fillRect(-15 + sw, neckY - 13, 30, 17);
+  g.lineWidth = 1.8; g.beginPath(); g.moveTo(-14 + sw, neckY - 11); g.lineTo(14 + sw, neckY - 11); g.stroke();
+  // 头
+  g.save(); g.translate(sw * 1.6, headY); g.rotate(P.tilt);
+  g.fillStyle = COL.ink;
+  g.beginPath(); g.ellipse(-30, 3, 6, 9, 0, 0, 7); g.ellipse(30, 3, 6, 9, 0, 0, 7); g.fill();
+  g.beginPath(); g.ellipse(0, 0, 30, 36, 0, 0, 7); g.fill();
+  // 瓜皮帽
+  g.beginPath(); g.moveTo(-31, -10); g.quadraticCurveTo(-31, -46, 0, -47); g.quadraticCurveTo(31, -46, 31, -10); g.closePath(); g.fill();
+  g.strokeStyle = COL.paper; g.lineWidth = 2.4; g.beginPath(); g.moveTo(-31, -10); g.quadraticCurveTo(0, -4, 31, -10); g.stroke();
+  g.lineWidth = 1.2; g.globalAlpha = .7; g.beginPath(); g.moveTo(0, -46); g.lineTo(-17, -12); g.moveTo(0, -46); g.lineTo(17, -12); g.moveTo(0, -46); g.lineTo(0, -8); g.stroke(); g.globalAlpha = 1;
+  g.fillStyle = COL.red; g.beginPath(); g.arc(0, -49, 6.5, 0, 7); g.fill();
+  g.fillStyle = COL.paperHi; g.beginPath(); g.arc(-2, -51, 1.8, 0, 7); g.fill();
+  // 脸：刻出来的眉眼
+  g.fillStyle = COL.paper;
+  knife(g, -23, 0, -7, -4, 2.4, -1); knife(g, 23, 0, 7, -4, 2.4, 1);
+  g.strokeStyle = COL.paper; g.lineWidth = 1.9;
+  g.beginPath(); g.moveTo(-20, 8); g.quadraticCurveTo(-13, 5, -7, 8); g.moveTo(20, 8); g.quadraticCurveTo(13, 5, 7, 8); g.stroke();
+  g.lineWidth = 1.6; g.beginPath(); g.moveTo(1, 8); g.lineTo(-2.5, 18); g.lineTo(3, 19.5); g.stroke();
+  knife(g, -2, 24, -17, 29, 2.2, 2); knife(g, 2, 24, 17, 29, 2.2, -2);
+  if (P.mouth > 0.15) { g.beginPath(); g.ellipse(0, 29.5, 5, 1.2 + 3.6 * P.mouth, 0, 0, 7); g.fill(); }
+  else { g.beginPath(); g.moveTo(-5, 29.5); g.lineTo(5, 29.5); g.stroke(); }
+  g.fillStyle = COL.ink; g.beginPath(); g.moveTo(-8, 32); g.quadraticCurveTo(-6, 48, 0, 56); g.quadraticCurveTo(6, 48, 8, 32); g.fill();
+  g.strokeStyle = COL.paper2; g.lineWidth = 1; g.beginPath(); g.moveTo(-2, 38); g.lineTo(-1, 50); g.moveTo(2, 38); g.lineTo(1.5, 49); g.stroke();
+  g.strokeStyle = COL.paper; g.lineWidth = 2.2; g.beginPath(); g.ellipse(0, 0, 30, 36, 0, Math.PI * .66, Math.PI * 1.02); g.stroke();
+  g.restore();
+}
+function drawArm(g, S, H, side, item, P) {
+  const r = ik(S, H, 72, 66, side), E = r[0], Hh = r[1];
+  const fa = Math.atan2(Hh.y - E.y, Hh.x - E.x), ux = Math.cos(fa), uy = Math.sin(fa);
+  const W = { x: Hh.x - ux * 10, y: Hh.y - uy * 10 };
+  g.strokeStyle = COL.ink; g.lineCap = 'round'; g.lineJoin = 'round';
+  g.lineWidth = 34; g.beginPath(); g.moveTo(S.x, S.y); g.lineTo(E.x, E.y); g.stroke();
+  g.lineWidth = 30; g.beginPath(); g.moveTo(E.x, E.y); g.lineTo(W.x, W.y); g.stroke();
+  // 袖口外翻的阔袖
+  g.fillStyle = COL.ink; g.beginPath(); g.moveTo(W.x - uy * 19, W.y + ux * 19); g.lineTo(W.x + uy * 19, W.y - ux * 19); g.lineTo(E.x + uy * 15, E.y - ux * 15); g.lineTo(E.x - uy * 15, E.y + ux * 15); g.fill();
+  // 受光刻线
+  const ua = Math.atan2(E.y - S.y, E.x - S.x), nx = -Math.sin(ua) * side, ny = Math.cos(ua) * side;
+  g.strokeStyle = COL.paper; g.lineWidth = 1.8;
+  g.beginPath(); g.moveTo(S.x - nx * 14, S.y - ny * 14); g.lineTo(E.x - nx * 13, E.y - ny * 13); g.stroke();
+  g.fillStyle = COL.paper; knife(g, E.x - ux * 2, E.y - uy * 2, E.x + ux * 28 + uy * 6, E.y + uy * 28 - ux * 6, 2, 2);
+  // 白袖口（说书人卷起的白水袖）
+  g.save(); g.translate(W.x, W.y); g.rotate(fa);
+  g.fillStyle = COL.paperHi; g.fillRect(-6, -16, 10, 32);
+  g.strokeStyle = COL.ink; g.lineWidth = 1.2; g.beginPath(); g.moveTo(-1, -15); g.lineTo(-1, 15); g.stroke();
+  g.restore();
+  // 手
+  g.fillStyle = COL.ink; g.beginPath(); g.ellipse(Hh.x, Hh.y, 11.5, 10.5, fa, 0, 7); g.fill();
+  g.strokeStyle = COL.paper2; g.lineWidth = 1.2; g.beginPath(); g.arc(Hh.x, Hh.y, 8, fa - 1.2, fa + .2); g.stroke();
+  if (item === 'mallet') {
+    g.save(); g.translate(Hh.x, Hh.y + 7); g.rotate((fa - Math.PI / 2) * .18);
+    g.fillStyle = '#4a2e1c'; g.fillRect(-22, -8, 44, 15);
+    g.strokeStyle = COL.paper; g.lineWidth = 1.7; g.strokeRect(-22, -8, 44, 15);
+    g.beginPath(); g.moveTo(-19, -4); g.lineTo(19, -4); g.stroke();
+    g.restore();
+  } else if (item === 'fan') {
+    g.save(); g.translate(Hh.x, Hh.y); g.rotate(P.fanAng);
+    const o = P.fanOpen;
+    if (o > 0.08) {
+      const span = 2.0 * o, R = 66;
+      g.fillStyle = COL.paperHi; g.beginPath(); g.moveTo(0, 0); g.arc(0, 0, R, -span / 2, span / 2); g.closePath(); g.fill();
+      g.fillStyle = COL.red; g.beginPath(); g.arc(0, 0, R, -span / 2, span / 2); g.arc(0, 0, R * .78, span / 2, -span / 2, true); g.closePath(); g.fill();
+      g.strokeStyle = COL.ink; g.lineWidth = 1.1; g.beginPath();
+      for (let i = 0; i <= 10; i++) { const aa = -span / 2 + span * i / 10; g.moveTo(Math.cos(aa) * 10, Math.sin(aa) * 10); g.lineTo(Math.cos(aa) * R, Math.sin(aa) * R); }
+      g.stroke(); g.lineWidth = 2; g.beginPath(); g.arc(0, 0, R, -span / 2, span / 2); g.stroke();
+    } else {
+      g.fillStyle = '#3a2a1e'; g.beginPath(); g.moveTo(-4, -4); g.lineTo(66, -3); g.lineTo(66, 3); g.lineTo(-4, 5); g.closePath(); g.fill();
+      g.strokeStyle = COL.paper; g.lineWidth = 1.4; g.beginPath(); g.moveTo(-2, -3); g.lineTo(65, -2.5); g.stroke();
+      g.fillStyle = COL.red; g.beginPath(); g.moveTo(-6, 0); g.lineTo(-14, 8); g.lineTo(-10, 10); g.fill();
+    }
+    g.restore();
+  }
+}
+function drawTellerArms(g, P) {
+  const sw = P.sway, shY = -140 + P.bow * 9;
+  drawArm(g, { x: -74 + sw, y: shY + 8 }, P.L, -1, 'mallet', P);
+  drawArm(g, { x: 74 + sw, y: shY + 8 }, P.R, 1, 'fan', P);
+}
+
+// ===================== 茶馆戏台 =====================
+const stage = { cv: $('stage'), g: null, w: 0, h: 0, dpr: 1, s: 1, ox: 0, oy: 0, V: null, bg: null, table: null, grain: null, dimUntil: 0, dim: 0, raise: 0 };
+stage.g = stage.cv.getContext('2d');
+const VIEW = { hw: 430, yt: -440, yb: 290 };
+const TELLER_K = 1.18, TELLER_Y = -40;
+const WIN = [{ x0: 296, x1: 432, y0: -300, y1: -86 }, { x0: -432, x1: -296, y0: -300, y1: -86 }];
+const AUD = [];
+(function buildAudience() {
+  const rng = mulberry32(2024);
+  const rows = [{ y: 198, k: .78, gap: 66, off: 8 }, { y: 244, k: 1.0, gap: 88, off: 42 }, { y: 292, k: 1.3, gap: 118, off: 6 }];
+  rows.forEach((r, ri) => {
+    for (let x = -680 + r.off; x < 680; x += r.gap * (.9 + rng() * .25)) {
+      const type = Math.floor(rng() * 5);
+      AUD.push({ x: x, y: r.y + (rng() - .5) * 6, k: r.k * (type === 4 ? .82 : 1) * (.94 + rng() * .1), row: ri, type: type, ph: rng() * 6.28, raiseT: -1e9, side: rng() < .5 ? -1 : 1 });
+    }
+  });
+})();
+const BOWLS = [-520, -383, -240, -96, 74, 214, 352, 498].map((x, i) => ({ x: x + (i % 2 ? 8 : -6), ph: i * 1.7 }));
+let SNOW = null;
+function buildSnow() {
+  const rng = mulberry32(77); SNOW = WIN.map(() => { const a = []; for (let i = 0; i < 34; i++) a.push({ x: rng(), y: rng(), sp: 14 + rng() * 26, amp: 3 + rng() * 7, ph: rng() * 6.28, r: .9 + rng() * 2.2 }); return a; });
+}
+buildSnow();
+
+function worldTf(g) { g.setTransform(stage.dpr * stage.s, 0, 0, stage.dpr * stage.s, stage.dpr * stage.ox, stage.dpr * stage.oy); }
+function makeLayer() { const c = document.createElement('canvas'); c.width = Math.max(1, Math.round(stage.w * stage.dpr)); c.height = Math.max(1, Math.round(stage.h * stage.dpr)); return c; }
+
+function resizeStage() {
+  const r = $('stageWrap').getBoundingClientRect();
+  const w = Math.max(10, r.width), h = Math.max(10, r.height), dpr = Math.min(2.5, window.devicePixelRatio || 1);
+  if (w === stage.w && h === stage.h && dpr === stage.dpr && stage.bg) return;
+  stage.w = w; stage.h = h; stage.dpr = dpr;
+  stage.cv.width = Math.round(w * dpr); stage.cv.height = Math.round(h * dpr);
+  const s = Math.min(w / (VIEW.hw * 2), h / (VIEW.yb - VIEW.yt));
+  stage.s = s; stage.ox = w / 2; stage.oy = h / 2 - s * (VIEW.yt + VIEW.yb) / 2;
+  // 竖向富余时，把画面压低一点，让上方多露房梁
+  stage.V = { xL: -stage.ox / s, xR: (w - stage.ox) / s, yT: -stage.oy / s, yB: (h - stage.oy) / s };
+  buildLayers();
+}
+function buildLayers() {
+  const V = stage.V;
+  stage.bg = makeLayer(); { const g = stage.bg.getContext('2d'); worldTf(g); drawBackdrop(g, V, mulberry32(11)); }
+  stage.table = makeLayer(); { const g = stage.table.getContext('2d'); worldTf(g); g.translate(0, TELLER_Y); g.scale(TELLER_K, TELLER_K); drawTable(g, mulberry32(29)); }
+  stage.grain = makeLayer(); {
+    const g = stage.grain.getContext('2d'), rng = mulberry32(5), W = stage.grain.width, H = stage.grain.height, n = Math.min(26000, W * H / 70 | 0);
+    for (let i = 0; i < n; i++) { g.fillStyle = rng() < .55 ? 'rgba(238,224,192,.09)' : 'rgba(23,17,12,.13)'; const sz = rng() < .9 ? 1 : 2; g.fillRect(rng() * W | 0, rng() * H | 0, sz * stage.dpr, sz * stage.dpr); }
+  }
+}
+
+function drawBackdrop(g, V, rng) {
+  const X0 = V.xL - 20, X1 = V.xR + 20, Y0 = V.yT - 20, Y1 = V.yB + 20, WALL_B = 0;
+  // 墙：米黄纸地 + 木板缝 + 木纹
+  g.fillStyle = COL.paper; g.fillRect(X0, Y0, X1 - X0, WALL_B - Y0);
+  g.strokeStyle = COL.ink3; g.lineWidth = 1.4; g.beginPath();
+  for (let x = Math.floor(X0 / 54) * 54; x < X1; x += 54) wob(g, x, Y0, x, WALL_B, rng, 1.6);
+  g.stroke();
+  g.globalAlpha = .3; g.lineWidth = .9; g.beginPath();
+  for (let x = Math.floor(X0 / 54) * 54; x < X1; x += 54) for (let k = 0; k < 3; k++) { const gx = x + 8 + rng() * 38; let y = Y0; g.moveTo(gx, y); while (y < WALL_B) { y += 18 + rng() * 26; g.lineTo(gx + Math.sin(y * .02 + k * 2 + x) * 3.2, y); } }
+  g.stroke(); g.globalAlpha = 1;
+  // 四周排线压暗（木刻的“暗部”）
+  g.save(); g.beginPath(); g.rect(X0, Y0, X1 - X0, WALL_B - Y0); g.ellipse(0, -190, 390, 250, 0, 0, 7); g.clip('evenodd');
+  hatch(g, rng, X0, Y0, X1 - X0, WALL_B - Y0, -0.85, 7.5, 1.15, COL.ink2, 1.3); g.restore();
+  g.save(); g.beginPath(); g.rect(X0, Y0, X1 - X0, WALL_B - Y0); g.ellipse(0, -170, 520, 340, 0, 0, 7); g.clip('evenodd');
+  hatch(g, rng, X0, Y0, X1 - X0, WALL_B - Y0, 0.75, 5.5, 1.2, COL.ink2, 1.3); g.restore();
+  // 窗：夜色（雪花在动态层里画）
+  WIN.forEach(w => {
+    g.fillStyle = COL.ink; g.fillRect(w.x0 - 14, w.y0 - 14, w.x1 - w.x0 + 28, w.y1 - w.y0 + 28);
+    g.fillStyle = '#1e1712'; g.fillRect(w.x0, w.y0, w.x1 - w.x0, w.y1 - w.y0);
+    g.save(); g.beginPath(); g.rect(w.x0, w.y0, w.x1 - w.x0, w.y1 - w.y0); g.clip();
+    g.fillStyle = COL.ink; g.beginPath(); g.moveTo(w.x0, w.y1); for (let x = w.x0; x <= w.x1; x += 12) g.lineTo(x, w.y1 - 30 - Math.sin(x * .05) * 14 - rng() * 8); g.lineTo(w.x1, w.y1); g.fill();
+    g.fillStyle = COL.paper2; g.globalAlpha = .8; for (let x = w.x0; x <= w.x1; x += 9) knife(g, x, w.y1 - 30 - Math.sin(x * .05) * 14, x + 7, w.y1 - 28 - Math.sin((x + 7) * .05) * 14, 1.4, 0); g.globalAlpha = 1;
+    g.restore();
+    g.strokeStyle = COL.paper2; g.lineWidth = 1.2; g.strokeRect(w.x0 - 8, w.y0 - 8, w.x1 - w.x0 + 16, w.y1 - w.y0 + 16);
+    g.fillStyle = COL.ink; g.fillRect(w.x0 - 22, w.y1 + 12, w.x1 - w.x0 + 44, 10);
+  });
+  // 屏风：三扇，中间一轮朱红
+  const PN = [[-272, -94], [-90, 90], [94, 272]], PT = -342, PB = -6;
+  g.fillStyle = COL.ink; g.fillRect(-284, PT - 16, 568, PB - PT + 16);
+  g.save(); g.beginPath(); PN.forEach(p => g.rect(p[0], PT, p[1] - p[0], PB - PT)); g.clip();
+  g.fillStyle = COL.paper; g.fillRect(-280, PT, 560, PB - PT);
+  g.globalAlpha = .4; hatch(g, rng, -280, PT, 560, 150, 0, 8, .9, COL.ink3, 1.6); g.globalAlpha = 1;
+  g.fillStyle = COL.red; g.beginPath(); g.arc(0, -262, 122, 0, 7); g.fill();
+  g.save(); g.beginPath(); g.arc(0, -262, 122, 0, 7); g.clip();
+  hatch(g, rng, -130, -262, 260, 130, -0.2, 6, 1.6, COL.red2, 1.2);
+  g.strokeStyle = COL.redHi; g.lineWidth = 1.6; g.globalAlpha = .7;
+  for (let r = 26; r < 124; r += 13) { const a0 = Math.PI * (1.05 + rng() * .3), a1 = a0 + Math.PI * (.35 + rng() * .4); g.beginPath(); g.arc(0, -262, r, a0, a1); g.stroke(); }
+  g.globalAlpha = 1; g.restore();
+  // 远山：只用排线
+  g.save(); g.beginPath(); g.moveTo(-290, -110);
+  [[-230, -168], [-180, -136], [-128, -190], [-70, -148], [-10, -178], [52, -140], [118, -202], [176, -150], [228, -176], [290, -126]].forEach(p => g.lineTo(p[0], p[1]));
+  g.lineTo(290, PB); g.lineTo(-290, PB); g.closePath(); g.clip();
+  g.fillStyle = COL.paper; g.fillRect(-290, -210, 580, 210);
+  hatch(g, rng, -290, -210, 580, 210, 0.95, 4.2, 1.5, COL.ink2, 1); g.restore();
+  // 近山：实黑 + 刻出雪顶
+  const ridge = [[-290, -60], [-240, -92], [-196, -74], [-150, -116], [-96, -80], [-40, -98], [10, -70], [70, -110], [130, -78], [190, -104], [240, -70], [290, -90]];
+  g.fillStyle = COL.ink; g.beginPath(); g.moveTo(-290, PB); ridge.forEach(p => g.lineTo(p[0], p[1])); g.lineTo(290, PB); g.closePath(); g.fill();
+  g.fillStyle = COL.paper;
+  for (let i = 0; i < ridge.length - 1; i++) { const a = ridge[i], b = ridge[i + 1]; for (let k = 0; k < 3; k++) { const t = (k + rng()) / 3; const x = lerp(a[0], b[0], t), y = lerp(a[1], b[1], t) + 4 + rng() * 6; knife(g, x - 10, y, x + 10, y + (b[1] - a[1]) * .1, 1.5, 0); } }
+  // 黑松
+  const pine = (x, y, h) => {
+    g.fillStyle = COL.ink;
+    for (let i = 0; i < 4; i++) { const ty = y - h + i * h * .22, bw = h * (.2 + i * .1); g.beginPath(); g.moveTo(x, ty); g.lineTo(x - bw, ty + h * .32); g.lineTo(x + bw, ty + h * .32); g.closePath(); g.fill(); }
+    g.fillRect(x - 2, y - h * .1, 4, h * .14);
+    g.fillStyle = COL.paper; for (let i = 0; i < 4; i++) { const ty = y - h + i * h * .22 + h * .3, bw = h * (.2 + i * .1); knife(g, x - bw * .8, ty, x - bw * .1, ty - h * .05, 1.2, 0); }
+  };
+  [[-250, -86, 58], [-212, -78, 40], [-150, -110, 66], [-118, -86, 44], [150, -84, 50], [196, -100, 70], [236, -74, 42], [262, -86, 52]].forEach(p => pine(p[0], p[1], p[2]));
+  // 画里的雪
+  g.fillStyle = COL.paperHi; for (let i = 0; i < 160; i++) { const x = -280 + rng() * 560, y = PT + rng() * (PB - PT); g.fillRect(x, y, 1.6 + rng() * 1.4, 1.6 + rng() * 1.4); }
+  g.restore();
+  g.strokeStyle = COL.ink; g.lineWidth = 11; PN.forEach(p => g.strokeRect(p[0], PT, p[1] - p[0], PB - PT));
+  g.strokeStyle = COL.paper2; g.lineWidth = 1.1; PN.forEach(p => g.strokeRect(p[0] + 7, PT + 7, p[1] - p[0] - 14, PB - PT - 14));
+  g.fillStyle = COL.ink; [-272, -92, 92, 272].forEach(x => { g.beginPath(); g.arc(x, PT - 16, 7, 0, 7); g.fill(); });
+  // 房梁 + 挂落
+  g.fillStyle = COL.ink; g.fillRect(X0, Y0, X1 - X0, -398 - Y0);
+  g.fillStyle = COL.paper2; for (let x = X0; x < X1; x += 30 + rng() * 40) knife(g, x, -420 + rng() * 14, x + 40 + rng() * 50, -418 + rng() * 14, 1.2, rng() * 2 - 1);
+  g.fillStyle = COL.ink2; g.fillRect(X0, -398, X1 - X0, 26);
+  g.strokeStyle = COL.paper2; g.lineWidth = 1.6; g.beginPath(); g.moveTo(X0, -397); g.lineTo(X1, -397); g.stroke();
+  meander(g, Math.floor(X0 / 34) * 34, -392, X1, 15, 1.8, COL.paper2);
+  g.fillStyle = COL.ink; g.fillRect(X0, -372, X1 - X0, 5);
+  // 台面
+  g.fillStyle = COL.ink2; g.fillRect(X0, WALL_B - 2, X1 - X0, 154);
+  g.strokeStyle = COL.paper2; g.globalAlpha = .35; g.lineWidth = 1.2; g.beginPath();
+  [12, 32, 58, 92, 132].forEach(y => wob(g, X0, y, X1, y, rng, 1.2));
+  for (let x = X0; x < X1; x += 70 + rng() * 60) { const y = [12, 32, 58, 92][rng() * 4 | 0]; g.moveTo(x, y); g.lineTo(x, y + 20); }
+  g.stroke(); g.globalAlpha = 1;
+  g.fillStyle = COL.ink; g.beginPath(); g.ellipse(0, -22, 280, 24, 0, 0, 7); g.fill();
+  g.fillStyle = COL.ink; g.fillRect(X0, WALL_B - 4, X1 - X0, 5);
+  // 台口：朱红回纹
+  g.fillStyle = COL.red; g.fillRect(X0, 150, X1 - X0, 64);
+  g.save(); g.beginPath(); g.rect(X0, 150, X1 - X0, 64); g.clip(); hatch(g, rng, X0, 186, X1 - X0, 30, 0, 4, 1.2, COL.red2, .6); g.restore();
+  g.fillStyle = COL.ink; g.fillRect(X0, 148, X1 - X0, 7); g.fillRect(X0, 210, X1 - X0, 5);
+  meander(g, Math.floor(X0 / 40) * 40, 164, X1, 22, 3, COL.ink);
+  // 台下
+  g.fillStyle = '#120d09'; g.fillRect(X0, 214, X1 - X0, Y1 - 214);
+}
+
+function drawTable(g, rng) {
+  // 桌围
+  g.fillStyle = COL.red; g.fillRect(-206, 8, 412, 140);
+  g.save(); g.beginPath(); g.rect(-206, 8, 412, 140); g.clip();
+  hatch(g, rng, 120, 8, 90, 140, -1.1, 4.5, 1.3, COL.red2, .8);
+  hatch(g, rng, -206, 100, 412, 50, 0.1, 5, 1.2, COL.red2, .8);
+  g.restore();
+  g.fillStyle = COL.ink; g.fillRect(-206, 8, 412, 22); g.fillRect(-206, 8, 12, 140); g.fillRect(194, 8, 12, 140);
+  meander(g, -196, 12, 196, 12, 1.6, COL.paper2);
+  // 团花
+  g.fillStyle = COL.ink; g.beginPath(); g.arc(0, 86, 47, 0, 7); g.fill();
+  g.fillStyle = COL.red; g.beginPath(); g.arc(0, 86, 39, 0, 7); g.fill();
+  g.strokeStyle = COL.ink; g.lineWidth = 3.4; g.lineCap = 'round';
+  const spiral = (cx, cy, r, dir) => { g.beginPath(); for (let a = 0; a < Math.PI * 3.2; a += .2) { const rr = r * (1 - a / (Math.PI * 3.6)); const x = cx + Math.cos(a * dir) * rr, y = cy + Math.sin(a * dir) * rr; a === 0 ? g.moveTo(x, y) : g.lineTo(x, y); } g.stroke(); };
+  spiral(-14, 80, 13, 1); spiral(14, 80, 13, -1); spiral(0, 100, 11, 1);
+  g.strokeStyle = COL.paper2; g.lineWidth = 1.2; g.beginPath(); g.arc(0, 86, 43, 0, 7); g.stroke();
+  // 四角如意
+  g.fillStyle = COL.ink; [[-170, 52, 1], [170, 52, -1]].forEach(p => { g.beginPath(); g.moveTo(p[0], p[1] - 12); g.quadraticCurveTo(p[0] + 26 * p[2], p[1] - 14, p[0] + 18 * p[2], p[1] + 8); g.quadraticCurveTo(p[0] + 4 * p[2], p[1] + 18, p[0], p[1] + 6); g.closePath(); g.fill(); spiral(p[0] + 9 * p[2], p[1] - 1, 5, p[2]); });
+  // 流苏
+  g.fillStyle = COL.ink; for (let x = -200; x < 200; x += 14) { g.beginPath(); g.moveTo(x, 146); g.lineTo(x + 14, 146); g.lineTo(x + 7, 160); g.closePath(); g.fill(); }
+  g.fillStyle = COL.paper2; for (let x = -200; x < 200; x += 28) knife(g, x + 3, 148, x + 7, 157, .8, 0);
+  // 桌面
+  g.fillStyle = COL.ink; g.fillRect(-220, -9, 440, 19);
+  g.fillStyle = COL.paper; knife(g, -218, -8, 218, -8, 1.6, 0); knife(g, -200, 8, 120, 8, 1, 0);
+  // 手帕
+  g.fillStyle = COL.paperHi; g.beginPath(); g.moveTo(-190, -9); g.lineTo(-138, -9); g.lineTo(-132, 6); g.lineTo(-148, 34); g.lineTo(-166, 22); g.lineTo(-196, 6); g.closePath(); g.fill();
+  g.strokeStyle = COL.ink; g.lineWidth = 1.3; g.beginPath(); g.moveTo(-182, -6); g.lineTo(-150, 28); g.moveTo(-160, -6); g.lineTo(-140, 12); g.stroke();
+  g.strokeStyle = COL.red; g.lineWidth = 2; g.beginPath(); g.moveTo(-190, -9); g.lineTo(-138, -9); g.stroke();
+  // 盖碗
+  const cx = 146;
+  g.fillStyle = COL.paperHi; g.beginPath(); g.ellipse(cx, -10, 30, 6, 0, 0, 7); g.fill();
+  g.strokeStyle = COL.ink; g.lineWidth = 1.4; g.stroke();
+  g.fillStyle = COL.paperHi; g.beginPath(); g.moveTo(cx - 22, -40); g.quadraticCurveTo(cx - 22, -12, cx - 9, -12); g.lineTo(cx + 9, -12); g.quadraticCurveTo(cx + 22, -12, cx + 22, -40); g.closePath(); g.fill(); g.stroke();
+  g.save(); g.beginPath(); g.moveTo(cx - 22, -40); g.quadraticCurveTo(cx - 22, -12, cx - 9, -12); g.lineTo(cx + 9, -12); g.quadraticCurveTo(cx + 22, -12, cx + 22, -40); g.closePath(); g.clip(); hatch(g, rng, cx + 4, -42, 22, 32, 1.1, 3, .9, COL.ink, .4); g.restore();
+  g.strokeStyle = COL.red; g.lineWidth = 2; g.beginPath(); g.moveTo(cx - 18, -30); g.quadraticCurveTo(cx, -24, cx + 18, -30); g.stroke();
+  g.fillStyle = COL.paperHi; g.beginPath(); g.ellipse(cx, -41, 25, 6, 0, 0, 7); g.fill(); g.strokeStyle = COL.ink; g.lineWidth = 1.4; g.stroke();
+  g.beginPath(); g.moveTo(cx - 20, -43); g.quadraticCurveTo(cx, -60, cx + 20, -43); g.fill(); g.stroke();
+  g.fillStyle = COL.red; g.beginPath(); g.ellipse(cx, -55, 5, 3, 0, 0, 7); g.fill();
+}
+
+function drawLantern(g, x, top, len, t, ph, ch) {
+  const ang = RM ? 0 : Math.sin(t * .9 + ph) * .035;
+  g.save(); g.translate(x, top); g.rotate(ang);
+  g.strokeStyle = COL.ink; g.lineWidth = 2.2; g.beginPath(); g.moveTo(0, 0); g.lineTo(0, len - 42); g.stroke();
+  const cy = len;
+  g.fillStyle = 'rgba(248,239,217,.08)'; g.beginPath(); g.arc(0, cy, 78, 0, 7); g.fill();
+  g.fillStyle = COL.ink; g.fillRect(-15, cy - 46, 30, 9); g.fillRect(-15, cy + 37, 30, 9);
+  g.fillStyle = COL.red; g.beginPath(); g.ellipse(0, cy, 32, 40, 0, 0, 7); g.fill();
+  g.save(); g.beginPath(); g.ellipse(0, cy, 32, 40, 0, 0, 7); g.clip(); hatch(g, mulberry32(9), 6, cy - 40, 30, 80, -1.2, 4, 1.2, COL.red2, .4); g.restore();
+  g.strokeStyle = COL.ink; g.lineWidth = 1.3; g.beginPath(); g.ellipse(0, cy, 14, 40, 0, 0, 7); g.ellipse(0, cy, 26, 40, 0, 0, 7); g.stroke();
+  g.fillStyle = COL.paperHi; knife(g, -24, cy - 22, -26, cy + 20, 2.4, -3);
+  g.fillStyle = COL.ink; g.font = '400 30px ' + FONT_BRUSH; g.textAlign = 'center'; g.textBaseline = 'middle'; g.fillText(ch, 1, cy + 2);
+  g.strokeStyle = COL.red; g.lineWidth = 2; g.beginPath(); for (let i = -2; i <= 2; i++) { g.moveTo(i * 3, cy + 46); g.lineTo(i * 3.6 + Math.sin(t * 1.4 + i) * (RM ? 0 : 1.5), cy + 72); } g.stroke();
+  g.restore();
+}
+function drawBanner(g, t) {
+  const x = -348, top = -398, w = 78, h = 236;
+  const ang = RM ? 0 : Math.sin(t * .7) * .018 + Math.sin(t * 1.9) * .006;
+  g.save(); g.translate(x, top); g.rotate(ang);
+  g.fillStyle = COL.ink; g.fillRect(-w / 2 - 10, -2, w + 20, 9);
+  g.fillStyle = COL.paper2; g.beginPath(); g.arc(-w / 2 - 10, 2.5, 4.5, 0, 7); g.arc(w / 2 + 10, 2.5, 4.5, 0, 7); g.fill();
+  const path = () => { g.beginPath(); g.moveTo(-w / 2, 6); g.lineTo(w / 2, 6); g.lineTo(w / 2, h); g.lineTo(0, h - 28); g.lineTo(-w / 2, h); g.closePath(); };
+  path(); g.fillStyle = COL.red; g.fill();
+  g.save(); path(); g.clip(); hatch(g, mulberry32(3), 10, 6, 40, h, -1.25, 4.2, 1.3, COL.red2, .5); g.restore();
+  g.strokeStyle = COL.ink; g.lineWidth = 6; path(); g.stroke();
+  g.strokeStyle = COL.paper2; g.lineWidth = 1.2; g.beginPath(); g.moveTo(-w / 2 + 9, 16); g.lineTo(w / 2 - 9, 16); g.lineTo(w / 2 - 9, h - 14); g.lineTo(0, h - 38); g.lineTo(-w / 2 + 9, h - 14); g.closePath(); g.stroke();
+  g.fillStyle = COL.ink; g.font = '400 70px ' + FONT_BRUSH; g.textAlign = 'center'; g.textBaseline = 'middle'; g.fillText('书', 0, 86);
+  g.font = '400 19px ' + FONT_BRUSH; ['说', '古', '论', '今'].forEach((c, i) => g.fillText(c, 0, 140 + i * 19));
+  g.strokeStyle = COL.ink; g.lineWidth = 2; g.beginPath(); [-w / 2, w / 2].forEach(px => { for (let i = -1; i <= 1; i++) { g.moveTo(px + i * 2.5, h); g.lineTo(px + i * 3, h + 22 + Math.sin(t * 1.6 + i) * (RM ? 0 : 1.2)); } }); g.stroke();
+  g.restore();
+}
+function drawWindowsDyn(g, t) {
+  WIN.forEach((w, wi) => {
+    const W = w.x1 - w.x0, H = w.y1 - w.y0;
+    g.save(); g.beginPath(); g.rect(w.x0, w.y0, W, H); g.clip();
+    g.fillStyle = COL.paperHi;
+    SNOW[wi].forEach(f => {
+      const y = w.y0 + ((f.y * H + t * f.sp * (RM ? .3 : 1)) % (H + 10)) - 5;
+      const x = w.x0 + f.x * W + Math.sin(t * .8 + f.ph) * f.amp;
+      g.fillRect(x, y, f.r, f.r);
+    });
+    g.restore();
+    g.strokeStyle = COL.ink2; g.lineWidth = 7; g.beginPath();
+    for (let i = 1; i < 3; i++) { g.moveTo(w.x0 + W * i / 3, w.y0); g.lineTo(w.x0 + W * i / 3, w.y1); }
+    for (let i = 1; i < 4; i++) { g.moveTo(w.x0, w.y0 + H * i / 4); g.lineTo(w.x1, w.y0 + H * i / 4); }
+    g.stroke();
+    g.strokeStyle = COL.paper2; g.lineWidth = 1.2; g.beginPath();
+    for (let i = 1; i < 3; i++) { g.moveTo(w.x0 + W * i / 3 - 3, w.y0); g.lineTo(w.x0 + W * i / 3 - 3, w.y1); }
+    for (let i = 1; i < 4; i++) { g.moveTo(w.x0, w.y0 + H * i / 4 - 3); g.lineTo(w.x1, w.y0 + H * i / 4 - 3); }
+    g.stroke();
+    g.strokeStyle = COL.ink; g.lineWidth = 8; g.strokeRect(w.x0, w.y0, W, H);
+  });
+}
+function drawMember(g, m, t, now) {
+  const k = m.k, bob = RM ? 0 : Math.sin(t * 1.1 + m.ph) * 1.3 * k, x = m.x, y = m.y + bob;
+  const re = now - m.raiseT, rp = re < 0 || re > 2000 ? 0 : re < 260 ? easeOut(re / 260) : re > 1700 ? 1 - (re - 1700) / 300 : 1;
+  g.fillStyle = COL.ink;
+  if (rp > 0) {   // 举起手机
+    const sx = x + m.side * 30 * k, sy = y + 32 * k, hx = x + m.side * (36 + 6 * rp) * k, hy = y + (30 - 74 * rp) * k;
+    g.strokeStyle = COL.ink; g.lineWidth = 13 * k; g.lineCap = 'round'; g.beginPath(); g.moveTo(sx, sy); g.lineTo(hx, hy); g.stroke();
+    g.fillStyle = 'rgba(248,239,217,' + (.16 * rp) + ')'; g.beginPath(); g.arc(hx, hy - 12 * k, 22 * k, 0, 7); g.fill();
+    g.fillStyle = COL.ink; g.fillRect(hx - 7.5 * k, hy - 25 * k, 15 * k, 23 * k);
+    g.fillStyle = COL.paperHi; g.fillRect(hx - 5.5 * k, hy - 23 * k, 11 * k, 18 * k);
+    g.fillStyle = COL.red; g.fillRect(hx - 5.5 * k, hy - 15 * k, 11 * k * rp, 3 * k);
+    g.fillStyle = COL.ink;
+  }
+  g.beginPath(); g.moveTo(x - 52 * k, y + 110 * k); g.quadraticCurveTo(x - 52 * k, y + 30 * k, x - 15 * k, y + 20 * k); g.lineTo(x + 15 * k, y + 20 * k); g.quadraticCurveTo(x + 52 * k, y + 30 * k, x + 52 * k, y + 110 * k); g.closePath(); g.fill();
+  g.beginPath(); g.ellipse(x, y, 17 * k, 20 * k, 0, 0, 7); g.fill();
+  const T = m.type;
+  if (T === 1) { g.beginPath(); g.moveTo(x - 18 * k, y - 4 * k); g.quadraticCurveTo(x, y - 30 * k, x + 18 * k, y - 4 * k); g.fill(); g.fillStyle = COL.red; g.beginPath(); g.arc(x, y - 21 * k, 3.4 * k, 0, 7); g.fill(); }
+  else if (T === 2) { g.beginPath(); g.ellipse(x, y - 8 * k, 30 * k, 6 * k, 0, 0, 7); g.fill(); g.beginPath(); g.ellipse(x, y - 15 * k, 16 * k, 11 * k, 0, 0, 7); g.fill(); }
+  else if (T === 3) { g.beginPath(); g.ellipse(x + 3 * k, y - 18 * k, 13 * k, 9 * k, 0, 0, 7); g.fill(); g.strokeStyle = COL.paper2; g.lineWidth = 1.6 * k; g.beginPath(); g.moveTo(x - 14 * k, y - 22 * k); g.lineTo(x + 20 * k, y - 15 * k); g.stroke(); g.fillStyle = COL.red; g.beginPath(); g.arc(x + 20 * k, y - 15 * k, 2.6 * k, 0, 7); g.fill(); }
+  else if (T === 4) { g.beginPath(); g.arc(x - 12 * k, y - 16 * k, 7 * k, 0, 7); g.arc(x + 12 * k, y - 16 * k, 7 * k, 0, 7); g.fill(); }
+  else { g.beginPath(); g.arc(x, y - 18 * k, 7 * k, 0, 7); g.fill(); }
+  g.strokeStyle = m.row === 0 ? COL.paper : COL.paper2; g.lineWidth = 1.7 * k; g.lineCap = 'round';
+  g.beginPath(); g.ellipse(x, y, 17 * k, 20 * k, 0, Math.PI * 1.08, Math.PI * 1.62); g.stroke();
+  g.beginPath(); g.moveTo(x - 48 * k, y + 52 * k); g.quadraticCurveTo(x - 47 * k, y + 31 * k, x - 16 * k, y + 22.5 * k); g.stroke();
+}
+function drawBowls(g, t) {
+  g.fillStyle = COL.ink2; g.fillRect(-720, 226, 1440, 9);
+  g.strokeStyle = COL.paper2; g.lineWidth = 1.2; g.beginPath(); g.moveTo(-720, 226.5); g.lineTo(720, 226.5); g.stroke();
+  BOWLS.forEach(b => {
+    const x = b.x, y = 226;
+    g.fillStyle = COL.paper; g.beginPath(); g.ellipse(x, y - 1, 17, 3.5, 0, 0, 7); g.fill();
+    g.beginPath(); g.moveTo(x - 12, y - 18); g.quadraticCurveTo(x - 12, y - 3, x - 5, y - 3); g.lineTo(x + 5, y - 3); g.quadraticCurveTo(x + 12, y - 3, x + 12, y - 18); g.closePath(); g.fill();
+    g.strokeStyle = COL.ink; g.lineWidth = 1; g.stroke();
+    g.strokeStyle = COL.red; g.lineWidth = 1.6; g.beginPath(); g.moveTo(x - 10, y - 12); g.lineTo(x + 10, y - 12); g.stroke();
+    g.fillStyle = COL.paper; g.beginPath(); g.ellipse(x, y - 19, 13, 3.2, 0, 0, 7); g.fill(); g.strokeStyle = COL.ink; g.lineWidth = 1; g.stroke();
+    if (!RM) {
+      g.strokeStyle = 'rgba(238,224,192,.45)'; g.lineWidth = 1.4; g.beginPath();
+      for (let s = 0; s < 2; s++) { const ph = t * .9 + b.ph + s * 2; g.moveTo(x - 3 + s * 6, y - 22); g.bezierCurveTo(x - 9 + Math.sin(ph) * 5 + s * 6, y - 32, x + 4 + Math.cos(ph) * 5 + s * 6, y - 40, x - 2 + Math.sin(ph * 1.3) * 6 + s * 6, y - 52); }
+      g.stroke();
+    }
+  });
+}
+
+const teller = makeTeller(big => onTellerImpact(big));
+function drawStage(now) {
+  const g = stage.g, t = now / 1000;
+  if (!stage.bg) return;
+  g.setTransform(1, 0, 0, 1, 0, 0);
+  g.drawImage(stage.bg, 0, 0);
+  worldTf(g);
+  drawWindowsDyn(g, t);
+  drawLantern(g, 330, -398, 112, t, 0, '茶');
+  drawLantern(g, -214, -398, 46, t, 1.7, '');
+  drawBanner(g, t);
+  g.save(); g.translate(0, TELLER_Y); g.scale(TELLER_K, TELLER_K); drawTellerBody(g, teller.P); g.restore();
+  g.setTransform(1, 0, 0, 1, 0, 0); g.drawImage(stage.table, 0, 0);
+  worldTf(g);
+  g.save(); g.translate(0, TELLER_Y); g.scale(TELLER_K, TELLER_K); drawTellerArms(g, teller.P); g.restore();
+  AUD.forEach(m => { if (m.row === 0) drawMember(g, m, t, now); });
+  drawBowls(g, t);
+  AUD.forEach(m => { if (m.row === 1) drawMember(g, m, t, now); });
+  AUD.forEach(m => { if (m.row === 2) drawMember(g, m, t, now); });
+  // 灯灭
+  const dimT = now < stage.dimUntil ? 1 : 0; stage.dim += (dimT - stage.dim) * 0.08;
+  g.setTransform(1, 0, 0, 1, 0, 0);
+  if (stage.dim > 0.01) { g.fillStyle = 'rgba(10,7,5,' + (stage.dim * 0.62) + ')'; g.fillRect(0, 0, stage.cv.width, stage.cv.height); }
+  g.globalAlpha = 1; g.drawImage(stage.grain, 0, 0);
+}
+function raiseRandom(n, now) {
+  const vis = AUD.filter(m => m.x > stage.V.xL + 20 && m.x < stage.V.xR - 20 && now - m.raiseT > 2100);
+  for (let i = 0; i < n && vis.length; i++) { const j = Math.random() * vis.length | 0; vis[j].raiseT = now + Math.random() * 120; vis.splice(j, 1); }
+}
+
+// ===================== 开场海报 =====================
+const poster = { cv: $('posterCv'), w: 0, h: 0, dpr: 1, bg: null, teller: null, lastSlam: 0, impactAt: -1e9, running: true };
+poster.teller = makeTeller(() => { poster.impactAt = nowMs(); if (Snd.ctx && !$('intro').classList.contains('gone')) Snd.slam(.5); });
+function resizePoster() {
+  const r = poster.cv.getBoundingClientRect(); const w = Math.max(10, r.width), h = Math.max(10, r.height), dpr = Math.min(2.5, window.devicePixelRatio || 1);
+  if (w === poster.w && h === poster.h && dpr === poster.dpr && poster.bg) return;
+  poster.w = w; poster.h = h; poster.dpr = dpr; poster.cv.width = Math.round(w * dpr); poster.cv.height = Math.round(h * dpr);
+  // 静态底：纸、边框、朱日、排线
+  const c = document.createElement('canvas'); c.width = poster.cv.width; c.height = poster.cv.height; const g = c.getContext('2d'); g.scale(dpr, dpr);
+  const rng = mulberry32(61);
+  g.fillStyle = COL.paper; g.fillRect(0, 0, w, h);
+  g.globalAlpha = .18; hatch(g, rng, 0, 0, w, h, -0.6, 5, .8, COL.ink3, 1); g.globalAlpha = 1;
+  const m = Math.min(w, h) * .035;
+  g.strokeStyle = COL.ink; g.lineWidth = 4; g.strokeRect(m, m, w - 2 * m, h - 2 * m); g.lineWidth = 1.4; g.strokeRect(m + 7, m + 7, w - 2 * m - 14, h - 2 * m - 14);
+  const P = posterGeom();
+  g.save(); g.beginPath(); g.rect(m + 8, m + 8, w - 2 * m - 16, h - 2 * m - 16); g.clip();
+  // 放射刻线
+  g.strokeStyle = COL.ink2; g.globalAlpha = .55;
+  for (let i = 0; i < 90; i++) { const a = i / 90 * Math.PI * 2, r0 = P.R * 1.12, r1 = Math.max(w, h); g.lineWidth = (i % 2 ? .8 : 1.6); g.beginPath(); g.moveTo(P.cx + Math.cos(a) * r0, P.cy + Math.sin(a) * r0); g.lineTo(P.cx + Math.cos(a) * r1, P.cy + Math.sin(a) * r1); g.stroke(); }
+  g.globalAlpha = 1;
+  g.fillStyle = COL.paper; g.fillRect(0, 0, w, h * .3);
+  g.globalAlpha = .18; hatch(g, rng, 0, 0, w, h * .3, -0.6, 5, .8, COL.ink3, 1); g.globalAlpha = 1;
+  g.fillStyle = COL.red; g.beginPath(); g.arc(P.cx, P.cy, P.R, 0, 7); g.fill();
+  g.save(); g.beginPath(); g.arc(P.cx, P.cy, P.R, 0, 7); g.clip(); hatch(g, rng, P.cx - P.R, P.cy, P.R * 2, P.R, -0.25, 5, 1.6, COL.red2, 1);
+  g.strokeStyle = COL.redHi; g.lineWidth = 1.6; g.globalAlpha = .7; for (let r = P.R * .2; r < P.R; r += P.R * .1) { const a0 = Math.PI * (1.05 + rng() * .3); g.beginPath(); g.arc(P.cx, P.cy, r, a0, a0 + Math.PI * (.3 + rng() * .4)); g.stroke(); } g.globalAlpha = 1;
+  g.restore();
+  // 底部：纸地上刻几道雪坡排线
+  const base = P.ty + P.u * 54;
+  g.save(); g.beginPath(); g.rect(0, base, w, h - base); g.clip(); g.fillStyle = COL.paper; g.fillRect(0, base, w, h - base);
+  g.globalAlpha = .22; hatch(g, rng, 0, base, w, h - base, 0, 6, 1, COL.ink3, 1.2); g.globalAlpha = 1; g.restore();
+  g.restore();
+  poster.bg = c;
+  drawQR();
+}
+function posterGeom() {
+  const w = poster.w, h = poster.h, R = Math.min(w * .37, h * .17);
+  const cx = w / 2, cy = h * .475, u = R / 125;
+  return { cx: cx, cy: cy, R: R, u: u, ty: cy + 120 * u };
+}
+function drawPoster(now) {
+  if (!poster.bg) return;
+  const g = poster.cv.getContext('2d'), P = posterGeom(), d = poster.dpr;
+  g.setTransform(1, 0, 0, 1, 0, 0); g.drawImage(poster.bg, 0, 0);
+  if (now - poster.lastSlam > 3200) { poster.lastSlam = now; poster.teller.start('slam', now); }
+  poster.teller.update(now, false);
+  g.setTransform(d * P.u, 0, 0, d * P.u, d * P.cx, d * P.ty);
+  drawTellerBody(g, poster.teller.P);
+  g.fillStyle = COL.ink; g.fillRect(-250, -9, 500, 19); g.fillStyle = COL.red; g.fillRect(-236, 10, 472, 44);
+  g.fillStyle = COL.ink; g.fillRect(-236, 10, 472, 16); meander(g, -228, 13, 228, 10, 1.4, COL.paper2);
+  g.fillStyle = COL.paper; knife(g, -248, -8, 248, -8, 1.6, 0);
+  drawTellerArms(g, poster.teller.P);
+  const e = now - poster.impactAt;
+  if (e >= 0 && e < 420) {   // 醒木落下的冲击刻线
+    const k = e / 420; g.strokeStyle = COL.ink; g.lineCap = 'round';
+    for (let i = 0; i < 9; i++) { const a = Math.PI * (1.05 + i * .1), r0 = 30 + k * 40, r1 = r0 + 26 * (1 - k); g.lineWidth = 4 * (1 - k) + 1; g.beginPath(); g.moveTo(-60 + Math.cos(a) * r0, -4 + Math.sin(a) * r0); g.lineTo(-60 + Math.cos(a) * r1, -4 + Math.sin(a) * r1); g.stroke(); }
+  }
+}
+function drawQR() {
+  const c = $('qr'), g = c.getContext('2d'), rng = mulberry32(23), n = 21, s = 64 / (n + 2);
+  g.fillStyle = COL.paperHi; g.fillRect(0, 0, 64, 64); g.fillStyle = COL.ink;
+  const finder = (x, y) => { g.fillRect((x + 1) * s, (y + 1) * s, 7 * s, 7 * s); g.fillStyle = COL.paperHi; g.fillRect((x + 2) * s, (y + 2) * s, 5 * s, 5 * s); g.fillStyle = COL.red; g.fillRect((x + 3) * s, (y + 3) * s, 3 * s, 3 * s); g.fillStyle = COL.ink; };
+  for (let y = 0; y < n; y++) for (let x = 0; x < n; x++) { if ((x < 8 && y < 8) || (x > 12 && y < 8) || (x < 8 && y > 12)) continue; if (rng() < .48) g.fillRect((x + 1) * s, (y + 1) * s, s + .3, s + .3); }
+  finder(0, 0); finder(14, 0); finder(0, 14);
+}
+
+// ===================== 演出控制 =====================
+const ui = { log: $('phLog'), lyText: $('lyText'), lyChap: $('lyChap'), lyAct: $('lyAct'), sheet: $('sheet'), opts: $('shOpts'), toast: $('toast') };
+const NUM_CN = ['一', '二', '三', '四', '五', '六'];
+const ACK = [
+  '@bow 好！台下要「{L}」——说书的，接住了。',
+  '@fan 得嘞，列位说「{L}」，那咱就往这儿说。',
+  '@point 「{L}」！这一嗓子，喊到点子上了。',
+  '@bow 台下要「{L}」，说书的哪敢不从——'
+];
+const show = {
+  token: 0, engine: null, crowd: null, rng: null, decisions: [], lines: [], chars: 0, t0: 0, speed: 1,
+  typing: null, vote: null, chapter: '第一回', seat: 23, ended: false, hold: null
+};
+function makeEngine() {
+  let q = '';
+  try { q = location.search || ''; } catch (e) {}
+  const m = /[?&]engine=llm\b/.test(q);
+  if (m) { const ep = /[?&]endpoint=([^&]+)/.exec(q); return new LocalLLMEngine({ endpoint: ep ? decodeURIComponent(ep[1]) : undefined }); }
+  return new TreeEngine(SCRIPT);
+}
+function esc(s) { return String(s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c])); }
+function logScroll() { const el = ui.log; el.scrollTop = el.scrollHeight; }
+function addLog(html, cls) {
+  const w = ui.log.querySelector('.wait'); if (w) w.remove();
+  const p = document.createElement(cls === 'chap' || cls === 'dec' ? 'div' : 'p'); if (cls) p.className = cls; p.innerHTML = html; ui.log.appendChild(p); logScroll();
+}
+function setProg(curSlot) {
+  const st = $('phProg').children;
+  for (let i = 0; i < st.length; i++) st[i].className = 'st' + (i < show.decisions.length ? ' done' : '') + (i === curSlot ? ' now' : '');
+}
+let toastTimer = 0;
+function toast(html, ms) { ui.toast.innerHTML = html; ui.toast.classList.add('on'); clearTimeout(toastTimer); toastTimer = setTimeout(() => ui.toast.classList.remove('on'), ms || 2600); }
+
+function shake(big) {
+  if (RM) return; const a = $('app'); a.classList.remove('shake', 'shake-s'); void a.offsetWidth; a.classList.add(big ? 'shake' : 'shake-s');
+  setTimeout(() => a.classList.remove('shake', 'shake-s'), 420);
+}
+function onTellerImpact(big) {
+  Snd.slam(big ? 1 : .55); shake(big);
+  if (big) { const p = $('pa'); p.classList.remove('on'); void p.offsetWidth; p.classList.add('on'); setTimeout(() => p.classList.remove('on'), 950); raiseRandom(3, nowMs()); }
+}
+
+function playLine(L, token) {
+  return new Promise(res => {
+    if (token !== show.token) return;
+    if (L.chapter) {
+      show.chapter = L.chapter; ui.lyChap.textContent = L.chapter;
+      addLog(esc(L.chapter), 'chap'); setTimeout(res, 700 / show.speed); return;
+    }
+    const now = nowMs();
+    if (L.act) teller.start(L.act, now);
+    if (/吹灭/.test(L.text)) stage.dimUntil = now + 60000;
+    if (/火折子一亮|重新点上/.test(L.text)) stage.dimUntil = 0;
+    ui.lyAct.textContent = L.act ? '说书人 · ' + ACT_NAMES[L.act] : '说书人';
+    show.typing = { L: L, t0: now, n: -1, done: false, holdUntil: 0, res: res, speechDone: true, speechDeadline: 0, token: token };
+    if (Voice.on && Voice.ok && !Snd.muted) {
+      const ty = show.typing; ty.speechDone = false; ty.speechDeadline = now + L.text.length * 360 + 3000;
+      Voice.speak(L.text, () => { ty.speechDone = true; });
+    }
+    if (L.act === 'slam' && Math.random() < .3) setTimeout(() => Snd.hao(1 + (Math.random() * 3 | 0), .7), 1400);
+  });
+}
+function cps() { return (Voice.on && Voice.ok && !Snd.muted ? 4.4 : 6.2) * show.speed; }
+function updateTyping(now) {
+  const ty = show.typing; if (!ty) return;
+  const len = ty.L.text.length;
+  const n = Math.min(len, Math.floor((now - ty.t0) / 1000 * cps()));
+  if (n !== ty.n) { ty.n = n; ui.lyText.innerHTML = esc(ty.L.text.slice(0, n)) + (n < len ? '<span class="cur"></span>' : ''); }
+  if (n >= len && !ty.done) {
+    ty.done = true; ty.holdUntil = now + (850 + len * 14) / show.speed;
+    show.chars += len;
+    addLog((ty.L.act ? '<span class="tag">' + ACT_NAMES[ty.L.act] + '</span>' : '') + esc(ty.L.text));
+    show.lines.push(ty.L);
+  }
+  if (ty.done && now >= ty.holdUntil && (ty.speechDone || now > ty.speechDeadline)) {
+    show.typing = null; ty.res();
+  }
+}
+function talking() { const ty = show.typing; return !!(ty && !ty.done) || !!(ty && !ty.speechDone); }
+function skip() {
+  const ty = show.typing; if (!ty) return;
+  if (!ty.done) ty.t0 = -1e9;
+  else { ty.holdUntil = 0; ty.speechDone = true; Voice.stop(); }
+}
+
+// ---- 且慢 ----
+const VOTE_MS = 8000;
+function runVote(choice, token) {
+  return new Promise(res => {
+    if (token !== show.token) return;
+    const sim = new VoteSim(choice, show.crowd, show.rng, VOTE_MS);
+    const now = nowMs();
+    show.vote = { choice: choice, sim: sim, t0: now, lastSec: 9, res: res, closed: false, token: token, lastCount: 0 };
+    setProg(choice.slot);
+    $('shTitle').textContent = '且慢！';
+    $('shSub').textContent = '且慢' + NUM_CN[choice.slot] + ' · 下一句由台下说了算';
+    $('shPrompt').textContent = choice.prompt;
+    ui.opts.innerHTML = ''; $('shFeed').innerHTML = '';
+    choice.options.forEach(o => {
+      const b = document.createElement('button'); b.className = 'opt'; b.dataset.id = o.id; b.type = 'button';
+      b.innerHTML = '<span class="bar"></span><span class="mn"><b>' + esc(o.label) + '</b><small>' + esc(o.desc || '') + '</small></span><span class="num"><em>0</em><i>0%</i></span><span class="me">你喊的 ×' + PLAYER_WEIGHT + '</span>';
+      b.addEventListener('click', () => playerVote(o.id));
+      ui.opts.appendChild(b);
+    });
+    $('shFootR').innerHTML = '你的一票算 <b>三票</b>，喊得早，跟的人多';
+    ui.sheet.classList.add('on');
+    const st = $('stamp'); st.classList.remove('off', 'on'); void st.offsetWidth; st.classList.add('on');
+    Snd.drum(); Snd.ambLevel(.2); raiseRandom(4, now);
+    try { if (navigator.vibrate) navigator.vibrate([30, 40, 30]); } catch (e) {}
+    ui.lyAct.textContent = '台下 · 且慢'; ui.lyText.innerHTML = esc('台下有人喊：且慢！——') + '<span class="cur"></span>';
+    teller.start('fan', now);
+  });
+}
+const PERSONA = ['老票友', '茶客', '跑堂的', '学生', '账房先生', '卖花的', '小孩儿', '车夫', '绣娘', '外地客'];
+const ROWN = ['头排', '二排', '三排', '四排', '五排', '后排', '楼上'];
+function personaOf(c) {
+  let best = 'thrill'; for (const k in c.pref) if (c.pref[k] > c.pref[best]) best = k;
+  return ROWN[c.id % ROWN.length] + '·' + TAG_CN[best] + '的' + PERSONA[(c.id * 7 + 3) % PERSONA.length];
+}
+function feedLine(who, label, me) {
+  const f = $('shFeed'), d = document.createElement('div'); if (me) d.className = 'me';
+  d.innerHTML = '<b>' + esc(who) + '</b> 喊：「' + esc(label) + '」';
+  f.insertBefore(d, f.firstChild); while (f.children.length > 12) f.removeChild(f.lastChild);
+}
+function playerVote(id) {
+  const v = show.vote; if (!v || v.closed) return;
+  const first = v.sim.player < 0;
+  v.sim.setPlayer(id, nowMs() - v.t0);
+  Snd.blip(true);
+  try { if (navigator.vibrate) navigator.vibrate(18); } catch (e) {}
+  const lab = v.choice.options.find(o => o.id === id).label;
+  feedLine('你（第 23 座）', lab, true);
+  $('shFootR').innerHTML = first ? '你喊了「<b>' + esc(lab) + '</b>」，旁边有人跟' : '改喊「<b>' + esc(lab) + '</b>」';
+  raiseRandom(2, nowMs());
+  renderVote(nowMs());
+}
+function renderVote(now) {
+  const v = show.vote; if (!v) return;
+  const r = v.sim.result(), tot = r.total || 1;
+  const btns = ui.opts.children;
+  for (let i = 0; i < btns.length; i++) {
+    const b = btns[i], id = b.dataset.id, n = r.tally[id] || 0, pct = Math.round(n / tot * 100);
+    b.querySelector('.bar').style.width = (v.sim.voted || v.sim.player >= 0 ? pct : 0) + '%';
+    b.querySelector('em').textContent = n;
+    b.querySelector('i').textContent = (v.sim.voted || v.sim.player >= 0 ? pct : 0) + '%';
+    b.classList.toggle('mine', r.playerPick === id);
+    if (v.closed) { b.classList.toggle('win', r.winner === id); b.classList.toggle('lose', r.winner !== id); }
+  }
+  $('shFootL').textContent = '台下已喊 ' + v.sim.voted + ' 声';
+}
+function updateVote(now) {
+  const v = show.vote; if (!v || v.closed) return;
+  const el = now - v.t0;
+  const fresh = v.sim.advance(Math.min(el, VOTE_MS));
+  if (fresh.length) {
+    Snd.blip(false); if (Math.random() < .5) raiseRandom(1, now); renderVote(now);
+    const ev = v.sim.events, from = Math.max(v.feedN || 0, ev.length - 3);
+    for (let k = from; k < ev.length; k++) feedLine(personaOf(ev[k].c), v.choice.options[ev[k].i].label, false);
+    v.feedN = ev.length;
+  }
+  const sec = Math.max(0, Math.ceil((VOTE_MS - el) / 1000));
+  if (sec !== v.lastSec) { v.lastSec = sec; $('shSec').textContent = sec; if (sec > 0 && sec <= 8) Snd.tick(sec <= 3); }
+  $('ringFg').style.strokeDashoffset = (175.93 * clamp(el / VOTE_MS, 0, 1)).toFixed(1);
+  if (el >= VOTE_MS) closeVote(now);
+}
+function closeVote(now) {
+  const v = show.vote; v.closed = true;
+  const r = v.sim.finish();
+  renderVote(now);
+  const opt = v.choice.options.find(o => o.id === r.winner);
+  $('shTitle').textContent = '醒木一拍！';
+  $('shSub').textContent = '众意：「' + opt.label + '」 · ' + Math.round(r.share * 100) + '%';
+  $('shSec').textContent = '0';
+  $('stamp').classList.remove('on'); $('stamp').classList.add('off');
+  teller.start('slam', now, true);
+  Snd.ambLevel(.11);
+  const dec = { choiceId: v.choice.id, slot: v.choice.slot, prompt: v.choice.prompt, optionId: r.winner, label: opt.label, hui: opt.hui, tally: r.tally, share: r.share, total: r.total, playerPick: r.playerPick,
+    options: v.choice.options.map(o => ({ id: o.id, label: o.label })) };
+  setTimeout(() => {
+    if (v.token !== show.token) return;
+    const mine = r.playerPick ? v.choice.options.find(o => o.id === r.playerPick).label : null;
+    const tip = !mine ? '你这回没喊，台下替你定了。' : mine === opt.label ? '你喊的，成了。' : '你喊的「' + esc(mine) + '」没压过台下——下回再争。';
+    addLog('且慢' + NUM_CN[v.choice.slot] + ' · 众意 <b>「' + esc(opt.label) + '」</b> ' + Math.round(r.share * 100) + '%<small>' + tip + '</small>', 'dec');
+    toast('醒木一拍 · <b>' + esc(opt.label) + '</b><br>' + tip, 2400);
+  }, 700);
+  setTimeout(() => {
+    if (v.token !== show.token) return;
+    ui.sheet.classList.remove('on'); show.vote = null; show.decisions.push(dec); setProg(-1);
+    v.res(dec);
+  }, 2300);
+}
+
+// ---- 主流程 ----
+async function runShow() {
+  const token = ++show.token;
+  show.engine = makeEngine();
+  show.rng = mulberry32((Date.now() ^ (Math.random() * 1e9)) >>> 0);
+  show.crowd = makeCrowd(show.rng, 44 + Math.floor(show.rng() * 12));
+  show.decisions = []; show.lines = []; show.chars = 0; show.t0 = nowMs(); show.ended = false; show.typing = null; show.vote = null;
+  $('phLive').textContent = '在场 ' + (show.crowd.length + 1) + ' 人';
+  ui.log.innerHTML = '<p class="wait">说书人正在上台……</p>'; setProg(-1);
+  ui.sheet.classList.remove('on'); $('finale').classList.remove('on'); stage.dimUntil = 0;
+  let seg = await show.engine.begin();
+  for (;;) {
+    for (const L of seg.lines) { await playLine(L, token); if (token !== show.token) return; }
+    if (seg.choice) {
+      const d = await runVote(seg.choice, token); if (token !== show.token) return;
+      const ack = parseLine(ACK[show.decisions.length % ACK.length].split('{L}').join(d.label));
+      await playLine({ text: ack.text, act: ack.act }, token); if (token !== show.token) return;
+      seg = await show.engine.continue(d);
+      continue;
+    }
+    break;
+  }
+  show.ended = true;
+  teller.start('bow', nowMs());
+  Snd.hao(6, 1); setTimeout(() => Snd.hao(4, .8), 500);
+  raiseRandom(8, nowMs());
+  ui.lyAct.textContent = '散场'; ui.lyText.textContent = '台下一片叫好。';
+  setTimeout(() => { if (token === show.token) showFinale(seg.ending || { id: 'X', name: '散场', line: '' }); }, 2600);
+}
+
+function fmtDur(ms) { const s = Math.round(ms / 1000); return Math.floor(s / 60) + '′' + String(s % 60).padStart(2, '0') + '″'; }
+function showFinale(ending) {
+  const st = loadStore(); st.shows += 1; if (ending.id && st.endings.indexOf(ending.id) < 0) st.endings.push(ending.id); saveStore(st);
+  const h = buildHuimu(SCRIPT, show.decisions, ending);
+  const hits = show.decisions.filter(d => d.playerPick && d.playerPick === d.optionId).length;
+  const totalEnd = Object.keys(SCRIPT.nodes).filter(k => SCRIPT.nodes[k].end).length;
+  let html = '<div class="fin-top"><span>听雪楼 · 散场</span><span class="seal">本场回目</span><span>' + new Date().getFullYear() + '</span></div>';
+  html += '<h2>《' + esc(h.book) + '》</h2>';
+  html += '<div class="fin-hui">';
+  h.hui.forEach((x, i) => { if (i) html += '<div class="gap"></div>'; html += '<div class="col n">' + x.num + '</div><div class="col">' + esc(x.a) + '</div><div class="col">' + esc(x.b) + '</div>'; });
+  html += '</div>';
+  html += '<div class="fin-flat">' + h.hui.map(x => x.num + '　' + esc(x.a) + ' · ' + esc(x.b)).join('<br>') + '</div>';
+  html += '<div class="fin-end"><span class="seal">' + esc(h.ending) + '</span><div>' + esc(h.endingLine) + '<small>本场结局 · 已听结局 ' + st.endings.length + ' / ' + totalEnd + '</small></div></div>';
+  html += '<div class="fin-votes">';
+  show.decisions.forEach(d => {
+    html += '<div class="fv"><div class="fv-h"><span>且慢' + NUM_CN[d.slot] + '</span>' + esc(d.prompt) + '</div>';
+    d.options.forEach(o => {
+      const n = d.tally[o.id] || 0, pct = Math.round(n / (d.total || 1) * 100);
+      html += '<div class="fv-r' + (o.id === d.optionId ? ' w' : '') + '"><span class="lb"><span class="t">' + esc(o.label) + '</span>' + (o.id === d.playerPick ? '<span class="you">你</span>' : '') + '</span><span class="tr"><i style="width:' + pct + '%"></i></span><span class="pc">' + pct + '%</span></div>';
+    });
+    html += '</div>';
+  });
+  html += '</div>';
+  html += '<div class="fin-stats">本场书词 ' + show.chars.toLocaleString('zh-CN') + ' 字 · 历时 ' + fmtDur(nowMs() - show.t0) + ' · 在场 ' + (show.crowd.length + 1) + ' 人 · 你喊中 ' + hits + ' / ' + show.decisions.length + '</div>';
+  html += '<p class="fin-export">这场书可以导出为一段<b>音频 / 短片</b>：参赛版在 DGX Spark 上，把本地模型即兴说出的书词、语音合成的说书腔、醒木与台下叫好，连同戏台画面一起录下来，散场时扫码带走。</p>';
+  html += '<div class="fin-btns"><button class="fbtn pri" id="btnAgain" type="button">再开一场</button><button class="fbtn" id="btnSave" type="button">保存书词</button></div>';
+  $('finBox').innerHTML = html;
+  $('finale').classList.add('on'); $('finale').scrollTop = 0;
+  $('btnAgain').addEventListener('click', () => { Snd.init(); Voice.stop(); runShow(); });
+  $('btnSave').addEventListener('click', () => saveText(h));
+}
+function saveText(h) {
+  try {
+    let s = '《' + h.book + '》本场回目\n' + h.hui.map(x => x.num + ' ' + x.a + ' · ' + x.b).join('\n') + '\n结局：' + h.ending + '\n\n';
+    let di = 0;
+    show.lines.forEach(L => { s += (L.act ? '〔' + ACT_NAMES[L.act] + '〕' : '') + L.text + '\n'; });
+    s += '\n—— 且慢记录 ——\n';
+    show.decisions.forEach(d => { di++; s += '且慢' + NUM_CN[d.slot] + '：' + d.prompt + '\n' + d.options.map(o => '  ' + o.label + ' ' + (d.tally[o.id] || 0) + '票' + (o.id === d.optionId ? ' ←众意' : '') + (o.id === d.playerPick ? ' （你）' : '')).join('\n') + '\n'; });
+    const blob = new Blob([s], { type: 'text/plain;charset=utf-8' });
+    const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = '无限说书人-雪夜追镖-本场书词.txt';
+    document.body.appendChild(a); a.click(); setTimeout(() => { URL.revokeObjectURL(a.href); a.remove(); }, 500);
+  } catch (e) { /* 下载不了就算了 */ }
+}
+
+// ===================== 交互 =====================
+$('btnEnter').addEventListener('click', () => {
+  Snd.init();
+  $('intro').classList.add('gone'); poster.running = false;
+  setTimeout(() => { $('intro').style.display = 'none'; }, 750);
+  setTimeout(() => { resizeStage(); runShow(); }, 350);
+});
+$('stageWrap').addEventListener('pointerup', skip);
+$('lyric').addEventListener('pointerup', skip);
+$('mute').addEventListener('click', () => {
+  Snd.init(); Snd.setMuted(!Snd.muted); $('mute').classList.toggle('muted', Snd.muted);
+  $('mute').setAttribute('aria-label', Snd.muted ? '取消静音' : '静音');
+  if (Snd.muted) Voice.stop();
+});
+(function initVoiceBtn() {
+  const b = $('btnVoice');
+  if (!Voice.ok) { b.disabled = true; b.title = '这台设备不支持朗读，字幕照常'; return; }
+  b.addEventListener('click', () => {
+    Voice.on = !Voice.on; b.setAttribute('aria-pressed', String(Voice.on)); b.textContent = Voice.on ? '声开' : '开声';
+    if (!Voice.on) { Voice.stop(); if (show.typing) show.typing.speechDone = true; }
+    else { Voice.pick(); toast('说书人<b>开口</b>了。设备没有中文语音时，会静静地只出字幕。', 2600); }
+  });
+})();
+$('btnSpeed').addEventListener('click', () => {
+  show.speed = show.speed === 1 ? 2 : 1; const b = $('btnSpeed'); b.textContent = show.speed + '×'; b.setAttribute('aria-pressed', String(show.speed > 1));
+});
+document.addEventListener('keydown', e => {
+  if (e.key === ' ' || e.key === 'Enter') { if (document.activeElement && document.activeElement.tagName === 'BUTTON') return; skip(); e.preventDefault(); }
+  if (show.vote && /^[1-3]$/.test(e.key)) { const o = show.vote.choice.options[+e.key - 1]; if (o) playerVote(o.id); }
+});
+
+// ===================== 尺寸与主循环 =====================
+let rsTimer = 0;
+function onResize() { clearTimeout(rsTimer); rsTimer = setTimeout(() => { resizeStage(); if (poster.running) resizePoster(); }, 60); }
+window.addEventListener('resize', onResize);
+try { if (window.ResizeObserver) new ResizeObserver(onResize).observe($('stageWrap')); } catch (e) {}
+try { if (document.fonts && document.fonts.ready) document.fonts.ready.then(() => { stage.bg = null; resizeStage(); poster.bg = null; if (poster.running) resizePoster(); }); } catch (e) {}
+
+let lastFrame = 0;
+function tick(now) {
+  lastFrame = now;
+  if (poster.running) drawPoster(now);
+  updateTyping(now);
+  updateVote(now);
+  teller.update(now, talking());
+  drawStage(now);
+}
+function frame(now) { tick(nowMs()); requestAnimationFrame(frame); }
+// rAF 被节流（后台页、无头浏览器）时，用定时器兜底；一切都按 performance.now 计时，不按帧累加
+setInterval(() => { const n = nowMs(); if (n - lastFrame > 120) tick(n); }, 100);
+resizeStage(); resizePoster(); drawPoster(nowMs()); drawStage(nowMs());
+requestAnimationFrame(frame);
+
+// 测试钩子（仅供自动截图）：跳到某个节点开说
+window.__wuxian = {
+  jump(nodeId, picks, decisions) {
+    const token = ++show.token; show.engine = new TreeEngine(SCRIPT); show.engine.picks = Object.assign({}, picks || {});
+    show.rng = mulberry32(7); show.crowd = makeCrowd(show.rng, 47); show.decisions = decisions || []; show.lines = []; show.chars = 0; show.t0 = nowMs() - 8 * 60000;
+    $('phLive').textContent = '在场 48 人'; ui.log.innerHTML = ''; ui.lyChap.textContent = /^(n[0-3]|n1)/.test(nodeId) ? '第一回' : '第二回';
+    const seg = show.engine.segmentFrom(nodeId);
+    (async () => {
+      let s = seg;
+      for (;;) {
+        for (const L of s.lines) { await playLine(L, token); if (token !== show.token) return; }
+        if (!s.choice) break;
+        const d = await runVote(s.choice, token); if (token !== show.token) return;
+        s = await show.engine.continue(d);
+      }
+      showFinale(s.ending);
+    })();
+  },
+  speed(x) { show.speed = x; },
+  vote(i) { if (show.vote) playerVote(show.vote.choice.options[i].id); },
+  finale(ending, decisions) { show.decisions = decisions; showFinale(ending); }
+};
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,3044 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="color-scheme" content="light">
+<title>城市回信 · 桐溪</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=ZCOOL+XiaoWei&family=Ma+Shan+Zheng&family=Noto+Serif+SC:wght@400;600;700&family=Courier+Prime:wght@400;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  color-scheme: light;
+  --green:#1d5c48; --green-d:#123f31; --green-l:#2f7a60; --green-ink:rgba(29,92,72,.9);
+  --kraft:#cfae7e; --kraft-l:#e2c99c; --kraft-d:#a98658; --kraft-dd:#7d5f3b;
+  --paper:#f6eedc; --paper-2:#ece1c8; --paper-3:#e1d2b2;
+  --red:#c23b2a; --red-d:#8f2a1d; --red-ink:rgba(194,59,42,.88);
+  --ink:#2f2822; --ink-2:#5b4f43; --ink-3:#8a7c6b;
+  --pen:#22324a;
+  --f-title:"ZCOOL XiaoWei","STKaiti","KaiTi","Songti SC",serif;
+  --f-body:"Noto Serif SC","Songti SC","STSong","SimSun",serif;
+  --f-hand:"Ma Shan Zheng","Kaiti SC","STKaiti","KaiTi",cursive;
+  --f-mono:"Courier Prime","Courier New",ui-monospace,Menlo,monospace;
+  --grain:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='240' height='240'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 .32  0 0 0 0 .24  0 0 0 0 .14  0 0 0 .26 0'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");
+  --blot:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='600' height='600'><filter id='b'><feTurbulence type='fractalNoise' baseFrequency='.008' numOctaves='3' seed='7'/><feColorMatrix values='0 0 0 0 .45  0 0 0 0 .32  0 0 0 0 .16  0 0 0 .5 -.12'/></filter><rect width='100%' height='100%' filter='url(%23b)'/></svg>");
+  --shadow:0 1px 0 rgba(255,255,255,.35) inset, 0 10px 30px rgba(60,40,15,.22), 0 2px 6px rgba(60,40,15,.18);
+}
+*{box-sizing:border-box}
+html,body{height:100%;margin:0}
+body{
+  background-color:var(--kraft); background-image:var(--grain), var(--blot);
+  color:var(--ink); font-family:var(--f-body); font-size:16px; line-height:1.7;
+  overflow:hidden; -webkit-tap-highlight-color:transparent; -webkit-font-smoothing:antialiased;
+}
+button,input,textarea{font-family:inherit;color:inherit}
+button{cursor:pointer}
+[hidden]{display:none!important}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
+
+/* ---------- 凸版印刷字 ---------- */
+.lp{position:relative;color:var(--green);text-shadow:0 1px 0 rgba(255,250,235,.45), 0 -1px 0 rgba(40,20,0,.18)}
+.lp .ghost{position:absolute;left:0;top:0;color:var(--red);opacity:.36;transform:translate(.06em,.035em);mix-blend-mode:multiply;pointer-events:none;white-space:nowrap;text-shadow:none}
+/* ZCOOL XiaoWei 的“回”字字形有缺陷（渲染成实心方块），单独换成宋体 */
+.hui{font-family:var(--f-body);font-weight:600;font-size:.92em}
+
+/* ---------- 按钮：邮政绿凸印 ---------- */
+.btn{min-height:46px;border:0;border-radius:6px;padding:10px 22px;font-family:var(--f-title);font-size:19px;letter-spacing:.16em;
+  background:var(--green);color:#f6eedc;position:relative;
+  box-shadow:0 0 0 2px var(--green), 0 0 0 4px rgba(246,238,220,.65), 0 0 0 5.5px var(--green), 0 4px 0 6px var(--green-d), 0 10px 22px 4px rgba(30,40,20,.3);
+  transition:transform .12s ease, box-shadow .12s ease; touch-action:manipulation}
+.btn:active{transform:translateY(3px);box-shadow:0 0 0 2px var(--green), 0 0 0 4px rgba(246,238,220,.65), 0 0 0 5.5px var(--green), 0 1px 0 6px var(--green-d), 0 4px 10px 4px rgba(30,40,20,.25)}
+.btn.red{background:var(--red);box-shadow:0 0 0 2px var(--red), 0 0 0 4px rgba(246,238,220,.65), 0 0 0 5.5px var(--red), 0 4px 0 6px var(--red-d), 0 10px 22px 4px rgba(60,20,10,.3)}
+.btn.ghost{background:transparent;color:var(--green);box-shadow:inset 0 0 0 2px var(--green), inset 0 0 0 4px transparent, inset 0 0 0 5px rgba(29,92,72,.45)}
+.btn.ghost:active{transform:translateY(2px)}
+.btn.sm{min-height:44px;font-size:15px;padding:8px 14px;letter-spacing:.08em}
+.btn:focus-visible,.chip:focus-visible,.icon-btn:focus-visible{outline:3px solid var(--red);outline-offset:4px}
+.icon-btn{width:44px;height:44px;border-radius:50%;border:2px solid var(--green);background:rgba(246,238,220,.85);display:grid;place-items:center;padding:0;color:var(--green)}
+.icon-btn svg{width:22px;height:22px}
+
+#btnMute{position:fixed;top:calc(10px + env(safe-area-inset-top));right:calc(12px + env(safe-area-inset-right));z-index:60}
+
+/* ---------- 屏幕 ---------- */
+.screen{position:fixed;inset:0;overflow-x:hidden;overflow-y:auto;opacity:0;visibility:hidden;transition:opacity .45s ease, visibility 0s linear .45s;-webkit-overflow-scrolling:touch}
+.screen.show{opacity:1;visibility:visible;transition:opacity .45s ease}
+.bar{position:sticky;top:0;z-index:5;display:flex;align-items:center;gap:10px;padding:calc(8px + env(safe-area-inset-top)) 66px 8px 14px;min-height:60px;
+  background:linear-gradient(var(--green),var(--green-d));color:#f3e9d2;box-shadow:0 2px 0 #0b281f, 0 6px 14px rgba(0,0,0,.18)}
+.bar h2{margin:0;font-family:var(--f-title);font-weight:400;font-size:21px;letter-spacing:.14em;flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.bar .icon-btn{border-color:#e9dcc0;background:transparent;color:#f3e9d2}
+.bar .btn.sm{background:#f3e9d2;color:var(--green);box-shadow:none;border-radius:999px;padding:6px 14px}
+.bar-stripe{height:8px;background:repeating-linear-gradient(-45deg,var(--red) 0 12px,var(--paper) 12px 24px,var(--green) 24px 36px,var(--paper) 36px 48px);opacity:.9}
+
+/* ---------- 开始页 ---------- */
+#scStart{display:flex;align-items:center;justify-content:center;overflow:hidden}
+.start-bg{position:absolute;inset:0;pointer-events:none}
+.start-bg svg{position:absolute;left:0;bottom:0;width:100%;height:46%}
+.start-wrap{position:relative;display:flex;align-items:center;justify-content:center;gap:clamp(20px,5vw,80px);width:100%;max-width:1100px;height:100%;padding:20px 24px}
+.mailbox{height:min(76vh,620px);width:auto;filter:drop-shadow(0 18px 26px rgba(40,25,5,.35));flex:none;overflow:visible}
+#envPeek{transform-origin:160px 210px;animation:peek 3.2s ease-in-out infinite}
+@keyframes peek{0%,100%{transform:rotate(-7deg) translateY(0)}50%{transform:rotate(-5deg) translateY(-6px)}}
+.start-text{max-width:440px;text-align:left}
+.eyebrow{font-family:var(--f-mono);letter-spacing:.32em;font-size:13px;color:var(--red-d);margin:0 0 6px}
+.start-text h1{font-family:var(--f-title);font-weight:400;white-space:nowrap;font-size:clamp(56px,6.6vw,92px);line-height:1.05;margin:0 0 6px;letter-spacing:.06em}
+.start-text .sub{font-family:var(--f-hand);font-size:clamp(26px,3vw,34px);color:var(--pen);margin:0 0 14px}
+.start-text .lede{font-size:15px;color:var(--ink-2);margin:0 0 26px;max-width:26em}
+.start-actions{display:flex;gap:18px;align-items:center;flex-wrap:wrap}
+.start-actions .btn.big{font-size:24px;padding:12px 40px;letter-spacing:.4em}
+.cancel-lines{position:absolute;top:6%;right:4%;width:min(42vw,420px);opacity:.16;pointer-events:none}
+
+/* ---------- 写信 ---------- */
+.write-wrap{max-width:760px;margin:0 auto;padding:22px 16px calc(40px + env(safe-area-inset-bottom))}
+.sheet{position:relative;background:var(--paper);background-image:var(--grain);border-radius:3px;box-shadow:var(--shadow);padding:26px clamp(18px,4vw,44px) 22px}
+.sheet::before{content:"";position:absolute;inset:8px;border:1px solid rgba(194,59,42,.35);pointer-events:none}
+.letterhead{display:flex;justify-content:space-between;align-items:flex-end;border-bottom:2px solid var(--red);padding-bottom:6px;margin-bottom:12px;color:var(--red)}
+.letterhead .lh-t{font-family:var(--f-title);font-size:22px;letter-spacing:.3em}
+.letterhead .lh-n{font-family:var(--f-mono);font-size:13px;letter-spacing:.12em}
+.salute{font-family:var(--f-hand);font-size:28px;color:var(--pen);margin:2px 0 0}
+.ruled{--lh:44px;background-image:linear-gradient(transparent calc(var(--lh) - 1px), rgba(194,59,42,.38) calc(var(--lh) - 1px));background-size:100% var(--lh);background-attachment:local;line-height:var(--lh)}
+#ta{display:block;width:100%;min-height:calc(44px * 5);border:0;resize:vertical;background-color:transparent;font-family:var(--f-hand);font-size:25px;color:var(--pen);padding:0 2px;outline:none}
+#ta::placeholder{color:rgba(34,50,74,.38)}
+.sign-row{display:flex;justify-content:flex-end;align-items:center;gap:8px;font-family:var(--f-hand);font-size:24px;color:var(--pen);margin-top:6px}
+#nameIn{border:0;border-bottom:1px solid rgba(194,59,42,.5);background:transparent;font-family:var(--f-hand);font-size:24px;color:var(--pen);width:9em;min-height:44px;outline:none;padding:0 4px}
+.chips-h{font-size:14px;color:var(--ink-2);margin:20px 2px 10px;letter-spacing:.06em}
+.chips{display:flex;flex-wrap:wrap;gap:10px}
+.chip{min-height:44px;padding:8px 14px;border-radius:3px;border:1.5px dashed rgba(47,40,34,.45);background:rgba(246,238,220,.6);font-size:15px;color:var(--ink);transition:transform .12s, background .2s}
+.chip[aria-pressed="true"]{background:var(--green);color:#f6eedc;border-style:solid;border-color:var(--green)}
+.chip:active{transform:scale(.97)}
+.send-row{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-top:22px;flex-wrap:wrap}
+.send-row .hint{font-size:13px;color:var(--ink-2)}
+
+/* ---------- 读信 ---------- */
+.read-grid{display:grid;grid-template-columns:1fr 380px;gap:18px;padding:16px;height:calc(100% - 68px)}
+.map-box{position:relative;border-radius:4px;overflow:hidden;background:#e6d2a8;background-image:var(--grain);box-shadow:var(--shadow);min-height:280px;touch-action:none}
+.map-box canvas{position:absolute;inset:0;width:100%;height:100%;display:block}
+.compass{position:absolute;left:12px;bottom:12px;width:64px;height:64px;pointer-events:none;opacity:.85}
+.cartouche{position:absolute;left:12px;top:12px;background:rgba(246,238,220,.92);border:1.5px solid var(--ink);box-shadow:0 0 0 3px rgba(246,238,220,.92), 0 0 0 4px var(--ink);padding:4px 12px;pointer-events:none}
+.cartouche b{display:block;font-family:var(--f-title);font-weight:400;color:var(--green);font-size:20px;letter-spacing:.2em}
+.cartouche small{display:block;font-family:var(--f-mono);font-size:10.5px;color:var(--ink-2);letter-spacing:.14em}
+.slip{background:var(--paper);background-image:var(--grain);box-shadow:var(--shadow);padding:16px 18px;overflow:auto;position:relative}
+.slip h3{margin:0 0 2px;font-family:var(--f-title);font-weight:400;font-size:20px;letter-spacing:.2em;color:var(--green)}
+.slip .slip-no{font-family:var(--f-mono);font-size:12px;color:var(--red-d);letter-spacing:.1em}
+.slip table{width:100%;border-collapse:collapse;margin-top:10px;font-size:14px}
+.slip th{width:4.6em;text-align:left;vertical-align:top;font-weight:600;color:var(--green);border:1px solid rgba(29,92,72,.45);padding:6px 8px;background:rgba(29,92,72,.06);letter-spacing:.1em}
+.slip td{border:1px solid rgba(29,92,72,.45);padding:6px 8px;vertical-align:top}
+.slip tr{opacity:0;transform:translateY(4px);transition:opacity .35s, transform .35s}
+.slip tr.on{opacity:1;transform:none}
+.tag{display:inline-block;margin:2px 4px 2px 0;padding:0 8px;border:1px solid var(--red);color:var(--red-d);border-radius:2px;font-size:13px;line-height:22px;background:rgba(194,59,42,.06)}
+.tag.g{border-color:var(--green);color:var(--green)}
+.kw{font-family:var(--f-hand);font-size:18px;color:var(--pen);margin-right:8px;white-space:nowrap}
+.bars{display:grid;grid-template-columns:auto 1fr auto;gap:3px 8px;align-items:center;font-size:13px}
+.bars i{display:block;height:7px;background:var(--ink-3);border-radius:1px}
+.bars i.on{background:var(--red)}
+.bars span.sc{font-family:var(--f-mono);font-size:12px;color:var(--ink-2)}
+#btnOpen{margin-top:14px;width:100%}
+.fly-env{position:fixed;left:50%;top:50%;width:min(420px,84vw);aspect-ratio:1.6;z-index:40;pointer-events:none;transform:translate(-50%,-50%)}
+.envelope{position:absolute;inset:0;background:#f3ead6;background-image:var(--grain);border-radius:3px;box-shadow:0 18px 40px rgba(40,25,5,.35), 0 0 0 1px rgba(90,70,40,.25)}
+.envelope .zip{position:absolute;left:6%;top:9%;display:flex;gap:5px}
+.envelope .zip i{width:20px;height:24px;border:1.6px solid var(--red);display:block;font-style:normal;font-family:var(--f-mono);color:var(--red-d);text-align:center;line-height:21px;font-size:14px}
+.envelope .stamp-slot{position:absolute;right:6%;top:7%;width:20%}
+.envelope .stamp-slot canvas{width:100%;display:block;filter:drop-shadow(0 1px 1px rgba(0,0,0,.2))}
+.envelope .to{position:absolute;left:10%;top:42%;font-family:var(--f-hand);font-size:clamp(26px,5vw,36px);color:var(--pen)}
+.envelope .from{position:absolute;right:8%;bottom:10%;font-family:var(--f-hand);font-size:18px;color:var(--pen)}
+.envelope .pm{position:absolute;right:13%;top:2%;width:42%;opacity:0}
+.envelope .pm svg{width:100%;height:auto}
+.envelope .bottom-line{position:absolute;left:6%;right:6%;bottom:6%;border-top:1.5px solid var(--red);}
+
+/* ---------- 回信 ---------- */
+.reply-wrap{max-width:820px;margin:0 auto;padding:20px 16px calc(110px + env(safe-area-inset-bottom))}
+.env-head{position:relative;display:flex;align-items:center;gap:16px;background:#f1e6cc;background-image:var(--grain);padding:14px 18px;border-radius:3px 3px 0 0;box-shadow:var(--shadow);border-bottom:2px dashed rgba(90,70,40,.35)}
+.env-head canvas{width:72px;flex:none}
+.env-head .pm-wrap{position:absolute;left:58px;top:-2px;width:132px;pointer-events:none}
+.env-head .pm-wrap svg{width:100%;height:auto}
+.env-head .meta{margin-left:auto;text-align:right;font-size:13px;color:var(--ink-2);line-height:1.6}
+.env-head .meta b{font-family:var(--f-hand);font-weight:400;font-size:22px;color:var(--pen)}
+.reply-letter{border-radius:0 0 3px 3px}
+.reply-letter .hand{font-family:var(--f-hand);font-size:23px;color:#3a2a20;--lh:46px}
+.reply-letter .hand p{margin:0;text-indent:2em}
+.reply-letter .hand p.to{text-indent:0}
+.reply-letter .sig{text-align:right;margin-top:6px;font-family:var(--f-hand);font-size:24px;color:#3a2a20;line-height:1.6}
+.reply-letter .ps{font-family:var(--f-hand);font-size:20px;color:var(--red-d);margin-top:14px;line-height:1.7}
+.route{list-style:none;margin:16px 0 12px;padding:0;position:relative}
+.route::before{content:"";position:absolute;left:30px;top:24px;bottom:24px;border-left:2px dashed var(--red)}
+.stop{position:relative;display:grid;grid-template-columns:62px 1fr;gap:0 14px;margin:0 0 14px}
+.stop .no{width:62px;height:62px;border-radius:50%;background:var(--red);color:#fbf3df;display:grid;place-items:center;font-family:var(--f-mono);font-weight:700;font-size:15px;line-height:1.1;text-align:center;box-shadow:0 0 0 3px var(--paper), 0 0 0 4.5px var(--red);z-index:1}
+.stop .no small{display:block;font-size:11px;font-weight:400;opacity:.9}
+.stop .card{background:rgba(255,252,242,.75);border:1px solid rgba(90,70,40,.25);padding:10px 14px 12px;border-radius:2px}
+.stop .walk{font-size:13px;color:var(--ink-2);margin:0 0 2px;font-style:normal}
+.stop h4{margin:0;font-family:var(--f-title);font-weight:400;font-size:22px;color:var(--green);letter-spacing:.06em}
+.stop h4 span{font-family:var(--f-body);font-size:13px;color:var(--ink-3);letter-spacing:0;margin-left:8px}
+.stop .why{font-family:var(--f-hand);font-size:20px;line-height:1.65;color:#3a2a20;margin:4px 0}
+.stop .quote{font-size:14.5px;color:var(--ink);margin:4px 0;border-left:3px solid var(--green);padding-left:10px}
+.stop .quote b{color:var(--green);font-weight:600}
+.stop .task{display:flex;gap:8px;align-items:center;font-size:14px;color:var(--red-d);margin-top:6px}
+.stop .task::before{content:"";width:16px;height:16px;border:2px solid var(--red);border-radius:50%;flex:none}
+.section-h{display:flex;align-items:center;gap:12px;margin:34px 0 14px;font-family:var(--f-title);font-size:22px;color:var(--green);letter-spacing:.2em}
+.section-h::before,.section-h::after{content:"";flex:1;height:0;border-top:1.5px solid rgba(29,92,72,.5);border-bottom:1.5px solid rgba(29,92,72,.5);padding-top:3px}
+.pc-stage{perspective:1600px;max-width:720px;margin:0 auto}
+.postcard{position:relative;aspect-ratio:3/2.1;transform-style:preserve-3d;transition:transform .9s cubic-bezier(.3,.7,.2,1);cursor:pointer;transform:rotate(-1.2deg)}
+.postcard.flipped{transform:rotate(1deg) rotateY(180deg)}
+.pc-face{position:absolute;inset:0;backface-visibility:hidden;-webkit-backface-visibility:hidden;background:#fbf6ea;padding:3.2% 3.2% 9%;box-shadow:0 16px 36px rgba(40,25,5,.32), 0 2px 5px rgba(40,25,5,.2)}
+.pc-face canvas{width:100%;height:100%;display:block}
+.pc-cap{position:absolute;left:3.2%;right:3.2%;bottom:2%;display:flex;justify-content:space-between;align-items:center;font-size:clamp(11px,1.8vw,14px);color:var(--ink-2)}
+.pc-cap b{font-family:var(--f-title);font-weight:400;color:var(--green);font-size:clamp(15px,2.4vw,20px);letter-spacing:.2em}
+.pc-cap span{font-family:var(--f-mono);letter-spacing:.1em}
+.pc-back{transform:rotateY(180deg);display:grid;grid-template-columns:1.2fr 1fr;gap:4%;padding:5%}
+.pc-back .l{border-right:1.5px solid rgba(90,70,40,.4);padding-right:4%;font-family:var(--f-hand);font-size:clamp(15px,2.3vw,21px);line-height:1.6;color:#3a2a20;overflow:hidden}
+.pc-back .l .prompt{display:block;margin-top:10px;font-family:var(--f-mono);font-size:clamp(9.5px,1.3vw,12px);line-height:1.5;color:var(--ink-2)}
+.pc-back .r{display:flex;flex-direction:column;gap:10px}
+.pc-back .r canvas{width:22%;align-self:flex-end}
+.pc-back .r .line{border-bottom:1.5px solid rgba(90,70,40,.45);height:clamp(22px,4vw,34px);font-family:var(--f-hand);font-size:clamp(15px,2.3vw,21px);color:var(--pen)}
+.pc-tip{text-align:center;font-size:13px;color:var(--ink-2);margin:12px 0 0}
+.tasks{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:12px}
+.task-card{background:var(--paper);background-image:var(--grain);padding:12px;text-align:center;box-shadow:0 4px 12px rgba(40,25,5,.16);border-radius:2px;position:relative}
+.task-card .slot{width:80px;height:80px;margin:0 auto 6px;border:2px dashed rgba(194,59,42,.45);border-radius:50%;display:grid;place-items:center;font-family:var(--f-title);font-size:30px;color:rgba(194,59,42,.3)}
+.task-card .slot.done{border-color:transparent}
+.task-card b{display:block;font-family:var(--f-title);font-weight:400;font-size:17px;color:var(--green)}
+.task-card p{margin:2px 0 0;font-size:13px;color:var(--ink-2);line-height:1.5}
+.dock{position:fixed;left:0;right:0;bottom:0;z-index:20;display:flex;justify-content:center;gap:12px;padding:12px 16px calc(14px + env(safe-area-inset-bottom));background:linear-gradient(rgba(207,174,126,0),rgba(207,174,126,.95) 38%);flex-wrap:wrap}
+
+/* ---------- 地图 / 护照 ---------- */
+.map-grid{display:grid;grid-template-columns:1fr 360px;gap:16px;padding:16px;height:calc(100% - 68px)}
+.passport{display:flex;flex-direction:column;background:var(--green);border-radius:6px;box-shadow:var(--shadow);padding:10px;min-height:0}
+.pp-cover{display:flex;align-items:center;gap:10px;color:#efe1c0;padding:4px 6px 10px}
+.pp-cover b{font-family:var(--f-title);font-weight:400;font-size:24px;letter-spacing:.3em}
+.pp-cover small{font-family:var(--f-mono);font-size:11px;letter-spacing:.2em;opacity:.8;display:block}
+.pp-cover .emb{width:40px;height:40px;border:2px solid #d9c79c;border-radius:50%;display:grid;place-items:center;font-family:var(--f-title);font-size:20px;color:#d9c79c}
+.pp-page{flex:1;min-height:0;overflow:auto;background:var(--paper);background-image:var(--grain), repeating-linear-gradient(0deg, transparent 0 27px, rgba(29,92,72,.08) 27px 28px);border-radius:3px;padding:10px}
+.pp-list{list-style:none;margin:0;padding:0;display:grid;gap:8px}
+.pp-item{display:grid;grid-template-columns:72px 1fr;gap:10px;align-items:center;min-height:84px;padding:6px 8px;border:1px solid rgba(90,70,40,.22);background:rgba(255,252,242,.6);border-radius:2px;cursor:pointer;text-align:left;width:100%}
+.pp-item:active{background:rgba(29,92,72,.08)}
+.pp-item .slot{width:72px;height:72px;border:2px dashed rgba(194,59,42,.4);border-radius:50%;display:grid;place-items:center;font-family:var(--f-mono);font-weight:700;color:rgba(194,59,42,.55);font-size:20px;position:relative}
+.pp-item .slot.done{border-color:transparent}
+.pp-item .slot .seal{position:absolute;inset:-6px;width:84px;height:84px;transform:rotate(var(--rot,-8deg))}
+.pp-item b{font-family:var(--f-title);font-weight:400;font-size:18px;color:var(--green);display:block;line-height:1.3}
+.pp-item span{font-size:12.5px;color:var(--ink-2);display:block;line-height:1.45}
+.pp-item.hiddenp{border-color:var(--green);border-style:dashed}
+.pp-foot{padding:10px 2px 2px;display:flex;gap:8px;flex-wrap:wrap}
+.pp-foot .btn{flex:1}
+.map-hint{position:absolute;right:12px;top:12px;margin:0;background:rgba(246,238,220,.92);padding:4px 10px;font-size:13px;border:1px solid rgba(58,49,40,.4);pointer-events:none}
+.zoom{position:absolute;right:12px;bottom:12px;display:flex;flex-direction:column;gap:8px}
+
+/* ---------- 弹层 ---------- */
+.overlay{position:fixed;inset:0;z-index:50;display:grid;place-items:center;padding:16px;background:rgba(30,22,12,.48);opacity:0;visibility:hidden;transition:opacity .3s, visibility 0s linear .3s}
+.overlay.show{opacity:1;visibility:visible;transition:opacity .3s}
+.dialog{position:relative;width:min(520px,100%);max-height:calc(100% - 10px);overflow:auto;background:var(--paper);background-image:var(--grain);box-shadow:0 24px 60px rgba(0,0,0,.4);border-radius:3px;padding:22px 22px 20px}
+.dialog .x{position:absolute;right:10px;top:10px;border-color:var(--ink-3);color:var(--ink-2);background:transparent}
+.shop-head{display:flex;gap:14px;align-items:center;padding-right:44px}
+.shop-head .badge{width:66px;height:66px;flex:none}
+.shop-head h3{margin:0;font-family:var(--f-title);font-weight:400;font-size:26px;color:var(--green);letter-spacing:.06em;line-height:1.2}
+.shop-head p{margin:2px 0 0;font-size:13px;color:var(--ink-2)}
+.owner-say{margin:16px 0 10px;padding:12px 14px;background:rgba(29,92,72,.07);border-left:4px solid var(--green);font-family:var(--f-hand);font-size:22px;line-height:1.55;color:#2a2a24}
+.owner-say small{display:block;font-family:var(--f-body);font-size:12.5px;color:var(--ink-2);margin-top:4px}
+.shop-task{font-size:14px;color:var(--red-d);margin:0 0 12px}
+.stamp-pad{position:relative;height:170px;border:1px solid rgba(90,70,40,.3);background:repeating-linear-gradient(0deg, transparent 0 27px, rgba(29,92,72,.08) 27px 28px), #fbf5e6;display:grid;place-items:center;overflow:hidden;margin-bottom:14px}
+.stamp-pad .pad-label{position:absolute;left:10px;top:6px;font-family:var(--f-mono);font-size:11px;letter-spacing:.2em;color:var(--ink-3)}
+.stamp-pad .imprint{width:124px;height:124px;opacity:0;transform:rotate(-9deg) scale(1.1)}
+.stamp-pad .imprint.on{opacity:1;transform:rotate(-9deg) scale(1);transition:opacity .08s, transform .2s}
+.stamp-pad .imprint svg{width:100%;height:100%}
+.stamper{position:absolute;left:50%;top:50%;width:120px;height:190px;margin:-200px 0 0 -60px;opacity:0;pointer-events:none}
+.moods{display:flex;gap:8px;flex-wrap:wrap;margin:0 0 12px}
+.moods-h{font-size:13px;color:var(--ink-2);margin:0 0 6px}
+.dialog .row{display:flex;gap:10px;flex-wrap:wrap}
+.dialog .row .btn{flex:1}
+.follow .hand{font-family:var(--f-hand);font-size:22px;color:#3a2a20;--lh:44px}
+.follow .hand p{margin:0;text-indent:2em}
+.follow .hand p.to{text-indent:0}
+.follow h3{margin:0 0 6px;font-family:var(--f-title);font-weight:400;color:var(--red);letter-spacing:.2em;font-size:20px}
+.incoming{position:fixed;z-index:45;right:20px;top:80px;width:150px;aspect-ratio:1.6;pointer-events:none;opacity:0}
+.incoming .envelope .to{font-size:20px;top:38%}
+.incoming .envelope .zip i{width:10px;height:12px;line-height:10px;font-size:8px;border-width:1px}
+
+/* 商户后台 */
+.drawer{place-items:stretch end;padding:0}
+.drawer .panel{width:min(560px,100%);height:100%;overflow:auto;background:#f1ece0;background-image:var(--grain);box-shadow:-10px 0 40px rgba(0,0,0,.3);transform:translateX(30px);transition:transform .35s}
+.drawer.show .panel{transform:none}
+.panel .bar{position:sticky;padding-right:66px}
+.panel .inner{padding:16px 18px calc(30px + env(safe-area-inset-bottom))}
+.demo-badge{display:inline-block;font-family:var(--f-mono);font-size:11px;letter-spacing:.14em;color:#fff;background:var(--red);padding:1px 8px;border-radius:2px;vertical-align:middle;margin-left:6px}
+.panel h4{font-family:var(--f-title);font-weight:400;font-size:19px;color:var(--green);margin:20px 0 8px;letter-spacing:.14em}
+.panel table{width:100%;border-collapse:collapse;font-size:13.5px;background:rgba(255,255,255,.4)}
+.panel th,.panel td{border-bottom:1px solid rgba(90,70,40,.25);padding:7px 6px;text-align:left}
+.panel th{font-weight:600;color:var(--ink-2);font-size:12.5px}
+.panel td.num{font-family:var(--f-mono);text-align:right;white-space:nowrap}
+.state{display:inline-block;font-size:12px;padding:0 6px;border-radius:2px;border:1px solid var(--ink-3);color:var(--ink-2)}
+.state.ok{border-color:var(--green);color:#fff;background:var(--green)}
+.cards{display:grid;gap:10px}
+.tcard{display:grid;grid-template-columns:1fr auto;gap:4px 10px;align-items:center;padding:10px 12px;background:var(--paper);border:1.5px solid var(--green);border-radius:3px;position:relative}
+.tcard::before{content:"";position:absolute;left:-1.5px;top:12px;bottom:12px;border-left:4px solid var(--red)}
+.tcard b{font-family:var(--f-title);font-weight:400;font-size:16px;color:var(--green)}
+.tcard p{margin:0;font-size:13px;color:var(--ink-2);grid-column:1}
+.meter{grid-column:1/-1;height:6px;background:rgba(90,70,40,.15);border-radius:3px;overflow:hidden}
+.meter i{display:block;height:100%;background:var(--green)}
+.switch{width:56px;height:32px;border-radius:16px;border:0;background:#b9ad96;position:relative;grid-row:1/3;grid-column:2;padding:0}
+.switch::after{content:"";position:absolute;left:4px;top:4px;width:24px;height:24px;border-radius:50%;background:#fff;transition:left .2s}
+.switch[aria-checked="true"]{background:var(--green)}
+.switch[aria-checked="true"]::after{left:28px}
+.loop{display:flex;flex-wrap:wrap;align-items:center;gap:6px;font-size:13px}
+.loop span{padding:6px 10px;background:var(--paper);border:1.5px solid var(--green);border-radius:3px}
+.loop span.money{border-color:var(--red);color:var(--red-d)}
+.loop em{font-style:normal;color:var(--red);font-weight:700}
+.kpis{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.kpi{background:var(--paper);padding:10px;border-radius:3px;border:1px solid rgba(90,70,40,.25)}
+.kpi b{display:block;font-family:var(--f-mono);font-size:22px;color:var(--green)}
+.kpi span{font-size:12px;color:var(--ink-2)}
+.note{font-size:12.5px;color:var(--ink-2);margin-top:14px;line-height:1.6}
+
+/* 信匣 */
+.box-list{list-style:none;padding:0;margin:12px 0 0;display:grid;gap:10px}
+.box-list button{width:100%;text-align:left;display:grid;grid-template-columns:1fr auto;gap:2px 10px;padding:10px 12px;min-height:56px;background:rgba(255,252,242,.7);border:1px solid rgba(90,70,40,.3);border-radius:2px}
+.box-list b{font-family:var(--f-hand);font-weight:400;font-size:20px;color:var(--pen);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.box-list span{font-family:var(--f-mono);font-size:12px;color:var(--ink-2)}
+.box-list em{grid-row:1/3;grid-column:2;align-self:center;font-style:normal;color:var(--red);font-family:var(--f-mono)}
+
+.toast{position:fixed;left:50%;bottom:calc(100px + env(safe-area-inset-bottom));transform:translateX(-50%) translateY(20px);z-index:70;background:var(--ink);color:#f6eedc;padding:8px 16px;border-radius:3px;font-size:14px;opacity:0;transition:opacity .3s, transform .3s;pointer-events:none;max-width:calc(100% - 32px)}
+.toast.show{opacity:1;transform:translateX(-50%)}
+
+/* ---------- 手机 ---------- */
+@media (max-width: 820px){
+  .read-grid,.map-grid{grid-template-columns:1fr;grid-template-rows:auto auto;height:auto;padding:12px}
+  .map-grid{grid-template-rows:56vh auto}
+  .read-grid .map-box{height:42vh}
+  .passport{min-height:auto}
+  .pp-page{overflow:visible}
+}
+@media (max-width: 700px), (max-aspect-ratio: 4/5){
+  .start-wrap{flex-direction:column;justify-content:space-between;gap:6px;padding:calc(52px + env(safe-area-inset-top)) 16px calc(26px + env(safe-area-inset-bottom))}
+  .start-text{display:contents}
+  .title-block{text-align:center;order:-1}
+  .mailbox{order:0}
+  .start-text .lede{display:none}
+  .start-text h1{font-size:62px}
+  .start-text .sub{margin-bottom:0}
+  .mailbox{height:auto;width:min(58vw,260px);max-height:46vh}
+  .start-actions{justify-content:center;flex-direction:column;gap:14px;order:2;width:100%}
+  .start-actions .btn{width:min(280px,100%)}
+  .bar h2{font-size:18px}
+  .dock{flex-wrap:nowrap;gap:8px;padding-left:12px;padding-right:12px}
+  .dock .btn{font-size:15px;padding:8px 10px;letter-spacing:.04em;white-space:nowrap}
+  .dock .btn.red{flex:1}
+  .stop{grid-template-columns:48px 1fr;gap:0 10px}
+  .stop .no{width:48px;height:48px;font-size:13px}
+  .route::before{left:23px}
+  .reply-letter .hand{font-size:21px;--lh:42px}
+  .stop .why{font-size:18.5px}
+  .env-head .pm-wrap{width:110px}
+  .kpis{grid-template-columns:1fr 1fr}
+  .pc-back{grid-template-columns:1fr;grid-template-rows:auto auto}
+  .pc-back .l{border-right:0;padding-right:0}
+  .pc-back .r{display:none}
+}
+@media (prefers-reduced-motion: reduce){
+  *,*::before,*::after{animation-duration:.001s!important;animation-iteration-count:1!important;transition-duration:.001s!important}
+}
+</style>
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <filter id="inkRough" x="-10%" y="-10%" width="120%" height="120%">
+      <feTurbulence type="fractalNoise" baseFrequency="1.6" numOctaves="2" seed="3" result="n"/>
+      <feDisplacementMap in="SourceGraphic" in2="n" scale="2.2" result="d"/>
+      <feTurbulence type="fractalNoise" baseFrequency=".9" numOctaves="1" seed="9" result="m"/>
+      <feColorMatrix in="m" type="matrix" values="0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 -2.2 1.75" result="mask"/>
+      <feComposite in="d" in2="mask" operator="in"/>
+    </filter>
+    <path id="sealArc" d="M 12 50 A 38 38 0 0 1 88 50"/>
+    <path id="pmTopShared" d="M -6 65 A 46 46 0 0 1 86 65"/>
+    <linearGradient id="gBody" x1="0" x2="1">
+      <stop offset="0" stop-color="#0c3629"/><stop offset=".16" stop-color="#1b5c46"/><stop offset=".34" stop-color="#2f8064"/><stop offset=".42" stop-color="#3b8d70"/><stop offset=".6" stop-color="#22694f"/><stop offset=".86" stop-color="#154a39"/><stop offset="1" stop-color="#0b3025"/>
+    </linearGradient>
+    <linearGradient id="gCap" x1="0" x2="1">
+      <stop offset="0" stop-color="#0a2d22"/><stop offset=".35" stop-color="#2a7559"/><stop offset=".55" stop-color="#1d5c48"/><stop offset="1" stop-color="#0a2b21"/>
+    </linearGradient>
+    <linearGradient id="gBrass" x1="0" x2="1">
+      <stop offset="0" stop-color="#6d5420"/><stop offset=".4" stop-color="#d9b968"/><stop offset=".6" stop-color="#b8953f"/><stop offset="1" stop-color="#5c461a"/>
+    </linearGradient>
+    <clipPath id="slotClip"><rect x="-100" y="-200" width="520" height="409"/></clipPath>
+  </defs>
+</svg>
+
+<button id="btnMute" class="icon-btn" aria-label="静音" aria-pressed="false">
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 9h4l5-4v14l-5-4H4z"/><path class="w1" d="M16 9c1.5 1.5 1.5 4.5 0 6"/><path class="w2" d="M18.5 6.5c3 3 3 8 0 11"/><path class="mx" d="M16 9l6 6M22 9l-6 6" style="display:none"/></svg>
+</button>
+
+<!-- 开始页 -->
+<section id="scStart" class="screen show" aria-label="开始">
+  <div class="start-bg" aria-hidden="true">
+    <svg class="cancel-lines" viewBox="0 0 400 200"><g fill="none" stroke="#8f2a1d" stroke-width="5"><circle cx="300" cy="100" r="86"/><circle cx="300" cy="100" r="64" stroke-width="2.5"/><path d="M0 50q25-16 50 0t50 0t50 0t50 0M0 80q25-16 50 0t50 0t50 0t50 0M0 110q25-16 50 0t50 0t50 0t50 0M0 140q25-16 50 0t50 0t50 0t50 0"/></g></svg>
+    <svg viewBox="0 0 1200 400" preserveAspectRatio="xMidYMax slice" id="townPrint"></svg>
+  </div>
+  <div class="start-wrap">
+    <svg class="mailbox" viewBox="0 0 320 560" role="img" aria-label="一只绿色邮筒，投信口探出半封信">
+      <ellipse cx="160" cy="543" rx="120" ry="13" fill="rgba(40,25,5,.32)"/>
+      <rect x="92" y="486" width="136" height="52" rx="6" fill="#0d3328"/>
+      <rect x="84" y="526" width="152" height="12" rx="3" fill="#0a281f"/>
+      <rect x="70" y="150" width="180" height="344" rx="14" fill="url(#gBody)"/>
+      <rect x="70" y="462" width="180" height="10" fill="url(#gBrass)" opacity=".9"/>
+      <rect x="102" y="160" width="10" height="320" rx="5" fill="#fff" opacity=".12"/>
+      <path d="M58 158 Q58 66 160 58 Q262 66 262 158 Z" fill="url(#gCap)"/>
+      <path d="M92 120 Q104 82 150 72" fill="none" stroke="#fff" stroke-opacity=".22" stroke-width="7" stroke-linecap="round"/>
+      <rect x="54" y="146" width="212" height="22" rx="7" fill="#0e3a2d"/>
+      <rect x="54" y="146" width="212" height="5" rx="2" fill="#3f8f72" opacity=".6"/>
+      <circle cx="160" cy="54" r="11" fill="url(#gBrass)"/>
+      <!-- 信从投信口探出 -->
+      <g clip-path="url(#slotClip)">
+        <g id="envPeek">
+          <rect x="96" y="122" width="132" height="86" rx="3" fill="#f3ead6" stroke="#b9a37b" stroke-width="1"/>
+          <g fill="none" stroke="#c23b2a" stroke-width="1.4"><rect x="104" y="130" width="9" height="11"/><rect x="116" y="130" width="9" height="11"/><rect x="128" y="130" width="9" height="11"/><rect x="140" y="130" width="9" height="11"/><rect x="152" y="130" width="9" height="11"/><rect x="164" y="130" width="9" height="11"/></g>
+          <rect x="196" y="128" width="24" height="29" fill="#fbf5e6" stroke="#1d5c48" stroke-width="1.5" stroke-dasharray="2 1.6"/>
+          <path d="M199 150 q9 -10 18 0" fill="none" stroke="#1d5c48" stroke-width="2"/>
+          <circle cx="212" cy="136" r="3.5" fill="#c23b2a"/>
+          <path d="M112 168 q10 -6 20 0 t20 0 t20 0" fill="none" stroke="#22324a" stroke-width="2.2" stroke-linecap="round"/>
+          <path d="M124 186 q8 -5 16 0 t16 0" fill="none" stroke="#22324a" stroke-width="2" stroke-linecap="round"/>
+        </g>
+      </g>
+      <rect x="100" y="196" width="120" height="26" rx="6" fill="#0a2d22"/>
+      <rect x="108" y="205" width="104" height="7" rx="2" fill="#030c09"/>
+      <rect x="100" y="216" width="120" height="6" rx="3" fill="#2b7a5e" opacity=".55"/>
+      <rect x="110" y="250" width="100" height="160" rx="4" fill="#efe4c8"/>
+      <rect x="116" y="256" width="88" height="148" rx="2" fill="none" stroke="#1d5c48" stroke-width="2"/>
+      <text x="160" y="300" text-anchor="middle" font-family="ZCOOL XiaoWei, STKaiti, serif" font-size="34" fill="#1d5c48">桐</text>
+      <text x="160" y="340" text-anchor="middle" font-family="ZCOOL XiaoWei, STKaiti, serif" font-size="34" fill="#1d5c48">溪</text>
+      <text x="160" y="388" text-anchor="middle" font-family="ZCOOL XiaoWei, STKaiti, serif" font-size="20" fill="#c23b2a" letter-spacing="4">信筒</text>
+      <rect x="112" y="420" width="96" height="30" rx="3" fill="#e3d6b6"/>
+      <text x="160" y="433" text-anchor="middle" font-family="Courier Prime, Courier New, monospace" font-size="9.5" fill="#123f31" font-weight="700">开箱 09:00</text>
+      <text x="160" y="445" text-anchor="middle" font-family="Courier Prime, Courier New, monospace" font-size="9.5" fill="#123f31" font-weight="700">     15:00</text>
+    </svg>
+    <div class="start-text">
+      <div class="title-block">
+      <p class="eyebrow">TONGXI POST · 桐溪邮局</p>
+      <h1 class="lp"><span class="ghost" aria-hidden="true">城市<span class="hui">回</span>信</span>城市<span class="hui">回</span>信</h1>
+      <p class="sub">给桐溪写一封信</p>
+      <p class="lede">说说你想要怎样的一天。这座江南小城会用本地人的口吻回你：一条只给你排的路，一张按你的信画的明信片，一本等着店主们盖章的护照。</p>
+      </div>
+      <div class="start-actions">
+        <button id="btnStart" class="btn big">提笔</button>
+        <button id="btnBox" class="btn ghost sm" hidden>信匣</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 写信 -->
+<section id="scWrite" class="screen" aria-label="写信">
+  <header class="bar"><button class="icon-btn" data-go="scStart" aria-label="返回"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M15 5l-7 7 7 7"/></svg></button><h2>写信给桐溪</h2></header>
+  <div class="bar-stripe"></div>
+  <div class="write-wrap">
+    <div class="sheet">
+      <div class="letterhead"><span class="lh-t">桐溪邮局 · 信笺</span><span class="lh-n" id="lhNo">No.0001</span></div>
+      <p class="salute">致 桐溪：</p>
+      <div class="ruled"><textarea id="ta" maxlength="600" rows="5" placeholder="想要怎样的一天？和谁来，待多久，怕什么，想念什么……" aria-label="信的正文"></textarea></div>
+      <div class="sign-row">—— <input id="nameIn" maxlength="12" placeholder="你的署名" aria-label="署名"></div>
+    </div>
+    <p class="chips-h">不知道从哪里写起？点几句，它们会落到信纸上：</p>
+    <div class="chips" id="chips"></div>
+    <div class="send-row">
+      <span class="hint">写什么都行，空着寄出也可以。</span>
+      <button id="btnSend" class="btn red">封缄 · 寄出</button>
+    </div>
+  </div>
+</section>
+
+<!-- 读信 -->
+<section id="scRead" class="screen" aria-label="城市读信">
+  <header class="bar"><h2 id="readTitle">邮差正在读你的信</h2></header>
+  <div class="bar-stripe"></div>
+  <div class="read-grid">
+    <div class="map-box" id="readBox"><canvas id="cvRead"></canvas>
+      <div class="cartouche"><b>桐溪街巷图</b><small>TONGXI · 四街十六处</small></div>
+    </div>
+    <div class="slip" aria-live="polite">
+      <h3>邮件处理单</h3>
+      <div class="slip-no" id="slipNo">CITY AGENT · RULE</div>
+      <table><tbody id="slipBody"></tbody></table>
+      <button id="btnOpen" class="btn red" hidden>拆开<span class="hui">回</span>信</button>
+    </div>
+  </div>
+  <div class="fly-env" id="flyEnv" aria-hidden="true">
+    <div class="envelope">
+      <div class="zip"><i>3</i><i>1</i><i>4</i><i>0</i><i>0</i><i>0</i></div>
+      <div class="stamp-slot"><canvas id="cvFlyStamp"></canvas></div>
+      <div class="pm" id="flyPm"></div>
+      <div class="to">桐溪　收</div>
+      <div class="from" id="flyFrom"></div>
+      <div class="bottom-line"></div>
+    </div>
+  </div>
+</section>
+
+<!-- 回信 -->
+<section id="scReply" class="screen" aria-label="回信">
+  <header class="bar"><button class="icon-btn" data-go="scStart" aria-label="回到邮筒"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M15 5l-7 7 7 7"/></svg></button><h2>桐溪的<span class="hui">回</span>信</h2><button class="btn sm" data-merchant>商户视角</button></header>
+  <div class="bar-stripe"></div>
+  <div class="reply-wrap">
+    <div class="env-head"><canvas id="cvReplyStamp"></canvas><div class="pm-wrap" id="replyPm"></div><div class="meta">寄自 桐溪<br>收信人 <b id="replyTo"></b></div></div>
+    <article class="sheet reply-letter" id="replyLetter"></article>
+    <div class="section-h">明信片</div>
+    <div class="pc-stage">
+      <div class="postcard" id="postcard" role="button" tabindex="0" aria-label="明信片，点击翻面">
+        <div class="pc-face"><canvas id="cvCard" width="1200" height="800"></canvas><div class="pc-cap"><b>桐溪</b><span id="pcNo"></span></div></div>
+        <div class="pc-face pc-back"><div class="l" id="pcBack"></div><div class="r"><canvas id="cvCardStamp"></canvas><div class="line" id="pcTo"></div><div class="line"></div><div class="line"></div></div></div>
+      </div>
+    </div>
+    <p class="pc-tip">点明信片翻到背面，看看它是按信里哪些话画的。</p>
+    <div class="section-h">沿途盖章</div>
+    <div class="tasks" id="tasks"></div>
+  </div>
+  <div class="dock"><button class="btn red" id="btnGo">出发 · 去盖章</button><button class="btn ghost sm" id="btnSave">存下明信片</button><button class="btn ghost sm" id="btnAgain">再写一封</button></div>
+</section>
+
+<!-- 地图 -->
+<section id="scMap" class="screen" aria-label="出发与盖章">
+  <header class="bar"><button class="icon-btn" data-go="scReply" aria-label="回到回信"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M15 5l-7 7 7 7"/></svg></button><h2>今天的路线</h2><button class="btn sm" data-merchant>商户视角</button></header>
+  <div class="bar-stripe"></div>
+  <div class="map-grid">
+    <div class="map-box" id="mapBox"><canvas id="cvMap"></canvas>
+      <div class="cartouche"><b>桐溪街巷图</b><small>拖动查看 · 点红印到店</small></div>
+      <svg class="compass" viewBox="0 0 64 64"><circle cx="32" cy="32" r="26" fill="rgba(246,238,220,.8)" stroke="#3a3128" stroke-width="1.5"/><circle cx="32" cy="32" r="21" fill="none" stroke="#3a3128" stroke-width=".7"/><path d="M32 8l5 24h-10z" fill="#c23b2a"/><path d="M32 56l5-24h-10z" fill="#3a3128"/><text x="32" y="7" font-size="9" text-anchor="middle" fill="#3a3128" font-family="ZCOOL XiaoWei,serif">北</text></svg>
+      <div class="zoom"><button class="icon-btn" id="zIn" aria-label="放大"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg></button><button class="icon-btn" id="zOut" aria-label="缩小"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M5 12h14"/></svg></button></div>
+    </div>
+    <aside class="passport" aria-label="桐溪护照">
+      <div class="pp-cover"><div class="emb">溪</div><div><b>桐溪护照</b><small>PASSPORT · <span id="ppCount">0/0</span></small></div></div>
+      <div class="pp-page"><ol class="pp-list" id="ppList"></ol></div>
+      <div class="pp-foot"><button class="btn red" id="btnFollow" hidden>第二封<span class="hui">回</span>信到了</button></div>
+    </aside>
+  </div>
+</section>
+
+<!-- 到店盖章 -->
+<div class="overlay" id="ovShop" role="dialog" aria-modal="true" aria-labelledby="shopName">
+  <div class="dialog">
+    <button class="icon-btn x" data-close aria-label="关闭"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg></button>
+    <div class="shop-head"><div class="badge" id="shopBadge"></div><div><h3 id="shopName"></h3><p id="shopMeta"></p></div></div>
+    <div class="owner-say" id="shopSay"></div>
+    <p class="shop-task" id="shopTask"></p>
+    <div class="stamp-pad" id="stampPad"><span class="pad-label">PASSPORT · 桐溪</span><div class="imprint" id="imprint"></div>
+      <svg class="stamper" id="stamper" viewBox="0 0 120 190"><defs><linearGradient id="gWood" x1="0" x2="1"><stop offset="0" stop-color="#5a3a24"/><stop offset=".45" stop-color="#a0714a"/><stop offset="1" stop-color="#4a2e1c"/></linearGradient></defs><ellipse cx="60" cy="30" rx="26" ry="24" fill="url(#gWood)"/><rect x="48" y="44" width="24" height="80" rx="6" fill="url(#gWood)"/><rect x="18" y="120" width="84" height="44" rx="4" fill="url(#gWood)"/><rect x="14" y="160" width="92" height="16" rx="3" fill="#8f2a1d"/><rect x="18" y="122" width="84" height="5" fill="#fff" opacity=".18"/></svg>
+    </div>
+    <div id="moodBox" hidden><p class="moods-h">这一站，你：</p><div class="moods" id="moods"></div></div>
+    <div class="row"><button class="btn red" id="btnStamp">请店主盖章</button></div>
+    <p class="note" style="margin-top:10px">演示里点按钮即视为到店；正式版可用店内二维码或定位核销。</p>
+  </div>
+</div>
+
+<!-- 第二封信 -->
+<div class="overlay" id="ovFollow" role="dialog" aria-modal="true" aria-label="第二封回信">
+  <div class="dialog follow" style="width:min(620px,100%)">
+    <button class="icon-btn x" data-close aria-label="关闭"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg></button>
+    <h3>桐溪 · 第二封<span class="hui">回</span>信</h3>
+    <div class="ruled hand" id="followBody"></div>
+    <div class="row" style="margin-top:16px"><button class="btn" id="btnSeeHidden">去找这个地方</button></div>
+  </div>
+</div>
+<div class="incoming" id="incoming" aria-hidden="true"><div class="envelope"><div class="zip"><i></i><i></i><i></i></div><div class="to">致 你</div></div></div>
+
+<!-- 商户后台 -->
+<div class="overlay drawer" id="ovMerchant" role="dialog" aria-modal="true" aria-label="商户后台">
+  <div class="panel">
+    <header class="bar"><h2>商户后台 <span class="demo-badge">示例数据</span></h2><button class="icon-btn" data-close aria-label="关闭"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg></button></header>
+    <div class="inner" id="merchantInner"></div>
+  </div>
+</div>
+
+<!-- 信匣 -->
+<div class="overlay" id="ovBox" role="dialog" aria-modal="true" aria-label="信匣">
+  <div class="dialog">
+    <button class="icon-btn x" data-close aria-label="关闭"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg></button>
+    <h3 style="margin:0;font-family:var(--f-title);font-weight:400;color:var(--green);font-size:24px;letter-spacing:.2em">信匣</h3>
+    <p style="margin:2px 0 0;font-size:13px;color:var(--ink-2)">桐溪寄给你的信都在这里，存在这台设备上。</p>
+    <ul class="box-list" id="boxList"></ul>
+  </div>
+</div>
+<div class="toast" id="toast" role="status"></div>
+
+<script id="core">
+/* =====================================================================
+ * 桐溪 · 城市数据 + CityAgent（纯逻辑，不碰 DOM，可在 node 里直接跑）
+ * ===================================================================== */
+(function (root) {
+'use strict';
+
+/* ---------- 小工具 ---------- */
+function hashStr(s) {
+  let h = 2166136261 >>> 0;
+  for (let i = 0; i < s.length; i++) { h ^= s.charCodeAt(i); h = Math.imul(h, 16777619) >>> 0; }
+  return h >>> 0;
+}
+function rngFrom(seed) {
+  let a = seed >>> 0;
+  return function () {
+    a = (a + 0x6D2B79F5) >>> 0;
+    let t = a;
+    t = Math.imul(t ^ (t >>> 15), t | 1);
+    t ^= t + Math.imul(t ^ (t >>> 7), t | 61);
+    return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+  };
+}
+function pick(rng, arr) { return arr[Math.floor(rng() * arr.length) % arr.length]; }
+const CN_NUM = ['零', '一', '二', '三', '四', '五', '六', '七', '八', '九', '十'];
+function cnNum(n) {
+  n = Math.round(n);
+  if (n <= 10) return CN_NUM[n];
+  if (n < 20) return '十' + CN_NUM[n - 10];
+  const t = Math.floor(n / 10), o = n % 10;
+  return CN_NUM[t] + '十' + (o ? CN_NUM[o] : '');
+}
+function hhmm(min) {
+  const h = Math.floor(min / 60), m = min % 60;
+  return String(h).padStart(2, '0') + ':' + String(m).padStart(2, '0');
+}
+function has(obj, k) { return Object.prototype.hasOwnProperty.call(obj, k); }
+
+/* ---------- 偏好标签 ---------- */
+const TAG_LABEL = {
+  quiet: '安静', solo: '独处', food: '吃点好的', nostalgia: '小时候的味道', parents: '带爸妈',
+  craft: '老手艺', rain: '雨天', night: '夜色', kids: '带孩子', couple: '两个人', friends: '和朋友',
+  photo: '拍照', books: '旧书', opera: '听戏', tea: '喝茶', water: '坐船看水', sweet: '甜食',
+  lively: '烟火气', cheap: '省着花', oldtime: '老物件', tired: '想歇一歇', morning: '早起'
+};
+
+/* 关键词 → 标签。[标签, 权重, 词表] */
+const KEYWORDS = [
+  ['quiet', 2, ['安静', '清净', '清静', '发呆', '放空', '不想说话', '躲一躲', '慢一点', '慢慢', '没人打扰', '静一静', '清闲']],
+  ['solo', 2, ['一个人', '独自', '独行', '自己一个', '一人']],
+  ['quiet', 1, ['一个人', '独自']],
+  ['food', 2, ['吃', '味道', '美食', '小吃', '馋', '饿', '早点', '早饭', '早餐', '好吃', '面条', '一碗面', '馄饨', '菜']],
+  ['nostalgia', 2, ['小时候', '童年', '外婆', '奶奶', '姥姥', '怀旧', '从前', '以前', '老味道', '记忆', '回忆', '老家', '家乡', '过年']],
+  ['parents', 3, ['爸妈', '父母', '爸爸', '妈妈', '老人', '长辈', '父亲', '母亲', '老爸', '老妈', '公婆', '岳父', '岳母']],
+  ['craft', 2, ['手艺', '手工', '匠人', '非遗', '亲手', '自己做', '传统工艺', '老师傅', '做东西']],
+  ['rain', 3, ['下雨', '雨天', '雨', '梅雨', '淋']],
+  ['night', 2, ['晚上', '夜里', '夜景', '夜晚', '天黑', '傍晚', '灯火', '夜市', '夜']],
+  ['kids', 3, ['孩子', '小孩', '女儿', '儿子', '宝宝', '小朋友', '娃']],
+  ['couple', 3, ['女朋友', '男朋友', '对象', '恋人', '爱人', '老婆', '老公', '约会', '喜欢的人', '另一半', '妻子', '丈夫', '纪念日', '两个人']],
+  ['friends', 2, ['朋友', '同学', '闺蜜', '兄弟', '室友', '同事']],
+  ['photo', 2, ['拍照', '照片', '相机', '出片', '拍几张', '胶片', '取景']],
+  ['books', 2, ['书店', '看书', '读书', '旧书', '翻书', '诗', '小说', '书']],
+  ['opera', 3, ['听戏', '看戏', '戏曲', '昆曲', '越剧', '评弹', '戏台', '戏']],
+  ['tea', 2, ['喝茶', '茶馆', '茶']],
+  ['water', 2, ['坐船', '划船', '乌篷船', '水乡', '摇橹', '河边', '看水', '小桥', '船', '河', '桥', '水']],
+  ['sweet', 2, ['甜', '糕', '点心', '甜品', '糖']],
+  ['lively', 2, ['热闹', '烟火气', '人多', '逛', '市集', '集市']],
+  ['cheap', 2, ['省钱', '便宜', '预算', '没什么钱', '学生', '穷游']],
+  ['oldtime', 2, ['老物件', '老东西', '旧物', '老建筑', '古镇', '老房子', '历史', '老手艺', '旧时光']],
+  ['craft', 1, ['老手艺']],
+  ['tired', 3, ['累', '疲惫', '压力', '加班', '焦虑', '烦', '失眠', '难过', '失恋', '辞职', '喘口气', '歇一歇', '休息', '想逃']],
+  ['quiet', 1, ['累', '疲惫', '休息', '喘口气']],
+  ['morning', 2, ['早起', '清晨', '一大早', '早上']]
+];
+const DUR_HALF = ['半天', '半日', '下午', '上午', '两个小时', '三个小时', '几个小时', '赶时间', '时间不多', '时间紧', '匆匆'];
+const DUR_FULL = ['一天', '整天', '全天', '一整天', '一日', '两天', '周末'];
+const NEG = ['不', '别', '没', '怕', '讨厌', '不要', '不想'];
+
+/* ---------- 街区与去处 ---------- */
+const DISTRICTS = [
+  { id: 'qiaotou', name: '桥头', full: '东桥头', lx: 880, ly: 395, blurb: '溪水从这里进城，早点摊、渡口和茶馆都挤在桥脚下。' },
+  { id: 'laojie', name: '老街', full: '西市老街', lx: 360, ly: 130, blurb: '一条河，两排铺子，手艺人大多住在这一段。' },
+  { id: 'shuyuan', name: '书院弄', full: '书院弄', lx: 150, ly: 430, blurb: '巷子窄，墙头高，旧书店和老戏台背靠背。' },
+  { id: 'nanbu', name: '南埠', full: '南埠码头', lx: 860, ly: 650, blurb: '船在这里靠岸，天一黑最热闹。' }
+];
+const D_ORDER = { qiaotou: 0, laojie: 1, shuyuan: 2, nanbu: 3 };
+const D_ADJ = [['qiaotou', 'laojie'], ['laojie', 'shuyuan'], ['shuyuan', 'nanbu'], ['qiaotou', 'nanbu']];
+
+/* 16 个虚构去处。坐标在 1000×900 的地图世界里。 */
+const PLACES = [
+  { id: 'chaguan', name: '半闲茶馆', kind: '店', d: 'qiaotou', x: 905, y: 300,
+    owner: '沈先生', role: '茶博士，会使一米长的长嘴壶',
+    catch: '坐下就是客，不喝也行。',
+    says: ['窗边那张桌子给你留着，别客气。', '茶续了三回，颜色就淡了，人也就松了。', '下回来，带一个故事给我听。'],
+    stamp: { g: 'teapot', c: '茶', shape: 'square' },
+    tags: { quiet: 3, tea: 3, rain: 3, parents: 3, solo: 2, oldtime: 2, tired: 3, opera: 1 },
+    slot: 'any', indoor: true, dur: 60, base: 1.2,
+    reasons: {
+      quiet: '靠窗那张桌子正对着河，上午十点以前几乎没有人。',
+      tea: '沈先生泡的是本地的溪头白茶，第三泡最好，别急着走。',
+      rain: '雨天来正好，窗外的瓦当一直滴水，屋里的炭炉一直温着。',
+      parents: '老人家在这里能坐一下午，沈先生会陪他们聊天，也会讲两段评弹。',
+      solo: '一个人来也不尴尬，点一壶茶，可以一直坐到中午。',
+      tired: '这里的规矩是不催客，你睡着了，沈先生会替你把窗关上。'
+    },
+    desc: '桥头最老的一家茶馆，木楼梯一踩就响。',
+    task: '看沈先生隔着一米远斟茶，一滴不洒。',
+    mem: '在半闲茶馆喝了三泡白茶',
+    biz: { cpa: 3, spend: 32, card: '雨天到店，多送一泡茶', budget: 1500, used: 640, month: 412 } },
+
+  { id: 'zaodian', name: '阿萍早点摊', kind: '店', d: 'qiaotou', x: 838, y: 262,
+    owner: '阿萍婆', role: '七十一岁，在桥脚摆了四十年摊',
+    catch: '趁热吃，凉了就不是这个味了。',
+    says: ['慢点，烫嘴。', '外地来的？多给你撒一把葱。', '明天还来，我还在这儿。'],
+    stamp: { g: 'steamer', c: '早', shape: 'round' },
+    tags: { food: 3, nostalgia: 3, morning: 3, cheap: 3, parents: 1, kids: 1, lively: 1 },
+    slot: 'morning', indoor: false, dur: 30, base: 1.0,
+    reasons: {
+      nostalgia: '葱油饼还是用猪油起的酥，咬下去那一声脆，跟你小时候巷口那家应该差不多。',
+      food: '桐溪人的一天是从这碗咸豆浆开始的，油条要掰碎了泡进去。',
+      morning: '六点出摊，第一锅饼最香，八点以后就只剩粢饭团了。',
+      cheap: '一碗豆浆加一个饼，五块钱，阿萍婆不收扫码以外的小费。',
+      parents: '摊子边上有几张矮竹凳，爸妈坐着吃，你可以上桥走两步。'
+    },
+    desc: '桥脚下的早点摊，一口油锅，一只蒸笼。',
+    task: '买一个刚出锅的葱油饼，站在桥上吃完。',
+    mem: '在桥脚下吃了一个刚出锅的葱油饼',
+    biz: { cpa: 2, spend: 9, card: '早上八点前到店，豆浆续一碗', budget: 600, used: 410, month: 980 } },
+
+  { id: 'dukou', name: '东渡口', kind: '去处', d: 'qiaotou', x: 738, y: 345,
+    owner: '周师傅', role: '摇橹三十年的船老大',
+    catch: '坐稳了，船比人懂水。',
+    says: ['头低一点，前面是桥洞。', '你听，橹声一下一下的，跟心跳差不多。', '上岸慢点，船还会晃两下。'],
+    stamp: { g: 'boat', c: '渡', shape: 'oval' },
+    tags: { water: 3, quiet: 2, parents: 2, couple: 2, rain: 2, photo: 2, kids: 1, tired: 1 },
+    slot: 'day', indoor: false, dur: 40, base: 1.4,
+    reasons: {
+      water: '从东渡口坐乌篷船到南埠，一刻钟，橹声比人声大。',
+      quiet: '船上没人催你，周师傅也不爱讲解，你看水就好。',
+      rain: '下雨天的船篷是最好的避雨处，雨点打在篷上，像有人轻轻敲门。',
+      parents: '上船有人扶，比走路省力，这一段爸妈会喜欢。',
+      couple: '船舱只够两个人并排坐，挨近一点，正好。',
+      photo: '船过桥洞的那一下，桥洞会把你框成一张照片。'
+    },
+    desc: '桥头的老渡口，乌篷船一天来回十几趟。',
+    task: '请周师傅教你摇三下橹。',
+    mem: '坐了周师傅的乌篷船，过了两座桥洞',
+    biz: { cpa: 5, spend: 40, card: '工作日下午乘船，送一包菱角', budget: 2000, used: 1180, month: 655 } },
+
+  { id: 'sanpu', name: '廊桥伞铺', kind: '店', d: 'qiaotou', x: 712, y: 168,
+    owner: '柳二姐', role: '油纸伞第四代，手上常年有桐油味',
+    catch: '伞是给雨用的，不是给太阳用的。',
+    says: ['伞骨要等它自己干，急不得。', '这把借你，回程还我就行。', '撑开转一圈，看看透不透光。'],
+    stamp: { g: 'umbrella', c: '伞', shape: 'round' },
+    tags: { craft: 3, rain: 3, photo: 2, couple: 1, oldtime: 2, kids: 1 },
+    slot: 'day', indoor: true, dur: 45, base: 1.0,
+    reasons: {
+      craft: '一把油纸伞要过七十多道工序，柳二姐愿意让你亲手刷一遍桐油。',
+      rain: '下雨天来，她会借你一把伞走完今天，回程再还。',
+      photo: '伞面透光，在廊桥下撑开，照片里的人会被染成暖黄色。',
+      oldtime: '铺子就开在廊桥里，桥是明朝修的，伞是今天做的。'
+    },
+    desc: '开在廊桥里的伞铺，伞面晾了一整排。',
+    task: '在伞面上按一个手印，晾干就是你的了。',
+    mem: '在廊桥伞铺按了一个手印',
+    biz: { cpa: 4, spend: 85, card: '雨天到店，免费借伞一日', budget: 1200, used: 300, month: 210 } },
+
+  { id: 'mianguan', name: '陆记老面馆', kind: '店', d: 'laojie', x: 582, y: 198,
+    owner: '陆师傅', role: '第三代掌勺，凌晨三点起来吊汤',
+    catch: '汤是昨天夜里熬的，面是今天早上擀的。',
+    says: ['汤喝完了再走，底下有东西。', '下回提前说，给你留一块最好的肉。', '吃饱了吗？吃饱了就好。'],
+    stamp: { g: 'bowl', c: '面', shape: 'round' },
+    tags: { food: 3, nostalgia: 3, parents: 2, rain: 2, cheap: 2, kids: 1, friends: 2 },
+    slot: 'day', indoor: true, dur: 45, base: 1.3,
+    reasons: {
+      food: '一碗焖肉面，汤头熬了一整夜，浇头的肉要提前一天腌。',
+      nostalgia: '碗还是粗瓷蓝边碗，筷子筒是竹子的，很多人吃第一口就不说话了。',
+      rain: '下雨天面馆的窗户会起雾，蒸汽从锅里一直飘到门口。',
+      parents: '汤可以要淡一点，面可以要软一点，跟陆师傅说一声就行。',
+      friends: '店里有一张能坐八个人的圆桌，几碗面几样浇头，分着吃。',
+      cheap: '一碗面十八块，汤可以续。'
+    },
+    desc: '老街口的面馆，门口一口大锅从早冒到晚。',
+    task: '吃到碗底，找一找碗底那个"陆"字。',
+    mem: '在陆记吃了一碗焖肉面，汤喝到了底',
+    biz: { cpa: 3, spend: 26, card: '雨天到店，送一碟酱瓜', budget: 1800, used: 760, month: 1320 } },
+
+  { id: 'xiuzhong', name: '时针修钟铺', kind: '店', d: 'laojie', x: 468, y: 312,
+    owner: '老钟', role: '修了五十年钟表，姓钟，大家就叫他老钟',
+    catch: '钟慢了不要紧，人别急。',
+    says: ['这块表比你年纪大。', '听，它又走起来了。', '东西坏了别扔，拿来给我看看。'],
+    stamp: { g: 'clock', c: '时', shape: 'round' },
+    tags: { craft: 3, quiet: 3, solo: 3, oldtime: 3, nostalgia: 1, tired: 2 },
+    slot: 'day', indoor: true, dur: 35, base: 0.9,
+    reasons: {
+      craft: '满墙的钟各走各的，老钟拆一块怀表，能一下午不抬头。',
+      quiet: '铺子里只有滴答声，门口那张板凳谁都可以坐。',
+      solo: '一个人去最合适，老钟只跟一个人说话的时候才会讲钟的来历。',
+      oldtime: '柜台上那只座钟，跟你外婆家那只多半是同一年出厂的。',
+      tired: '在满屋滴答声里坐一会儿，时间会慢下来，这不是比喻。'
+    },
+    desc: '老街中段，铺面不到十平米，墙上挂着四十多只钟。',
+    task: '听老钟讲一块表的来历，再请他盖章。',
+    mem: '在修钟铺听老钟讲了一块表的来历',
+    biz: { cpa: 3, spend: 40, card: '带旧表来，免费看诊一次', budget: 800, used: 150, month: 96 } },
+
+  { id: 'caifeng', name: '巧手裁缝铺', kind: '店', d: 'laojie', x: 352, y: 196,
+    owner: '吴阿姨', role: '量体从不记数，尺寸全在脑子里',
+    catch: '衣服是穿给自己看的。',
+    says: ['站直了，我看一眼就知道。', '盘扣是我昨晚上盘的，挑一个。', '三天后寄到你家，不合身就寄回来。'],
+    stamp: { g: 'scissors', c: '衣', shape: 'square' },
+    tags: { craft: 2, parents: 3, oldtime: 2, nostalgia: 2, couple: 1 },
+    slot: 'day', indoor: true, dur: 40, base: 0.8,
+    reasons: {
+      parents: '给爸妈量一身对襟衫，三天后寄到家里，比带纪念品实在。',
+      craft: '吴阿姨量体从来不用本子记，尺寸全在脑子里。',
+      nostalgia: '缝纫机还是脚踏的，咔嗒咔嗒，像小时候家里那台。',
+      oldtime: '柜台上那把木尺用了四十年，刻度已经磨平了。'
+    },
+    desc: '老街上的裁缝铺，门口挂着一排布样。',
+    task: '挑一枚盘扣，请吴阿姨当场缝在你的包上。',
+    mem: '在吴阿姨那儿挑了一枚盘扣',
+    biz: { cpa: 6, spend: 120, card: '带父母量体，盘扣免费', budget: 1000, used: 220, month: 74 } },
+
+  { id: 'jianzhi', name: '红纸剪纸铺', kind: '店', d: 'laojie', x: 215, y: 300,
+    owner: '小满', role: '二十六岁，从大城市回来接了外婆的剪刀',
+    catch: '一刀下去，不能回头。',
+    says: ['歪了也好看，是你剪的。', '先折，再剪，最后才打开。', '贴在窗上，太阳一照就活了。'],
+    stamp: { g: 'flower', c: '剪', shape: 'square' },
+    tags: { craft: 3, kids: 3, photo: 1, couple: 1, rain: 1, friends: 1 },
+    slot: 'day', indoor: true, dur: 40, base: 1.0,
+    reasons: {
+      craft: '小满最拿手的是窗花《鱼戏莲》，一张红纸，一把剪刀，四十分钟。',
+      kids: '孩子可以坐下来剪一张最简单的，十五分钟就能带走。',
+      couple: '两个人一起剪一张对称的窗花，一人剪一半。',
+      rain: '下雨天铺子里人少，小满会多教你几刀。'
+    },
+    desc: '老街尽头的剪纸铺，窗上贴满了红窗花。',
+    task: '剪一张自己的窗花，歪了也算。',
+    mem: '在小满的铺子里剪了一张窗花',
+    biz: { cpa: 4, spend: 45, card: '亲子体验课，第二人半价', budget: 1500, used: 980, month: 320 } },
+
+  { id: 'zhaoxiang', name: '青石照相馆', kind: '店', d: 'shuyuan', x: 255, y: 525,
+    owner: '何师傅', role: '还在用木头座机，冲洗要等两小时',
+    catch: '看这里，别眨眼。',
+    says: ['肩膀放松，你在拍照，不是在体检。', '两个小时后来取，它要慢慢显出来。', '这张好，你笑了。'],
+    stamp: { g: 'camera', c: '影', shape: 'square' },
+    tags: { photo: 3, couple: 3, parents: 2, nostalgia: 2, kids: 1, oldtime: 2 },
+    slot: 'day', indoor: true, dur: 40, base: 0.9,
+    reasons: {
+      photo: '何师傅的木头座机还能用，拍一张黑白照，冲洗要等两个小时。',
+      couple: '拍一张两个人的黑白合影，二十年后再拿出来看。',
+      parents: '很多人在这里给爸妈拍了第一张正式的合影。',
+      nostalgia: '背景布还是那块画着假山的，和你家相册里那张一样。'
+    },
+    desc: '书院弄口的老照相馆，橱窗里摆着几十年的照片。',
+    task: '拍一张，等它慢慢显影。',
+    mem: '在青石照相馆拍了一张黑白照',
+    biz: { cpa: 6, spend: 88, card: '合影加洗一张', budget: 1200, used: 510, month: 140 } },
+
+  { id: 'xitai', name: '万年台老戏台', kind: '去处', d: 'shuyuan', x: 335, y: 420,
+    owner: '方班主', role: '戏班第三代班主，每天下午两点开锣',
+    catch: '锣一响，就是开场。',
+    says: ['坐前排，看得见眼神。', '听不懂不要紧，看他们的手。', '明天唱另一折，再来。'],
+    stamp: { g: 'stage', c: '戏', shape: 'oval' },
+    tags: { opera: 3, parents: 3, oldtime: 3, nostalgia: 2, kids: 1, photo: 2, lively: 1 },
+    slot: 'day', indoor: false, dur: 60, base: 1.0, notBefore: 14 * 60,
+    reasons: {
+      opera: '每天下午两点一场折子戏，锣鼓一响，整条书院弄都听得见。',
+      parents: '台下的长条凳，坐的多是你爸妈那个年纪的人，他们会跟着哼。',
+      oldtime: '戏台是清代的，藻井上的彩绘还在，抬头看。',
+      photo: '散场时的光从戏台的檐角斜下来，正好落在台口。'
+    },
+    desc: '书院弄里的老戏台，台下摆着长条凳。',
+    task: '散场后去后台看一眼，演员卸妆不怕人看。',
+    mem: '在万年台听了一折戏',
+    biz: { cpa: 4, spend: 20, card: '午场送一壶大碗茶', budget: 1000, used: 430, month: 380 } },
+
+  { id: 'shudian', name: '拾页旧书店', kind: '店', d: 'shuyuan', x: 488, y: 398,
+    owner: '林老师', role: '退休的语文老师，店是他家的老宅',
+    catch: '书不用买，读完放回去就行。',
+    says: ['那本书里夹着一张车票，别弄丢了。', '坐吧，猫不介意。', '你要的那本，下次来我帮你找。'],
+    stamp: { g: 'book', c: '书', shape: 'square' },
+    tags: { books: 3, quiet: 3, solo: 3, rain: 3, couple: 1, tired: 2 },
+    slot: 'day', indoor: true, dur: 60, base: 1.1,
+    reasons: {
+      books: '二楼有一整面墙是本地人捐的旧书，书页里常夹着别人的车票和信。',
+      quiet: '林老师只在你问的时候说话，店里的猫一句也不说。',
+      rain: '雨天的书店最好，那只猫会睡在窗台的旧报纸上。',
+      solo: '一个人去，就在楼梯口那张藤椅上坐着，读多久都行。',
+      tired: '在这里睡着也没人管，林老师说书店本来就是让人歇脚的。'
+    },
+    desc: '书院弄深处的旧书店，木门上挂着"随便看"。',
+    task: '在一本旧书里夹一张纸条，写给下一个读到它的人。',
+    mem: '在拾页旧书店给下一个读者留了一张纸条',
+    biz: { cpa: 3, spend: 30, card: '留言夹书，送一枚藏书票', budget: 800, used: 260, month: 260 } },
+
+  { id: 'guihua', name: '桂花糕坊', kind: '店', d: 'shuyuan', x: 430, y: 572,
+    owner: '桂姨', role: '每年秋天收桂花，用糖腌一整年',
+    catch: '甜要甜得刚好，多一分就腻了。',
+    says: ['刚出笼的，烫手，拿稳。', '桂花是去年的，今年的还在腌。', '给家里人也带一盒吧。'],
+    stamp: { g: 'osmanthus', c: '甜', shape: 'round' },
+    tags: { sweet: 3, nostalgia: 3, kids: 3, food: 2, couple: 1, parents: 1, cheap: 1 },
+    slot: 'day', indoor: true, dur: 25, base: 1.0,
+    reasons: {
+      sweet: '桂花是去年秋天收的，用糖腌了一整年，才配得上今天这笼糕。',
+      nostalgia: '糕模是木头的，花纹磨得发亮，那是小时候过年才吃得到的点心。',
+      kids: '孩子可以自己把米粉压进模子里，拍出来就是一朵花。',
+      food: '走到这里正好饿，一块糕垫一垫，不占肚子。'
+    },
+    desc: '书院弄转角的糕坊，门口一棵老桂花树。',
+    task: '自己压一块糕，带着路上吃。',
+    mem: '在桂花糕坊自己压了一块糕',
+    biz: { cpa: 2, spend: 22, card: '下午三点后，第二盒八折', budget: 900, used: 520, month: 610 } },
+
+  { id: 'denglong', name: '秦记灯笼作坊', kind: '店', d: 'nanbu', x: 470, y: 705,
+    owner: '秦伯', role: '劈了一辈子竹篾的灯笼匠',
+    catch: '灯笼要点着了，才算做完。',
+    says: ['篾片要顺着竹纹劈。', '纸糊上去要绷紧，不然一点就皱。', '天黑了再点，现在点浪费。'],
+    stamp: { g: 'lantern', c: '灯', shape: 'round' },
+    tags: { craft: 3, night: 2, kids: 2, couple: 2, photo: 2, oldtime: 1 },
+    slot: 'day', indoor: true, dur: 50, base: 0.9,
+    reasons: {
+      craft: '竹篾是秦伯自己劈的，糊纸之前，要先在灯骨上刷一遍浆。',
+      night: '傍晚去，挑一盏点亮，提着它走去码头。',
+      kids: '孩子能做一盏巴掌大的小灯笼，秦伯会帮他扎最难的那一圈。',
+      couple: '一盏灯笼两个人提，灯光只够照见两双鞋。',
+      photo: '作坊里挂着上百盏没点的灯笼，像一屋子没开口的红果子。'
+    },
+    desc: '南埠边上的灯笼作坊，屋梁上挂满了竹骨。',
+    task: '亲手糊一盏小灯笼，留到天黑再点。',
+    mem: '在秦伯那里糊了一盏小灯笼',
+    biz: { cpa: 5, spend: 60, card: '傍晚体验场，送一支蜡烛', budget: 1500, used: 700, month: 230 } },
+
+  { id: 'jiufang', name: '葛家老酒坊', kind: '店', d: 'nanbu', x: 528, y: 825,
+    owner: '葛老板', role: '地窖里有三百多坛酒，最老的比他还老',
+    catch: '酒是等出来的。',
+    says: ['先闻，别急着喝。', '这坛十年了，你来得正好。', '带一坛回去，过年开。'],
+    stamp: { g: 'jar', c: '酒', shape: 'oval' },
+    tags: { oldtime: 3, parents: 2, couple: 1, food: 1, night: 1, quiet: 1, friends: 2 },
+    slot: 'day', indoor: true, dur: 30, base: 0.8,
+    reasons: {
+      oldtime: '坛子在地窖里放了十年，葛老板会先让你闻一闻，再决定买不买。',
+      parents: '给爸爸带一小坛，他会说你乱花钱，然后偷偷高兴。',
+      friends: '几个人可以围着酒缸各尝一小盏，猜猜哪一坛最老。',
+      night: '傍晚的酒坊门口会摆两张桌子，一碟茴香豆，一盏温酒。'
+    },
+    desc: '码头背后的老酒坊，一进门就是酒糟香。',
+    task: '闻三坛不同年份的酒，猜出最老的那一坛。',
+    mem: '在葛家酒坊闻了三坛不同年份的酒',
+    biz: { cpa: 5, spend: 75, card: '到店品鉴，送一小瓶试饮装', budget: 1200, used: 380, month: 190 } },
+
+  { id: 'yeshi', name: '南埠码头夜市', kind: '去处', d: 'nanbu', x: 588, y: 752,
+    owner: '许大哥', role: '夜市的管事，自己也卖一锅小馄饨',
+    catch: '晚上八点以后，桐溪才算醒透。',
+    says: ['馄饨要不要加辣？', '从这头吃到那头，一共三十二个摊子。', '灯是七点整一起亮的，你赶上了。'],
+    stamp: { g: 'lanterns', c: '夜', shape: 'round' },
+    tags: { night: 3, food: 3, lively: 3, kids: 2, couple: 2, friends: 3, photo: 2, cheap: 2 },
+    slot: 'night', indoor: false, dur: 70, base: 1.2,
+    reasons: {
+      night: '天一黑，码头上三十几个摊子同时亮灯，灯影一盏一盏掉进河里。',
+      food: '糖粥、油墩子、小馄饨，一路吃过去，一共不到五十块。',
+      lively: '桐溪的热闹全攒在这里，吆喝声一阵高过一阵。',
+      friends: '人多就各买一样，在码头的石阶上摊开吃。',
+      couple: '码头尽头有一段没摆摊的石阶，那里能看见对岸的灯。'
+    },
+    desc: '南埠码头上的夜市，天黑开张，半夜收摊。',
+    task: '从第一个摊子吃到最后一个，数一数一共有几盏灯。',
+    mem: '在码头夜市从第一个摊子吃到了最后一个',
+    biz: { cpa: 2, spend: 46, card: '持护照到摊，任选一样加量', budget: 3000, used: 2200, month: 2600 } },
+
+  { id: 'yuhuo', name: '渔火小馆', kind: '店', d: 'nanbu', x: 792, y: 762,
+    owner: '阿水', role: '渔家出身，每天清早自己下网',
+    catch: '今天河里有什么，桌上就有什么。',
+    says: ['今天的白条鱼最好，别点别的了。', '坐窗边，看得见船回来。', '鱼刺多，慢慢吃。'],
+    stamp: { g: 'fish', c: '鱼', shape: 'oval' },
+    tags: { food: 3, water: 2, parents: 2, night: 2, couple: 1, friends: 2 },
+    slot: 'any', indoor: true, dur: 60, base: 1.0,
+    reasons: {
+      food: '没有菜单，今天河里有什么，桌上就有什么。',
+      water: '临河的座位，窗外就是归航的渔船。',
+      parents: '阿水会把鱼刺剔干净了再端上桌，老人吃着省心。',
+      night: '傍晚坐下，吃到一半，对岸的灯就亮了。',
+      friends: '人多就让阿水配一桌，四个菜一个汤，她心里有数。'
+    },
+    desc: '南埠东岸的小馆子，三张桌子临着河。',
+    task: '让阿水替你点菜。',
+    mem: '在渔火小馆吃了阿水推荐的今日河鲜',
+    biz: { cpa: 6, spend: 98, card: '工作日晚市，送一份糟毛豆', budget: 1600, used: 820, month: 360 } }
+];
+
+/* 隐藏去处：不在第一封信里，只在盖齐章之后的“下一封信”里出现 */
+const HIDDEN = [
+  { id: 'h_post', name: '桥头旧邮局', d: 'qiaotou', x: 960, y: 225, g: 'post', c: '邮',
+    tags: {},
+    desc: '桐溪的第一个邮局，柜台早就撤了，门口那只绿邮筒还在用。',
+    how: '往里投一封写给自己的信，明年的今天，我会把它寄还给你。',
+    says: '这只邮筒，比桐溪大部分的房子都老。' },
+  { id: 'h_roof', name: '陆家晒秋的屋顶', d: 'laojie', x: 640, y: 150, g: 'roof', c: '晒',
+    tags: { food: 2, nostalgia: 3, photo: 2, parents: 1 },
+    desc: '陆师傅家的屋顶，秋天晒满了酱肉和桂花。',
+    how: '跟陆师傅说是我让你来的，他会让你从后门的木梯爬上去，能看见半个桐溪。',
+    says: '小心脚下的瓦，踩中间那一片。' },
+  { id: 'h_well', name: '书院弄后巷的老井', d: 'shuyuan', x: 150, y: 600, g: 'well', c: '井',
+    tags: { quiet: 3, solo: 3, oldtime: 2, tired: 2 },
+    desc: '井栏上有十几道绳痕，最深的那一道，磨了三百年。',
+    how: '傍晚去，井口会冒出一点凉气。往里轻轻喊一声自己的名字，回声会慢半拍。',
+    says: '井水是凉的，夏天也凉。' },
+  { id: 'h_reed', name: '南埠外的芦苇湾', d: 'nanbu', x: 668, y: 842, g: 'reed', c: '苇',
+    tags: { water: 3, couple: 3, quiet: 1, photo: 2, night: 2 },
+    desc: '码头再往南走十分钟，河拐了一个弯，岸上全是芦苇。',
+    how: '太阳落山前半小时，白鹭会一只一只飞回来。不用拍，看着就好。',
+    says: '白鹭回来的时候，不要出声。' },
+  { id: 'h_loft', name: '旧书店的阁楼', d: 'shuyuan', x: 560, y: 450, g: 'book', c: '阁',
+    tags: { books: 3, rain: 2, quiet: 2, solo: 1 },
+    desc: '林老师从不跟人提的阁楼，墙上贴满了这些年客人留下的纸条。',
+    how: '上楼要脱鞋。找一张还没人回的纸条，替我回它。',
+    says: '阁楼的窗户推开，能看见戏台的屋脊。' },
+  { id: 'h_back', name: '万年台的后台', d: 'shuyuan', x: 290, y: 365, g: 'stage', c: '台',
+    tags: { opera: 3, kids: 3, parents: 2, craft: 1 },
+    desc: '戏散场以后，后台的门会开一条缝。',
+    how: '演员卸妆的时候不怕人看。有个唱小生的姑娘，愿意给看热闹的人也勾一道眉。',
+    says: '小声点，师傅在勾脸。' }
+];
+
+/* ---------- 句库 ---------- */
+const RESP = {
+  quiet: ['那就不去人多的地方。桐溪最安静的时候，是早上十点以前，和下雨的时候。', '想安静的话，桐溪有的是不说话的角落，我替你挑了几个。'],
+  solo: ['一个人来也好，桐溪很会照顾一个人：茶馆有单人桌，渡船也不必凑满一船。', '一个人走，就不用迁就谁的步子，想停就停。'],
+  food: ['吃这件事，桐溪不会让你失望，只是要按顺序来，先咸后甜。', '我替你把肚子的空位算好了，别在第一站就吃撑。'],
+  nostalgia: ['小时候的味道很难找，因为它其实是小时候的那个人。不过有几家店，确实还是老样子。', '桐溪有些东西三十年没变过：碗、凳子、灶台，还有做的人。'],
+  parents: ['带着爸妈，我挑了少走路的线，能坐的地方就让他们坐着。', '爸妈走累了不会说，所以我在每一站都给他们留了凳子。'],
+  craft: ['桐溪的老手艺人都还在，脾气各不相同，但都愿意让你上手试一下。', '看手艺最好的办法，是坐在旁边，不说话，看人家做完一件。'],
+  rain: ['下雨也别担心，我把大半行程放在了有屋檐的地方。桐溪的雨，本来就是要隔着窗看的。', '你说会下雨，那正好，桐溪是下雨才好看的地方。'],
+  night: ['夜里的桐溪和白天是两座城，灯一亮，河就变成了另一条街。', '我把最后一站留给了夜里，你会看见灯影一盏一盏掉进河里。'],
+  kids: ['带孩子来，就别排得太满。每一站都有能让他动手的东西。', '孩子不爱看风景，但爱看人做东西，我就按这个排的。'],
+  couple: ['两个人来，路线不用太紧。有些地方，只适合挨着坐。', '两个人走桐溪，最好走得慢一点，在桥上停一停。'],
+  friends: ['和朋友来，就多吃几样，分着吃才不浪费。', '人多热闹，我挑了几家坐得下一桌人的地方。'],
+  photo: ['想拍照的话，下午三点以后的光最好，白墙会变成暖色。', '在桐溪拍照不用找机位，转过任何一个弯都是。'],
+  books: ['旧书店是我最想让你去的地方，那里的书都被人读过，比新书多一层意思。', '桐溪读书的人不多，但书都还在，等着有人翻开。'],
+  opera: ['戏台每天下午还唱，台下坐的多半是老街坊。听不懂也没关系，看他们的表情就够了。'],
+  tea: ['桐溪人喝茶不讲究，坐得住就行。', '茶这件事，在桐溪是用来消磨时间的，不是用来品的。'],
+  water: ['来桐溪不坐一次船，就像没来过。', '桐溪的路一半在岸上，一半在水上。'],
+  sweet: ['甜的东西我留到了后面，走累了吃，刚刚好。'],
+  lively: ['想热闹，就去码头，桐溪的热闹都攒在晚上。', '烟火气不用找，跟着油锅的声音走就对了。'],
+  cheap: ['钱的事别担心，这条路一天走下来花不了多少，最贵的是你的时间。'],
+  oldtime: ['桐溪的老东西不在博物馆里，都还在用。', '这里的旧东西不是摆着看的，是还在过日子的。'],
+  tired: ['你的信读起来有点累。那今天就不安排任何需要赶的事了。', '听起来你最近不太轻松。来桐溪什么都别想，坐着也算玩。'],
+  morning: ['早起的人在桐溪有口福，早点摊六点就开了。']
+};
+const COMPANION = {
+  parents: { label: '爸妈', line: ['带着爸妈，路线我挑了少走路的，能坐船的地方就坐船。', '爸妈的脚力我算过了，走一段就有地方坐。'] },
+  kids: { label: '孩子', line: ['带着孩子，每一站都有他能上手的东西，大人跟着看就行。'] },
+  couple: { label: '两个人', line: ['两个人来，我挑的都是适合并排坐的地方。'] },
+  friends: { label: '朋友', line: ['和朋友一起，我挑了几家坐得下一桌人的店。'] },
+  solo: { label: '独自', line: ['一个人来也好，桐溪很会照顾一个人。'] }
+};
+const OPENINGS = [
+  '信收到了。早上开邮筒的是{owner}，把它压在茶碗底下，等我得空了慢慢看。',
+  '你的信是午后到的，那会儿老街刚下过一阵小雨，信封角上沾了一点水。',
+  '信收到了。我读了两遍，第二遍是在周师傅的渡船上读的。',
+  '见字如面。你的信到的时候，桥头的早点摊刚收摊，油锅还是热的。',
+  '信收到了。邮差说，这是今天写给桐溪的第{n}封信，我先拆了你的。'
+];
+const CLOSINGS = {
+  tired: '要是走到一半累了，就别管路线了，随便找一家门口有竹椅的店坐下，桐溪人不赶客。',
+  quiet: '要是走到一半累了，就别管路线了，随便找一家门口有竹椅的店坐下，桐溪人不赶客。',
+  food: '吃不下的时候别硬撑，打包也行，店主们都备着油纸。',
+  parents: '替我向你爸妈问好。要是喜欢，秋天桂花开的时候再来。',
+  couple: '桥上风大，记得把外套给对方。',
+  kids: '孩子要是在哪一站不肯走，就让他多待一会儿，路线是给大人看的。',
+  night: '夜里回去的时候，沿着河走，河边的灯会一直亮到你上车。',
+  rain: '雨要是大了，就在屋檐下站一会儿。桐溪的雨下不久，下完空气是甜的。',
+  _default: '路线只是个建议。走着走着拐进别的巷子，也算是我带你去的。'
+};
+const REFLECT = {
+  quiet: '这一天你几乎没怎么说话，桐溪也没怎么吵你。这样很好。',
+  solo: '一个人走完一整条路，不容易，也很难得。',
+  food: '你今天吃下去的东西，大概够桐溪的店主们念叨一个礼拜。',
+  nostalgia: '不知道你有没有找到小时候的那口味道。找不到也不要紧，你今天又多了一口新的。',
+  parents: '你爸妈今天走的路，比他们平时一个礼拜走的都多。晚上记得让爸妈泡泡脚。',
+  craft: '你今天看了好几双手。那些手做的事，比我能写下来的多。',
+  rain: '今天的雨，你都替我看见了。',
+  night: '灯亮以后的桐溪，你也见过了。现在你知道它有两张脸。',
+  kids: '孩子今天做的那些歪歪扭扭的东西，记得都带回家。',
+  couple: '你们今天在好几个地方都并排坐过。我都看见了。',
+  friends: '你们今天笑得很大声，码头的人都回头看了。',
+  tired: '希望你今天歇过来了一点。',
+  _default: '你今天走过的地方，我都记下了。'
+};
+
+/* ---------- 读信：从文字里抽出偏好 ---------- */
+function analyze(text) {
+  const raw = String(text == null ? '' : text);
+  const t = raw.replace(/\s+/g, ' ').trim();
+  const tags = {};
+  const hits = [];
+  for (const [tag, w, words] of KEYWORDS) {
+    for (const word of words) {
+      let from = 0, idx;
+      while ((idx = t.indexOf(word, from)) !== -1) {
+        from = idx + word.length;
+        const before = t.slice(Math.max(0, idx - 2), idx);
+        const negated = NEG.some(n => before.indexOf(n) !== -1);
+        if (negated) {
+          if (tag === 'lively') tags.quiet = (tags.quiet || 0) + 2;
+          continue;
+        }
+        tags[tag] = Math.min(6, (tags[tag] || 0) + w);
+        if (hits.indexOf(word) === -1) hits.push(word);
+      }
+    }
+  }
+  const hitsShown = hits.filter(h => !hits.some(o => o !== h && o.indexOf(h) !== -1));
+  hits.length = 0; hitsShown.forEach(h => hits.push(h));
+  /* "带着奶奶/外婆" 是同伴，不是怀旧 */
+  if (/带(着|上)?(奶奶|外婆|爷爷|外公|姥姥|姥爷)/.test(t)) tags.parents = Math.max(tags.parents || 0, 3);
+  /* 时间 */
+  let duration = 'unknown';
+  const isHalf = DUR_HALF.some(w => t.indexOf(w) !== -1);
+  const isFull = DUR_FULL.some(w => t.indexOf(w) !== -1);
+  if (isHalf) duration = 'half'; else if (isFull) duration = 'full';
+  if (tags.night && (duration === 'half' || /傍晚|晚上才|下班后/.test(t))) duration = 'evening';
+  /* 天气 */
+  let weather = 'unknown';
+  if (tags.rain) weather = 'rain';
+  else if (/雪/.test(t)) weather = 'snow';
+  else if (/晴|太阳|阳光/.test(t)) weather = 'sunny';
+  /* 同伴 */
+  const comps = ['parents', 'kids', 'couple', 'friends', 'solo'].filter(c => tags[c]);
+  const companion = comps[0] || 'unknown';
+  const mood = tags.tired ? 'tired' : 'plain';
+  let elder = '爸妈';
+  const em = t.match(/(爸爸|妈妈|老爸|老妈|奶奶|外婆|爷爷|外公|姥姥|姥爷)/);
+  if (em && tags.parents && !/爸妈|父母/.test(t)) elder = em[1] === '老爸' ? '爸爸' : em[1] === '老妈' ? '妈妈' : em[1];
+
+  const sorted = Object.keys(tags)
+    .sort((a, b) => tags[b] - tags[a] || a.localeCompare(b));
+  return { text: t, empty: t.length === 0, tags, hits, duration, weather, companion, companions: comps, mood, elder, sortedTags: sorted };
+}
+
+/* 从原文里挑一句可以引用的话 */
+function pickClause(A) {
+  if (A.empty) return '';
+  const parts = A.text.split(/[，。！？,.!?；;\n、~～…]+/).map(s => s.trim()).filter(s => s.length > 0);
+  if (!parts.length) return '';
+  let best = parts[0], bestScore = -1;
+  for (const p of parts) {
+    let sc = 0;
+    for (const h of A.hits) if (p.indexOf(h) !== -1) sc += h.length;
+    if (sc > bestScore) { bestScore = sc; best = p; }
+  }
+  best = best.replace(/^(我|就是|其实|那个|嗯)+/, m => (m === '我' ? m : ''));
+  if (best.length > 26) best = best.slice(0, 24) + '……';
+  return best.replace(/[「」『』"]/g, '');
+}
+
+/* ---------- 规划：店铺打分 + 顺路排序 ---------- */
+function scorePlace(p, A, rng) {
+  let s = p.base || 0;
+  for (const k in A.tags) if (has(p.tags, k)) s += A.tags[k] * p.tags[k] * 0.55;
+  if (p.slot === 'night') {
+    if (A.tags.night) s += 7;
+    else if (A.duration === 'half') s -= 8;
+    else s -= 1.5;
+  }
+  if (p.slot === 'morning') {
+    if (A.duration === 'evening') s -= 12;
+    else if (A.duration === 'half' && !A.tags.morning && !A.tags.food) s -= 3;
+    if (A.tags.night && A.duration !== 'full') s -= 3;
+  }
+  if (A.weather === 'rain') {
+    if (p.indoor) s += 1.5; else if (!p.tags.rain) s -= 3.5;
+  }
+  if (A.weather === 'snow' && !p.indoor) s -= 1.5;
+  if ((A.tags.parents || 0) >= 3 && p.dur >= 60 && !p.indoor) s -= 0.5;
+  s += rng() * 1.8;
+  return Math.round(s * 100) / 100;
+}
+
+function stopsWanted(A, rng) {
+  if (A.duration === 'half' || A.duration === 'evening') return 3;
+  const richness = Object.keys(A.tags).length;
+  if (A.duration === 'full') return richness >= 4 || rng() < 0.4 ? 5 : 4;
+  return richness >= 5 && rng() < 0.6 ? 5 : 4;
+}
+
+function planRoute(A, rng) {
+  const scored = PLACES.map(p => ({ p, s: scorePlace(p, A, rng) })).sort((a, b) => b.s - a.s);
+  const N = stopsWanted(A, rng);
+  let allowed = null;
+  if (A.duration === 'half' || A.duration === 'evening') {
+    let bestPair = null, bestSum = -1e9;
+    for (const pair of D_ADJ) {
+      if (A.duration === 'evening' && pair.indexOf('nanbu') === -1) continue;
+      const top = scored.filter(x => pair.indexOf(x.p.d) !== -1).slice(0, N);
+      const sum = top.reduce((a, x) => a + x.s, 0);
+      if (sum > bestSum) { bestSum = sum; bestPair = pair; }
+    }
+    allowed = bestPair;
+  }
+  const maxFood = (A.tags.food || 0) >= 4 || A.companion === 'friends' ? 3 : 2;
+  const maxNight = A.tags.night ? 2 : 1;
+  const chosen = [];
+  const ok = (p, strict) => {
+    if (chosen.indexOf(p) !== -1) return false;
+    if (allowed && allowed.indexOf(p.d) === -1) return false;
+    if (!strict) return true;
+    const food = chosen.filter(c => (c.tags.food || 0) >= 3).length;
+    if ((p.tags.food || 0) >= 3 && food >= maxFood) return false;
+    if (p.slot === 'night' && chosen.filter(c => c.slot === 'night').length >= maxNight) return false;
+    if (p.slot === 'morning' && chosen.some(c => c.slot === 'morning')) return false;
+    if (chosen.filter(c => c.d === p.d).length >= (N >= 5 ? 3 : 2) && !allowed) return false;
+    return true;
+  };
+  for (const x of scored) { if (chosen.length >= N) break; if (ok(x.p, true)) chosen.push(x.p); }
+  for (const x of scored) { if (chosen.length >= N) break; if (ok(x.p, false)) chosen.push(x.p); }
+  for (const x of scored) { if (chosen.length >= N) break; if (chosen.indexOf(x.p) === -1) chosen.push(x.p); }
+  return { route: orderRoute(chosen), scored, N };
+}
+
+/* 顺路：早点放最前，夜市放最后，中间按街区沿河的顺序走，同一街区内就近 */
+function orderRoute(list) {
+  const morning = list.filter(p => p.slot === 'morning');
+  const night = list.filter(p => p.slot === 'night');
+  const mid = list.filter(p => p.slot !== 'morning' && p.slot !== 'night');
+  const out = morning.slice();
+  let cur = out.length ? out[out.length - 1] : null;
+  const groups = {};
+  mid.forEach(p => { (groups[p.d] = groups[p.d] || []).push(p); });
+  let dKeys = Object.keys(groups).sort((a, b) => D_ORDER[a] - D_ORDER[b]);
+  /* 夜里那一站在南埠时，就把南埠的白天去处排在最后，好接上夜市 */
+  if (night.length && groups.nanbu) dKeys = dKeys.filter(k => k !== 'nanbu').concat(['nanbu']);
+  for (const k of dKeys) {
+    const g = groups[k].slice();
+    while (g.length) {
+      let bi = 0;
+      if (cur) {
+        let bd = 1e9;
+        g.forEach((p, i) => { const d = Math.hypot(p.x - cur.x, p.y - cur.y); if (d < bd) { bd = d; bi = i; } });
+      } else {
+        g.sort((a, b) => b.x - a.x); /* 没有起点时从东边（进城的方向）开始 */
+      }
+      cur = g.splice(bi, 1)[0];
+      out.push(cur);
+    }
+  }
+  return out.concat(night);
+}
+
+function dirWord(a, b) {
+  const dx = b.x - a.x, dy = b.y - a.y;
+  const ang = Math.atan2(-dy, dx) * 180 / Math.PI; /* 北为正 */
+  const dirs = ['东', '东北', '北', '西北', '西', '西南', '南', '东南'];
+  const i = Math.round(((ang + 360) % 360) / 45) % 8;
+  return dirs[i];
+}
+function walkMinutes(a, b) {
+  return Math.max(3, Math.min(18, Math.round(Math.hypot(b.x - a.x, b.y - a.y) / 22) + 2));
+}
+
+function buildStops(A, route, rng) {
+  const anyMorning = route[0] && route[0].slot === 'morning';
+  let clock;
+  if (anyMorning) clock = 7 * 60 + 40;
+  else if (A.duration === 'half') clock = A.tags.morning ? 9 * 60 : 13 * 60 + 30;
+  else if (A.duration === 'evening') clock = 15 * 60 + 30;
+  else clock = 9 * 60;
+  const stops = [];
+  route.forEach((p, i) => {
+    let walk = '', mins = 0;
+    if (i > 0) {
+      const prev = route[i - 1];
+      mins = walkMinutes(prev, p);
+      const dir = dirWord(prev, p);
+      const crossing = prev.d !== p.d;
+      const viaBoat = crossing && (prev.id === 'dukou' || (prev.d === 'qiaotou' && p.d === 'nanbu') || (prev.d === 'nanbu' && p.d === 'qiaotou'));
+      if (viaBoat) { mins = Math.max(10, mins - 2); walk = '在渡口搭一段船往' + dir + '，水路约' + cnNum(mins) + '分钟'; }
+      else if (crossing) walk = pick(rng, ['过一座石桥，往' + dir + '再走' + cnNum(mins) + '分钟', '从' + districtName(prev.d) + '穿进' + districtName(p.d) + '，往' + dir + '走约' + cnNum(mins) + '分钟']);
+      else walk = pick(rng, ['出门往' + dir + '走，约' + cnNum(mins) + '分钟', '沿着河往' + dir + '，' + cnNum(mins) + '分钟的路', '顺着青石板往' + dir + '，走' + cnNum(mins) + '分钟']);
+      clock += mins;
+    }
+    if (p.slot === 'night' && clock < 18 * 60 + 30) {
+      if (18 * 60 + 30 - clock > 90 && walk) walk = '等到天擦黑，' + walk;
+      clock = 18 * 60 + 30;
+    }
+    if (p.notBefore && clock < p.notBefore) clock = p.notBefore;
+    clock = Math.ceil(clock / 10) * 10;
+    let best = null, bestV = -1;
+    for (const k in p.reasons) {
+      const v = (A.tags[k] || 0) * (p.tags[k] || 1) + (A.tags[k] ? 0.5 : 0);
+      if (v > bestV) { bestV = v; best = k; }
+    }
+    if (bestV <= 0.5) best = Object.keys(p.reasons)[Math.floor(rng() * Object.keys(p.reasons).length)];
+    stops.push({
+      id: p.id, name: p.name, district: districtName(p.d), time: hhmm(clock),
+      walk, reason: p.reasons[best] || p.desc, reasonTag: best,
+      owner: p.owner, role: p.role, quote: p.catch, task: p.task, slot: p.slot
+    });
+    const linger = A.duration === 'full' ? 30 : A.duration === 'unknown' ? 20 : 10;
+    clock += p.dur + linger;
+  });
+  return stops;
+}
+function districtName(id) { const d = DISTRICTS.find(x => x.id === id); return d ? d.name : ''; }
+
+/* ---------- 明信片：根据偏好组合画面元素 ---------- */
+function composePostcard(A, route, rng) {
+  const ids = route.map(p => p.id);
+  const hasId = id => ids.indexOf(id) !== -1;
+  const tg = k => A.tags[k] || 0;
+  let time = 'day';
+  if (tg('night') || route.some(p => p.slot === 'night')) time = 'night';
+  else if (A.duration === 'evening') time = 'dusk';
+  else if (route[0] && route[0].slot === 'morning') time = 'morning';
+  else if (A.duration === 'half') time = rng() < 0.6 ? 'dusk' : 'day';
+  else time = rng() < 0.25 ? 'dusk' : 'day';
+  const weather = A.weather === 'rain' ? 'rain' : A.weather === 'snow' ? 'snow' : (A.weather === 'unknown' && rng() < 0.12 ? 'mist' : 'clear');
+  const cand = {
+    boat: tg('water') * 2 + (hasId('dukou') ? 5 : 0) + (hasId('yuhuo') ? 2 : 0) + 1.5,
+    lanterns: tg('night') * 2 + (hasId('denglong') ? 4 : 0) + (hasId('yeshi') ? 4 : 0),
+    steam: tg('food') * 1.5 + (hasId('mianguan') ? 5 : 0) + (hasId('zaodian') ? 4 : 0),
+    umbrella: tg('rain') * 1.5 + (hasId('sanpu') ? 5 : 0),
+    osmanthus: tg('sweet') * 2 + (hasId('guihua') ? 5 : 0),
+    papercut: tg('craft') + (hasId('jianzhi') ? 5 : 0),
+    stage: tg('opera') * 2 + (hasId('xitai') ? 5 : 0),
+    books: tg('books') * 2 + (hasId('shudian') ? 5 : 0),
+    teapot: tg('tea') * 2 + (hasId('chaguan') ? 4 : 0) + tg('quiet') * 0.5,
+    birds: tg('quiet') + tg('solo') * 0.5 + 0.5,
+    willow: 1.2
+  };
+  for (const k in cand) cand[k] += rng() * 1.5;
+  let motifs = Object.keys(cand).sort((a, b) => cand[b] - cand[a]).slice(0, 4);
+  if (time !== 'night' && weather !== 'rain') motifs = motifs.filter(m => m !== 'lanterns' || cand.lanterns > 5);
+  motifs = motifs.slice(0, 3);
+  let figures = A.companion === 'unknown' ? (rng() < 0.5 ? 'solo' : 'none') : A.companion;
+  const comp = {
+    bridgeSide: rng() < 0.5 ? 'left' : 'right',
+    arches: rng() < 0.3 ? 3 : 1,
+    houses: 3 + Math.floor(rng() * 3),
+    hills: 2 + Math.floor(rng() * 2),
+    seed: Math.floor(rng() * 1e9)
+  };
+  const signature = [time, weather, figures, motifs.slice().sort().join('+'), comp.bridgeSide, comp.arches, comp.houses].join('|');
+  const T = { morning: '清晨薄雾，天色微粉', day: '午后天光，柔和的青灰色', dusk: '黄昏，暖橙色的光', night: '夜晚，深蓝天幕，暖黄灯火' };
+  const W = { rain: '细雨斜落，河面泛起涟漪', snow: '小雪，瓦檐积白', mist: '河面起了薄雾', clear: '空气清透' };
+  const M = { boat: '一条乌篷船', lanterns: '一串红灯笼倒映在水里', steam: '面馆门口的热气', umbrella: '一把油纸伞', osmanthus: '一棵开花的桂树', papercut: '窗上的红色剪纸窗花', stage: '远处老戏台飞起的檐角', books: '一扇堆着旧书、亮着灯的窗', teapot: '前景栏杆上一把茶壶两只杯', birds: '几只白鹭', willow: '垂柳' };
+  const F = { solo: '桥上一个人的背影', parents: '桥上一家三口，两位老人走在前面', kids: '桥上大人牵着孩子', couple: '桥上并肩的两个人', friends: '桥上三个朋友', none: '桥上没有人' };
+  const prompt = '柔和插画风格明信片，虚构的江南水乡小城“桐溪”，白墙黛瓦，石拱桥，' + T[time] + '，' + W[weather] + '，' + motifs.map(m => M[m]).join('、') + '，' + F[figures] + '，低饱和，纸张颗粒，凸版印刷的套色质感';
+  return { time, weather, motifs, figures, comp, signature, prompt };
+}
+
+/* ---------- 写回信 ---------- */
+function fmtDateCN(d) { return (d.getMonth() + 1) + '月' + d.getDate() + '日'; }
+function fill(tpl, map) { return tpl.replace(/\{(\w+)\}/g, (m, k) => (has(map, k) ? map[k] : '')); }
+
+function writeLetter(A, stops, route, rng, opts) {
+  const name = (opts.name || '').trim() || '远方的朋友';
+  const paras = [];
+  /* 开头 */
+  if (A.empty) paras.push('信收到了，信封里是一张白纸。我猜你是不知道从哪里说起——没关系，那就由我先说。');
+  else paras.push(fill(pick(rng, OPENINGS), { owner: pick(rng, ['茶馆的沈先生', '修钟铺的老钟', '旧书店的林老师']), n: cnNum(3 + Math.floor(rng() * 17)) }));
+  /* 回应 */
+  const clause = pickClause(A);
+  const top = A.sortedTags.filter(k => RESP[k]);
+  const used = {};
+  const echo = [];
+  if (!A.empty && top.length) {
+    echo.push('你在信里说「' + clause + '」。');
+    const side = ['rain', 'parents', 'kids', 'couple', 'friends', 'solo'];
+    const inClause = top.filter(k => KEYWORDS.some(row => row[0] === k && row[2].some(w => clause.indexOf(w) !== -1)));
+    const t1 = inClause.find(k => side.indexOf(k) === -1) || inClause[0] || top.find(k => side.indexOf(k) === -1) || top[0];
+    used[t1] = 1; echo.push(pick(rng, RESP[t1]));
+    const t2 = top.find(k => !used[k] && side.indexOf(k) === -1);
+    if (t2) { used[t2] = 1; echo.push(pick(rng, RESP[t2])); }
+  } else if (!A.empty) {
+    echo.push('你写了「' + clause + '」。这件事我帮不上忙，但看得出来，你需要出门走走。');
+    echo.push('那我就按桐溪最本分的样子，给你排一条不会出错的路。');
+  } else {
+    echo.push('我就按桐溪最本分的样子，给你排一条不会出错的路。');
+  }
+  paras.push(echo.join(''));
+  /* 同伴 / 天气 / 时长 */
+  const arr = [];
+  if (A.companion !== 'unknown' && !used[A.companion]) { arr.push(pick(rng, COMPANION[A.companion].line)); used[A.companion] = 1; }
+  if (A.weather === 'rain' && !used.rain) arr.push(pick(rng, RESP.rain));
+  else if (A.weather === 'snow') arr.push('下雪的桐溪我自己也很少见，白墙配白雪，瓦是黑的，像一张没上色的画。路滑，慢点走。');
+  else if (A.weather === 'sunny') arr.push('你说是晴天，那就带顶帽子，桥上没有树荫。');
+  else if (A.weather === 'unknown') {
+    const k = stops.findIndex((s, i) => route[i].indoor);
+    if (k >= 0) arr.push('你没说天气。要是那天下雨，就在第' + cnNum(k + 1) + '站' + stops[k].name + '多坐一会儿，那里有屋檐。');
+    else arr.push('你没说天气。桐溪这个季节多半是阴天，不晒，正适合走路。');
+  }
+  const N = stops.length;
+  if (A.duration === 'half') arr.push('你只有半天，那就别贪多，' + cnNum(N) + '站，每一站都待够。');
+  else if (A.duration === 'full') arr.push('给你排了一整天，' + cnNum(N) + '站，中间特意留了发呆的空。');
+  else if (A.duration === 'evening') arr.push('从傍晚开始走，' + cnNum(N) + '站，越走天越黑，灯越多。');
+  else arr.push('你没说要待多久，我按一天排的，' + cnNum(N) + '站，走不完也不要紧。');
+  paras.push(arr.join(''));
+  /* 路线总述 */
+  const first = stops[0], last = stops[N - 1];
+  const mids = stops.slice(1, N - 1).map(s => s.name);
+  paras.push('路线是这样的：从' + first.district + '的' + first.name + '出发，' + (mids.length ? '经过' + mids.join('、') + '，' : '') + '最后在' + last.district + '的' + last.name + '停下。');
+  /* 结尾 */
+  const ck = A.sortedTags.find(k => CLOSINGS[k]) || '_default';
+  const closing = [CLOSINGS[ck], '等你来。'];
+  const ps = '又及：每到一站，请店主在护照上盖一个章。盖齐了，我再给你写一封信。';
+  const date = fmtDateCN(opts.now || new Date());
+  return { to: name, paras, closing, ps, sign: '桐溪', date, clause };
+}
+
+function letterPlainText(L, stops) {
+  const lines = [L.to + '：'].concat(L.paras);
+  stops.forEach((s, i) => {
+    lines.push((i === 0 ? '第一站' : (i === stops.length - 1 ? '最后一站' : '第' + cnNum(i + 1) + '站')) + '，' + s.time + '，' + s.district + '·' + s.name + '。' + (s.walk ? s.walk + '就到。' : '') + s.reason + s.owner + '常说：「' + s.quote + '」盖章任务：' + s.task);
+  });
+  return lines.concat(L.closing, [L.ps, L.sign, L.date]).join('\n');
+}
+
+/* ---------- 第二封信：回应今天的行程 + 隐藏去处 ---------- */
+function writeFollowUp(record, usedHidden) {
+  const A = record.analysis;
+  const rng = rngFrom(hashStr(record.seedText + '|follow|' + (usedHidden || []).join(',')));
+  const order = (record.stampOrder || []).filter(id => record.route.indexOf(id) !== -1);
+  const seq = order.length ? order : record.route.slice();
+  const mems = seq.map(id => (PLACES.find(p => p.id === id) || {}).mem).filter(Boolean);
+  const join = ['你先', '又', '然后', '接着', '最后'];
+  let recap = '今天的章都盖齐了。我数了数：';
+  recap += mems.map((m, i) => {
+    let w;
+    if (i === 0) w = join[0]; else if (i === mems.length - 1) w = join[4]; else w = join[Math.min(3, i)];
+    return w + m;
+  }).join('，') + '。';
+  const notes = [];
+  const moods = record.moods || {};
+  const stayId = seq.find(id => moods[id] === 'stay');
+  const buyId = seq.find(id => moods[id] === 'buy');
+  const rushId = seq.find(id => moods[id] === 'rush');
+  if (stayId) { const p = PLACES.find(x => x.id === stayId); notes.push(p.owner + '说，你是今天在' + p.name + '待得最久的客人。'); }
+  if (buyId) { const p = PLACES.find(x => x.id === buyId); notes.push('你从' + p.name + '带走的那样东西，' + p.owner + '让我转告你：用旧了再拿回来，给你修。'); }
+  if (rushId && !stayId) { const p = PLACES.find(x => x.id === rushId); notes.push('在' + p.name + '你走得有点急，没关系，' + p.owner + '说下回补上。'); }
+  const rk = A.sortedTags.find(k => REFLECT[k]) || '_default';
+  const reflect = REFLECT[rk];
+  const usedSet = usedHidden || [];
+  let best = null, bestS = -1e9;
+  for (const h of HIDDEN) {
+    if (usedSet.indexOf(h.id) !== -1) continue;
+    let s = rng() * 0.8;
+    for (const k in A.tags) if (h.tags[k]) s += A.tags[k] * h.tags[k];
+    if (record.route.some(id => { const p = PLACES.find(x => x.id === id); return p && p.d === h.d; })) s += 1.2;
+    if (s > bestS) { bestS = s; best = h; }
+  }
+  if (!best) best = HIDDEN[0];
+  const paras = [
+    recap,
+    (notes.length ? notes.join('') : '') + reflect,
+    '还有一个地方，我没写在第一封信里，因为它不在任何一张地图上：' + best.name + '。' + best.desc + best.how,
+    '这封信不用回。下次来，我还在这里。'
+  ];
+  const el = A.elder || '爸妈';
+  return { to: record.letter.to, paras: paras.map(x => x.replace(/爸妈/g, el)), sign: '桐溪', date: record.letter.date, hidden: best.id };
+}
+
+/* ---------- 示例：商户后台数据 ---------- */
+function merchantView(record) {
+  const rows = record.route.map(id => {
+    const p = PLACES.find(x => x.id === id);
+    const visited = !!(record.stamps && record.stamps[id]);
+    return { id, name: p.name, owner: p.owner, visited, spend: p.biz.spend, cpa: p.biz.cpa, card: p.biz.card, budget: p.biz.budget, used: p.biz.used, month: p.biz.month, mood: (record.moods || {})[id] || '' };
+  });
+  const expectSpend = rows.reduce((a, r) => a + r.spend, 0);
+  const fee = rows.reduce((a, r) => a + (r.visited ? r.cpa : 0), 0);
+  const feeAll = rows.reduce((a, r) => a + r.cpa, 0);
+  return { rows, expectSpend, fee, feeAll };
+}
+
+/* =====================================================================
+ * CityAgent 抽象
+ *   read(text)        → 读信，抽取偏好（标签、时间、同伴、天气）
+ *   reply(text, opts) → 规划路线 + 写回信 + 明信片构图
+ *   followUp(record)  → 盖齐章后的第二封信
+ * ===================================================================== */
+class CityAgent {
+  read() { throw new Error('not implemented'); }
+  reply() { throw new Error('not implemented'); }
+  followUp() { throw new Error('not implemented'); }
+}
+
+/* 默认：本地规则 + 模板 + 偏好打分。离线、可复现：同样的信得到同样的回信，不同的信得到不同的回信。 */
+class RuleAgent extends CityAgent {
+  read(text) { return analyze(text); }
+  reply(text, opts) {
+    opts = opts || {};
+    const seedText = String(text || '') + '|' + (opts.name || '');
+    const rng = rngFrom(hashStr(seedText));
+    const A = analyze(text);
+    const plan = planRoute(A, rng);
+    const stops = buildStops(A, plan.route, rng);
+    const letter = writeLetter(A, stops, plan.route, rng, opts);
+    if (A.elder !== '爸妈') {
+      const fix = x => x.replace(/爸妈/g, A.elder);
+      letter.paras = letter.paras.map(fix); letter.closing = letter.closing.map(fix);
+      stops.forEach(st => { st.reason = fix(st.reason); });
+    }
+    const postcard = composePostcard(A, plan.route, rng);
+    const candidates = plan.scored.slice(0, 7).map(x => ({ id: x.p.id, name: x.p.name, score: x.s }));
+    return {
+      seedText, analysis: A, route: plan.route.map(p => p.id), stops, letter, postcard, candidates,
+      plain: letterPlainText(letter, stops)
+    };
+  }
+  followUp(record, usedHidden) { return writeFollowUp(record, usedHidden); }
+}
+
+/* ---------------------------------------------------------------------
+ * LLMAgent（桩，未接入；演示中不会被调用）
+ *
+ * 设计：同样实现 read / reply / followUp，输出与 RuleAgent 完全相同的 JSON 结构，
+ * 界面层不需要改动。大致流程：
+ *   1. read：把游客的信交给大模型，system 提示词让它扮演“桐溪”这座城，
+ *      以结构化输出返回 { tags, duration, weather, companion, mood, clause }。
+ *   2. reply：给模型注册几个工具（function calling），让它自己查数据：
+ *        - search_places({tags, district, indoor, slot})  → 商户库（店主人设、口头禅、营业时段）
+ *        - plan_route({place_ids, start_time})            → 顺路排序、步行/水路时间（复用 orderRoute / buildStops）
+ *        - get_weather({date})                            → 当天天气，决定室内外比例
+ *        - get_merchant_tasks({place_ids})                → 商户正在投放的任务卡（文旅局补贴、到店核销价）
+ *      模型拿到工具结果后，用城市拟人化的口吻写回信（要求引用店主原话、不得编造不存在的店），
+ *      并输出一段明信片提示词 postcard.prompt 交给图像模型；本地仍保留 composePostcard 作为构图兜底。
+ *   3. 校验：路线 3–5 站、店铺 id 必须来自商户库、不重复；不合格就回退到 RuleAgent。
+ * --------------------------------------------------------------------- */
+class LLMAgent extends CityAgent {
+  constructor(cfg) { super(); this.cfg = cfg || {}; this.fallback = new RuleAgent(); }
+  /* eslint-disable no-unused-vars */
+  async callModel(messages, tools) {
+    /* 这里接入大模型接口：POST this.cfg.endpoint，带上 messages 与 tools，循环处理 tool_calls。 */
+    throw new Error('LLMAgent 未配置：演示默认使用 RuleAgent');
+  }
+  async read(text) { try { return await this.callModel([{ role: 'user', content: text }], []); } catch (e) { return this.fallback.read(text); } }
+  async reply(text, opts) { try { return await this.callModel([{ role: 'user', content: text }], ['search_places', 'plan_route', 'get_weather', 'get_merchant_tasks']); } catch (e) { return this.fallback.reply(text, opts); } }
+  async followUp(record, used) { try { return await this.callModel([], []); } catch (e) { return this.fallback.followUp(record, used); } }
+}
+
+root.TongxiCore = {
+  DISTRICTS, PLACES, HIDDEN, TAG_LABEL, COMPANION,
+  CityAgent, RuleAgent, LLMAgent,
+  analyze, merchantView, hashStr, rngFrom, cnNum
+};
+})(typeof window !== 'undefined' ? window : globalThis);
+
+</script>
+<script id="art">
+/* =====================================================================
+ * 美术：手绘水乡地图 / 插画明信片 / 齿孔邮票 / 邮戳与印章
+ * ===================================================================== */
+const Art = (function () {
+'use strict';
+const C = window.TongxiCore;
+const INK = '#3a3128', GREEN = '#1d5c48', RED = '#c23b2a';
+const F_TITLE = '"ZCOOL XiaoWei","STKaiti","KaiTi",serif';
+const F_BODY = '"Noto Serif SC","Songti SC","STSong",serif';
+const F_MONO = '"Courier Prime","Courier New",ui-monospace,monospace';
+
+/* ---------- 颜色工具 ---------- */
+function hex(h) { h = h.replace('#', ''); return [parseInt(h.slice(0, 2), 16), parseInt(h.slice(2, 4), 16), parseInt(h.slice(4, 6), 16)]; }
+function mix(a, b, t) { const A = hex(a), B = hex(b); return '#' + A.map((v, i) => Math.round(v + (B[i] - v) * t).toString(16).padStart(2, '0')).join(''); }
+function rgba(h, a) { const A = hex(h); return 'rgba(' + A[0] + ',' + A[1] + ',' + A[2] + ',' + a + ')'; }
+function lerp(a, b, t) { return a + (b - a) * t; }
+
+/* ---------- 纸张颗粒（离屏生成一次） ---------- */
+let grainCv = null;
+function grain() {
+  if (grainCv) return grainCv;
+  grainCv = document.createElement('canvas'); grainCv.width = grainCv.height = 256;
+  const g = grainCv.getContext('2d'); const im = g.createImageData(256, 256);
+  const r = C.rngFrom(77);
+  for (let i = 0; i < im.data.length; i += 4) {
+    const v = 150 + r() * 105;
+    im.data[i] = v; im.data[i + 1] = v * 0.97; im.data[i + 2] = v * 0.9; im.data[i + 3] = 255;
+  }
+  g.putImageData(im, 0, 0);
+  g.globalAlpha = 0.25; g.strokeStyle = '#6b5a40';
+  for (let i = 0; i < 90; i++) { g.beginPath(); const x = r() * 256, y = r() * 256, a = r() * 6.28; g.moveTo(x, y); g.lineTo(x + Math.cos(a) * 7, y + Math.sin(a) * 7); g.lineWidth = 0.6; g.stroke(); }
+  return grainCv;
+}
+
+/* ---------- 曲线工具 ---------- */
+function catmull(pts, seg) {
+  const out = [];
+  for (let i = 0; i < pts.length - 1; i++) {
+    const p0 = pts[Math.max(0, i - 1)], p1 = pts[i], p2 = pts[i + 1], p3 = pts[Math.min(pts.length - 1, i + 2)];
+    for (let k = 0; k < seg; k++) {
+      const t = k / seg, t2 = t * t, t3 = t2 * t;
+      out.push([
+        0.5 * ((2 * p1[0]) + (-p0[0] + p2[0]) * t + (2 * p0[0] - 5 * p1[0] + 4 * p2[0] - p3[0]) * t2 + (-p0[0] + 3 * p1[0] - 3 * p2[0] + p3[0]) * t3),
+        0.5 * ((2 * p1[1]) + (-p0[1] + p2[1]) * t + (2 * p0[1] - 5 * p1[1] + 4 * p2[1] - p3[1]) * t2 + (-p0[1] + 3 * p1[1] - 3 * p2[1] + p3[1]) * t3)
+      ]);
+    }
+  }
+  out.push(pts[pts.length - 1].slice());
+  return out;
+}
+function wobble(pts, amp, seed) {
+  const r = C.rngFrom(seed); let ph = r() * 10, ph2 = r() * 10;
+  return pts.map((p, i) => {
+    const a = pts[Math.max(0, i - 1)], b = pts[Math.min(pts.length - 1, i + 1)];
+    let nx = -(b[1] - a[1]), ny = b[0] - a[0]; const L = Math.hypot(nx, ny) || 1; nx /= L; ny /= L;
+    const o = Math.sin(i * 0.35 + ph) * amp + Math.sin(i * 1.3 + ph2) * amp * 0.35;
+    return [p[0] + nx * o, p[1] + ny * o];
+  });
+}
+function strokePath(ctx, pts) { ctx.beginPath(); ctx.moveTo(pts[0][0], pts[0][1]); for (let i = 1; i < pts.length; i++) ctx.lineTo(pts[i][0], pts[i][1]); }
+
+/* =====================================================================
+ * 地图
+ * ===================================================================== */
+const MW = 1000, MH = 900;
+const WATER = [
+  { w: 64, pts: [[1040, 116], [905, 150], [792, 212], [700, 300], [642, 400], [606, 500], [612, 600], [660, 690], [722, 780], [764, 940]], name: '桐溪' },
+  { w: 32, pts: [[700, 300], [600, 262], [480, 250], [360, 256], [240, 242], [120, 252], [-40, 238]], name: '西市河' },
+  { w: 26, pts: [[628, 444], [520, 470], [420, 502], [334, 560], [264, 640], [206, 742], [160, 940]], name: '书院河' }
+];
+const LANES = [
+  [[985, 340], [905, 318], [840, 290], [770, 262], [720, 232]],
+  [[655, 222], [560, 212], [450, 220], [340, 224], [220, 212], [70, 218]],
+  [[650, 305], [540, 292], [430, 296], [300, 290], [150, 288]],
+  [[575, 430], [470, 425], [370, 446], [290, 484], [232, 545]],
+  [[575, 535], [480, 562], [400, 600], [330, 612]],
+  [[440, 670], [530, 722], [590, 790], [555, 870]],
+  [[690, 560], [745, 650], [806, 724], [880, 800]],
+  [[880, 430], [800, 420], [700, 480], [680, 560]]
+];
+const BRIDGES = [[0, 0.25], [0, 0.47], [0, 0.66], [0, 0.86], [1, 0.25], [1, 0.48], [1, 0.75], [2, 0.3], [2, 0.6]];
+let dense = null;
+function waterDense() {
+  if (dense) return dense;
+  dense = WATER.map((wt, i) => ({ w: wt.w, pts: wobble(catmull(wt.pts, 14), 2.2, 11 + i) }));
+  return dense;
+}
+function distToWater(x, y) {
+  let best = 1e9;
+  for (const wt of waterDense()) for (const p of wt.pts) { const d = Math.hypot(p[0] - x, p[1] - y) - wt.w / 2; if (d < best) best = d; }
+  const bd = Math.hypot((x - 655) / 1.1, (y - 708) / 0.62) - 80; if (bd < best) best = bd;
+  return best;
+}
+
+let mapBase = null;
+function renderMapBase() {
+  if (mapBase) return mapBase;
+  const S = 2;
+  const cv = document.createElement('canvas'); cv.width = MW * S; cv.height = MH * S;
+  const ctx = cv.getContext('2d'); ctx.scale(S, S);
+  const R = C.rngFrom(2026);
+  /* 纸底 */
+  ctx.fillStyle = '#e6d2a8'; ctx.fillRect(0, 0, MW, MH);
+  for (let i = 0; i < 26; i++) {
+    const x = R() * MW, y = R() * MH, r = 60 + R() * 160;
+    const g = ctx.createRadialGradient(x, y, 0, x, y, r);
+    g.addColorStop(0, R() < 0.5 ? 'rgba(160,120,70,.10)' : 'rgba(255,245,220,.18)'); g.addColorStop(1, 'rgba(0,0,0,0)');
+    ctx.fillStyle = g; ctx.fillRect(x - r, y - r, r * 2, r * 2);
+  }
+  /* 田块（斜线排线） */
+  const fields = [[30, 600, 120, 120], [60, 760, 110, 110], [820, 840, 150, 50], [30, 60, 140, 110], [900, 460, 90, 120]];
+  ctx.save();
+  for (const f of fields) {
+    ctx.fillStyle = 'rgba(150,160,100,.16)'; ctx.fillRect(f[0], f[1], f[2], f[3]);
+    ctx.strokeStyle = 'rgba(80,90,50,.25)'; ctx.lineWidth = 0.8;
+    ctx.beginPath(); for (let k = -f[3]; k < f[2]; k += 7) { ctx.moveTo(f[0] + k, f[1] + f[3]); ctx.lineTo(f[0] + k + f[3], f[1]); }
+    ctx.save(); ctx.beginPath(); ctx.rect(f[0], f[1], f[2], f[3]); ctx.clip();
+    ctx.beginPath(); for (let k = -f[3]; k < f[2]; k += 7) { ctx.moveTo(f[0] + k, f[1] + f[3]); ctx.lineTo(f[0] + k + f[3], f[1]); } ctx.stroke();
+    ctx.restore();
+    ctx.strokeStyle = 'rgba(60,50,30,.35)'; ctx.lineWidth = 1; ctx.strokeRect(f[0], f[1], f[2], f[3]);
+  }
+  ctx.restore();
+  /* 巷子 */
+  ctx.lineCap = 'round'; ctx.lineJoin = 'round';
+  LANES.forEach((ln, i) => {
+    const pts = wobble(catmull(ln, 8), 1.2, 40 + i);
+    strokePath(ctx, pts); ctx.strokeStyle = 'rgba(70,55,35,.38)'; ctx.lineWidth = 11; ctx.stroke();
+    strokePath(ctx, pts); ctx.strokeStyle = '#efdfbd'; ctx.lineWidth = 8.5; ctx.stroke();
+  });
+  /* 水面 */
+  const wd = waterDense();
+  const basin = () => { ctx.beginPath(); ctx.ellipse(655, 708, 88, 50, 0.45, 0, Math.PI * 2); };
+  ctx.lineCap = 'round';
+  wd.forEach(wt => { strokePath(ctx, wt.pts); ctx.strokeStyle = 'rgba(48,70,64,.85)'; ctx.lineWidth = wt.w + 5; ctx.stroke(); });
+  basin(); ctx.fillStyle = 'rgba(48,70,64,.85)'; ctx.fill(); ctx.lineWidth = 5; ctx.strokeStyle = 'rgba(48,70,64,.85)'; ctx.stroke();
+  wd.forEach(wt => { strokePath(ctx, wt.pts); ctx.strokeStyle = '#93b3a8'; ctx.lineWidth = wt.w; ctx.stroke(); });
+  basin(); ctx.fillStyle = '#93b3a8'; ctx.fill();
+  wd.forEach(wt => { strokePath(ctx, wt.pts); ctx.strokeStyle = 'rgba(220,236,226,.35)'; ctx.lineWidth = wt.w * 0.42; ctx.stroke(); });
+  /* 水纹 */
+  ctx.strokeStyle = 'rgba(40,70,64,.45)'; ctx.lineWidth = 1.1;
+  wd.forEach((wt, wi) => {
+    for (let i = 6; i < wt.pts.length - 6; i += (wi === 0 ? 5 : 8)) {
+      const p = wt.pts[i], q = wt.pts[i + 1];
+      const ang = Math.atan2(q[1] - p[1], q[0] - p[0]);
+      const off = (R() - 0.5) * wt.w * 0.5;
+      const x = p[0] - Math.sin(ang) * off, y = p[1] + Math.cos(ang) * off;
+      ctx.save(); ctx.translate(x, y); ctx.rotate(ang);
+      ctx.beginPath(); ctx.moveTo(-6, 0); ctx.quadraticCurveTo(-3, -2.5, 0, 0); ctx.quadraticCurveTo(3, 2.5, 6, 0); ctx.stroke();
+      ctx.restore();
+    }
+  });
+  /* 码头石阶 */
+  ctx.fillStyle = '#d8ccb2'; ctx.strokeStyle = INK; ctx.lineWidth = 1;
+  for (let i = 0; i < 4; i++) { ctx.save(); ctx.translate(588 + i * 3, 700 + i * 12); ctx.rotate(0.45); ctx.fillRect(-14, -3, 28, 6); ctx.strokeRect(-14, -3, 28, 6); ctx.restore(); }
+  /* 桥 */
+  BRIDGES.forEach(([wi, t]) => {
+    const pts = wd[wi].pts; const i = Math.floor(t * (pts.length - 2)); const p = pts[i], q = pts[i + 1];
+    const ang = Math.atan2(q[1] - p[1], q[0] - p[0]) + Math.PI / 2; const L = wd[wi].w + 18;
+    ctx.save(); ctx.translate(p[0], p[1]); ctx.rotate(ang);
+    ctx.fillStyle = 'rgba(40,30,20,.25)'; ctx.fillRect(-L / 2 + 2, -5, L, 12);
+    ctx.fillStyle = '#efe5cf'; ctx.fillRect(-L / 2, -6, L, 12);
+    ctx.strokeStyle = INK; ctx.lineWidth = 1.2; ctx.strokeRect(-L / 2, -6, L, 12);
+    ctx.beginPath(); for (let k = -L / 2 + 4; k < L / 2 - 2; k += 4) { ctx.moveTo(k, -6); ctx.lineTo(k, 6); } ctx.lineWidth = 0.5; ctx.stroke();
+    ctx.beginPath(); ctx.arc(0, 6, 8, Math.PI, 0); ctx.lineWidth = 1; ctx.stroke();
+    ctx.restore();
+  });
+  /* 房子：白墙黛瓦，小斜角 */
+  const marks = C.PLACES.map(p => [p.x, p.y]).concat(C.HIDDEN.map(h => [h.x, h.y]));
+  const labelBoxes = C.DISTRICTS.map(d => [d.lx - 70, d.ly - 30, 140, 56]);
+  const houses = [];
+  for (let n = 0; n < 2600 && houses.length < 150; n++) {
+    const x = 20 + R() * 960, y = 30 + R() * 840;
+    const w = 16 + R() * 16, h = 9 + R() * 5;
+    if (distToWater(x + w / 2, y) < 14 || distToWater(x + w / 2, y) > 120) continue;
+    if (marks.some(m => Math.hypot(m[0] - x - w / 2, m[1] - y) < 34)) continue;
+    if (labelBoxes.some(b => x + w > b[0] && x < b[0] + b[2] && y > b[1] && y - h < b[1] + b[3])) continue;
+    if (fields.some(f => x + w > f[0] && x < f[0] + f[2] && y > f[1] && y - 10 < f[1] + f[3])) continue;
+    if (houses.some(o => Math.abs(o.x - x) < (o.w + w) / 2 + 3 && Math.abs(o.y - y) < 18)) continue;
+    houses.push({ x, y, w, h });
+  }
+  houses.sort((a, b) => a.y - b.y);
+  for (const o of houses) {
+    const { x, y, w, h } = o;
+    ctx.fillStyle = 'rgba(60,40,20,.22)'; ctx.fillRect(x + 3, y - h + 3, w, h);
+    ctx.fillStyle = '#f6f0e2'; ctx.fillRect(x, y - h, w, h);
+    ctx.strokeStyle = INK; ctx.lineWidth = 0.9; ctx.strokeRect(x, y - h, w, h);
+    ctx.beginPath(); ctx.moveTo(x - 2, y - h); ctx.lineTo(x + 2, y - h - 7); ctx.lineTo(x + w - 2, y - h - 7); ctx.lineTo(x + w + 2, y - h); ctx.closePath();
+    ctx.fillStyle = '#4a4d4f'; ctx.fill(); ctx.stroke();
+    ctx.strokeStyle = 'rgba(255,255,255,.25)'; ctx.lineWidth = 0.6; ctx.beginPath();
+    for (let k = x + 3; k < x + w - 1; k += 2.6) { ctx.moveTo(k, y - h - 1); ctx.lineTo(k + 0.6, y - h - 6); } ctx.stroke();
+    if (w > 22) { /* 马头墙 */
+      ctx.fillStyle = '#f6f0e2'; ctx.strokeStyle = INK; ctx.lineWidth = 0.8;
+      ctx.fillRect(x - 1, y - h - 10, 4, 10); ctx.strokeRect(x - 1, y - h - 10, 4, 10);
+      ctx.fillStyle = '#3a3c3e'; ctx.fillRect(x - 2.5, y - h - 11.5, 7, 2);
+    }
+    ctx.fillStyle = 'rgba(70,55,40,.7)'; ctx.fillRect(x + w * 0.4, y - h * 0.6, 3, h * 0.6);
+  }
+  /* 树 */
+  for (let n = 0, k = 0; n < 900 && k < 55; n++) {
+    const x = 20 + R() * 960, y = 30 + R() * 840;
+    const dw = distToWater(x, y); if (dw < 8 || dw > 90) continue;
+    if (marks.some(m => Math.hypot(m[0] - x, m[1] - y) < 30)) continue;
+    if (houses.some(o => x > o.x - 6 && x < o.x + o.w + 6 && y > o.y - o.h - 12 && y < o.y + 6)) continue;
+    if (labelBoxes.some(b => x > b[0] && x < b[0] + b[2] && y > b[1] && y < b[1] + b[3])) continue;
+    k++;
+    const willow = dw < 22;
+    if (willow) {
+      ctx.strokeStyle = 'rgba(70,100,60,.85)'; ctx.lineWidth = 0.9;
+      for (let s = 0; s < 7; s++) { ctx.beginPath(); ctx.moveTo(x, y - 12); ctx.quadraticCurveTo(x + (s - 3) * 3, y - 12, x + (s - 3) * 2.4, y + 2); ctx.stroke(); }
+      ctx.fillStyle = 'rgba(110,140,85,.55)'; ctx.beginPath(); ctx.arc(x, y - 10, 6, 0, 7); ctx.fill();
+    } else {
+      const n2 = 2 + Math.floor(R() * 3);
+      for (let s = 0; s < n2; s++) {
+        const cx = x + (R() - 0.5) * 12, cy = y + (R() - 0.5) * 8, r = 5 + R() * 4;
+        ctx.fillStyle = R() < 0.5 ? '#8ea072' : '#7d9468'; ctx.beginPath(); ctx.arc(cx, cy, r, 0, 7); ctx.fill();
+        ctx.strokeStyle = 'rgba(50,55,30,.7)'; ctx.lineWidth = 0.8; ctx.stroke();
+        ctx.fillStyle = 'rgba(255,255,230,.25)'; ctx.beginPath(); ctx.arc(cx - r * 0.3, cy - r * 0.3, r * 0.4, 0, 7); ctx.fill();
+      }
+    }
+  }
+  /* 边框 */
+  ctx.strokeStyle = INK; ctx.lineWidth = 2.2; ctx.strokeRect(10, 10, MW - 20, MH - 20);
+  ctx.lineWidth = 0.8; ctx.strokeRect(17, 17, MW - 34, MH - 34);
+  ctx.globalCompositeOperation = 'multiply'; ctx.globalAlpha = 0.35;
+  ctx.fillStyle = ctx.createPattern(grain(), 'repeat'); ctx.fillRect(0, 0, MW, MH);
+  ctx.globalAlpha = 1; ctx.globalCompositeOperation = 'source-over';
+  mapBase = cv;
+  return cv;
+}
+
+/* 地图视图：世界坐标 → 屏幕坐标 */
+function fitView(w, h, box, pad) {
+  pad = pad == null ? 40 : pad;
+  const bw = box[2] - box[0], bh = box[3] - box[1];
+  const s = Math.max(0.05, Math.min((Math.max(40, w - pad * 2)) / bw, (Math.max(40, h - pad * 2)) / bh));
+  return { s, cx: (box[0] + box[2]) / 2, cy: (box[1] + box[3]) / 2 };
+}
+function routeBox(ids, extra) {
+  let x0 = 1e9, y0 = 1e9, x1 = -1e9, y1 = -1e9;
+  const all = ids.map(id => C.PLACES.find(p => p.id === id) || C.HIDDEN.find(p => p.id === id)).filter(Boolean).concat(extra || []);
+  all.forEach(p => { x0 = Math.min(x0, p.x); y0 = Math.min(y0, p.y); x1 = Math.max(x1, p.x); y1 = Math.max(y1, p.y); });
+  const minW = 360, minH = 320;
+  if (x1 - x0 < minW) { const c = (x0 + x1) / 2; x0 = c - minW / 2; x1 = c + minW / 2; }
+  if (y1 - y0 < minH) { const c = (y0 + y1) / 2; y0 = c - minH / 2; y1 = c + minH / 2; }
+  return [x0 - 60, y0 - 70, x1 + 60, y1 + 60];
+}
+
+/* 动态层：标签、路线、标记 */
+function drawMap(ctx, w, h, view, st, now) {
+  const base = renderMapBase();
+  ctx.clearRect(0, 0, w, h);
+  ctx.save();
+  ctx.translate(w / 2, h / 2); ctx.scale(view.s, view.s); ctx.translate(-view.cx, -view.cy);
+  ctx.drawImage(base, 0, 0, MW, MH);
+  const px = 1 / view.s; /* 一个屏幕像素在世界坐标中的大小 */
+  /* 街区名 */
+  C.DISTRICTS.forEach(d => {
+    const fs = Math.max(30, 15 * px);
+    ctx.font = fs + 'px ' + F_TITLE; ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+    ctx.fillStyle = 'rgba(194,59,42,.32)'; ctx.fillText(d.name, d.lx + 1.6 * px, d.ly + 1.2 * px);
+    ctx.fillStyle = rgba(GREEN, 0.9); ctx.fillText(d.name, d.lx, d.ly);
+    ctx.font = Math.max(10, 8.5 * px) + 'px ' + F_MONO; ctx.fillStyle = 'rgba(58,49,40,.6)';
+    ctx.fillText(d.full === d.name ? d.id.toUpperCase() : d.full, d.lx, d.ly + fs * 0.75);
+  });
+  /* 河名 */
+  ctx.save(); ctx.translate(655, 560); ctx.rotate(1.35);
+  ctx.font = 'italic ' + Math.max(18, 10 * px) + 'px ' + F_BODY; ctx.fillStyle = 'rgba(30,60,55,.55)'; ctx.textAlign = 'center';
+  ctx.fillText('桐　溪', 0, 0); ctx.restore();
+
+  const route = st.route || [];
+  const pts = route.map(id => C.PLACES.find(p => p.id === id));
+  /* 路线 */
+  const shown = st.routeProgress == null ? 1 : st.routeProgress;
+  if (pts.length > 1 && shown > 0) {
+    ctx.save();
+    ctx.lineCap = 'round'; ctx.lineJoin = 'round';
+    const segs = pts.length - 1, upto = shown * segs;
+    ctx.beginPath(); ctx.moveTo(pts[0].x, pts[0].y);
+    for (let i = 0; i < segs; i++) {
+      const a = pts[i], b = pts[i + 1];
+      const f = Math.max(0, Math.min(1, upto - i)); if (f <= 0) break;
+      const mx = (a.x + b.x) / 2 + (b.y - a.y) * 0.18, my = (a.y + b.y) / 2 - (b.x - a.x) * 0.18;
+      if (f >= 1) ctx.quadraticCurveTo(mx, my, b.x, b.y);
+      else {
+        const t = f, x1 = lerp(a.x, mx, t), y1 = lerp(a.y, my, t), x2 = lerp(mx, b.x, t), y2 = lerp(my, b.y, t);
+        ctx.quadraticCurveTo(x1, y1, lerp(x1, x2, t), lerp(y1, y2, t));
+      }
+    }
+    ctx.strokeStyle = 'rgba(255,248,230,.85)'; ctx.lineWidth = 7 * px; ctx.stroke();
+    ctx.setLineDash([9 * px, 7 * px]); ctx.lineDashOffset = -(now / 60) * px;
+    ctx.strokeStyle = RED; ctx.lineWidth = 3.2 * px; ctx.stroke();
+    ctx.restore();
+  }
+  /* 所有店铺 */
+  const R0 = 13 * px;
+  C.PLACES.forEach(p => {
+    const ri = route.indexOf(p.id);
+    const lit = st.lit && st.lit[p.id];
+    const scan = st.scan && st.scan[p.id];
+    if (ri === -1) {
+      if (st.hideOthers && !scan) return;
+      ctx.beginPath(); ctx.arc(p.x, p.y, R0 * 0.78, 0, 7);
+      ctx.fillStyle = scan ? 'rgba(255,240,200,.95)' : 'rgba(250,243,225,.85)'; ctx.fill();
+      ctx.strokeStyle = scan ? RED : 'rgba(58,49,40,.65)'; ctx.lineWidth = 1.2 * px; ctx.stroke();
+      ctx.font = (R0 * 0.95) + 'px ' + F_TITLE; ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+      ctx.fillStyle = 'rgba(58,49,40,.8)'; ctx.fillText(p.stamp.c, p.x, p.y + 0.5 * px);
+      if (st.showNames) {
+        ctx.font = (10.5 * px) + 'px ' + F_BODY; ctx.fillStyle = 'rgba(58,49,40,.72)';
+        ctx.fillText(p.name, p.x, p.y + R0 + 8 * px);
+      }
+    }
+  });
+  /* 路线上的店铺 */
+  pts.forEach((p, i) => {
+    const lit = !st.lit || st.lit[p.id];
+    if (!lit) return;
+    const stamped = st.stamps && st.stamps[p.id];
+    const isNext = st.nextId === p.id;
+    const pulse = isNext ? (Math.sin(now / 260) * 0.5 + 0.5) : 0;
+    const R1 = R0 * 1.25;
+    if (isNext) { ctx.beginPath(); ctx.arc(p.x, p.y, R1 + (6 + pulse * 8) * px, 0, 7); ctx.fillStyle = 'rgba(194,59,42,' + (0.25 - pulse * 0.18) + ')'; ctx.fill(); }
+    if (st.glow && st.glow[p.id] != null) {
+      const g = Math.max(0, Math.min(1, 1 - (now - st.glow[p.id]) / 900));
+      if (g > 0) { ctx.beginPath(); ctx.arc(p.x, p.y, R1 + (1 - g) * 40 * px, 0, 7); ctx.strokeStyle = 'rgba(194,59,42,' + g + ')'; ctx.lineWidth = 3 * px; ctx.stroke(); }
+    }
+    ctx.save(); ctx.translate(p.x, p.y);
+    ctx.fillStyle = 'rgba(60,30,20,.25)'; ctx.beginPath(); ctx.arc(1.5 * px, 2 * px, R1, 0, 7); ctx.fill();
+    ctx.beginPath(); ctx.arc(0, 0, R1, 0, 7);
+    ctx.fillStyle = stamped ? '#f6ecd6' : RED; ctx.fill();
+    ctx.strokeStyle = stamped ? RED : '#7e2216'; ctx.lineWidth = 1.6 * px; ctx.stroke();
+    if (stamped) {
+      ctx.rotate(-0.2);
+      ctx.strokeStyle = RED; ctx.lineWidth = 1.4 * px; ctx.strokeRect(-R1 * 0.62, -R1 * 0.62, R1 * 1.24, R1 * 1.24);
+      ctx.font = (R1 * 1.05) + 'px ' + F_TITLE; ctx.fillStyle = RED; ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+      ctx.fillText(p.stamp.c, 0, 1 * px); ctx.rotate(0.2);
+    } else {
+      ctx.font = 'bold ' + (R1 * 1.05) + 'px ' + F_MONO; ctx.fillStyle = '#fbf3df'; ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+      ctx.fillText(String(i + 1), 0, 1 * px);
+    }
+    ctx.restore();
+    /* 名签 */
+    const label = p.name;
+    ctx.font = (12.5 * px) + 'px ' + F_BODY;
+    const tw = ctx.measureText(label).width + 12 * px;
+    const lx = p.x - tw / 2, ly = p.y + R1 + 4 * px;
+    ctx.fillStyle = 'rgba(251,245,230,.94)'; ctx.fillRect(lx, ly, tw, 19 * px);
+    ctx.strokeStyle = 'rgba(58,49,40,.55)'; ctx.lineWidth = 0.8 * px; ctx.strokeRect(lx, ly, tw, 19 * px);
+    ctx.fillStyle = INK; ctx.textAlign = 'center'; ctx.textBaseline = 'middle'; ctx.fillText(label, p.x, ly + 10 * px);
+  });
+  /* 隐藏去处 */
+  if (st.hidden) {
+    const hp = C.HIDDEN.find(x => x.id === st.hidden);
+    if (hp) {
+      const done = st.stamps && st.stamps[hp.id];
+      ctx.save(); ctx.translate(hp.x, hp.y);
+      ctx.setLineDash([4 * px, 3 * px]); ctx.lineDashOffset = -(now / 80) * px;
+      ctx.beginPath(); ctx.arc(0, 0, R0 * 1.35, 0, 7); ctx.fillStyle = done ? '#f6ecd6' : 'rgba(29,92,72,.92)'; ctx.fill();
+      ctx.strokeStyle = done ? GREEN : '#f6ecd6'; ctx.lineWidth = 1.8 * px; ctx.stroke(); ctx.setLineDash([]);
+      ctx.font = (R0 * 1.2) + 'px ' + F_TITLE; ctx.fillStyle = done ? GREEN : '#f6ecd6'; ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+      ctx.fillText(hp.c, 0, 1 * px);
+      ctx.restore();
+      ctx.font = (12.5 * px) + 'px ' + F_BODY;
+      const tw = ctx.measureText(hp.name).width + 12 * px; const ly = hp.y + R0 * 1.35 + 4 * px;
+      ctx.fillStyle = 'rgba(29,92,72,.92)'; ctx.fillRect(hp.x - tw / 2, ly, tw, 19 * px);
+      ctx.fillStyle = '#f6ecd6'; ctx.textAlign = 'center'; ctx.textBaseline = 'middle'; ctx.fillText(hp.name, hp.x, ly + 10 * px);
+    }
+  }
+  ctx.restore();
+}
+function hitMap(w, h, view, x, y, ids) {
+  const wx = (x - w / 2) / view.s + view.cx, wy = (y - h / 2) / view.s + view.cy;
+  let best = null, bd = 1e9;
+  ids.forEach(id => {
+    const p = C.PLACES.find(q => q.id === id) || C.HIDDEN.find(q => q.id === id); if (!p) return;
+    const d = Math.hypot(p.x - wx, p.y - wy) * view.s;
+    if (d < 26 && d < bd) { bd = d; best = id; }
+  });
+  return best;
+}
+
+/* =====================================================================
+ * 明信片插画
+ * ===================================================================== */
+const PAL = {
+  morning: { sky: ['#e9c9bd', '#f2dccd', '#f5ece0'], sun: '#fff3dd', hill: ['#c2b2b3', '#b0a9ae', '#9ea2a7'], water: ['#efe2d6', '#a3b8b4'], wall: ['#f7f2e8', '#e4dacb'], roof: '#4a4e53', bank: ['#d4cab8', '#b2a68f'], wood: '#6b4a36' },
+  day: { sky: ['#9fbfc9', '#c8dadb', '#ecefe5'], sun: '#fffbe8', hill: ['#9db0b3', '#8ba0a5', '#7a9197'], water: ['#dde6df', '#7fa29e'], wall: ['#f6f3eb', '#e0dace'], roof: '#3e454a', bank: ['#cdc8b8', '#a69f8b'], wood: '#5f4332' },
+  dusk: { sky: ['#d98f6f', '#eebc97', '#f7e3c6'], sun: '#ffe4b8', hill: ['#c4968a', '#b08684', '#98787b'], water: ['#f2d6b6', '#8f8486'], wall: ['#f6e6d2', '#e2c8ae'], roof: '#43403f', bank: ['#d0b9a0', '#a48d78'], wood: '#5a3b2c' },
+  night: { sky: ['#14233a', '#22364d', '#3a4c62'], sun: '#f3ecd2', hill: ['#2d3c50', '#263449', '#1f2b3e'], water: ['#33465b', '#141e2b'], wall: ['#8d95a4', '#6a7383'], roof: '#1a1e25', bank: ['#4a5160', '#2f3541'], wood: '#2e2420' }
+};
+function palette(pc) {
+  const p = JSON.parse(JSON.stringify(PAL[pc.time]));
+  if (pc.weather === 'rain' || pc.weather === 'mist') {
+    const k = pc.weather === 'rain' ? 0.42 : 0.3, grey = pc.time === 'night' ? '#3d4856' : '#c3c9c6';
+    p.sky = p.sky.map(c => mix(c, grey, k)); p.hill = p.hill.map(c => mix(c, grey, k + 0.1)); p.water = p.water.map(c => mix(c, grey, k * 0.6));
+  }
+  if (pc.weather === 'snow') { p.sky = p.sky.map(c => mix(c, '#e9ecee', 0.5)); p.hill = p.hill.map(c => mix(c, '#e4e8ea', 0.45)); p.bank = p.bank.map(c => mix(c, '#eef0f0', 0.55)); }
+  return p;
+}
+
+function drawPostcard(cv, pc) {
+  const W = 1200, H = 800;
+  cv.width = W; cv.height = H;
+  const ctx = cv.getContext('2d');
+  const R = C.rngFrom(pc.comp.seed);
+  const P = palette(pc);
+  const night = pc.time === 'night';
+  const has = m => pc.motifs.indexOf(m) !== -1;
+  const HZ = 430;
+  const vpx = pc.comp.bridgeSide === 'left' ? 540 : 660;
+  const leftEdge = y => lerp(vpx - 34, 250, (y - HZ) / (H - HZ));
+  const rightEdge = y => lerp(vpx + 34, 950, (y - HZ) / (H - HZ));
+
+  /* 1 天空 */
+  let g = ctx.createLinearGradient(0, 0, 0, HZ + 40);
+  g.addColorStop(0, P.sky[0]); g.addColorStop(0.55, P.sky[1]); g.addColorStop(1, P.sky[2]);
+  ctx.fillStyle = g; ctx.fillRect(0, 0, W, H);
+  if (night) {
+    for (let i = 0; i < 90; i++) { ctx.fillStyle = 'rgba(255,250,230,' + (0.2 + R() * 0.6) + ')'; ctx.fillRect(R() * W, R() * HZ * 0.7, 1.6, 1.6); }
+  }
+  const sunX = pc.comp.bridgeSide === 'left' ? 900 : 300, sunY = night ? 120 : pc.time === 'dusk' ? 300 : pc.time === 'morning' ? 250 : 150;
+  if (pc.weather !== 'rain') {
+    g = ctx.createRadialGradient(sunX, sunY, 0, sunX, sunY, 260);
+    g.addColorStop(0, rgba(P.sun, night ? 0.35 : 0.75)); g.addColorStop(1, rgba(P.sun, 0));
+    ctx.fillStyle = g; ctx.fillRect(0, 0, W, HZ + 40);
+    ctx.beginPath(); ctx.arc(sunX, sunY, night ? 34 : 44, 0, 7); ctx.fillStyle = rgba(P.sun, night ? 0.95 : 0.8); ctx.fill();
+    if (night) { ctx.beginPath(); ctx.arc(sunX + 14, sunY - 8, 30, 0, 7); ctx.fillStyle = mix(P.sky[0], P.sky[1], 0.3); ctx.globalAlpha = 0.85; ctx.fill(); ctx.globalAlpha = 1; }
+  }
+  /* 云 */
+  for (let i = 0; i < 7; i++) {
+    const cx = R() * W, cy = 60 + R() * 220, rw = 140 + R() * 220;
+    g = ctx.createRadialGradient(cx, cy, 0, cx, cy, rw);
+    g.addColorStop(0, night ? 'rgba(120,140,170,.18)' : 'rgba(255,252,245,.5)'); g.addColorStop(1, 'rgba(255,255,255,0)');
+    ctx.save(); ctx.translate(cx, cy); ctx.scale(1, 0.28); ctx.translate(-cx, -cy);
+    ctx.fillStyle = g; ctx.fillRect(cx - rw, cy - rw, rw * 2, rw * 2); ctx.restore();
+  }
+  /* 2 远山 */
+  const nh = pc.comp.hills;
+  for (let i = 0; i < nh; i++) {
+    const baseY = HZ - 10 - (nh - i) * 26, amp = 70 - i * 14;
+    const ph = R() * 10, f1 = 0.004 + R() * 0.003, f2 = 0.011 + R() * 0.006;
+    ctx.beginPath(); ctx.moveTo(0, HZ + 20);
+    for (let x = 0; x <= W; x += 8) {
+      const y = baseY - amp * (0.55 + 0.45 * Math.sin(x * f1 + ph)) - 16 * Math.sin(x * f2 + ph * 2) * (0.6 + 0.4 * Math.sin(x * 0.002));
+      ctx.lineTo(x, y);
+    }
+    ctx.lineTo(W, HZ + 20); ctx.closePath();
+    g = ctx.createLinearGradient(0, baseY - amp, 0, HZ + 20);
+    g.addColorStop(0, P.hill[i % 3]); g.addColorStop(1, mix(P.hill[i % 3], P.sky[2], 0.65));
+    ctx.fillStyle = g; ctx.globalAlpha = 0.55 + i * 0.18; ctx.fill(); ctx.globalAlpha = 1;
+  }
+  /* 地平线雾 */
+  g = ctx.createLinearGradient(0, HZ - 90, 0, HZ + 30);
+  g.addColorStop(0, rgba(P.sky[2], 0)); g.addColorStop(1, rgba(P.sky[2], night ? 0.35 : 0.85));
+  ctx.fillStyle = g; ctx.fillRect(0, HZ - 90, W, 130);
+  /* 远处屋脊 */
+  ctx.fillStyle = mix(P.roof, P.sky[2], 0.55);
+  for (let x = vpx - 260; x < vpx + 260; x += 26 + R() * 18) {
+    if (Math.abs(x - vpx) < 30) continue;
+    const hh = 10 + R() * 16, ww = 20 + R() * 20;
+    ctx.fillStyle = mix(P.wall[1], P.sky[2], 0.5); ctx.fillRect(x, HZ - hh, ww, hh);
+    ctx.fillStyle = mix(P.roof, P.sky[2], 0.45); ctx.fillRect(x - 2, HZ - hh - 4, ww + 4, 5);
+  }
+  if (has('stage')) drawStage(ctx, pc.comp.bridgeSide === 'left' ? vpx + 150 : vpx - 210, HZ - 8, 0.75, P, night);
+
+  /* 3 河岸 */
+  g = ctx.createLinearGradient(0, HZ, 0, H);
+  g.addColorStop(0, mix(P.bank[0], P.sky[2], 0.4)); g.addColorStop(1, P.bank[1]);
+  ctx.fillStyle = g;
+  ctx.beginPath(); ctx.moveTo(0, HZ); ctx.lineTo(leftEdge(HZ), HZ); ctx.lineTo(leftEdge(H), H); ctx.lineTo(0, H); ctx.fill();
+  ctx.beginPath(); ctx.moveTo(W, HZ); ctx.lineTo(rightEdge(HZ), HZ); ctx.lineTo(rightEdge(H), H); ctx.lineTo(W, H); ctx.fill();
+  /* 4 水面 */
+  const waterPath = () => { ctx.beginPath(); ctx.moveTo(leftEdge(HZ), HZ); ctx.lineTo(rightEdge(HZ), HZ); ctx.lineTo(rightEdge(H), H); ctx.lineTo(leftEdge(H), H); ctx.closePath(); };
+  waterPath();
+  g = ctx.createLinearGradient(0, HZ, 0, H);
+  g.addColorStop(0, P.water[0]); g.addColorStop(1, P.water[1]);
+  ctx.fillStyle = g; ctx.fill();
+  /* 石驳岸 */
+  ctx.strokeStyle = rgba(P.roof, 0.55); ctx.lineWidth = 2;
+  [[leftEdge, -1], [rightEdge, 1]].forEach(([edge, sgn]) => {
+    ctx.beginPath();
+    for (let y = HZ; y <= H; y += 4) { const x = edge(y), hgt = lerp(2, 28, (y - HZ) / (H - HZ)); ctx.lineTo(x, y + hgt); }
+    for (let y = H; y >= HZ; y -= 4) ctx.lineTo(edge(y), y);
+    ctx.closePath(); ctx.fillStyle = mix(P.bank[1], P.roof, 0.35); ctx.fill();
+    for (let y = HZ + 10; y < H; y += lerp(8, 30, (y - HZ) / (H - HZ))) {
+      const x = edge(y), hgt = lerp(2, 28, (y - HZ) / (H - HZ));
+      ctx.beginPath(); ctx.moveTo(x, y); ctx.lineTo(x, y + hgt); ctx.stroke();
+    }
+  });
+
+  /* 5 桥 */
+  const yw = 535, bl = leftEdge(yw), br = rightEdge(yw), span = br - bl, bcx = (bl + br) / 2;
+  drawBridge(ctx, bcx, yw, span, pc.comp.arches, P, night, waterPath);
+
+  /* 6 房屋 */
+  const nHouse = pc.comp.houses;
+  const houseList = [];
+  for (const side of [-1, 1]) {
+    for (let i = 0; i < nHouse; i++) {
+      const u = (i + 0.6 + R() * 0.2) / (nHouse + 0.2);
+      const y = HZ + (H - HZ) * Math.pow(u, 1.25) + 4;
+      const s = 0.2 + 0.85 * u;
+      const edge = side < 0 ? leftEdge(y) : rightEdge(y);
+      houseList.push({ side, u, y, s, edge, i });
+    }
+  }
+  /* 6a 远处的房子先画；倒影 */
+  houseList.sort((a, b) => a.u - b.u);
+  const nearest = { '-1': houseList.filter(h => h.side < 0).pop(), '1': houseList.filter(h => h.side > 0).pop() };
+  ctx.save(); waterPath(); ctx.clip();
+  houseList.forEach(hs => {
+    ctx.save(); ctx.translate(0, hs.y * 2 + 6); ctx.scale(1, -1); ctx.globalAlpha = 0.22;
+    drawHouse(ctx, hs, P, night, R, pc, true);
+    ctx.restore();
+  });
+  /* 水纹 */
+  for (let i = 0; i < 160; i++) {
+    const y = HZ + Math.pow(R(), 0.8) * (H - HZ), l = leftEdge(y), r = rightEdge(y);
+    const x = lerp(l, r, R()), len = lerp(6, 70, (y - HZ) / (H - HZ)) * (0.5 + R());
+    ctx.strokeStyle = night ? 'rgba(200,220,255,.12)' : 'rgba(255,255,255,.35)'; ctx.lineWidth = lerp(0.6, 2, (y - HZ) / (H - HZ));
+    ctx.beginPath(); ctx.moveTo(x, y); ctx.lineTo(x + len, y); ctx.stroke();
+  }
+  ctx.restore();
+  /* 灯笼要挂在中景的两栋房子之间 */
+  houseList.forEach(hs => drawHouse(ctx, hs, P, night, R, pc, false, hs === nearest['1'] ? (has('steam') ? 'steam' : has('books') ? 'books' : null) : hs === nearest['-1'] ? (has('papercut') ? 'papercut' : (has('books') && has('steam')) ? 'books' : null) : null));
+  if (has('lanterns')) {
+    const mids = houseList.filter(h => h.u > 0.4 && h.u < 0.75);
+    const a = mids.find(h => h.side < 0), b = mids.find(h => h.side > 0);
+    if (a && b) drawLanterns(ctx, a.edge - 6, a.y - 200 * a.s, b.edge + 6, b.y - 200 * b.s, night, waterPath);
+  }
+  /* 7 船 */
+  if (has('boat')) {
+    const y = 640 + R() * 40, x = lerp(leftEdge(y), rightEdge(y), 0.35 + R() * 0.3);
+    drawBoat(ctx, x, y, lerp(0.5, 0.9, (y - HZ) / (H - HZ)), P, night, R() < 0.5 ? 1 : -1);
+  }
+  /* 8 桥上的人 */
+  drawFigures(ctx, bcx, yw - span * 0.5 - 22, pc, P, night);
+  /* 9 桂树、柳树 */
+  if (has('osmanthus')) drawOsmanthus(ctx, pc.comp.bridgeSide === 'left' ? 1080 : 120, 640, P, night, R);
+  if (has('willow') || has('birds')) drawWillow(ctx, pc.comp.bridgeSide === 'left' ? W - 60 : 60, P, night, R, has('willow') ? 1 : 0.5);
+  if (has('birds')) drawBirds(ctx, R, night);
+  /* 10 前景茶具 */
+  if (has('teapot')) drawTea(ctx, pc.comp.bridgeSide === 'left' ? 840 : 0, P, night);
+  /* 11 天气 */
+  if (pc.weather === 'rain') {
+    ctx.strokeStyle = night ? 'rgba(200,215,240,.28)' : 'rgba(255,255,255,.45)'; ctx.lineWidth = 1.2;
+    ctx.beginPath();
+    for (let i = 0; i < 420; i++) { const x = R() * (W + 200) - 100, y = R() * H, l = 18 + R() * 26; ctx.moveTo(x, y); ctx.lineTo(x - l * 0.25, y + l); }
+    ctx.stroke();
+    ctx.save(); waterPath(); ctx.clip(); ctx.strokeStyle = 'rgba(255,255,255,.4)'; ctx.lineWidth = 1;
+    for (let i = 0; i < 70; i++) { const y = HZ + 40 + R() * (H - HZ - 40), x = lerp(leftEdge(y), rightEdge(y), R()), r = lerp(3, 16, (y - HZ) / (H - HZ)); ctx.beginPath(); ctx.ellipse(x, y, r, r * 0.3, 0, 0, 7); ctx.stroke(); }
+    ctx.restore();
+  } else if (pc.weather === 'snow') {
+    for (let i = 0; i < 380; i++) { const r = 1 + R() * 2.6; ctx.fillStyle = 'rgba(255,255,255,' + (0.5 + R() * 0.5) + ')'; ctx.beginPath(); ctx.arc(R() * W, R() * H, r, 0, 7); ctx.fill(); }
+  } else if (pc.weather === 'mist') {
+    for (let i = 0; i < 3; i++) { g = ctx.createLinearGradient(0, 380 + i * 90, 0, 470 + i * 90); g.addColorStop(0, 'rgba(255,255,255,0)'); g.addColorStop(0.5, 'rgba(250,250,245,.35)'); g.addColorStop(1, 'rgba(255,255,255,0)'); ctx.fillStyle = g; ctx.fillRect(0, 380 + i * 90, W, 90); }
+  }
+  /* 12 调色、颗粒、暗角 */
+  ctx.globalCompositeOperation = 'soft-light';
+  ctx.fillStyle = night ? 'rgba(60,80,140,.35)' : pc.time === 'dusk' ? 'rgba(255,170,110,.35)' : 'rgba(255,230,200,.25)';
+  ctx.fillRect(0, 0, W, H);
+  ctx.globalCompositeOperation = 'multiply'; ctx.globalAlpha = 0.28;
+  ctx.fillStyle = ctx.createPattern(grain(), 'repeat'); ctx.fillRect(0, 0, W, H);
+  ctx.globalAlpha = 1; ctx.globalCompositeOperation = 'source-over';
+  g = ctx.createRadialGradient(W / 2, H * 0.48, H * 0.35, W / 2, H * 0.5, H * 0.95);
+  g.addColorStop(0, 'rgba(0,0,0,0)'); g.addColorStop(1, night ? 'rgba(5,10,20,.45)' : 'rgba(90,60,30,.22)');
+  ctx.fillStyle = g; ctx.fillRect(0, 0, W, H);
+}
+
+function drawBridge(ctx, cx, yw, span, arches, P, night, waterPath) {
+  const stone = night ? '#7c8492' : mix(P.wall[1], '#b9b2a3', 0.5);
+  const stoneD = mix(stone, P.roof, 0.35);
+  const r = span * 0.5, deckY = yw - r - 18, half = r + 150;
+  /* 倒影（只在水里） */
+  ctx.save(); waterPath(); ctx.clip();
+  ctx.globalAlpha = 0.35; ctx.fillStyle = stoneD;
+  ctx.beginPath(); ctx.moveTo(cx - half, yw); ctx.lineTo(cx - r - 30, yw + (yw - deckY)); ctx.lineTo(cx + r + 30, yw + (yw - deckY)); ctx.lineTo(cx + half, yw); ctx.closePath();
+  ctx.arc(cx, yw, r * 0.92, 0, Math.PI, false); ctx.fill('evenodd');
+  ctx.restore();
+  ctx.globalAlpha = 1;
+  /* 桥身 */
+  ctx.beginPath();
+  ctx.moveTo(cx - half, yw + 4);
+  ctx.quadraticCurveTo(cx - half * 0.55, deckY - 4, cx, deckY - 10);
+  ctx.quadraticCurveTo(cx + half * 0.55, deckY - 4, cx + half, yw + 4);
+  ctx.lineTo(cx + r * 0.92, yw + 4);
+  ctx.arc(cx, yw + 4, r * 0.92, 0, Math.PI, true);
+  ctx.closePath();
+  const g = ctx.createLinearGradient(0, deckY, 0, yw);
+  g.addColorStop(0, stone); g.addColorStop(1, stoneD);
+  ctx.fillStyle = g; ctx.fill();
+  ctx.strokeStyle = rgba(P.roof, 0.6); ctx.lineWidth = 2; ctx.stroke();
+  /* 拱券石 */
+  ctx.save(); ctx.strokeStyle = rgba(P.roof, 0.45); ctx.lineWidth = 1.4;
+  for (let a = 0; a <= 16; a++) { const t = Math.PI + a / 16 * Math.PI; ctx.beginPath(); ctx.moveTo(cx + Math.cos(t) * r * 0.92, yw + 4 + Math.sin(t) * r * 0.92); ctx.lineTo(cx + Math.cos(t) * (r * 0.92 + 16), yw + 4 + Math.sin(t) * (r * 0.92 + 16)); ctx.stroke(); }
+  ctx.beginPath(); ctx.arc(cx, yw + 4, r * 0.92 + 16, Math.PI, 0); ctx.stroke();
+  /* 石缝 */
+  for (let row = 0; row < 3; row++) { ctx.beginPath(); for (let x = cx - half + 30; x < cx + half - 30; x += 46) { ctx.moveTo(x + (row % 2) * 23, deckY + 12 + row * 14); ctx.lineTo(x + (row % 2) * 23 + 20, deckY + 12 + row * 14); } ctx.globalAlpha = 0.35; ctx.stroke(); ctx.globalAlpha = 1; }
+  ctx.restore();
+  if (arches === 3) {
+    [-1, 1].forEach(s => {
+      const sx = cx + s * (r + 70), sr = r * 0.32;
+      ctx.beginPath(); ctx.arc(sx, yw + 4, sr, Math.PI, 0); ctx.fillStyle = mix(P.water[0], P.roof, 0.35); ctx.fill();
+      ctx.strokeStyle = rgba(P.roof, 0.5); ctx.lineWidth = 1.5; ctx.stroke();
+    });
+  }
+  /* 栏杆 */
+  ctx.strokeStyle = mix(stoneD, P.roof, 0.3); ctx.lineWidth = 3;
+  ctx.beginPath();
+  for (let t = 0; t <= 1.001; t += 0.02) {
+    const x = lerp(cx - half * 0.86, cx + half * 0.86, t);
+    const k = (x - cx) / half; const y = deckY - 10 + (Math.pow(Math.abs(k), 1.7)) * (yw - deckY) * 0.92 - 14;
+    t === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y);
+  }
+  ctx.stroke();
+  ctx.lineWidth = 2;
+  for (let t = 0; t <= 1.001; t += 0.1) {
+    const x = lerp(cx - half * 0.86, cx + half * 0.86, t);
+    const k = (x - cx) / half; const y = deckY - 10 + (Math.pow(Math.abs(k), 1.7)) * (yw - deckY) * 0.92;
+    ctx.beginPath(); ctx.moveTo(x, y); ctx.lineTo(x, y - 14); ctx.stroke();
+  }
+}
+
+function drawHouse(ctx, hs, P, night, R, pc, reflect, feature) {
+  const s = hs.s, wd = 300 * s, ht = 230 * s, side = hs.side;
+  const x0 = side < 0 ? hs.edge - wd - 4 * s : hs.edge + 4 * s, y0 = hs.y;
+  const rr = C.rngFrom(Math.floor(hs.u * 1000) + side * 31 + pc.comp.seed % 997);
+  /* 墙 */
+  const g = ctx.createLinearGradient(x0, y0 - ht, x0, y0);
+  g.addColorStop(0, P.wall[0]); g.addColorStop(1, P.wall[1]);
+  ctx.fillStyle = g; ctx.fillRect(x0, y0 - ht, wd, ht);
+  if (!reflect) {
+    /* 雨渍 */
+    for (let k = 0; k < 5; k++) {
+      const sx = x0 + rr() * wd, sw = 8 + rr() * 30 * s;
+      const sg = ctx.createLinearGradient(0, y0 - ht, 0, y0 - ht + ht * (0.3 + rr() * 0.5));
+      sg.addColorStop(0, 'rgba(70,70,70,.13)'); sg.addColorStop(1, 'rgba(70,70,70,0)');
+      ctx.fillStyle = sg; ctx.fillRect(sx, y0 - ht, sw, ht * 0.8);
+    }
+    ctx.fillStyle = rgba(P.roof, 0.28); ctx.fillRect(x0, y0 - 14 * s, wd, 14 * s);
+  }
+  /* 马头墙 */
+  const gableSide = rr() < 0.5 ? 0 : 1;
+  const gx = gableSide ? x0 + wd - 40 * s : x0;
+  ctx.fillStyle = P.wall[0];
+  ctx.fillRect(gx, y0 - ht - 46 * s, 40 * s, 46 * s);
+  ctx.fillRect(gx + (gableSide ? -30 * s : 40 * s), y0 - ht - 24 * s, 30 * s, 24 * s);
+  ctx.fillStyle = P.roof;
+  const cap = (x, y, w) => { ctx.beginPath(); ctx.moveTo(x - 6 * s, y); ctx.lineTo(x + w + 6 * s, y); ctx.lineTo(x + w + 2 * s, y - 9 * s); ctx.lineTo(x - 2 * s, y - 9 * s); ctx.closePath(); ctx.fill(); };
+  cap(gx, y0 - ht - 46 * s, 40 * s);
+  cap(gx + (gableSide ? -30 * s : 40 * s), y0 - ht - 24 * s, 30 * s);
+  /* 屋顶 */
+  ctx.beginPath();
+  ctx.moveTo(x0 - 12 * s, y0 - ht + 4 * s);
+  ctx.quadraticCurveTo(x0 + wd / 2, y0 - ht - 6 * s, x0 + wd + 12 * s, y0 - ht + 4 * s);
+  ctx.lineTo(x0 + wd + 4 * s, y0 - ht - 24 * s);
+  ctx.lineTo(x0 - 4 * s, y0 - ht - 24 * s); ctx.closePath();
+  ctx.fillStyle = P.roof; ctx.fill();
+  if (!reflect) {
+    ctx.strokeStyle = 'rgba(255,255,255,.14)'; ctx.lineWidth = Math.max(1, 2 * s);
+    ctx.beginPath(); for (let x = x0; x < x0 + wd; x += 9 * s) { ctx.moveTo(x, y0 - ht - 22 * s); ctx.lineTo(x + 1 * s, y0 - ht + 1 * s); } ctx.stroke();
+    if (pc.weather === 'snow') { ctx.fillStyle = 'rgba(255,255,255,.92)'; ctx.fillRect(x0 - 4 * s, y0 - ht - 27 * s, wd + 8 * s, 6 * s); }
+  }
+  /* 窗与门 */
+  const nW = wd > 120 ? 2 : 1;
+  for (let k = 0; k < nW; k++) {
+    const wx = x0 + wd * (nW === 1 ? 0.35 : 0.18 + k * 0.42), wy = y0 - ht * 0.72, ww = wd * 0.2, wh = ht * 0.24;
+    const lit = night || (feature === 'books' && k === 0);
+    ctx.fillStyle = lit ? '#f2c067' : P.wood; ctx.fillRect(wx, wy, ww, wh);
+    if (lit && !reflect) {
+      const lg = ctx.createRadialGradient(wx + ww / 2, wy + wh / 2, 0, wx + ww / 2, wy + wh / 2, ww * 1.4);
+      lg.addColorStop(0, 'rgba(255,200,110,.35)'); lg.addColorStop(1, 'rgba(255,200,110,0)'); ctx.fillStyle = lg; ctx.fillRect(wx - ww, wy - wh, ww * 3, wh * 3);
+    }
+    if (feature === 'books' && k === 0 && !reflect) {
+      const cols = ['#8a3b2c', '#2f5a6b', '#b8893c', '#4b5a3a', '#6d4c6a', '#9a6a3a'];
+      let bx = wx + 3 * s; while (bx < wx + ww - 6 * s) { const bw = (5 + rr() * 6) * s, bh = wh * (0.45 + rr() * 0.3); ctx.fillStyle = cols[Math.floor(rr() * cols.length)]; ctx.fillRect(bx, wy + wh - bh - 2 * s, bw, bh); bx += bw + 1 * s; }
+    }
+    if (feature === 'papercut' && k === 0 && !reflect) drawPapercut(ctx, wx + ww / 2, wy + wh / 2, Math.min(ww, wh) * 0.46);
+    if (!reflect) {
+      ctx.strokeStyle = rgba(P.roof, 0.65); ctx.lineWidth = Math.max(1, 1.6 * s);
+      ctx.strokeRect(wx, wy, ww, wh);
+      if (feature !== 'papercut' || k !== 0) { ctx.beginPath(); ctx.moveTo(wx + ww / 2, wy); ctx.lineTo(wx + ww / 2, wy + wh); ctx.moveTo(wx, wy + wh / 2); ctx.lineTo(wx + ww, wy + wh / 2); ctx.stroke(); }
+    }
+  }
+  const dx = x0 + wd * (side < 0 ? 0.66 : 0.12), dw = wd * 0.2, dh = ht * 0.42;
+  ctx.fillStyle = night || feature === 'steam' ? '#d59a52' : P.wood; ctx.fillRect(dx, y0 - dh - 4 * s, dw, dh);
+  if (!reflect && (feature === 'steam')) {
+    /* 面馆：蓝布招、锅与蒸汽 */
+    ctx.fillStyle = '#2d4e6e'; ctx.fillRect(dx + dw + 8 * s, y0 - ht * 0.8, 34 * s, 80 * s);
+    ctx.fillStyle = '#f3ead6'; ctx.font = Math.round(24 * s) + 'px ' + F_TITLE; ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+    ctx.fillText(pc.motifs && pc.time === 'morning' ? '早' : '面', dx + dw + 25 * s, y0 - ht * 0.8 + 40 * s);
+    ctx.fillStyle = '#3a3330'; ctx.beginPath(); ctx.ellipse(dx + dw / 2, y0 - 8 * s, 32 * s, 12 * s, 0, 0, 7); ctx.fill();
+    ctx.fillStyle = '#5c4a3e'; ctx.fillRect(dx + dw / 2 - 30 * s, y0 - 8 * s, 60 * s, 10 * s);
+    ctx.save(); ctx.lineCap = 'round';
+    for (let k = 0; k < 6; k++) {
+      const sx = dx + dw / 2 + (k - 2.5) * 9 * s;
+      ctx.strokeStyle = 'rgba(255,255,255,' + (0.55 - k * 0.04) + ')'; ctx.lineWidth = (10 - k) * s;
+      ctx.beginPath(); ctx.moveTo(sx, y0 - 16 * s);
+      ctx.bezierCurveTo(sx - 20 * s, y0 - 70 * s, sx + 26 * s, y0 - 110 * s, sx + (k % 2 ? 10 : -12) * s, y0 - (170 + k * 14) * s);
+      ctx.stroke();
+    }
+    ctx.restore();
+  }
+}
+function drawPapercut(ctx, cx, cy, r) {
+  ctx.save(); ctx.translate(cx, cy);
+  ctx.fillStyle = '#c4342a'; ctx.beginPath(); ctx.arc(0, 0, r, 0, 7); ctx.fill();
+  ctx.fillStyle = '#f4e9d6';
+  for (let k = 0; k < 8; k++) { ctx.save(); ctx.rotate(k * Math.PI / 4); ctx.beginPath(); ctx.ellipse(0, -r * 0.55, r * 0.12, r * 0.28, 0, 0, 7); ctx.fill(); ctx.restore(); }
+  ctx.beginPath(); ctx.arc(0, 0, r * 0.16, 0, 7); ctx.fill();
+  ctx.fillStyle = '#c4342a'; ctx.beginPath(); ctx.arc(0, 0, r * 0.08, 0, 7); ctx.fill();
+  ctx.restore();
+}
+function drawStage(ctx, x, y, s, P, night) {
+  const red = night ? '#7a3a34' : '#a2442f', roof = P.roof;
+  ctx.fillStyle = red; ctx.fillRect(x + 20 * s, y - 70 * s, 8 * s, 70 * s); ctx.fillRect(x + 92 * s, y - 70 * s, 8 * s, 70 * s);
+  ctx.fillStyle = mix(P.wall[1], roof, 0.3); ctx.fillRect(x + 10 * s, y - 8 * s, 100 * s, 8 * s);
+  ctx.fillStyle = roof; ctx.beginPath();
+  ctx.moveTo(x - 20 * s, y - 64 * s); ctx.quadraticCurveTo(x + 4 * s, y - 72 * s, x + 14 * s, y - 92 * s);
+  ctx.lineTo(x + 106 * s, y - 92 * s); ctx.quadraticCurveTo(x + 116 * s, y - 72 * s, x + 140 * s, y - 64 * s);
+  ctx.quadraticCurveTo(x + 60 * s, y - 76 * s, x - 20 * s, y - 64 * s); ctx.fill();
+  ctx.beginPath(); ctx.moveTo(x + 6 * s, y - 92 * s); ctx.quadraticCurveTo(x + 24 * s, y - 100 * s, x + 30 * s, y - 116 * s); ctx.lineTo(x + 90 * s, y - 116 * s); ctx.quadraticCurveTo(x + 96 * s, y - 100 * s, x + 114 * s, y - 92 * s); ctx.closePath(); ctx.fill();
+}
+function drawLanterns(ctx, x1, y1, x2, y2, night, waterPath) {
+  const sag = 50, n = 7;
+  const pt = t => [lerp(x1, x2, t), lerp(y1, y2, t) + Math.sin(t * Math.PI) * sag];
+  ctx.strokeStyle = 'rgba(40,30,25,.7)'; ctx.lineWidth = 1.5; ctx.beginPath();
+  for (let t = 0; t <= 1.001; t += 0.05) { const p = pt(t); t === 0 ? ctx.moveTo(p[0], p[1]) : ctx.lineTo(p[0], p[1]); } ctx.stroke();
+  for (let k = 1; k < n; k++) {
+    const p = pt(k / n), r = 11;
+    if (night) {
+      const g = ctx.createRadialGradient(p[0], p[1] + 14, 0, p[0], p[1] + 14, 60);
+      g.addColorStop(0, 'rgba(255,160,80,.45)'); g.addColorStop(1, 'rgba(255,160,80,0)');
+      ctx.fillStyle = g; ctx.fillRect(p[0] - 60, p[1] - 46, 120, 120);
+      ctx.save(); waterPath(); ctx.clip();
+      const rg = ctx.createLinearGradient(0, 560, 0, 800); rg.addColorStop(0, 'rgba(255,130,70,.32)'); rg.addColorStop(1, 'rgba(255,130,70,0)');
+      ctx.fillStyle = rg; ctx.fillRect(p[0] - 5, 560, 10, 240); ctx.restore();
+    }
+    ctx.strokeStyle = 'rgba(40,30,25,.7)'; ctx.beginPath(); ctx.moveTo(p[0], p[1]); ctx.lineTo(p[0], p[1] + 4); ctx.stroke();
+    ctx.fillStyle = night ? '#f05a3a' : '#c8392a'; ctx.beginPath(); ctx.ellipse(p[0], p[1] + 16, r, r * 1.2, 0, 0, 7); ctx.fill();
+    ctx.fillStyle = 'rgba(255,220,160,.35)'; ctx.beginPath(); ctx.ellipse(p[0] - 3, p[1] + 13, r * 0.35, r * 0.7, 0, 0, 7); ctx.fill();
+    ctx.fillStyle = '#d6a64a'; ctx.fillRect(p[0] - 6, p[1] + 3, 12, 3); ctx.fillRect(p[0] - 6, p[1] + 27, 12, 3);
+    ctx.strokeStyle = '#c8392a'; ctx.beginPath(); ctx.moveTo(p[0], p[1] + 30); ctx.lineTo(p[0], p[1] + 40); ctx.stroke();
+  }
+}
+function drawBoat(ctx, x, y, s, P, night, dir) {
+  ctx.save(); ctx.translate(x, y); ctx.scale(s * dir, s);
+  /* 倒影 */
+  ctx.fillStyle = 'rgba(20,25,30,.22)'; ctx.beginPath(); ctx.ellipse(0, 18, 150, 14, 0, 0, 7); ctx.fill();
+  /* 船身 */
+  ctx.fillStyle = night ? '#2a211d' : '#4a3426';
+  ctx.beginPath(); ctx.moveTo(-160, -14); ctx.quadraticCurveTo(-120, 18, 0, 16); ctx.quadraticCurveTo(120, 18, 170, -18); ctx.quadraticCurveTo(80, 0, 0, 0); ctx.quadraticCurveTo(-90, 0, -160, -14); ctx.fill();
+  ctx.strokeStyle = 'rgba(255,230,190,.25)'; ctx.lineWidth = 2; ctx.beginPath(); ctx.moveTo(-140, -6); ctx.quadraticCurveTo(0, 6, 150, -10); ctx.stroke();
+  /* 乌篷 */
+  const segs = [[-70, 62, 46], [-6, 66, 50], [58, 54, 40]];
+  segs.forEach(([cx, w, h], i) => {
+    ctx.fillStyle = night ? '#121316' : i === 1 ? '#22211f' : '#2c2a27';
+    ctx.beginPath(); ctx.moveTo(cx - w / 2, 0); ctx.quadraticCurveTo(cx - w / 2, -h * 1.25, cx, -h * 1.2); ctx.quadraticCurveTo(cx + w / 2, -h * 1.25, cx + w / 2, 0); ctx.fill();
+    ctx.strokeStyle = 'rgba(200,180,140,.22)'; ctx.lineWidth = 1.4;
+    for (let k = -2; k <= 2; k++) { ctx.beginPath(); ctx.moveTo(cx + k * w * 0.18, 0); ctx.quadraticCurveTo(cx + k * w * 0.18, -h * 1.05, cx + k * w * 0.1, -h * 1.15); ctx.stroke(); }
+  });
+  /* 船夫 */
+  ctx.fillStyle = night ? '#1c1e24' : '#3c4a58';
+  ctx.fillRect(112, -66, 16, 50);
+  ctx.beginPath(); ctx.arc(120, -74, 9, 0, 7); ctx.fillStyle = night ? '#4a3a32' : '#c79a7a'; ctx.fill();
+  ctx.fillStyle = night ? '#2a2420' : '#b69a5c'; ctx.beginPath(); ctx.moveTo(98, -76); ctx.lineTo(142, -76); ctx.lineTo(120, -94); ctx.closePath(); ctx.fill();
+  ctx.strokeStyle = night ? '#3a2e26' : '#6b4a32'; ctx.lineWidth = 4; ctx.beginPath(); ctx.moveTo(108, -50); ctx.lineTo(186, 24); ctx.stroke();
+  ctx.restore();
+}
+function drawFigures(ctx, cx, y, pc, P, night) {
+  const kinds = { solo: [['a', 0]], parents: [['o', -34], ['o', -10], ['a', 22]], kids: [['a', -10], ['k', 16]], couple: [['a', -9], ['b', 11]], friends: [['a', -30], ['b', 0], ['a', 30]], none: [] };
+  const list = kinds[pc.figures] || [];
+  const cols = night ? ['#3a3f4c', '#4a3e3a', '#2f3a40'] : ['#3d5770', '#8a5a3a', '#5e6b52', '#7a3e36'];
+  const umbrella = pc.weather === 'rain' || pc.motifs.indexOf('umbrella') !== -1;
+  list.forEach(([k, dx], i) => {
+    const s = k === 'k' ? 0.62 : 1, x = cx + dx, bend = k === 'o' ? 3 : 0;
+    ctx.fillStyle = cols[i % cols.length];
+    ctx.beginPath(); ctx.moveTo(x - 7 * s, y); ctx.lineTo(x - 6 * s + bend, y - 30 * s); ctx.quadraticCurveTo(x + bend, y - 36 * s, x + 6 * s + bend, y - 30 * s); ctx.lineTo(x + 7 * s, y); ctx.closePath(); ctx.fill();
+    ctx.fillStyle = night ? '#2a2a2e' : '#3a3634'; ctx.fillRect(x - 5 * s, y, 3.5 * s, 9 * s); ctx.fillRect(x + 1.5 * s, y, 3.5 * s, 9 * s);
+    ctx.beginPath(); ctx.arc(x + bend * 1.4, y - 40 * s, 6.5 * s, 0, 7); ctx.fillStyle = night ? '#5a4a42' : '#d4a787'; ctx.fill();
+    ctx.fillStyle = k === 'o' ? '#d9d6d0' : '#2a2422'; ctx.beginPath(); ctx.arc(x + bend * 1.4, y - 42 * s, 6.5 * s, Math.PI, 0); ctx.fill();
+    if (k === 'o') { ctx.strokeStyle = '#5a4030'; ctx.lineWidth = 1.5; ctx.beginPath(); ctx.moveTo(x + 9, y - 18); ctx.lineTo(x + 12, y + 9); ctx.stroke(); }
+  });
+  if (umbrella && list.length) {
+    const ux = cx + (list.length > 1 ? list[0][1] / 2 + list[1][1] / 2 : list[0][1]);
+    const uy = y - 62;
+    ctx.fillStyle = night ? '#a8432e' : '#c9603a';
+    ctx.beginPath(); ctx.moveTo(ux - 34, uy + 10); ctx.quadraticCurveTo(ux, uy - 26, ux + 34, uy + 10); ctx.quadraticCurveTo(ux, uy + 2, ux - 34, uy + 10); ctx.fill();
+    ctx.strokeStyle = 'rgba(255,230,180,.5)'; ctx.lineWidth = 1;
+    for (let k = -3; k <= 3; k++) { ctx.beginPath(); ctx.moveTo(ux, uy - 8); ctx.lineTo(ux + k * 10, uy + 8); ctx.stroke(); }
+    ctx.strokeStyle = '#4a3020'; ctx.lineWidth = 1.6; ctx.beginPath(); ctx.moveTo(ux, uy - 8); ctx.lineTo(ux, uy + 30); ctx.stroke();
+  }
+}
+function drawOsmanthus(ctx, x, y, P, night, R) {
+  ctx.fillStyle = night ? '#2a221e' : '#5a4232';
+  ctx.beginPath(); ctx.moveTo(x - 10, y + 160); ctx.quadraticCurveTo(x - 4, y + 40, x + 6, y - 20); ctx.lineTo(x + 16, y - 20); ctx.quadraticCurveTo(x + 10, y + 60, x + 14, y + 160); ctx.fill();
+  for (let i = 0; i < 26; i++) {
+    const a = R() * 6.28, d = R() * 110, cx = x + Math.cos(a) * d * 1.2, cy = y - 80 + Math.sin(a) * d * 0.7, r = 30 + R() * 30;
+    ctx.fillStyle = night ? mix('#1f3328', '#26384d', R() * 0.5) : mix('#4d6a45', '#6f8a55', R());
+    ctx.beginPath(); ctx.arc(cx, cy, r, 0, 7); ctx.fill();
+  }
+  for (let i = 0; i < 160; i++) {
+    const a = R() * 6.28, d = R() * 140; ctx.fillStyle = night ? 'rgba(240,200,110,.8)' : 'rgba(240,190,70,.95)';
+    ctx.beginPath(); ctx.arc(x + Math.cos(a) * d * 1.2, y - 80 + Math.sin(a) * d * 0.7, 2 + R() * 2, 0, 7); ctx.fill();
+  }
+}
+function drawWillow(ctx, x, P, night, R, k) {
+  ctx.save(); ctx.lineCap = 'round';
+  const col = night ? 'rgba(40,70,60,.85)' : 'rgba(90,125,75,.85)';
+  ctx.strokeStyle = night ? '#1e1a18' : '#4a3a2e'; ctx.lineWidth = 16;
+  ctx.beginPath(); ctx.moveTo(x, -20); ctx.quadraticCurveTo(x + (x < 600 ? 80 : -80), 30, x + (x < 600 ? 170 : -170), 40); ctx.stroke();
+  const n = Math.round(32 * k);
+  for (let i = 0; i < n; i++) {
+    const sx = x + (x < 600 ? 1 : -1) * R() * 240, sy = 20 + R() * 30, len = 120 + R() * 220 * k;
+    ctx.strokeStyle = col; ctx.lineWidth = 1.4;
+    ctx.beginPath(); ctx.moveTo(sx, sy); ctx.quadraticCurveTo(sx + 14, sy + len * 0.5, sx + 4, sy + len); ctx.stroke();
+    ctx.fillStyle = col;
+    for (let t = 0.15; t < 1; t += 0.09) { const px = lerp(lerp(sx, sx + 14, t), lerp(sx + 14, sx + 4, t), t), py = sy + len * t; ctx.beginPath(); ctx.ellipse(px + 3, py, 2.2, 6, 0.5, 0, 7); ctx.fill(); }
+  }
+  ctx.restore();
+}
+function drawBirds(ctx, R, night) {
+  ctx.strokeStyle = night ? 'rgba(230,230,240,.7)' : 'rgba(250,250,245,.95)'; ctx.lineWidth = 2.4; ctx.lineCap = 'round';
+  const bx = 300 + R() * 600, by = 120 + R() * 100;
+  for (let i = 0; i < 4; i++) {
+    const x = bx + i * 46 + R() * 20, y = by + Math.sin(i) * 26, s = 0.8 + R() * 0.6;
+    ctx.beginPath(); ctx.moveTo(x - 14 * s, y - 4 * s); ctx.quadraticCurveTo(x - 6 * s, y - 10 * s, x, y); ctx.quadraticCurveTo(x + 6 * s, y - 10 * s, x + 14 * s, y - 4 * s); ctx.stroke();
+  }
+}
+function drawTea(ctx, x0, P, night) {
+  const wood = night ? '#2a1f1a' : '#6a4630', woodL = night ? '#3a2c24' : '#8a6040';
+  ctx.fillStyle = wood; ctx.fillRect(x0, 720, 360, 22); ctx.fillStyle = woodL; ctx.fillRect(x0, 716, 360, 6);
+  for (let k = 0; k < 6; k++) ctx.fillRect(x0 + 20 + k * 60, 742, 10, 70);
+  const tx = x0 + 140, ty = 716;
+  ctx.fillStyle = night ? '#3a2a24' : '#8a4a32';
+  ctx.beginPath(); ctx.ellipse(tx, ty - 34, 46, 36, 0, 0, 7); ctx.fill();
+  ctx.fillRect(tx - 30, ty - 6, 60, 6);
+  ctx.beginPath(); ctx.moveTo(tx + 40, ty - 44); ctx.quadraticCurveTo(tx + 76, ty - 58, tx + 80, ty - 72); ctx.lineTo(tx + 86, ty - 70); ctx.quadraticCurveTo(tx + 76, ty - 40, tx + 42, ty - 26); ctx.fill();
+  ctx.lineWidth = 7; ctx.strokeStyle = night ? '#3a2a24' : '#8a4a32'; ctx.beginPath(); ctx.arc(tx - 48, ty - 36, 18, 1.8, 4.6); ctx.stroke();
+  ctx.fillRect(tx - 14, ty - 76, 28, 8); ctx.beginPath(); ctx.arc(tx, ty - 80, 6, 0, 7); ctx.fill();
+  ctx.fillStyle = 'rgba(255,220,180,.25)'; ctx.beginPath(); ctx.ellipse(tx - 16, ty - 46, 12, 18, -0.4, 0, 7); ctx.fill();
+  [[tx + 120, 0], [tx + 180, 1]].forEach(([cx]) => {
+    ctx.fillStyle = '#efe7d8'; ctx.beginPath(); ctx.moveTo(cx - 18, ty - 30); ctx.lineTo(cx + 18, ty - 30); ctx.lineTo(cx + 12, ty); ctx.lineTo(cx - 12, ty); ctx.closePath(); ctx.fill();
+    ctx.fillStyle = '#2f5a6b'; ctx.fillRect(cx - 16, ty - 24, 32, 3);
+    ctx.fillStyle = 'rgba(200,180,120,.9)'; ctx.beginPath(); ctx.ellipse(cx, ty - 29, 16, 3, 0, 0, 7); ctx.fill();
+  });
+}
+
+/* =====================================================================
+ * 齿孔邮票（套色错位）
+ * ===================================================================== */
+function drawStamp(cv, variant, denom) {
+  const W = 180, H = 220; cv.width = W; cv.height = H;
+  const ctx = cv.getContext('2d');
+  ctx.fillStyle = '#fbf5e6'; ctx.fillRect(0, 0, W, H);
+  ctx.globalCompositeOperation = 'destination-out';
+  const r = 6;
+  for (let x = r; x < W; x += r * 2.6) { ctx.beginPath(); ctx.arc(x, 0, r, 0, 7); ctx.arc(x, H, r, 0, 7); ctx.fill(); }
+  for (let y = r; y < H; y += r * 2.6) { ctx.beginPath(); ctx.arc(0, y, r, 0, 7); ctx.arc(W, y, r, 0, 7); ctx.fill(); }
+  ctx.globalCompositeOperation = 'source-over';
+  const ix = 16, iy = 16, iw = W - 32, ih = H - 56;
+  ctx.fillStyle = '#e9dcc0'; ctx.fillRect(ix, iy, iw, ih);
+  /* 两个色版：绿 + 朱红，故意错位 1.5px */
+  const plate = (col, ox, oy, part) => {
+    ctx.save(); ctx.beginPath(); ctx.rect(ix, iy, iw, ih); ctx.clip(); ctx.translate(ox, oy);
+    ctx.fillStyle = col; ctx.strokeStyle = col;
+    if (part === 'g') {
+      ctx.globalAlpha = 0.92;
+      ctx.fillRect(ix, iy + ih - 34, iw, 34);
+      ctx.fillStyle = '#e9dcc0'; ctx.beginPath(); ctx.arc(ix + iw / 2, iy + ih - 34, 30, Math.PI, 0); ctx.fill();
+      ctx.fillStyle = col;
+      ctx.beginPath(); ctx.arc(ix + iw / 2, iy + ih - 34, 30, Math.PI, 0); ctx.lineWidth = 7; ctx.stroke();
+      if (variant === 'boat') { ctx.beginPath(); ctx.ellipse(ix + iw * 0.3, iy + ih - 16, 26, 6, 0, 0, 7); ctx.fill(); }
+      for (const [hx, hw, hh] of [[ix + 4, 34, 30], [ix + iw - 40, 36, 26]]) { ctx.fillRect(hx, iy + ih - 34 - hh, hw, hh); }
+      ctx.lineWidth = 2; ctx.strokeRect(ix + 4, iy + 4, iw - 8, ih - 8);
+    } else {
+      ctx.globalAlpha = 0.85;
+      if (variant === 'lantern') { ctx.beginPath(); ctx.ellipse(ix + iw * 0.72, iy + 40, 13, 16, 0, 0, 7); ctx.fill(); ctx.fillRect(ix + iw * 0.72 - 1, iy + 10, 2, 16); }
+      else { ctx.beginPath(); ctx.arc(ix + iw * 0.72, iy + 38, 16, 0, 7); ctx.fill(); }
+      for (const [hx, hw, hh] of [[ix + 2, 38, 30], [ix + iw - 42, 40, 26]]) { ctx.fillRect(hx, iy + ih - 34 - hh - 8, hw, 8); }
+    }
+    ctx.restore();
+  };
+  plate(GREEN, 0, 0, 'g');
+  plate(RED, 1.6, -1.2, 'r');
+  ctx.fillStyle = GREEN; ctx.font = '22px ' + F_TITLE; ctx.textAlign = 'left'; ctx.textBaseline = 'alphabetic';
+  ctx.fillText('桐溪邮政', ix, H - 18);
+  ctx.fillStyle = RED; ctx.font = 'bold 20px ' + F_MONO; ctx.textAlign = 'right'; ctx.fillText(denom || '80分', W - 14, H - 18);
+  ctx.globalCompositeOperation = 'multiply'; ctx.globalAlpha = 0.3; ctx.fillStyle = ctx.createPattern(grain(), 'repeat'); ctx.fillRect(0, 0, W, H);
+  ctx.globalAlpha = 1; ctx.globalCompositeOperation = 'source-over';
+}
+
+/* =====================================================================
+ * 邮戳、印章（SVG 字符串）
+ * ===================================================================== */
+const GLYPH = {
+  teapot: 'M10 17h18v9a6 6 0 0 1-6 6h-6a6 6 0 0 1-6-6z M28 19c5 0 6 6 0 8 M10 19l-6-5 M15 17c0-4 8-4 8 0 M19 10v3',
+  steamer: 'M6 19h28v8a4 4 0 0 1-4 4H10a4 4 0 0 1-4-4z M6 24h28 M9 19c1-5 21-5 22 0 M14 13c-2-2 2-4 0-6 M20 13c-2-2 2-4 0-6 M26 13c-2-2 2-4 0-6',
+  boat: 'M3 25c7 7 27 7 34 0z M10 24c0-9 18-9 20 0 M15 24v-6 M25 24v-6 M33 8l-7 17',
+  umbrella: 'M4 21a16 14 0 0 1 32 0z M20 7v26c0 3-5 3-5 0 M12 21l8-14 M28 21l-8-14',
+  bowl: 'M5 19h30c0 9-7 14-15 14S5 28 5 19z M14 33h12 M27 5l-8 14 M32 8l-9 11 M12 15c-1-2 1-3 0-5 M17 14c-1-2 1-3 0-5',
+  clock: 'M20 6a14 14 0 1 0 .1 0z M20 11v9l7 4 M20 7v2 M33 20h-2 M20 33v-2 M7 20h2',
+  scissors: 'M11 31a4 4 0 1 0 .1 0z M29 31a4 4 0 1 0 .1 0z M14 28L29 6 M26 28L11 6',
+  flower: 'M20 6c4 5 4 9 0 14c-4-5-4-9 0-14z M20 34c4-5 4-9 0-14c-4 5-4 9 0 14z M6 20c5-4 9-4 14 0c-5 4-9 4-14 0z M34 20c-5-4-9-4-14 0c5 4 9 4 14 0z M20 18a2 2 0 1 0 .1 0z',
+  book: 'M6 10c5-2 10-2 14 2v21c-4-3-9-3-14-1z M34 10c-5-2-10-2-14 2v21c4-3 9-3 14-1z',
+  stage: 'M3 15c6 0 11-6 17-9c6 3 11 9 17 9 M8 15v19 M32 15v19 M4 34h32 M14 23c2 3 10 3 12 0',
+  camera: 'M6 14h28v18H6z M14 14l3-5h6l3 5 M20 18a5 5 0 1 0 .1 0z',
+  osmanthus: 'M14 12a3 3 0 1 0 .1 0z M26 10a3 3 0 1 0 .1 0z M20 20a3 3 0 1 0 .1 0z M12 26a3 3 0 1 0 .1 0z M28 25a3 3 0 1 0 .1 0z M8 34c8-6 16-10 26-24',
+  lantern: 'M20 3v4 M14 7h12 M13 11c-4 8-4 12 0 20h14c4-8 4-12 0-20z M14 31h12 M20 31v5 M13 11h14 M10 21h20',
+  lanterns: 'M3 8q17 10 34 0 M10 11v3 M30 11v3 M20 13v3 M7 14h6v8h-6z M27 14h6v8h-6z M17 16h6v9h-6z M10 22v4 M30 22v4 M20 25v4',
+  jar: 'M14 6h12v4c6 2 9 8 9 14c0 7-5 10-15 10S5 31 5 24c0-6 3-12 9-14z M11 18h18 M15 6l-2-2h14l-2 2',
+  fish: 'M4 20c8-10 20-10 28 0c-8 10-20 10-28 0z M32 20l6-6v12z M12 18a1 1 0 1 0 .1 0z M18 15c2 3 2 7 0 10',
+  post: 'M10 12a10 6 0 0 1 20 0v22H10z M14 18h12 M20 34v3 M14 24h12',
+  roof: 'M3 20l17-12l17 12 M7 18v15h26V18 M12 26h6v7h-6z M24 24h5',
+  well: 'M8 14h24 M8 26h24 M14 8v24 M26 8v24',
+  reed: 'M10 36c2-10 0-20-4-28 M20 36c0-12 2-20 6-28 M28 36c0-8-2-14-6-20 M6 8c2 2 2 5 0 7 M26 8c2 2 2 5 0 7'
+};
+function sealSVG(opts) {
+  const { g, c, shape, label, color, size } = opts;
+  const col = color || RED, sz = size || 96;
+  const fb = F_BODY.replace(/"/g, ''), ft = F_TITLE.replace(/"/g, '');
+  let body;
+  if (shape === 'square') {
+    body = '<rect x="7" y="7" width="86" height="86" rx="7" fill="none" stroke="' + col + '" stroke-width="4.5"/>' +
+      '<rect x="13" y="13" width="74" height="74" rx="4" fill="none" stroke="' + col + '" stroke-width="1.3"/>' +
+      '<g transform="translate(32 17) scale(.9)" fill="none" stroke="' + col + '" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"><path d="' + (GLYPH[g] || GLYPH.post) + '"/></g>' +
+      '<text x="50" y="72" text-anchor="middle" font-family="' + ft + '" font-size="22" fill="' + col + '">' + c + '</text>' +
+      '<text x="50" y="85" text-anchor="middle" font-family="' + fb + '" font-size="8" fill="' + col + '" letter-spacing="1">' + (label || '') + '</text>';
+  } else {
+    const ring = shape === 'oval'
+      ? '<ellipse cx="50" cy="50" rx="46" ry="42" fill="none" stroke="' + col + '" stroke-width="4"/><ellipse cx="50" cy="50" rx="34" ry="31" fill="none" stroke="' + col + '" stroke-width="1.3"/>'
+      : '<circle cx="50" cy="50" r="46" fill="none" stroke="' + col + '" stroke-width="4"/><circle cx="50" cy="50" r="34" fill="none" stroke="' + col + '" stroke-width="1.3"/>';
+    body = ring +
+      '<text font-family="' + fb + '" font-size="8" fill="' + col + '" letter-spacing="1.5"><textPath href="#sealArc" startOffset="50%" text-anchor="middle">' + (label || '') + '</textPath></text>' +
+      '<g transform="translate(35 23) scale(.75)" fill="none" stroke="' + col + '" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"><path d="' + (GLYPH[g] || GLYPH.post) + '"/></g>' +
+      '<text x="50" y="74" text-anchor="middle" font-family="' + ft + '" font-size="20" fill="' + col + '">' + c + '</text>' +
+      '<circle cx="14" cy="50" r="1.6" fill="' + col + '"/><circle cx="86" cy="50" r="1.6" fill="' + col + '"/>';
+  }
+  return '<svg class="seal" viewBox="0 0 100 100" width="' + sz + '" height="' + sz + '" aria-hidden="true"><g filter="url(#inkRough)">' + body + '</g></svg>';
+}
+function postmarkSVG(date, hour, size, color) {
+  const col = color || RED, sz = size || 130;
+  const waves = [0, 1, 2, 3].map(i => '<path d="M-96 ' + (38 + i * 9) + ' q8 -5 16 0 t16 0 t16 0 t16 0 t16 0" fill="none" stroke="' + col + '" stroke-width="2"/>').join('');
+  return '<svg class="postmark" viewBox="-100 0 200 130" width="' + (sz * 200 / 130) + '" height="' + sz + '" aria-hidden="true"><g filter="url(#inkRough)" opacity=".88">' +
+    '<g transform="translate(0 0)">' + waves + '</g>' +
+    '<circle cx="40" cy="65" r="52" fill="none" stroke="' + col + '" stroke-width="3.5"/><circle cx="40" cy="65" r="38" fill="none" stroke="' + col + '" stroke-width="1.6"/>' +
+    '<text font-family=\'' + F_TITLE.replace(/"/g, '') + '\' font-size="12.5" fill="' + col + '" letter-spacing="5"><textPath href="#pmTopShared" startOffset="50%" text-anchor="middle">桐溪邮局</textPath></text>' +
+    '<rect x="0" y="54" width="80" height="22" fill="none" stroke="' + col + '" stroke-width="1.4"/>' +
+    '<text x="40" y="70.5" text-anchor="middle" font-family=\'' + F_MONO.replace(/"/g, '') + '\' font-weight="700" font-size="13" fill="' + col + '">' + date + '</text>' +
+    '<text x="40" y="96" text-anchor="middle" font-family=\'' + F_MONO.replace(/"/g, '') + '\' font-weight="700" font-size="12" fill="' + col + '">' + hour + '</text>' +
+    '</g></svg>';
+}
+
+return { drawMap, renderMapBase, fitView, routeBox, hitMap, drawPostcard, drawStamp, sealSVG, postmarkSVG, MW, MH, GLYPH };
+})();
+
+</script>
+<script id="app">
+/* =====================================================================
+ * 界面、声音、存档
+ * ===================================================================== */
+(function () {
+'use strict';
+const C = window.TongxiCore;
+const $ = s => document.querySelector(s);
+const RM = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+const agent = new C.RuleAgent(); /* 换成 new C.LLMAgent({...}) 即可接入大模型，接口一致 */
+const esc = s => String(s == null ? '' : s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+const wait = ms => new Promise(r => setTimeout(r, RM ? Math.min(ms, 60) : ms));
+const ease = { out: t => 1 - Math.pow(1 - t, 3), inOut: t => t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2, in: t => t * t * t, lin: t => t };
+function tween(ms, fn, e) {
+  e = e || ease.out;
+  return new Promise(res => {
+    if (RM) ms = Math.min(ms, 1);
+    const t0 = performance.now(); let done = false;
+    const step = () => { if (done) return; const p = Math.max(0, Math.min(1, (performance.now() - t0) / ms)); fn(e(p), p); if (p < 1) requestAnimationFrame(step); else { done = true; res(); } };
+    requestAnimationFrame(step);
+    /* 兜底：后台标签页 rAF 停掉时也能结束 */
+    setTimeout(() => { if (done) return; done = true; fn(1, 1); res(); }, ms + 400);
+  });
+}
+let toastT = 0;
+function toast(msg) { const t = $('#toast'); t.textContent = msg; t.classList.add('show'); clearTimeout(toastT); toastT = setTimeout(() => t.classList.remove('show'), 2400); }
+
+/* ---------- 存档 ---------- */
+const KEY = 'tongxi_letters_v1', KEY_MUTE = 'tongxi_mute';
+function load() { try { const v = JSON.parse(localStorage.getItem(KEY) || 'null'); if (v && Array.isArray(v.list)) return v; } catch (e) { /* 读取失败就当没有 */ } return { list: [], cur: null }; }
+function save() { try { localStorage.setItem(KEY, JSON.stringify(DB)); } catch (e) { /* 存不下也不影响体验 */ } }
+function getPref(k, d) { try { const v = localStorage.getItem(k); return v == null ? d : v; } catch (e) { return d; } }
+function setPref(k, v) { try { localStorage.setItem(k, v); } catch (e) { /* ignore */ } }
+const DB = load();
+let REC = DB.list.find(r => r.id === DB.cur) || null;
+
+/* ---------- 声音（WebAudio 合成） ---------- */
+const Snd = {
+  ctx: null, master: null, nbuf: null, muted: getPref(KEY_MUTE, '0') === '1', timers: [],
+  init() {
+    if (this.ctx) { if (this.ctx.state === 'suspended') this.ctx.resume(); return; }
+    const AC = window.AudioContext || window.webkitAudioContext; if (!AC) return;
+    try { this.ctx = new AC(); } catch (e) { return; }
+    const ctx = this.ctx;
+    this.master = ctx.createGain(); this.master.gain.value = this.muted ? 0 : 0.9;
+    const comp = ctx.createDynamicsCompressor(); this.master.connect(comp); comp.connect(ctx.destination);
+    const len = ctx.sampleRate * 2; this.nbuf = ctx.createBuffer(1, len, ctx.sampleRate);
+    const d = this.nbuf.getChannelData(0); for (let i = 0; i < len; i++) d[i] = Math.random() * 2 - 1;
+    this.ambient();
+  },
+  setMuted(m) {
+    this.muted = m; setPref(KEY_MUTE, m ? '1' : '0');
+    if (this.master) this.master.gain.setTargetAtTime(m ? 0 : 0.9, this.ctx.currentTime, 0.05);
+  },
+  ok() { return this.ctx && !this.muted; },
+  noise(t, dur, o) {
+    const ctx = this.ctx, src = ctx.createBufferSource(); src.buffer = this.nbuf; src.loop = true;
+    const f = ctx.createBiquadFilter(); f.type = o.type || 'bandpass'; f.frequency.setValueAtTime(o.f || 2000, t); f.Q.value = o.q || 1;
+    if (o.f2) f.frequency.exponentialRampToValueAtTime(o.f2, t + dur * (o.fAt || 1));
+    const g = ctx.createGain(); g.gain.setValueAtTime(0.0001, t);
+    g.gain.exponentialRampToValueAtTime(o.gain || 0.2, t + (o.a || 0.005));
+    g.gain.exponentialRampToValueAtTime(0.0001, t + dur);
+    src.connect(f); f.connect(g); g.connect(o.dest || this.master);
+    src.start(t, Math.random()); src.stop(t + dur + 0.05);
+  },
+  rustle() { if (!this.ok()) return; const t = this.ctx.currentTime; this.noise(t, 0.06 + Math.random() * 0.05, { f: 3000 + Math.random() * 2500, q: 0.7, gain: 0.05 }); },
+  paper() { if (!this.ok()) return; const t = this.ctx.currentTime; for (let i = 0; i < 4; i++) this.noise(t + i * 0.06 + Math.random() * 0.03, 0.12, { f: 2400 + Math.random() * 3000, q: 0.6, gain: 0.07 }); },
+  thump(low) {
+    if (!this.ok()) return; const ctx = this.ctx, t = ctx.currentTime;
+    const o = ctx.createOscillator(), g = ctx.createGain(); o.type = 'sine';
+    o.frequency.setValueAtTime(low ? 120 : 160, t); o.frequency.exponentialRampToValueAtTime(42, t + 0.2);
+    g.gain.setValueAtTime(0.0001, t); g.gain.exponentialRampToValueAtTime(0.85, t + 0.004); g.gain.exponentialRampToValueAtTime(0.0001, t + 0.38);
+    o.connect(g); g.connect(this.master); o.start(t); o.stop(t + 0.42);
+    this.noise(t, 0.06, { type: 'lowpass', f: 1100, gain: 0.5 });
+  },
+  stamp() {
+    if (!this.ok()) return; this.thump(true);
+    const t = this.ctx.currentTime;
+    this.noise(t, 0.035, { f: 1700, q: 3, gain: 0.35 });
+    this.noise(t + 0.22, 0.16, { f: 4200, f2: 1800, q: 0.8, gain: 0.05 });
+  },
+  wind() { if (!this.ok()) return; const t = this.ctx.currentTime; this.noise(t, 1.5, { f: 260, f2: 1500, fAt: 0.55, q: 0.8, gain: 0.22, a: 0.45 }); this.noise(t + 0.1, 1.2, { f: 600, f2: 2600, q: 1.4, gain: 0.06, a: 0.4 }); },
+  tick() { if (!this.ok()) return; const ctx = this.ctx, t = ctx.currentTime; const o = ctx.createOscillator(), g = ctx.createGain(); o.type = 'square'; o.frequency.value = 1500 + Math.random() * 300; g.gain.setValueAtTime(0.03, t); g.gain.exponentialRampToValueAtTime(0.0001, t + 0.025); o.connect(g); g.connect(this.master); o.start(t); o.stop(t + 0.03); this.noise(t, 0.02, { f: 5000, gain: 0.05 }); },
+  chime(i) {
+    if (!this.ok()) return; const ctx = this.ctx, t = ctx.currentTime;
+    const sc = [523.25, 587.33, 659.25, 783.99, 880, 1046.5], f = sc[(i || 0) % sc.length];
+    [1, 2.01, 3.02].forEach((h, k) => { const o = ctx.createOscillator(), g = ctx.createGain(); o.frequency.value = f * h; g.gain.setValueAtTime(0.0001, t); g.gain.exponentialRampToValueAtTime(0.06 / (k + 1), t + 0.01); g.gain.exponentialRampToValueAtTime(0.0001, t + 1.4 / (k + 1)); o.connect(g); g.connect(this.master); o.start(t); o.stop(t + 1.5); });
+  },
+  ambient() {
+    const ctx = this.ctx;
+    /* 水声：低通噪声 + 缓慢起伏 */
+    const src = ctx.createBufferSource(); src.buffer = this.nbuf; src.loop = true;
+    const lp = ctx.createBiquadFilter(); lp.type = 'lowpass'; lp.frequency.value = 520;
+    const bp = ctx.createBiquadFilter(); bp.type = 'peaking'; bp.frequency.value = 900; bp.gain.value = 6;
+    const g = ctx.createGain(); g.gain.value = 0.045;
+    const lfo = ctx.createOscillator(), lg = ctx.createGain(); lfo.frequency.value = 0.13; lg.gain.value = 0.02; lfo.connect(lg); lg.connect(g.gain); lfo.start();
+    src.connect(lp); lp.connect(bp); bp.connect(g); g.connect(this.master); src.start();
+    /* 水滴、鸟、远处吆喝 */
+    const loop = (fn, a, b) => { const go = () => { fn(); this.timers.push(setTimeout(go, a + Math.random() * (b - a))); }; this.timers.push(setTimeout(go, a * 0.5 + Math.random() * a)); };
+    loop(() => this.bird(), 5000, 12000);
+    loop(() => this.drip(), 1800, 4200);
+    loop(() => this.call(), 16000, 32000);
+  },
+  drip() { if (!this.ok() || document.hidden) return; const ctx = this.ctx, t = ctx.currentTime; const o = ctx.createOscillator(), g = ctx.createGain(); o.type = 'sine'; o.frequency.setValueAtTime(900 + Math.random() * 500, t); o.frequency.exponentialRampToValueAtTime(1800 + Math.random() * 600, t + 0.05); g.gain.setValueAtTime(0.0001, t); g.gain.exponentialRampToValueAtTime(0.025, t + 0.005); g.gain.exponentialRampToValueAtTime(0.0001, t + 0.09); o.connect(g); g.connect(this.master); o.start(t); o.stop(t + 0.1); },
+  bird() {
+    if (!this.ok() || document.hidden) return; const ctx = this.ctx; let t = ctx.currentTime;
+    const pan = ctx.createStereoPanner ? ctx.createStereoPanner() : null; if (pan) { pan.pan.value = Math.random() * 1.6 - 0.8; pan.connect(this.master); }
+    const n = 2 + Math.floor(Math.random() * 4), base = 2400 + Math.random() * 1200;
+    for (let i = 0; i < n; i++) {
+      const o = ctx.createOscillator(), g = ctx.createGain(); o.type = 'sine';
+      o.frequency.setValueAtTime(base, t); o.frequency.exponentialRampToValueAtTime(base * (1.3 + Math.random() * 0.4), t + 0.06);
+      g.gain.setValueAtTime(0.0001, t); g.gain.exponentialRampToValueAtTime(0.022, t + 0.01); g.gain.exponentialRampToValueAtTime(0.0001, t + 0.09);
+      o.connect(g); g.connect(pan || this.master); o.start(t); o.stop(t + 0.1); t += 0.11 + Math.random() * 0.06;
+    }
+  },
+  call() {
+    /* 远处的吆喝：两拖腔，锯齿波过两道共振峰，像隔着几条巷子 */
+    if (!this.ok() || document.hidden) return; const ctx = this.ctx, t = ctx.currentTime + 0.05;
+    const o = ctx.createOscillator(); o.type = 'sawtooth';
+    const vib = ctx.createOscillator(), vg = ctx.createGain(); vib.frequency.value = 5.2; vg.gain.value = 3.5; vib.connect(vg); vg.connect(o.frequency);
+    const p = 190 + Math.random() * 50;
+    o.frequency.setValueAtTime(p, t); o.frequency.linearRampToValueAtTime(p * 1.18, t + 0.45); o.frequency.setValueAtTime(p * 1.12, t + 0.8); o.frequency.linearRampToValueAtTime(p * 0.9, t + 1.8);
+    const f1 = ctx.createBiquadFilter(); f1.type = 'bandpass'; f1.frequency.value = 750; f1.Q.value = 5;
+    const f2 = ctx.createBiquadFilter(); f2.type = 'bandpass'; f2.frequency.value = 1250; f2.Q.value = 6;
+    const g = ctx.createGain(); g.gain.setValueAtTime(0.0001, t);
+    g.gain.linearRampToValueAtTime(0.05, t + 0.12); g.gain.linearRampToValueAtTime(0.045, t + 0.6); g.gain.linearRampToValueAtTime(0.004, t + 0.75);
+    g.gain.linearRampToValueAtTime(0.05, t + 0.9); g.gain.linearRampToValueAtTime(0.0001, t + 1.9);
+    const lp = ctx.createBiquadFilter(); lp.type = 'lowpass'; lp.frequency.value = 1600;
+    const dl = ctx.createDelay(); dl.delayTime.value = 0.23; const fb = ctx.createGain(); fb.gain.value = 0.35;
+    const out = ctx.createGain(); out.gain.value = 0.5;
+    o.connect(f1); o.connect(f2); f1.connect(g); f2.connect(g); g.connect(lp); lp.connect(out); lp.connect(dl); dl.connect(fb); fb.connect(dl); dl.connect(out); out.connect(this.master);
+    o.start(t); vib.start(t); o.stop(t + 2); vib.stop(t + 2);
+  }
+};
+function syncMute() {
+  const b = $('#btnMute'); b.setAttribute('aria-pressed', Snd.muted ? 'true' : 'false'); b.setAttribute('aria-label', Snd.muted ? '取消静音' : '静音');
+  b.querySelector('.w1').style.display = b.querySelector('.w2').style.display = Snd.muted ? 'none' : '';
+  b.querySelector('.mx').style.display = Snd.muted ? '' : 'none';
+}
+$('#btnMute').addEventListener('click', () => { Snd.init(); Snd.setMuted(!Snd.muted); syncMute(); });
+syncMute();
+window.addEventListener('pointerdown', () => Snd.init(), { once: false, capture: true });
+window.addEventListener('keydown', () => Snd.init(), { capture: true });
+
+/* ---------- 屏幕切换 ---------- */
+let curScreen = 'scStart';
+function go(id) {
+  document.querySelectorAll('.screen').forEach(s => s.classList.toggle('show', s.id === id));
+  curScreen = id;
+  const el = document.getElementById(id); el.scrollTop = 0;
+  if (id === 'scStart') renderStart();
+  if (id === 'scMap') enterMap();
+  if (id === 'scReply' && REC) renderReply();
+  requestAnimationFrame(sizeAll);
+}
+document.querySelectorAll('[data-go]').forEach(b => b.addEventListener('click', () => { Snd.paper(); go(b.dataset.go); }));
+document.querySelectorAll('[data-merchant]').forEach(b => b.addEventListener('click', openMerchant));
+document.querySelectorAll('.overlay').forEach(ov => {
+  ov.addEventListener('click', e => { if (e.target === ov) closeOv(ov); });
+  ov.querySelectorAll('[data-close]').forEach(b => b.addEventListener('click', () => closeOv(ov)));
+});
+function openOv(id) { const o = document.getElementById(id); o.classList.add('show'); const f = o.querySelector('[data-close]'); if (f) setTimeout(() => f.focus({ preventScroll: true }), 50); }
+function closeOv(o) { o.classList.remove('show'); if (o.id === 'ovShop') setTimeout(afterStamp, 320); }
+window.addEventListener('keydown', e => { if (e.key === 'Escape') document.querySelectorAll('.overlay.show').forEach(closeOv); });
+
+/* ---------- 开始页 ---------- */
+(function townPrint() {
+  const svg = $('#townPrint'); const r = C.rngFrom(9);
+  let d = 'M0 400 L0 300 ', x = 0;
+  while (x < 1200) {
+    const w = 60 + r() * 70, h = 60 + r() * 70, base = 300;
+    if (x > 470 && x < 560) { d += 'L' + x + ' ' + base + ' Q' + (x + 90) + ' ' + (base - 70) + ' ' + (x + 180) + ' ' + base + ' '; x += 180; continue; }
+    d += 'L' + x + ' ' + (base - h) + ' L' + (x + 14) + ' ' + (base - h) + ' L' + (x + 14) + ' ' + (base - h - 22) + ' L' + (x + 34) + ' ' + (base - h - 22) + ' L' + (x + 34) + ' ' + (base - h - 8) + ' L' + (x + w) + ' ' + (base - h - 8) + ' L' + (x + w) + ' ' + base + ' ';
+    x += w + 6 + r() * 10;
+  }
+  d += 'L1200 300 L1200 400 Z';
+  let waves = '';
+  for (let i = 0; i < 5; i++) { let p = 'M0 ' + (322 + i * 16); for (let k = 0; k < 30; k++) p += ' q20 -6 40 0'; waves += '<path d="' + p + '" fill="none" stroke="#1d5c48" stroke-width="2" opacity="' + (0.5 - i * 0.07) + '"/>'; }
+  svg.innerHTML = '<path d="' + d + '" fill="#8f2a1d" opacity=".10" transform="translate(5 -3)"/><path d="' + d + '" fill="#1d5c48" opacity=".16"/>' + '<path d="M560 300 m10 0 a80 70 0 0 1 160 0" fill="none" stroke="#e2c99c" stroke-width="10" opacity=".5"/>' + waves;
+})();
+function renderStart() {
+  const b = $('#btnBox'); b.hidden = DB.list.length === 0; b.textContent = '信匣 · ' + DB.list.length;
+}
+$('#btnStart').addEventListener('click', async () => {
+  Snd.init(); Snd.paper();
+  const env = $('#envPeek'); env.style.animation = 'none';
+  await tween(420, p => { env.setAttribute('transform', 'translate(0 ' + (-90 * p) + ') rotate(' + (-7 + 7 * p) + ' 160 210)'); env.style.opacity = String(1 - p * 0.9); }, ease.in);
+  go('scWrite');
+  setTimeout(() => { env.removeAttribute('transform'); env.style.opacity = ''; env.style.animation = ''; }, 600);
+  setTimeout(() => $('#ta').focus({ preventScroll: true }), 500);
+});
+$('#btnBox').addEventListener('click', openBox);
+
+/* ---------- 写信 ---------- */
+const CHIPS = ['我想一个人安静待一天', '想吃点小时候的味道', '这次带着爸妈', '喜欢看老手艺', '只有半天时间', '那天可能下雨', '想看看夜里的河', '带孩子出来玩'];
+const chipsEl = $('#chips');
+CHIPS.forEach(c => {
+  const b = document.createElement('button'); b.className = 'chip'; b.type = 'button'; b.textContent = c; b.setAttribute('aria-pressed', 'false');
+  b.addEventListener('click', () => {
+    const ta = $('#ta'); const on = b.getAttribute('aria-pressed') !== 'true';
+    b.setAttribute('aria-pressed', on ? 'true' : 'false'); Snd.paper();
+    let v = ta.value;
+    if (on) { v = v.replace(/[，。\s]+$/, ''); v = (v ? v + '，' : '') + c + '。'; }
+    else { v = v.split(c + '。').join('').split(c).join('').replace(/，{2,}/g, '，').replace(/^[，。]+/, '').replace(/，。/g, '。'); }
+    ta.value = v;
+  });
+  chipsEl.appendChild(b);
+});
+let lastRustle = 0;
+$('#ta').addEventListener('input', () => { const n = performance.now(); if (n - lastRustle > 70) { lastRustle = n; Snd.rustle(); } });
+$('#lhNo').textContent = 'No.' + String(1287 + DB.list.length).padStart(4, '0');
+$('#btnSend').addEventListener('click', () => {
+  Snd.init();
+  const text = $('#ta').value.slice(0, 600), name = $('#nameIn').value.trim().slice(0, 12);
+  const r = agent.reply(text, { name, now: new Date() });
+  const now = new Date();
+  REC = { id: 'L' + now.getTime().toString(36), created: now.getTime(), text, name, r, stamps: {}, stampOrder: [], moods: {}, follow: null };
+  DB.list.unshift(REC); DB.list = DB.list.slice(0, 12); DB.cur = REC.id; save();
+  runReading(REC);
+});
+
+/* ---------- 地图画布 ---------- */
+const maps = {
+  read: { cv: $('#cvRead'), box: $('#readBox'), view: { s: 0.5, cx: 500, cy: 450 }, st: {}, w: 0, h: 0 },
+  map: { cv: $('#cvMap'), box: $('#mapBox'), view: { s: 0.5, cx: 500, cy: 450 }, st: {}, w: 0, h: 0 }
+};
+function sizeMap(m) {
+  const r = m.box.getBoundingClientRect(); if (r.width < 2 || r.height < 2) return false;
+  const dpr = Math.min(window.devicePixelRatio || 1, 2.5);
+  const W = Math.round(r.width * dpr), H = Math.round(r.height * dpr);
+  if (m.cv.width !== W || m.cv.height !== H) { m.cv.width = W; m.cv.height = H; }
+  const changed = m.w !== r.width || m.h !== r.height;
+  m.w = r.width; m.h = r.height; m.dpr = dpr;
+  return changed;
+}
+function sizeAll() {
+  if (sizeMap(maps.read) && maps.read.fit) maps.read.view = maps.read.fit();
+  if (sizeMap(maps.map) && maps.map.fit) maps.map.view = maps.map.fit();
+}
+window.addEventListener('resize', sizeAll);
+if (window.ResizeObserver) { const ro = new ResizeObserver(sizeAll); ro.observe(maps.read.box); ro.observe(maps.map.box); }
+function frame() {
+  const now = performance.now();
+  for (const k in maps) {
+    const m = maps[k]; const visible = (k === 'read' && curScreen === 'scRead') || (k === 'map' && curScreen === 'scMap');
+    if (!visible) continue;
+    if (!m.w || m.w < 20) { if (sizeMap(m) && m.fit) m.view = m.fit(); if (!m.w || m.w < 20) continue; }
+    const ctx = m.cv.getContext('2d'); ctx.setTransform(m.dpr, 0, 0, m.dpr, 0, 0);
+    try { Art.drawMap(ctx, m.w, m.h, m.view, m.st, now); } catch (e) { if (!frame.warned) { frame.warned = true; console.error(e); } }
+  }
+  requestAnimationFrame(frame);
+}
+requestAnimationFrame(frame);
+function wholeFit(m) { return () => Art.fitView(m.w, m.h, [20, 20, 980, 880], 10); }
+function clampView(m, v) {
+  const minS = Art.fitView(m.w, m.h, [0, 0, 1000, 900], 0).s * 0.9;
+  const s = Math.max(minS, Math.min(3.2, v.s));
+  const hw = m.w / 2 / s, hh = m.h / 2 / s;
+  const cx = hw * 2 >= 1000 ? 500 : Math.max(hw, Math.min(1000 - hw, v.cx));
+  const cy = hh * 2 >= 900 ? 450 : Math.max(hh, Math.min(900 - hh, v.cy));
+  return { s, cx, cy };
+}
+function animView(m, target, ms) {
+  target = clampView(m, target);
+  const a = Object.assign({}, m.view);
+  return tween(ms, p => { m.view = { s: a.s + (target.s - a.s) * p, cx: a.cx + (target.cx - a.cx) * p, cy: a.cy + (target.cy - a.cy) * p }; }, ease.inOut);
+}
+
+/* ---------- 读信动画 ---------- */
+const TIME_L = { half: '半日', full: '一整天', evening: '傍晚到夜里', unknown: '没说（按一天排）' };
+const WEA_L = { rain: '雨', snow: '雪', sunny: '晴', unknown: '没说（备好屋檐）' };
+const COMP_L = { parents: '爸妈', kids: '孩子', couple: '两个人', friends: '朋友', solo: '独自', unknown: '没说' };
+function pmDate(d) { return d.getFullYear() + '.' + String(d.getMonth() + 1).padStart(2, '0') + '.' + String(d.getDate()).padStart(2, '0'); }
+async function runReading(rec) {
+  const r = rec.r, A = r.analysis;
+  go('scRead');
+  $('#readTitle').textContent = '邮差正在读你的信';
+  $('#btnOpen').hidden = true;
+  const body = $('#slipBody'); body.innerHTML = '';
+  $('#slipNo').textContent = 'CITY AGENT · RuleAgent · No.' + String(1286 + DB.list.length).padStart(4, '0');
+  const m = maps.read;
+  m.st = { route: r.route, lit: {}, scan: {}, glow: {}, routeProgress: 0, showNames: false };
+  sizeMap(m); m.fit = wholeFit(m); m.view = m.fit();
+  /* 信封 */
+  const fe = $('#flyEnv'); fe.style.display = ''; fe.style.opacity = '1'; fe.style.transform = 'translate(-50%,-50%) scale(.9)';
+  Art.drawStamp($('#cvFlyStamp'), 'bridge', '80分');
+  $('#flyFrom').textContent = '寄自 ' + (rec.name || '远方');
+  const pm = $('#flyPm'); const d = new Date(rec.created);
+  pm.innerHTML = Art.postmarkSVG(pmDate(d), String(d.getHours()).padStart(2, '0') + ':00', 120); pm.style.opacity = '0';
+  await tween(380, p => { fe.style.transform = 'translate(-50%,-50%) scale(' + (0.9 + 0.1 * p) + ')'; });
+  await wait(260);
+  /* 盖邮戳 */
+  await tween(160, p => { pm.style.opacity = String(p); pm.style.transform = 'scale(' + (1.6 - 0.6 * p) + ') rotate(-12deg)'; }, ease.in);
+  Snd.thump();
+  await tween(220, (p, raw) => { const k = Math.sin(raw * Math.PI * 3) * (1 - raw) * 6; fe.style.transform = 'translate(calc(-50% + ' + k + 'px),-50%)'; });
+  await wait(500);
+  /* 飞向城中 */
+  Snd.wind();
+  const br = m.box.getBoundingClientRect();
+  const tx = br.left + br.width / 2 - window.innerWidth / 2, ty = br.top + br.height / 2 - window.innerHeight / 2;
+  await tween(900, p => { fe.style.transform = 'translate(calc(-50% + ' + tx * p + 'px), calc(-50% + ' + (ty * p - Math.sin(p * Math.PI) * 120) + 'px)) scale(' + (1 - 0.88 * p) + ') rotate(' + (p * -24) + 'deg)'; fe.style.opacity = String(1 - p * p); }, ease.inOut);
+  fe.style.display = 'none';
+  /* 处理单逐行出现 */
+  const row = async (k, html) => { const tr = document.createElement('tr'); tr.innerHTML = '<th>' + k + '</th><td>' + html + '</td>'; body.appendChild(tr); requestAnimationFrame(() => tr.classList.add('on')); Snd.tick(); await wait(420); };
+  await row('寄件', esc(rec.name || '远方的朋友'));
+  await row('读到', A.empty ? '<span class="kw">（一张白纸）</span>' : A.hits.length ? A.hits.slice(0, 10).map(h => '<span class="kw">' + esc(h) + '</span>').join('') : '<span class="kw">「' + esc(r.letter.clause) + '」</span><small style="color:var(--ink-3)">没读到想去哪儿</small>');
+  const tags = A.sortedTags.filter(t => ['rain', 'parents', 'kids', 'couple', 'friends', 'solo'].indexOf(t) === -1);
+  await row('偏好', tags.length ? tags.slice(0, 7).map(t => '<span class="tag">' + esc(C.TAG_LABEL[t] || t) + ' ' + '·'.repeat(Math.min(3, Math.ceil(A.tags[t] / 2))) + '</span>').join('') : '<span class="tag g">随桐溪安排</span>');
+  await row('时长', esc(TIME_L[A.duration]));
+  await row('同伴', esc(A.companions.length ? A.companions.map(c => c === 'parents' ? A.elder : COMP_L[c]).join('、') : COMP_L.unknown));
+  await row('天气', esc(WEA_L[A.weather]));
+  /* 扫描候选店 */
+  const cands = r.candidates;
+  const max = Math.max.apply(null, cands.map(c => c.score)), min = Math.min(0, Math.min.apply(null, cands.map(c => c.score)));
+  for (const c of cands) { m.st.scan[c.id] = true; Snd.tick(); await wait(140); }
+  await row('候选', '<div class="bars">' + cands.map(c => { const on = r.route.indexOf(c.id) !== -1; return '<span>' + esc(c.name) + '</span><i class="' + (on ? 'on' : '') + '" style="width:' + Math.max(6, Math.round((c.score - min) / (max - min || 1) * 100)) + '%"></i><span class="sc">' + c.score.toFixed(1) + '</span>'; }).join('') + '</div>');
+  /* 点亮路线 */
+  m.st.scan = {}; m.st.hideOthers = false;
+  const target = Art.fitView(m.w, m.h, Art.routeBox(r.route), 16);
+  animView(m, target, 1100);
+  for (let i = 0; i < r.route.length; i++) {
+    const id = r.route[i]; m.st.lit[id] = true; m.st.glow[id] = performance.now(); Snd.chime(i);
+    const from = i === 0 ? 0 : (i - 1) / Math.max(1, r.route.length - 1), to = i / Math.max(1, r.route.length - 1);
+    await tween(420, p => { m.st.routeProgress = from + (to - from) * p; }, ease.lin);
+    await wait(180);
+  }
+  m.st.lit = null; m.st.routeProgress = 1;
+  m.fit = () => Art.fitView(m.w, m.h, Art.routeBox(r.route), 16);
+  await row('路线', r.stops.map((s, i) => '<b style="color:var(--red)">' + (i + 1) + '</b> ' + esc(s.name)).join(' → '));
+  $('#readTitle').innerHTML = '<span class="hui">回</span>信写好了';
+  const bo = $('#btnOpen'); bo.hidden = false;
+  if (window.innerWidth < 821) bo.scrollIntoView({ behavior: RM ? 'auto' : 'smooth', block: 'end' });
+}
+$('#btnOpen').addEventListener('click', () => { Snd.paper(); go('scReply'); });
+
+/* ---------- 回信 ---------- */
+const MOTIF_L = { boat: '乌篷船', lanterns: '红灯笼', steam: '面馆的热气', umbrella: '油纸伞', osmanthus: '桂花树', papercut: '红窗花', stage: '戏台檐角', books: '亮灯的旧书窗', teapot: '一壶茶', birds: '白鹭', willow: '垂柳' };
+const TIME_PC = { morning: '清晨', day: '午后', dusk: '黄昏', night: '夜里' };
+const WEA_PC = { rain: '下着雨', snow: '落了雪', mist: '起了雾', clear: '天晴' };
+const FIG_PC = { solo: '桥上是你', parents: '桥上是你和家里人', kids: '桥上是你和孩子', couple: '桥上是你们两个', friends: '桥上是你们几个', none: '桥上空着，等你来' };
+function stampVariant(pc) { return pc.motifs.indexOf('boat') !== -1 ? 'boat' : pc.motifs.indexOf('lanterns') !== -1 ? 'lantern' : 'bridge'; }
+function renderReply() {
+  const r = REC.r, L = r.letter, d = new Date(REC.created);
+  Art.drawStamp($('#cvReplyStamp'), stampVariant(r.postcard), '1元');
+  $('#replyPm').innerHTML = Art.postmarkSVG(pmDate(d), String(d.getHours()).padStart(2, '0') + ':00', 90);
+  $('#replyTo').textContent = L.to;
+  let h = '<div class="ruled hand"><p class="to">' + esc(L.to) + '：</p>' + L.paras.map(p => '<p>' + esc(p) + '</p>').join('') + '</div>';
+  h += '<ol class="route">' + r.stops.map((s, i) => '<li class="stop"><div class="no">' + esc(s.time) + '<small>第' + C.cnNum(i + 1) + '站</small></div><div class="card">' +
+    (s.walk ? '<p class="walk">' + esc(s.walk) + '</p>' : '<p class="walk">从这里出发</p>') +
+    '<h4>' + esc(s.name) + '<span>' + esc(s.district) + '</span></h4>' +
+    '<p class="why">' + esc(s.reason) + '</p>' +
+    '<p class="quote"><b>' + esc(s.owner) + '</b>（' + esc(s.role) + '）常说：「' + esc(s.quote) + '」</p>' +
+    '<p class="task">盖章任务：' + esc(s.task) + '</p></div></li>').join('') + '</ol>';
+  h += '<div class="ruled hand">' + L.closing.map(p => '<p>' + esc(p) + '</p>').join('') + '</div>';
+  h += '<div class="sig">桐溪<br>' + esc(L.date) + '</div><p class="ps">' + esc(L.ps) + '</p>';
+  $('#replyLetter').innerHTML = h;
+  /* 明信片 */
+  const pc = r.postcard;
+  Art.drawPostcard($('#cvCard'), pc);
+  $('#pcNo').textContent = 'No.' + String(pc.comp.seed % 100000).padStart(5, '0') + ' · ' + L.date;
+  $('#pcBack').innerHTML = '这张是照着你的信画的：' + esc(TIME_PC[pc.time]) + '，' + esc(WEA_PC[pc.weather]) + '，画了' + pc.motifs.map(x => esc(MOTIF_L[x])).join('、') + '。' + esc(FIG_PC[pc.figures] || '') + '。' +
+    '<span class="prompt">明信片提示词（接入图像模型时使用）：<br>' + esc(pc.prompt) + '</span>';
+  Art.drawStamp($('#cvCardStamp'), stampVariant(pc), '80分');
+  $('#pcTo').textContent = '致 ' + L.to;
+  renderTasks();
+}
+function sealFor(id, size) {
+  const p = C.PLACES.find(x => x.id === id);
+  if (p) return Art.sealSVG({ g: p.stamp.g, c: p.stamp.c, shape: p.stamp.shape, label: '桐溪 · ' + p.name, size });
+  const hp = C.HIDDEN.find(x => x.id === id);
+  return Art.sealSVG({ g: hp.g, c: hp.c, shape: 'oval', label: '桐溪 · 秘境', size, color: '#1d5c48' });
+}
+function rot(id) { return (C.hashStr(id) % 22 - 11) + 'deg'; }
+function renderTasks() {
+  $('#tasks').innerHTML = REC.r.stops.map(s => {
+    const done = REC.stamps[s.id];
+    return '<div class="task-card"><div class="slot' + (done ? ' done' : '') + '" style="--rot:' + rot(s.id) + '">' + (done ? sealFor(s.id, 84) : esc((C.PLACES.find(p => p.id === s.id) || {}).stamp.c)) + '</div><b>' + esc(s.name) + '</b><p>' + esc(s.task) + '</p></div>';
+  }).join('');
+}
+$('#postcard').addEventListener('click', () => { $('#postcard').classList.toggle('flipped'); Snd.paper(); });
+$('#postcard').addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); $('#postcard').classList.toggle('flipped'); } });
+$('#btnGo').addEventListener('click', () => { Snd.paper(); go('scMap'); });
+$('#btnAgain').addEventListener('click', () => {
+  $('#ta').value = ''; document.querySelectorAll('.chip').forEach(c => c.setAttribute('aria-pressed', 'false'));
+  $('#lhNo').textContent = 'No.' + String(1287 + DB.list.length).padStart(4, '0');
+  go('scWrite');
+});
+$('#btnSave').addEventListener('click', () => {
+  const src = $('#cvCard'); const out = document.createElement('canvas'); out.width = 1300; out.height = 960;
+  const c = out.getContext('2d'); c.fillStyle = '#fbf6ea'; c.fillRect(0, 0, 1300, 960);
+  c.drawImage(src, 50, 50, 1200, 800);
+  c.fillStyle = '#1d5c48'; c.font = '40px "ZCOOL XiaoWei", serif'; c.textBaseline = 'middle'; c.fillText('桐　溪', 50, 905);
+  c.fillStyle = '#5b4f43'; c.font = '22px "Courier Prime", monospace'; c.textAlign = 'right'; c.fillText($('#pcNo').textContent, 1250, 905);
+  try {
+    out.toBlob(b => { if (!b) return; const a = document.createElement('a'); a.href = URL.createObjectURL(b); a.download = '桐溪明信片.png'; document.body.appendChild(a); a.click(); a.remove(); setTimeout(() => URL.revokeObjectURL(a.href), 4000); toast('明信片已存下'); }, 'image/png');
+  } catch (e) { toast('这个浏览器不让存图，长按明信片试试'); }
+});
+
+/* ---------- 出发：地图与护照 ---------- */
+function allStamped() { return REC && REC.r.route.every(id => REC.stamps[id]); }
+function mapIds() { const ids = REC.r.route.slice(); if (REC.follow) ids.push(REC.follow.hidden); return ids; }
+function enterMap() {
+  if (!REC) return;
+  const m = maps.map; sizeMap(m);
+  m.fit = () => { const extra = REC.follow ? [C.HIDDEN.find(h => h.id === REC.follow.hidden)] : []; return clampView(m, Art.fitView(m.w, m.h, Art.routeBox(REC.r.route, extra), 14)); };
+  m.view = clampView(m, m.fit());
+  updateMapState(); renderPassport();
+}
+function updateMapState() {
+  const m = maps.map;
+  const next = REC.r.route.find(id => !REC.stamps[id]) || (REC.follow && !REC.stamps[REC.follow.hidden] ? REC.follow.hidden : null);
+  m.st = { route: REC.r.route, stamps: REC.stamps, nextId: next, hidden: REC.follow ? REC.follow.hidden : null, glow: m.st.glow || {}, showNames: false };
+}
+function renderPassport() {
+  const r = REC.r; const items = r.stops.map((s, i) => ({ id: s.id, name: s.name, sub: s.time + ' · ' + s.district + ' · ' + s.owner, n: i + 1 }));
+  if (REC.follow) { const hp = C.HIDDEN.find(h => h.id === REC.follow.hidden); items.push({ id: hp.id, name: hp.name, sub: '第二封信里的隐藏去处', n: '秘', hidden: true }); }
+  $('#ppList').innerHTML = items.map(it => {
+    const done = REC.stamps[it.id];
+    return '<li><button class="pp-item' + (it.hidden ? ' hiddenp' : '') + '" data-id="' + it.id + '"><div class="slot' + (done ? ' done' : '') + '" style="--rot:' + rot(it.id) + '">' + (done ? sealFor(it.id, 84) : it.n) + '</div><div><b>' + esc(it.name) + '</b><span>' + esc(it.sub) + '</span><span style="color:' + (done ? 'var(--green)' : 'var(--red-d)') + '">' + (done ? '已盖章' + (REC.moods[it.id] ? ' · ' + MOOD[REC.moods[it.id]] : '') : '点这里，模拟到店') + '</span></div></button></li>';
+  }).join('');
+  $('#ppList').querySelectorAll('.pp-item').forEach(b => b.addEventListener('click', () => openShop(b.dataset.id)));
+  const total = r.route.length, got = r.route.filter(id => REC.stamps[id]).length;
+  $('#ppCount').textContent = got + '/' + total;
+  $('#btnFollow').hidden = !allStamped();
+  $('#btnFollow').innerHTML = REC.follow && REC.follow.read ? '重读第二封<span class="hui">回</span>信' : '第二封<span class="hui">回</span>信到了';
+}
+/* 拖动、缩放、点击 */
+(function mapInput() {
+  const m = maps.map, cv = m.cv; const pts = new Map(); let moved = 0, pinch = null;
+  const clampV = () => { m.view = clampView(m, m.view); };
+  cv.addEventListener('pointerdown', e => { cv.setPointerCapture(e.pointerId); pts.set(e.pointerId, { x: e.clientX, y: e.clientY }); moved = 0; if (pts.size === 2) { const a = [...pts.values()]; pinch = { d: Math.hypot(a[0].x - a[1].x, a[0].y - a[1].y), s: m.view.s }; } });
+  cv.addEventListener('pointermove', e => {
+    if (!pts.has(e.pointerId)) return; const p = pts.get(e.pointerId); const dx = e.clientX - p.x, dy = e.clientY - p.y;
+    p.x = e.clientX; p.y = e.clientY;
+    if (pts.size === 1) { m.view.cx -= dx / m.view.s; m.view.cy -= dy / m.view.s; moved += Math.abs(dx) + Math.abs(dy); }
+    else if (pinch) { const a = [...pts.values()]; const d = Math.hypot(a[0].x - a[1].x, a[0].y - a[1].y); m.view.s = pinch.s * d / pinch.d; moved += 10; }
+    clampV();
+  });
+  const up = e => {
+    if (!pts.has(e.pointerId)) return; pts.delete(e.pointerId); if (pts.size < 2) pinch = null;
+    if (moved < 8 && pts.size === 0) { const r = cv.getBoundingClientRect(); const id = Art.hitMap(m.w, m.h, m.view, e.clientX - r.left, e.clientY - r.top, mapIds()); if (id) openShop(id); }
+  };
+  cv.addEventListener('pointerup', up); cv.addEventListener('pointercancel', e => { pts.delete(e.pointerId); pinch = null; });
+  cv.addEventListener('wheel', e => { e.preventDefault(); m.view.s *= Math.exp(-e.deltaY * 0.0015); clampV(); }, { passive: false });
+  $('#zIn').addEventListener('click', () => { animView(m, { s: Math.min(3.2, m.view.s * 1.35), cx: m.view.cx, cy: m.view.cy }, 260); });
+  $('#zOut').addEventListener('click', () => { const minS = Art.fitView(m.w, m.h, [0, 0, 1000, 900], 0).s * 0.9; animView(m, { s: Math.max(minS, m.view.s / 1.35), cx: m.view.cx, cy: m.view.cy }, 260); });
+})();
+
+/* ---------- 到店盖章 ---------- */
+const MOOD = { stay: '多坐了一会儿', buy: '带走了点什么', rush: '匆匆路过' };
+let shopId = null, stamping = false;
+function openShop(id) {
+  shopId = id; Snd.paper();
+  const p = C.PLACES.find(x => x.id === id), hp = C.HIDDEN.find(x => x.id === id);
+  const done = !!REC.stamps[id];
+  $('#shopBadge').innerHTML = sealFor(id, 66);
+  if (p) {
+    const stop = REC.r.stops.find(s => s.id === id);
+    $('#shopName').textContent = p.name;
+    $('#shopMeta').textContent = C.DISTRICTS.find(d => d.id === p.d).full + ' · ' + p.owner + '，' + p.role;
+    const say = done ? p.says[C.hashStr(id + REC.id) % p.says.length] : p.catch;
+    $('#shopSay').innerHTML = '「' + esc(say) + '」<small>—— ' + esc(p.owner) + '</small>';
+    $('#shopTask').textContent = '盖章任务：' + p.task + (stop ? '（建议 ' + stop.time + ' 到）' : '');
+  } else {
+    $('#shopName').textContent = hp.name;
+    $('#shopMeta').textContent = '第二封信里的隐藏去处 · 不在任何地图上';
+    $('#shopSay').innerHTML = '「' + esc(hp.says) + '」<small>—— 桐溪</small>';
+    $('#shopTask').textContent = hp.how;
+  }
+  const im = $('#imprint'); im.innerHTML = sealFor(id, 124); im.classList.toggle('on', done);
+  $('#stamper').style.opacity = '0';
+  const bs = $('#btnStamp'); bs.textContent = done ? '收好，继续走' : '请店主盖章'; bs.dataset.done = done ? '1' : '';
+  renderMoods(id, done && !!p);
+  openOv('ovShop');
+}
+function renderMoods(id, show) {
+  $('#moodBox').hidden = !show;
+  if (!show) return;
+  $('#moods').innerHTML = Object.keys(MOOD).map(k => '<button class="chip" data-m="' + k + '" aria-pressed="' + (REC.moods[id] === k) + '">' + MOOD[k] + '</button>').join('');
+  $('#moods').querySelectorAll('.chip').forEach(b => b.addEventListener('click', () => {
+    REC.moods[id] = REC.moods[id] === b.dataset.m ? undefined : b.dataset.m; if (!REC.moods[id]) delete REC.moods[id];
+    save(); Snd.rustle(); renderMoods(id, true); renderPassport();
+  }));
+}
+$('#btnStamp').addEventListener('click', async () => {
+  if (stamping) return;
+  const bs = $('#btnStamp');
+  if (bs.dataset.done) { closeOv($('#ovShop')); return; }
+  stamping = true;
+  const st = $('#stamper'), im = $('#imprint');
+  st.style.opacity = '1';
+  await tween(320, p => { st.style.transform = 'translateY(' + (-140 + 178 * p) + 'px)'; }, ease.in);
+  Snd.stamp(); im.classList.add('on');
+  await tween(130, (p, raw) => { const k = Math.sin(raw * Math.PI); st.style.transform = 'translateY(' + (38 + 4 * k) + 'px) scaleY(' + (1 - 0.06 * k) + ')'; }, ease.lin);
+  await wait(120);
+  await tween(380, p => { st.style.transform = 'translateY(' + (38 - 220 * p) + 'px) rotate(' + (8 * p) + 'deg)'; st.style.opacity = String(1 - p); }, ease.out);
+  REC.stamps[shopId] = Date.now(); REC.stampOrder.push(shopId); save();
+  maps.map.st.glow = maps.map.st.glow || {}; maps.map.st.glow[shopId] = performance.now();
+  const p = C.PLACES.find(x => x.id === shopId);
+  if (p) $('#shopSay').innerHTML = '「' + esc(p.says[C.hashStr(shopId + REC.id) % p.says.length]) + '」<small>—— ' + esc(p.owner) + '</small>';
+  bs.textContent = '收好，继续走'; bs.dataset.done = '1';
+  renderMoods(shopId, !!p);
+  updateMapState(); renderPassport();
+  stamping = false;
+});
+let followAnnounced = false;
+async function afterStamp() {
+  if (!allStamped() || (REC.follow && REC.follow.read)) return;
+  ensureFollow();
+  if (followAnnounced) return; followAnnounced = true;
+  /* 第二封信从天上飞来 */
+  const inc = $('#incoming'); Snd.wind();
+  const target = $('#btnFollow').getBoundingClientRect();
+  await tween(1100, p => {
+    const x = (1 - p) * -window.innerWidth * 0.5, y = (target.top - 80) * p - (1 - p) * 120;
+    inc.style.opacity = String(Math.min(1, p * 3) * (1 - Math.max(0, p - 0.85) / 0.15));
+    inc.style.transform = 'translate(' + (x + (target.left - window.innerWidth + 170) * p) + 'px,' + y + 'px) rotate(' + (20 - 20 * p) + 'deg)';
+  }, ease.out);
+  inc.style.opacity = '0';
+  Snd.chime(4); renderPassport(); toast('第二封回信到了');
+}
+$('#btnFollow').addEventListener('click', openFollow);
+function ensureFollow() {
+  if (REC.follow || !allStamped()) return;
+  const used = DB.list.filter(x => x !== REC && x.follow).map(x => x.follow.hidden);
+  const rec = { seedText: REC.r.seedText, analysis: REC.r.analysis, route: REC.r.route, letter: REC.r.letter, stampOrder: REC.stampOrder, moods: REC.moods };
+  const f = agent.followUp(rec, used);
+  REC.follow = { paras: f.paras, to: f.to, hidden: f.hidden, read: false }; save();
+}
+function openFollow() {
+  ensureFollow();
+  if (!REC.follow) return;
+  updateMapState();
+  const f = REC.follow; Snd.paper();
+  $('#followBody').innerHTML = '<p class="to">' + esc(f.to) + '：</p>' + f.paras.map(p => '<p>' + esc(p) + '</p>').join('') + '<p style="text-align:right;text-indent:0">桐溪<br>' + esc(REC.r.letter.date) + '</p>';
+  f.read = true; save(); renderPassport();
+  openOv('ovFollow');
+}
+$('#btnSeeHidden').addEventListener('click', () => {
+  closeOv($('#ovFollow')); updateMapState(); renderPassport();
+  const m = maps.map; const hp = C.HIDDEN.find(h => h.id === REC.follow.hidden);
+  m.st.glow[hp.id] = performance.now();
+  animView(m, { s: Math.max(m.view.s, Art.fitView(m.w, m.h, [hp.x - 200, hp.y - 180, hp.x + 200, hp.y + 180], 10).s), cx: hp.x, cy: hp.y }, 900);
+});
+
+/* ---------- 商户后台（示例数据） ---------- */
+function openMerchant() {
+  if (!REC) return; Snd.paper();
+  const mv = C.merchantView({ route: REC.r.route, stamps: REC.stamps, moods: REC.moods });
+  let h = '<p class="note" style="margin-top:0">这封信的路线经过 <b>' + mv.rows.length + '</b> 家店。游客每在一家盖章，就算一次真实到店；商户只为到店付费，不为曝光付费。</p>';
+  h += '<h4>这封信带来的到访</h4><table><thead><tr><th>店铺</th><th>状态</th><th>心动</th><th style="text-align:right">客单(示例)</th><th style="text-align:right">核销费</th></tr></thead><tbody>' +
+    mv.rows.map(r => '<tr><td>' + esc(r.name) + '</td><td><span class="state' + (r.visited ? ' ok' : '') + '">' + (r.visited ? '已到店' : '待到店') + '</span></td><td>' + (r.mood ? esc(MOOD[r.mood]) : '—') + '</td><td class="num">¥' + r.spend + '</td><td class="num">¥' + r.cpa + '</td></tr>').join('') +
+    '</tbody></table><p class="note">预计带动消费 ¥' + mv.expectSpend + ' · 商户应付核销费 ¥' + mv.fee + '（已到店）/ ¥' + mv.feeAll + '（全部到店）</p>';
+  h += '<h4>可投放的任务卡</h4><div class="cards">' + mv.rows.map(r => '<div class="tcard"><b>' + esc(r.name) + ' · ' + esc(r.card) + '</b><button class="switch" role="switch" aria-checked="true" aria-label="投放开关"></button><p>本月经回信到店 ' + r.month + ' 人次 · 按核销 ¥' + r.cpa + '/次 · 补贴池 ¥' + r.used + ' / ¥' + r.budget + '</p><div class="meter"><i style="width:' + Math.round(r.used / r.budget * 100) + '%"></i></div></div>').join('') + '</div>';
+  h += '<h4>闭环怎么转</h4><div class="loop"><span>游客写信</span><em>→</em><span>城市 Agent 读信、排路线、写回信</span><em>→</em><span>到店盖章（核销）</span><em>→</em><span class="money">商户按到店付费 ¥2–6/次</span><em>→</em><span class="money">文旅局 / 商圈投放任务卡补贴</span><em>→</em><span>更好的回信，更多人出发</span></div>';
+  h += '<h4>本周桐溪 · 心愿热度</h4><div class="kpis"><div class="kpi"><b>1,284</b><span>收到来信</span></div><div class="kpi"><b>2,906</b><span>回信带来的到店</span></div><div class="kpi"><b>2.3</b><span>每封信平均到店家数</span></div><div class="kpi"><b>+42%</b><span>“下雨天”心愿（环比）</span></div><div class="kpi"><b>31%</b><span>信里提到“带爸妈”</span></div><div class="kpi"><b>18%</b><span>三个月内复访</span></div></div>';
+  h += '<p class="note">以上全部为<b>示例数据</b>，只用于说明商业模式；桐溪及其中的店铺、人物均为虚构。正式版中，任务卡由文旅局或商圈出资，城市 Agent 在“合适的人、合适的信”里才会推荐，不按出价排序。</p>';
+  $('#merchantInner').innerHTML = h;
+  $('#merchantInner').querySelectorAll('.switch').forEach(s => s.addEventListener('click', () => { s.setAttribute('aria-checked', s.getAttribute('aria-checked') === 'true' ? 'false' : 'true'); Snd.tick(); }));
+  openOv('ovMerchant');
+}
+
+/* ---------- 信匣 ---------- */
+function openBox() {
+  Snd.paper();
+  $('#boxList').innerHTML = DB.list.map(r => {
+    const d = new Date(r.created); const got = r.r.route.filter(id => r.stamps[id]).length;
+    const first = (r.text || '').trim() ? r.text.trim().slice(0, 18) : '（一张白纸）';
+    return '<li><button data-id="' + r.id + '"><b>' + esc(first) + '</b><span>' + pmDate(d) + ' · ' + r.r.route.length + '站</span><em>' + got + '/' + r.r.route.length + '</em></button></li>';
+  }).join('');
+  $('#boxList').querySelectorAll('button').forEach(b => b.addEventListener('click', () => {
+    REC = DB.list.find(r => r.id === b.dataset.id); DB.cur = REC.id; save(); followAnnounced = !!(REC.follow);
+    closeOv($('#ovBox')); go('scReply');
+  }));
+  openOv('ovBox');
+}
+
+renderStart();
+if (document.fonts && document.fonts.ready) document.fonts.ready.then(() => { if (REC && curScreen === 'scReply') Art.drawPostcard($('#cvCard'), REC.r.postcard); });
+})();
+
+</script>
+</body>
+</html>
