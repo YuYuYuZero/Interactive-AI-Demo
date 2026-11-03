@@ -115,6 +115,37 @@ canvas.art{position:absolute;inset:0;width:100%;height:100%}
 .cnote h4{margin:0;font-size:16px;font-weight:900}
 .cnote p{font-size:14px;color:var(--ink-2)}
 .cnote b{color:var(--ink)}
+.idea .intent{margin:0;font-size:14px;font-weight:700;color:var(--orange-ink)}
+.common{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:20px;background:var(--tint);padding:22px 24px;border:1.5px solid var(--ink)}
+.common h4{margin:0 0 6px;font-size:16px;font-weight:900}
+.common p,.common ul{margin:0;font-size:14px;color:var(--ink-2)}
+.common ul{padding-left:18px;display:grid;gap:4px}
+.common b{color:var(--ink)}
+.visions{display:grid;gap:0}
+.vis{display:grid;grid-template-columns:260px minmax(0,1fr);gap:28px;padding:28px 0;border-bottom:1px solid var(--rule)}
+.vis:first-child{padding-top:4px}
+.vhead{display:grid;gap:8px;align-content:start}
+.vdir{font-family:var(--f-mono);font-size:11px;font-weight:700;letter-spacing:.08em;color:var(--ink-2)}
+.vhead h3{font-size:22px;font-weight:900}
+.vthesis{font-family:var(--f-display);font-size:24px;line-height:1.35;color:var(--orange)}
+.vbody{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,1fr);gap:28px;min-width:0}
+.vcol{display:grid;gap:8px;align-content:start;min-width:0}
+.vcol h4{margin:0;font-family:var(--f-mono);font-size:12px;letter-spacing:.1em;color:var(--orange-ink);font-weight:700}
+.vcol h4+p{margin-bottom:6px}
+.vcol p{font-size:14px}
+.vcol ul{margin:0;padding-left:18px;font-size:14px;color:var(--ink-2);display:grid;gap:4px}
+.stages{display:grid;grid-template-columns:auto minmax(0,1fr);gap:6px 14px;margin:0;font-size:14px}
+.stages dt{font-weight:700;white-space:nowrap}
+.stages dd{margin:0;color:var(--ink-2)}
+.recs{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:0;border:1.5px solid var(--ink)}
+.rec{display:grid;gap:10px;align-content:start;padding:18px;min-width:0}
+.rec+.rec{border-left:1.5px solid var(--ink)}
+.rec:first-child{background:var(--tint)}
+.rec .rk{font-family:var(--f-display);font-size:40px;line-height:1;color:var(--orange)}
+.rec h4{margin:0 0 6px;font-size:15px;font-weight:900}
+.rec p{font-size:13px;color:var(--ink-2)}
+td.rank{font-family:var(--f-mono);font-weight:700;color:var(--ink-2)}
+td.name .badge{margin-left:6px;vertical-align:1px}
 /* ideas */
 .dir{display:grid;grid-template-columns:220px minmax(0,1fr);gap:28px;border-top:1.5px solid var(--rule);padding-top:22px}
 .dir .side{display:grid;gap:8px;align-content:start;position:sticky;top:calc(env(safe-area-inset-top,0px) + 16px)}
@@ -188,6 +219,11 @@ footer{font-size:13px;color:var(--ink-2);border-top:1px solid var(--rule);paddin
   .pipe{grid-template-columns:minmax(0,1fr)}
   .step+.step{border-left:0;border-top:1.5px solid var(--ink)}
   .shared{grid-template-columns:minmax(0,1fr)}
+  .common,.vis,.vbody{grid-template-columns:minmax(0,1fr)}
+  .recs{grid-template-columns:minmax(0,1fr)}
+  .rec+.rec{border-left:0;border-top:1.5px solid var(--ink)}
+  .rec{grid-template-columns:auto minmax(0,1fr);gap:14px}
+  .vis{gap:16px}
 }
 @media (max-width:520px){
   .idea{grid-template-columns:minmax(0,1fr);gap:4px}
@@ -204,7 +240,7 @@ footer{font-size:13px;color:var(--ink-2);border-top:1px solid var(--rule);paddin
 <header class="hero">
   <div class="eyebrow">AI 互动游戏 × 叙事影像 · 选题本 · 2026.11</div>
   <h1>15 个选题<br><em>7 个能玩的 demo</em></h1>
-  <p class="lede">按你给的三个方向各出 5 个候选：<b>休闲解压（≥50 关）</b>、<b>互动叙事 + 叙事影像双赛道</b>、<b>自由发挥</b>（含 第二玩家 / 第二十五帧 / 世界的回信 / 点火时刻 子方向）。每个方向挑了几个风格和思路差异最大的做成浏览器里直接能玩的 demo：休闲 3 个、叙事 3 个、自由发挥 1 个。美术全部是代码绘制，后续可以用 AI 出图整体升级。</p>
+  <p class="lede">按你给的三个方向各出 5 个候选：<b>休闲解压（≥50 关）</b>、<b>互动叙事 + 叙事影像双赛道</b>、<b>自由发挥</b>（含 第二玩家 / 第二十五帧 / 世界的回信 / 点火时刻 子方向）。每个方向挑了几个风格和思路差异最大的做成浏览器里直接能玩的 demo：休闲 3 个、叙事 3 个、自由发挥 1 个。美术全部是代码绘制，后续可以用 AI 出图整体升级。每个选题都写了立意和未来展望，最后按加权分重新排了名。</p>
 </header>
 
 <section aria-labelledby="s-combo">
@@ -367,26 +403,31 @@ footer{font-size:13px;color:var(--ink-2);border-top:1px solid var(--rule);paddin
     <div class="ideas">
       <div class="idea"><div class="code">A1</div><div class="main">
         <div class="top"><h4>锔 · 碎瓷重圆</h4><span class="badge">DEMO</span></div>
+        <p class="intent">「裂痕不用藏起来，用金把它描出来。」</p>
         <p class="pitch">一件瓷器碎成几块，拖回原位拼好，裂缝被熔金填满发光，弹出器物的一句身世。</p>
         <div class="meta"><span><b>关卡</b>60 关 / 6 窑口，碎片 3 → 14 块</span><span><b>解压点</b>吸附“叮”声、熔金、无失败</span><span><b>AI</b>玩家拍自家旧碗，AI 生成纹样和身世，变成专属关卡</span><span><b>赛道</b>互动游戏，可联名博物馆报商业创意</span></div>
       </div></div>
       <div class="idea"><div class="code">A2</div><div class="main">
         <div class="top"><h4>月下红线</h4><span class="badge">DEMO</span></div>
+        <p class="intent">「缘分是一点点理出来的。」</p>
         <p class="pitch">替月老理红线：拖动线结，让缠成一团的红绳不再交叉。线有柔软的绳子物理，解开一对，桥上两盏灯笼相遇。</p>
         <div class="meta"><span><b>关卡</b>120 关程序生成，交叉越多越难</span><span><b>解压点</b>绳子回弹、一下子全部松开的瞬间</span><span><b>AI</b>输入两个名字，AI 写一页“姻缘簿”</span><span><b>完成度</b>最高，核心玩法两天能出</span></div>
       </div></div>
       <div class="idea"><div class="code">A3</div><div class="main">
         <div class="top"><h4>中国色 · 调色铺</h4><span class="badge">DEMO</span></div>
+        <p class="intent">「每种颜色都有名字，每个名字都有出处。」</p>
         <p class="pitch">往瓷碟里滴颜料，调出指定的传统色：月白、天水碧、胭脂、秋香。颜料在水里晕开、旋转。</p>
         <div class="meta"><span><b>关卡</b>以几百个传统色名做关卡</span><span><b>解压点</b>流体晕染、命中色号时的色卡翻面</span><span><b>AI</b>拍一张照片，AI 取出“今日中国色”并配一句诗</span><span><b>赛道</b>互动游戏，可做品牌色营销</span></div>
       </div></div>
       <div class="idea"><div class="code">A4</div><div class="main">
         <div class="top"><h4>雨落青瓦</h4></div>
+        <p class="intent">「把一场雨好好引到它该去的地方。」</p>
         <p class="pitch">转动屋瓦，把雨水引到院子里浇花。雨声是全程的 ASMR，花随节气开。</p>
         <div class="meta"><span><b>关卡</b>二十四节气 × 3 = 72 关</span><span><b>解压点</b>水流顺着瓦当滴落的声音</span><span><b>AI</b>按玩家所在城市当天天气生成每日关</span><span><b>赛道</b>互动游戏，可接文旅</span></div>
       </div></div>
       <div class="idea"><div class="code">A5</div><div class="main">
         <div class="top"><h4>灯会 · 光路</h4></div>
+        <p class="intent">「一束光，点亮一整条街。」</p>
         <p class="pitch">摆放铜镜和窗棂，让一束烛光折射点亮整条街的花灯。</p>
         <div class="meta"><span><b>关卡</b>50+ 关，元宵、七夕、中秋分章</span><span><b>解压点</b>一盏接一盏亮起的连锁</span><span><b>AI</b>用一句话描述一盏灯，AI 生成灯样放进关卡</span><span><b>赛道</b>互动游戏</span></div>
       </div></div>
@@ -398,26 +439,31 @@ footer{font-size:13px;color:var(--ink-2);border-top:1px solid var(--rule);paddin
     <div class="ideas">
       <div class="idea"><div class="code">B1</div><div class="main">
         <div class="top"><h4>第二十五帧</h4><span class="badge">DEMO</span><span class="badge alt">主推</span></div>
+        <p class="intent">「意义不在镜头里，在镜头和镜头之间。」</p>
         <p class="pitch">库里肖夫效应解谜。同一个面无表情的特写，接在汤后面观众觉得他饿，接在棺木后面觉得他悲伤。你按失踪导演的字条排列镜头，最后替他剪出那部被禁电影的结局。</p>
         <div class="meta"><span><b>AI · 游戏</b>参赛版让多模态模型当“AI 观众”，看你的剪辑写出解读，没有标准答案</span><span><b>AI · 影像</b>沈先生的电影用 AI 生成镜头拍成短片</span><span><b>子赛道</b>第二十五帧 + 互动游戏</span><span><b>亮点</b>玩法本身就是电影语言，两条赛道互相背书</span></div>
       </div></div>
       <div class="idea"><div class="code">B2</div><div class="main">
         <div class="top"><h4>夜航电台</h4><span class="badge">DEMO</span></div>
+        <p class="intent">「城市最孤独的时刻，总有人在听。」</p>
         <p class="pitch">暴雨夜代班深夜电台，接 5 通来电。他们住在同一个街区却互不认识，你的回应和点歌决定他们天亮时会不会遇见。</p>
         <div class="meta"><span><b>AI · 游戏</b>来电者由大模型扮演、TTS 发声，每局来电都不同</span><span><b>AI · 影像</b>短片《凌晨三点的五通来电》</span><span><b>子赛道</b>第二玩家</span><span><b>亮点</b>调频找信号的手感 + 群像故事</span></div>
       </div></div>
       <div class="idea"><div class="code">B3</div><div class="main">
         <div class="top"><h4>外婆的菜谱</h4></div>
+        <p class="intent">「味道是最后才会忘记的记忆。」</p>
         <p class="pitch">外婆得了阿尔茨海默，只记得味道。你在她的厨房里切菜、颠勺、调味，每做对一道菜，她想起一段往事。</p>
         <div class="meta"><span><b>AI · 游戏</b>上传自家老照片和家乡菜名，AI 生成专属章节</span><span><b>AI · 影像</b>AI MV《外婆的厨房》</span><span><b>赛道</b>双赛道，地方菜可接文旅</span><span><b>风险</b>烹饪手感要打磨</span></div>
       </div></div>
       <div class="idea"><div class="code">B4</div><div class="main">
         <div class="top"><h4>末班车失物招领</h4><span class="badge">DEMO</span></div>
+        <p class="intent">「每件被落下的东西，都有一个在找它的人。」</p>
         <p class="pitch">地铁终点站的失物招领员。从一把伞、一张票根里推理主人是谁，把东西送回去，也把他们的故事拼起来。</p>
         <div class="meta"><span><b>AI · 游戏</b>玩家拍一件自己的旧物，AI 为它编主人和故事，成为别人游戏里的失物</span><span><b>AI · 影像</b>选集短片，一件物一集</span><span><b>赛道</b>双赛道</span><span><b>亮点</b>UGC 循环，内容越玩越多</span></div>
       </div></div>
       <div class="idea"><div class="code">B5</div><div class="main">
         <div class="top"><h4>梦境当铺</h4></div>
+        <p class="intent">「你愿意拿哪段记忆，去换一个愿望？」</p>
         <p class="pitch">你是收记忆的当铺掌柜。客人典当一段记忆换一个愿望，你要压价、识破谎言，收下的记忆会改变店里的陈设。</p>
         <div class="meta"><span><b>AI · 游戏</b>每个客人是有底线和秘密的大模型角色，靠对话套话</span><span><b>AI · 影像</b>每段被典当的记忆是一支短片</span><span><b>子赛道</b>第二玩家</span><span><b>风险</b>对话系统调优工作量大</span></div>
       </div></div>
@@ -429,26 +475,31 @@ footer{font-size:13px;color:var(--ink-2);border-top:1px solid var(--rule);paddin
     <div class="ideas">
       <div class="idea"><div class="code">C1</div><div class="main">
         <div class="top"><h4>无限说书人</h4></div>
+        <p class="intent">「故事是说书人和听众一起说完的。」</p>
         <p class="pitch">在 DGX Spark 上本地部署开源大模型当评书艺人。现场观众扫码，用手机喊“且慢！”改写剧情，醒木一拍定生死。</p>
         <div class="meta"><span><b>子赛道</b>点火时刻 · DGX 开源模型部署</span><span><b>为什么本地</b>低延迟、多人并发、展台离线可用</span><span><b>亮点</b>现场演示效果最强</span><span><b>风险</b>部署与语音合成要提前压测</span></div>
       </div></div>
       <div class="idea"><div class="code">C2</div><div class="main">
         <div class="top"><h4>城市回信</h4></div>
+        <p class="intent">「你给一座城写信，城会给你回信。」</p>
         <p class="pitch">给一座城市写一封信，城市 Agent 用本地口吻回信：一条为你定制的路线、一张 AI 明信片、沿途小店的盖章任务。到店打卡，解锁下一封。</p>
         <div class="meta"><span><b>子赛道</b>世界的回信 · 商业创意</span><span><b>商业闭环</b>文旅局与商户付费投放</span><span><b>AI</b>营销 Agent + 文生图明信片</span><span><b>风险</b>需要真实商户数据做演示</span></div>
       </div></div>
       <div class="idea"><div class="code">C3</div><div class="main">
         <div class="top"><h4>方言守夜人</h4></div>
+        <p class="intent">「一种方言消失，就有一扇窗暗下去。」</p>
         <p class="pitch">夜里的小镇只听得懂方言。学会说一句方言，才能点亮一户人家的灯，听到这家人的故事。</p>
         <div class="meta"><span><b>AI</b>方言语音识别打分 + 方言语音合成</span><span><b>赛道</b>互动游戏 / 文旅</span><span><b>亮点</b>方言保护，故事性强</span><span><b>风险</b>方言模型可用性要先验证</span></div>
       </div></div>
       <div class="idea"><div class="code">C4</div><div class="main">
         <div class="top"><h4>掌中皮影</h4></div>
+        <p class="intent">「你的手，就是戏台。」</p>
         <p class="pitch">摄像头识别手影，你摆出的手势变成幕布上的皮影角色，AI 根据你摆出的角色即兴编一出戏。</p>
         <div class="meta"><span><b>AI</b>手势识别 + 即兴编剧 + 配音</span><span><b>赛道</b>互动体验 / 非遗文旅</span><span><b>亮点</b>适合做展会装置</span><span><b>风险</b>识别稳定性</span></div>
       </div></div>
       <div class="idea"><div class="code">C5</div><div class="main">
         <div class="top"><h4>昨日之我</h4><span class="badge">DEMO</span></div>
+        <p class="intent">「最懂你的第二玩家，是昨天的你。」</p>
         <p class="pitch">第二玩家是“之前的你”：每关都要和自己前几次尝试的回放合作，一个踩机关、一个过门。AI 在回放基础上学你的习惯微调动作。</p>
         <div class="meta"><span><b>子赛道</b>第二玩家</span><span><b>AI</b>行为克隆，越玩“昨天的你”越像你</span><span><b>亮点</b>机制新、好解释</span><span><b>风险</b>关卡设计门槛高</span></div>
       </div></div>
@@ -456,17 +507,188 @@ footer{font-size:13px;color:var(--ink-2);border-top:1px solid var(--rule);paddin
   </div>
 </section>
 
+<section aria-labelledby="s-vision">
+  <div class="sh">
+    <div class="eyebrow">逐个展开</div>
+    <h2 id="s-vision">设计立意与未来展望</h2>
+    <p>15 个选题每个都先回答“它想让玩家感受到什么”，再说明 AI 起什么作用，最后按近期、中期、长期列出能走多远。“近期”就是做到参赛版要补的东西；标 DEMO 的 7 个已经能玩。</p>
+  </div>
+  <div class="common">
+    <div class="ccol"><h4>共同的立意</h4><p>这些选题大多从日常里很小的动作出发：拼、理、调、剪、听、看、等、说。我们想让 AI 把这些小动作变成“只属于你的那一份”：你家的碗、你们俩的名字、你调出的颜色、你剪出的结局。</p></div>
+    <div class="ccol"><h4>共同的展望</h4><ul><li><b>关卡无限、因人而异：</b>程序化生成负责数量，AI 负责个人化。</li><li><b>游戏和影像同源：</b>玩出来的分镜单就是短片的剪辑表，一套素材出两件作品。</li><li><b>AI 作为第二玩家：</b>来电者、观众、回声，AI 不只是生产工具，而是在场的角色。</li></ul></div>
+  </div>
+  <div class="visions">
+  <article class="vis" id="v-kintsugi">
+    <div class="vhead"><span class="vdir">A1 · 休闲解压 <span class="badge">DEMO</span></span><h3>锔 · 碎瓷重圆</h3><p class="vthesis">「裂痕不用藏起来，用金把它描出来。」</p></div>
+    <div class="vbody">
+      <div class="vcol"><h4>设计立意</h4><p>金缮的态度是承认破碎，再把修补的痕迹变成器物最好看的部分。游戏借这个态度做解压：每天把一件碎掉的东西拼回完整，是一种很小、很安静的自我修复。拼的是瓷器，读到的是器物背后的人，60 段身世让休闲游戏也有情感回报。</p><ul><li>不设失败和计时，解压来自“完成”，而不是“挑战”</li><li>金线沿着玩家拼合的裂缝流开，玩家的努力被直接画进器物里</li><li>窑口和器型按朝代分章，玩着玩着就认识了青花、汝窑、建盏</li></ul></div>
+      <div class="vcol"><h4>为什么要用 AI</h4><p>程序化碎裂让关卡数量没有上限。参赛版让玩家拍一只自家的碗，AI 抠图、碎裂、写出它的身世，情感对象从别人的故事换成自己的物件。</p>
+        <h4>未来展望</h4>
+        <dl class="stages"><dt>近期 · 参赛版</dt><dd>AI 生成各窑口纹样贴图；上传自家器物生成专属关卡；修好的器物导出成带金缝的分享卡</dd><dt>中期</dt><dd>和博物馆合作“馆藏修复”章节，把文物数字化和科普放进关卡；节日限定器物</dd><dt>长期</dt><dd>导流到线下金缮手作体验；做成“修复日记”，每天修一件，顺手记下一件让自己难过、后来被修好的事</dd></dl>
+      </div>
+    </div>
+  </article>
+  <article class="vis" id="v-red-thread">
+    <div class="vhead"><span class="vdir">A2 · 休闲解压 <span class="badge">DEMO</span></span><h3>月下红线</h3><p class="vthesis">「缘分是一点点理出来的。」</p></div>
+    <div class="vbody">
+      <div class="vcol"><h4>设计立意</h4><p>把一团乱麻理清本身就解压，但抽象的解结谜题缺一个理由。月老给了它一个温暖的理由：每解开一团，世上就多一对能相遇的人。故事刻意写得很日常，让座三年、共用一把伞，不写轰轰烈烈。</p><ul><li>抽象玩法配具象故事，解开之后才读到这一对人的小事</li><li>绳子有下垂和回弹，手感是解压的主体</li><li>六个节日分章，节庆氛围自带传播节点</li></ul></div>
+      <div class="vcol"><h4>为什么要用 AI</h4><p>输入两个名字，AI 写一页姻缘簿，并按两人的关键词生成一团专属的线。</p>
+        <h4>未来展望</h4>
+        <dl class="stages"><dt>近期 · 参赛版</dt><dd>名字生成专属关卡和分享卡，赶七夕、520 的传播节点</dd><dt>中期</dt><dd>和婚庆品牌、月老祠和鹊桥类景区联名做限定章节</dd><dt>长期</dt><dd>社交玩法：把一团线发给对方去解，解开后显示你写给 TA 的一句话</dd></dl>
+      </div>
+    </div>
+  </article>
+  <article class="vis" id="v-color-shop">
+    <div class="vhead"><span class="vdir">A3 · 休闲解压 <span class="badge">DEMO</span></span><h3>中国色 · 调色铺</h3><p class="vthesis">「每种颜色都有名字，每个名字都有出处。」</p></div>
+    <div class="vbody">
+      <div class="vcol"><h4>设计立意</h4><p>传统色名像一首首被遗忘的短诗。看色卡只是知道，亲手把颜料调出来才算“得到”这个颜色。调色铺把美育藏进一个解压动作里：滴、搅、看它慢慢变成想要的那个颜色。</p><ul><li>用接近真实颜料的减色混色，调色有真实的学习感</li><li>搅动时的流体晕染是解压核心，不计时、可无限清洗</li><li>每个颜色收成一张色卡，背面写出处或释义，攒成自己的色谱</li></ul></div>
+      <div class="vcol"><h4>为什么要用 AI</h4><p>拍一张照片，AI 从里面取出“今日中国色”并配一句诗，变成每日关卡。</p>
+        <h4>未来展望</h4>
+        <dl class="stages"><dt>近期 · 参赛版</dt><dd>每日一色、拍照识色、色卡分享</dd><dt>中期</dt><dd>和美妆、服饰、家居品牌做联名色号；做成中小学美术课的互动教具</dd><dt>长期</dt><dd>开放色谱共创：玩家给自己调出的颜色命名，AI 做考据式配文，攒成一本大家写的色名辞典</dd></dl>
+      </div>
+    </div>
+  </article>
+  <article class="vis" id="v-rain">
+    <div class="vhead"><span class="vdir">A4 · 休闲解压</span><h3>雨落青瓦</h3><p class="vthesis">「把一场雨好好引到它该去的地方。」</p></div>
+    <div class="vbody">
+      <div class="vcol"><h4>设计立意</h4><p>二十四节气是中国人的时间感，雨声是最古老的白噪音。这个游戏不追求难，追求下雨天坐在屋檐下发呆的那种安心：每关把雨水顺着瓦当引进院子，院里的花跟着节气开。</p><ul><li>雨声随水路变化，接通时水声汇成一股</li><li>节气章节对应真实物候，惊蛰有虫、谷雨开牡丹</li><li>节奏平静、随时可停，适合睡前玩几关</li></ul></div>
+      <div class="vcol"><h4>为什么要用 AI</h4><p>按玩家所在城市当天的真实天气生成每日关卡，AI 再按节气写一句当天的物候小记。</p>
+        <h4>未来展望</h4>
+        <dl class="stages"><dt>近期 · 参赛版</dt><dd>72 关加每日天气关</dd><dt>中期</dt><dd>和天气、助眠类 App 合作做“雨声关卡”；用江南古镇的屋顶实景做文旅章节</dd><dt>长期</dt><dd>接入智能音箱和车机，做成能听也能玩的助眠小游戏</dd></dl>
+      </div>
+    </div>
+  </article>
+  <article class="vis" id="v-lantern">
+    <div class="vhead"><span class="vdir">A5 · 休闲解压</span><h3>灯会 · 光路</h3><p class="vthesis">「一束光，点亮一整条街。」</p></div>
+    <div class="vbody">
+      <div class="vcol"><h4>设计立意</h4><p>光路谜题的满足感来自连锁：一盏亮了，下一盏跟着亮。这正是节日的情绪，团圆、热闹，一家接一家亮起来。</p><ul><li>铜镜、窗棂、琉璃三种折射元件，规则少、组合多</li><li>每章取一个真实灯会，比如自贡、秦淮、豫园</li><li>整条街点亮后，街上的人群和烟火才出现</li></ul></div>
+      <div class="vcol"><h4>为什么要用 AI</h4><p>用一句话描述一盏灯，AI 生成它的纹样和颜色，放进关卡成为你的灯。</p>
+        <h4>未来展望</h4>
+        <dl class="stages"><dt>近期 · 参赛版</dt><dd>50 关加 AI 自定义花灯</dd><dt>中期</dt><dd>和各地灯会、景区合作办线上灯会，线下扫码点亮</dd><dt>长期</dt><dd>元宵节全网一起点亮一条“云灯街”，每个人的灯挂在一起</dd></dl>
+      </div>
+    </div>
+  </article>
+  <article class="vis" id="v-25th-frame">
+    <div class="vhead"><span class="vdir">B1 · 互动叙事 × 叙事影像 <span class="badge">DEMO</span></span><h3>第二十五帧</h3><p class="vthesis">「意义不在镜头里，在镜头和镜头之间。」</p></div>
+    <div class="vbody">
+      <div class="vcol"><h4>设计立意</h4><p>库里肖夫效应说明，观众会主动替画面补全故事。“第二十五帧”说的正是这件事：AI 正在成为替人补上那一帧想象的存在。游戏先让玩家亲手当一次补帧的人，体会剪辑怎样制造意义，最后再决定一个人的结局该怎么剪。</p><ul><li>把电影语言变成可玩的规则，没学过剪辑也能在几分钟里理解蒙太奇</li><li>剪错时观众的“误读”是乐趣来源，错误也值得玩</li><li>沈先生的故事让技巧服务于情感，终章的结局由玩家决定</li></ul></div>
+      <div class="vcol"><h4>为什么要用 AI</h4><p>参赛版让多模态模型担任 AI 观众：看你剪出来的序列，写出它的理解，没有标准答案。镜头素材库也由 AI 生成，可以不断扩充。</p>
+        <h4>未来展望</h4>
+        <dl class="stages"><dt>近期 · 参赛版</dt><dd>接入 AI 观众；用 AI 生成的黑白剧照替换代码绘制的镜头；扩到 15 关</dd><dt>中期</dt><dd>做成影视院校和中学媒介素养课的教具，教人看出剪辑如何左右情绪，也能用来讨论断章取义的新闻剪辑</dd><dt>长期</dt><dd>同一组素材的全网剪辑挑战，每个人剪出不同的故事，最好的剪法由 AI 生成为短片</dd></dl>
+      </div>
+    </div>
+  </article>
+  <article class="vis" id="v-night-radio">
+    <div class="vhead"><span class="vdir">B2 · 互动叙事 × 叙事影像 <span class="badge">DEMO</span></span><h3>夜航电台</h3><p class="vthesis">「城市最孤独的时刻，总有人在听。」</p></div>
+    <div class="vbody">
+      <div class="vcol"><h4>设计立意</h4><p>深夜电台是一种正在消失的陪伴。游戏把玩家放在倾听者的位置，让人意识到回应本身就有力量。五个睡不着的陌生人住得只隔一条街，他们之间的线要靠你接上：孤独的人之间，往往只隔着一层楼。</p><ul><li>调频找信号把“寻找”变成身体动作，每次接通都有仪式感</li><li>选项鼓励倾听而不是给建议，陪伴不等于解决问题</li><li>隐藏关联让玩家在第二遍时才发现，原来他们早就认识</li></ul></div>
+      <div class="vcol"><h4>为什么要用 AI</h4><p>对应“第二玩家”：参赛版的来电者由大模型扮演，配 TTS 声线，每晚来电都不一样；玩家也可以自己拨进来，换成 AI 主持人接听。</p>
+        <h4>未来展望</h4>
+        <dl class="stages"><dt>近期 · 参赛版</dt><dd>接入大模型来电者和语音；加上玩家自己拨入的第六通电话</dd><dt>中期</dt><dd>异步陪伴：玩家匿名留下自己的故事，AI 改编成别人夜里接到的来电，陌生人之间互相陪一程</dd><dt>长期</dt><dd>和电台、播客品牌联名，每年出一部“城市夜话”短片集；心理陪伴方向要做好边界提示和专业转介</dd></dl>
+      </div>
+    </div>
+  </article>
+  <article class="vis" id="v-grandma">
+    <div class="vhead"><span class="vdir">B3 · 互动叙事 × 叙事影像</span><h3>外婆的菜谱</h3><p class="vthesis">「味道是最后才会忘记的记忆。」</p></div>
+    <div class="vbody">
+      <div class="vcol"><h4>设计立意</h4><p>阿尔茨海默会带走名字和面孔，味道往往留到最后。游戏用做菜对抗遗忘，每做对一道菜，外婆就想起一段往事。它让玩家想起自己家的那道菜，和会做这道菜的那个人。</p><ul><li>切、炒、调味都是有手感的小操作，火候和咸淡会影响外婆的反应</li><li>每道菜对应一个年代的家庭记忆</li><li>结局不是治好她，而是陪她多记住一天</li></ul></div>
+      <div class="vcol"><h4>为什么要用 AI</h4><p>玩家上传老照片和家乡菜名，AI 生成专属章节和外婆的口述，配音还原乡音。</p>
+        <h4>未来展望</h4>
+        <dl class="stages"><dt>近期 · 参赛版</dt><dd>一个完整章节（5 道菜）加 AI 专属章节</dd><dt>中期</dt><dd>和地方菜系、老字号联名；办线下“家的味道”征集</dd><dt>长期</dt><dd>做成家庭记忆存档，把长辈的菜谱和口述录下来，变成能传下去的互动家书</dd></dl>
+      </div>
+    </div>
+  </article>
+  <article class="vis" id="v-lost-and-found">
+    <div class="vhead"><span class="vdir">B4 · 互动叙事 × 叙事影像 <span class="badge">DEMO</span></span><h3>末班车失物招领</h3><p class="vthesis">「每件被落下的东西，都有一个在找它的人。」</p></div>
+    <div class="vbody">
+      <div class="vcol"><h4>设计立意</h4><p>物件是最诚实的叙事者。这里的推理不是破案，而是试着理解一个陌生人。三夜的物件拼出一家人，故事的中心是每晚送失物来、最容易被忽略的那位保洁阿姨。城市里擦肩而过的人，其实早有联系。</p><ul><li>检查物件就是在阅读一个人的生活，线索要靠观察找到</li><li>答错只给温和提示，鼓励慢慢看</li><li>反转落在被忽视的人身上，让玩家回头重看前两夜</li></ul></div>
+      <div class="vcol"><h4>为什么要用 AI</h4><p>参赛版开放失物投递：玩家拍一件自己的旧物，AI 为它生成主人和线索，放进别人的失物筐，内容会随玩家越玩越多。</p>
+        <h4>未来展望</h4>
+        <dl class="stages"><dt>近期 · 参赛版</dt><dd>落地玩家投递旧物、AI 生成主人；再加一条线路</dd><dt>中期</dt><dd>和地铁、城市文旅合作，用真实站名和城市历史做“城市记忆”章节；做线下失物招领处快闪展</dd><dt>长期</dt><dd>做成城市叙事平台，每条线路每季度一个故事，由市民投稿物件</dd></dl>
+      </div>
+    </div>
+  </article>
+  <article class="vis" id="v-pawnshop">
+    <div class="vhead"><span class="vdir">B5 · 互动叙事 × 叙事影像</span><h3>梦境当铺</h3><p class="vthesis">「你愿意拿哪段记忆，去换一个愿望？」</p></div>
+    <div class="vbody">
+      <div class="vcol"><h4>设计立意</h4><p>交易逼着人给记忆标价。掌柜要判断客人说的是不是真话、这段记忆值多少，玩家在讨价还价里看见别人怎样看待自己的过去。</p><ul><li>讨价还价是核心玩法，每个客人都有底线和秘密</li><li>收下的记忆会变成店里的陈设，当铺越来越像你的选择</li><li>道德选择不提示对错</li></ul></div>
+      <div class="vcol"><h4>为什么要用 AI</h4><p>客人由大模型扮演，带着隐藏动机和记忆。玩家用自由对话套话，没有选项菜单。</p>
+        <h4>未来展望</h4>
+        <dl class="stages"><dt>近期 · 参赛版</dt><dd>5 位客人的对话原型</dd><dt>中期</dt><dd>每段被典当的记忆生成一支 AI 短片，做成选集</dd><dt>长期</dt><dd>玩家可以典当自己的记忆（文字），AI 把它改写成下一位客人</dd></dl>
+      </div>
+    </div>
+  </article>
+  <article class="vis" id="v-storyteller">
+    <div class="vhead"><span class="vdir">C1 · 自由发挥</span><h3>无限说书人</h3><p class="vthesis">「故事是说书人和听众一起说完的。」</p></div>
+    <div class="vbody">
+      <div class="vcol"><h4>设计立意</h4><p>评书本来就是即兴的，说书人会看台下反应随时改词。大模型让这门手艺回到现场：台下每个人都能喊“且慢”，故事因此走向不同的地方。</p><ul><li>醒木一拍是节奏点，观众只能在拍醒木之前改剧情</li><li>手机扫码就能参与，不用下载</li><li>每场生成一张“本场回目”海报</li></ul></div>
+      <div class="vcol"><h4>为什么要用 AI</h4><p>在 DGX Spark 上本地部署开源大模型生成说书词，语音合成评书腔，多人投票合并成剧情走向。</p>
+        <h4>未来展望</h4>
+        <dl class="stages"><dt>近期 · 参赛版</dt><dd>一场 10 分钟的现场演示</dd><dt>中期</dt><dd>进商场、景区、茶馆做互动演出；和曲艺团体合作“AI 搭档”</dd><dt>长期</dt><dd>直播间版本，观众用弹幕改剧情</dd></dl>
+      </div>
+    </div>
+  </article>
+  <article class="vis" id="v-letters">
+    <div class="vhead"><span class="vdir">C2 · 自由发挥</span><h3>城市回信</h3><p class="vthesis">「你给一座城写信，城会给你回信。」</p></div>
+    <div class="vbody">
+      <div class="vcol"><h4>设计立意</h4><p>打卡式旅游只留下照片。写信让游客先说出自己想要什么，城市再用本地人的口吻回答，旅行从“去过”变成“被回应过”。</p><ul><li>回信里有路线、明信片和小店盖章任务</li><li>到店打卡才解锁下一封，线上线下形成闭环</li><li>回信口吻按城市性格定制</li></ul></div>
+      <div class="vcol"><h4>为什么要用 AI</h4><p>城市 Agent 读游客的信，结合商户和路线数据写回信，并生成 AI 明信片。</p>
+        <h4>未来展望</h4>
+        <dl class="stages"><dt>近期 · 参赛版</dt><dd>一个城区、10 家商户的演示</dd><dt>中期</dt><dd>文旅局和商圈投放，商户按到店人数付费</dd><dt>长期</dt><dd>城市之间互相写信，游客的旅途变成城市之间的通信</dd></dl>
+      </div>
+    </div>
+  </article>
+  <article class="vis" id="v-dialect">
+    <div class="vhead"><span class="vdir">C3 · 自由发挥</span><h3>方言守夜人</h3><p class="vthesis">「一种方言消失，就有一扇窗暗下去。」</p></div>
+    <div class="vbody">
+      <div class="vcol"><h4>设计立意</h4><p>方言是乡音，也是回家的钥匙。夜里的小镇只听得懂方言，学会一句才能点亮一户人家，听见他们的故事。学方言变成一种回家的方式。</p><ul><li>每户人家教一句方言，说对了窗才亮</li><li>故事由本地老人的口述改编</li><li>地图上亮起的窗，就是你学会的话</li></ul></div>
+      <div class="vcol"><h4>为什么要用 AI</h4><p>方言语音识别打分、方言语音合成，AI 根据口述整理成故事。</p>
+        <h4>未来展望</h4>
+        <dl class="stages"><dt>近期 · 参赛版</dt><dd>一种方言、一条街的原型</dd><dt>中期</dt><dd>和地方文旅、方言保护项目合作，每个城市一个小镇</dd><dt>长期</dt><dd>方言语料众包，玩家的录音反哺方言模型</dd></dl>
+      </div>
+    </div>
+  </article>
+  <article class="vis" id="v-shadow">
+    <div class="vhead"><span class="vdir">C4 · 自由发挥</span><h3>掌中皮影</h3><p class="vthesis">「你的手，就是戏台。」</p></div>
+    <div class="vbody">
+      <div class="vcol"><h4>设计立意</h4><p>皮影和手影本是一家：一束光、一双手、一块幕布。让观众伸出手就能演，非遗就从“看的东西”变成“玩的东西”。</p><ul><li>摆出手势就召唤对应的皮影角色</li><li>两个人同框就能对戏</li><li>AI 即兴配戏词和唱腔</li></ul></div>
+      <div class="vcol"><h4>为什么要用 AI</h4><p>手势识别、AI 即兴编剧和配音。</p>
+        <h4>未来展望</h4>
+        <dl class="stages"><dt>近期 · 参赛版</dt><dd>浏览器摄像头原型，5 种手势角色</dd><dt>中期</dt><dd>做博物馆和非遗展的互动装置</dd><dt>长期</dt><dd>亲子教育内容，录下孩子的手影戏生成短片</dd></dl>
+      </div>
+    </div>
+  </article>
+  <article class="vis" id="v-echo">
+    <div class="vhead"><span class="vdir">C5 · 自由发挥 <span class="badge">DEMO</span></span><h3>昨日之我</h3><p class="vthesis">「最懂你的第二玩家，是昨天的你。」</p></div>
+    <div class="vbody">
+      <div class="vcol"><h4>设计立意</h4><p>“第二玩家”的另一种解法：不是一个陌生的 AI，而是从你自己的操作里学出来的 AI。和自己协作，谈的是成长：今天能过的关，靠的是昨天的你铺好的路。</p><ul><li>回声机制天然产生协作谜题，规则一句话就能讲清</li><li>第 6 关起回声会等你、改道，玩家能直观感到“它在学我”</li><li>终关要 4 个自己配合，结尾一句话点题</li></ul></div>
+      <div class="vcol"><h4>为什么要用 AI</h4><p>当前的学习回声是启发式的。参赛版换成真正的模仿学习模型，回声会越来越像你。</p>
+        <h4>未来展望</h4>
+        <dl class="stages"><dt>近期 · 参赛版</dt><dd>用模仿学习替换启发式回声；加关卡编辑器</dd><dt>中期</dt><dd>异步多人：借用其他玩家的回声来帮你过关，变成“别人的昨天”</dd><dt>长期</dt><dd>做成行为克隆的科普展项，或当作游戏 AI 研究的轻量测试场</dd></dl>
+      </div>
+    </div>
+  </article>
+  </div>
+</section>
+
 <section aria-labelledby="s-matrix">
   <div class="sh">
     <div class="eyebrow">横向对比</div>
-    <h2 id="s-matrix">打分表</h2>
-    <p>五分制，是我的主观判断。“完成度”指黑客松周期内做到可演示的把握，“AI 结合”指 AI 是不是玩法本身而不只是生产工具。高亮行是做了 demo 的七个。</p>
+    <h2 id="s-matrix">重新打分</h2>
+    <p>第二轮打分。每项五分制，按权重折算成百分制：创意、完成度、AI 结合各占 20%，可玩和故事各占 15%，美术上限占 10%。“完成度”按现在的实际进度算，已有 demo 的选题会更高；“AI 结合”看 AI 是不是玩法本身，而不只是生产工具。按加权分从高到低排列，高亮的是前五名。</p>
   </div>
   <div class="tablewrap">
     <table>
-      <thead><tr><th>选题</th><th>创意</th><th>可玩</th><th>故事</th><th>美术上限</th><th>完成度</th><th>AI 结合</th><th>合计</th></tr></thead>
+      <thead><tr><th>排名</th><th>选题</th><th>创意 20%</th><th>可玩 15%</th><th>故事 15%</th><th>美术上限 10%</th><th>完成度 20%</th><th>AI 结合 20%</th><th>加权分</th></tr></thead>
       <tbody id="matrix"></tbody>
     </table>
+  </div>
+  <div class="recs">
+    <div class="rec"><span class="rk">1</span><div><h4>第二十五帧 · 97 分 · 主推</h4><p>报互动游戏和叙事影像两条赛道，同时扣“第二十五帧”子赛道。玩法就是电影语言，AI 观众让它没有标准答案，demo 已经能从头玩到两种结局。</p></div></div>
+    <div class="rec"><span class="rk">2</span><div><h4>夜航电台 · 90 分 · 备选</h4><p>AI 味最浓，来电者由大模型扮演，正好扣“第二玩家”。故事和美术已经很完整，接上大模型和语音就是参赛版。</p></div></div>
+    <div class="rec"><span class="rk">3</span><div><h4>末班车失物招领 · 87 分 · 叙事影像加分项</h4><p>反转最好，故事最适合直接拍成短片。如果叙事影像赛道只交一部片，可以考虑用它的故事。</p></div></div>
+    <div class="rec"><span class="rk">4</span><div><h4>无限说书人 · 82 分 · 报“点火时刻”时首选</h4><p>没有 demo 的选题里分最高。现场演示效果强，适合在 DGX Spark 上做本地部署挑战，但需要从零搭建。</p></div></div>
+    <div class="rec"><span class="rk">5</span><div><h4>锔 · 碎瓷重圆 · 79 分 · 休闲方向首选</h4><p>休闲解压方向分最高，60 关已完整，几乎没有完成风险，适合作为保底作品或商业创意的文旅联名。</p></div></div>
   </div>
 </section>
 
@@ -489,32 +711,6 @@ footer{font-size:13px;color:var(--ink-2);border-top:1px solid var(--rule);paddin
   </div>
 </section>
 
-<section aria-labelledby="s-road">
-  <div class="sh">
-    <div class="eyebrow">下一步</div>
-    <h2 id="s-road">从 demo 到参赛版</h2>
-  </div>
-  <div class="road">
-    <div class="r"><h4>第二十五帧</h4><ol>
-      <li><b>换美术：</b>用 AI 生成 1930 年代黑白剧照风格的镜头素材，替换代码绘制的镜头。</li>
-      <li><b>接 AI 观众：</b>多模态模型看剪好的序列，输出观众解读，规则判定作为兜底。</li>
-      <li><b>扩到 15 关：</b>加入节奏（镜头时长）和声音蒙太奇两个新机制。</li>
-      <li><b>拍短片：</b>沈先生的电影，两个结局各一版。</li>
-    </ol></div>
-    <div class="r"><h4>夜航电台</h4><ol>
-      <li><b>接大模型：</b>按人设和已发生事件生成来电台词，剧本节点保留为主线骨架。</li>
-      <li><b>加语音：</b>每个来电者一个 TTS 声线，电话滤波处理。</li>
-      <li><b>做“第六通电话”：</b>玩家可以自己打进来，AI 主持人接听。</li>
-      <li><b>拍短片：</b>用隐藏好结局的分镜单。</li>
-    </ol></div>
-    <div class="r"><h4>锔 · 碎瓷重圆</h4><ol>
-      <li><b>换纹样：</b>AI 批量生成各窑口纹样贴图，替换程序化纹样。</li>
-      <li><b>专属关卡：</b>拍一张自家碗碟，AI 抠图、碎裂、写身世。</li>
-      <li><b>加分享：</b>修好的器物导出成带金缝的卡片。</li>
-      <li><b>找联名：</b>以一家博物馆馆藏做一章，报商业创意。</li>
-    </ol></div>
-  </div>
-</section>
 
 <footer>源码在 <a href="https://github.com/YuYuYuZero/Interactive-AI-Demo">GitHub 仓库</a>：<span class="mono">index.html</span> 和 <span class="mono">demos/</span> 里的 kintsugi、red-thread、color-shop、25th-frame、night-radio、lost-and-found、echo 七个 HTML，每个都是单文件，双击即可在浏览器打开。</footer>
 </div>
@@ -527,17 +723,11 @@ footer{font-size:13px;color:var(--ink-2);border-top:1px solid var(--rule);paddin
 <script>
 (function(){
   // scores: [创意, 可玩, 故事, 美术上限, 完成度, AI结合]
-  const rows=[
-    ["A1","锔 · 碎瓷重圆",[4,4,3,5,5,3],1],["A2","月下红线",[3,5,2,4,5,2],1],["A3","中国色 · 调色铺",[4,3,2,5,4,3],1],
-    ["A4","雨落青瓦",[3,4,2,4,4,2]],["A5","灯会 · 光路",[3,4,2,4,4,3]],
-    ["B1","第二十五帧",[5,4,5,5,4,4],1],["B2","夜航电台",[4,3,5,5,4,5],1],["B3","外婆的菜谱",[4,3,5,4,3,3]],
-    ["B4","末班车失物招领",[4,3,4,4,3,5],1],["B5","梦境当铺",[5,3,4,4,2,5]],
-    ["C1","无限说书人",[5,4,4,3,3,5]],["C2","城市回信",[4,2,3,4,3,5]],["C3","方言守夜人",[4,3,4,3,2,5]],
-    ["C4","掌中皮影",[5,4,3,4,2,4]],["C5","昨日之我",[4,4,2,3,3,3],1]
-  ];
+  const W=[.2,.15,.15,.1,.2,.2];
+  const rows=[["A1","锔 · 碎瓷重圆",[4,4,3,5,5,3],1],["A2","月下红线",[3,5,3,4,5,2],1],["A3","中国色 · 调色铺",[4,3,2,5,5,3],1],["A4","雨落青瓦",[3,4,2,4,4,2],0],["A5","灯会 · 光路",[3,4,2,4,4,3],0],["B1","第二十五帧",[5,4,5,5,5,5],1],["B2","夜航电台",[4,3,5,5,5,5],1],["B3","外婆的菜谱",[4,3,5,4,3,3],0],["B4","末班车失物招领",[4,4,5,4,5,4],1],["B5","梦境当铺",[5,3,4,4,2,5],0],["C1","无限说书人",[5,4,4,3,3,5],0],["C2","城市回信",[4,2,3,4,3,5],0],["C3","方言守夜人",[4,3,4,3,2,5],0],["C4","掌中皮影",[5,4,3,4,2,4],0],["C5","昨日之我",[4,4,2,3,5,4],1]];
   const dots=n=>'<span class="dots" aria-label="'+n+' 分">'+[1,2,3,4,5].map(i=>'<i class="'+(i<=n?'on':'')+'"></i>').join('')+'</span>';
-  document.getElementById('matrix').innerHTML=rows.map(([c,n,s,p])=>
-    '<tr class="'+(p?'pick':'')+'"><td class="name"><small>'+c+'</small>'+n+'</td>'+s.map(v=>'<td>'+dots(v)+'</td>').join('')+'<td class="sum">'+s.reduce((a,b)=>a+b,0)+'</td></tr>').join('');
+  const scored=rows.map(r=>({c:r[0],n:r[1],s:r[2],d:r[3],w:Math.round(r[2].reduce((a,v,i)=>a+v*W[i],0)*20)})).sort((a,b)=>b.w-a.w||a.c.localeCompare(b.c));
+  document.getElementById('matrix').innerHTML=scored.map((r,k)=>'<tr class="'+(k<5?'pick':'')+'"><td class="rank">'+(k+1)+'</td><td class="name"><small>'+r.c+'</small>'+r.n+(r.d?' <span class="badge">DEMO</span>':'')+'</td>'+r.s.map(v=>'<td>'+dots(v)+'</td>').join('')+'<td class="sum">'+r.w+'</td></tr>').join('');
 
   // player
   const P=document.getElementById('player'),F=document.getElementById('pframe'),N=document.getElementById('pname'),L=document.getElementById('pnew');
